@@ -19,7 +19,7 @@ int main(int argc, char** argv)
   Vtestbench tb;
   for (auto i = 0; i < 10000; ++i)
   {
-    if (!tb.G_clock)
+    if (tb.G_phy2)
     {
       if (tb.G_addr >= 0x8000 && tb.G_rdwr)
         tb.G_rd_data = prgrom[(tb.G_addr - 0x8000) & 0x3fff];      
