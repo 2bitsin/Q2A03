@@ -5,12 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Generate",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/py/process.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
       "name": "Launch",
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/out/launch",
       "preLaunchTask": "Build",
-      "args": ["hello", "world", "foo", "bar", "bla"],
+      "args": [
+        "hello",
+        "world",
+        "foo",
+        "bar",
+        "bla"
+      ],
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
