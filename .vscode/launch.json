@@ -5,10 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Generate",
+      "name": "Generate ISA",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}/py/process.py",
+      "program": "${workspaceFolder}/py/ProcessIsa.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Generate Cycles",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/py/ProcessCycles.py",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}"
     },
