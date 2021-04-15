@@ -1,14 +1,15 @@
 
 module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rdwr, G_ready, G_sync, G_phy2);
 
-  `define C_bit   0
-  `define Z_bit   1
-  `define I_bit   2
-  `define D_bit   3
-  `define B_bit   4
+  localparam C_bit = 0 ;
+  localparam Z_bit = 1 ;
+  localparam I_bit = 2 ;
+  localparam D_bit = 3 ;
+  localparam B_bit = 4 ;
+  localparam O_bit = 6 ;
+  localparam N_bit = 7 ;
 
-  `define O_bit   6
-  `define N_bit   7
+  localparam stack_base = 16'h0100 ;
 
   typedef bit[3:0]          reg4_type;
   typedef byte unsigned     reg8_type;
@@ -43,7 +44,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   reg8_type   curr_a        = 0 ;
   reg8_type   curr_x        = 0 ;
   reg8_type   curr_y        = 0 ;
-  reg8_type   curr_s        = 0 ;
+  reg8_type   curr_s        = 8'hfd ;
   reg8_type   curr_pcl      = 0 ;
   reg8_type   curr_pch      = 0 ;
   reg8_type   curr_p        = 0 ;
@@ -57,7 +58,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   reg8_type   next_a        = 0 ;
   reg8_type   next_x        = 0 ;
   reg8_type   next_y        = 0 ;
-  reg8_type   next_s        = 0 ;
+  reg8_type   next_s        = 8'hfd ;
   reg8_type   next_pch      = 8'hC0 ;
   reg8_type   next_pcl      = 0 ;
   reg8_type   next_p        = 0 ;
@@ -127,7 +128,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       curr_a        <= 0;
       curr_x        <= 0;
       curr_y        <= 0;
-      curr_s        <= 0;
+      curr_s        <= 8'hfd ;
       curr_p        <= 0;
       curr_pch      <= 8'hC0;
       curr_pcl      <= 0;
@@ -138,7 +139,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       next_a        = 0;
       next_x        = 0;
       next_y        = 0;
-      next_s        = 0;
+      next_s        = 8'hfd ;
       next_p        = 0;
       next_pch      = 8'hC0;
       next_pcl      = 0;

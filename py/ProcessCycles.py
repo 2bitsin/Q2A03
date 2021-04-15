@@ -121,7 +121,7 @@ class ProcessCycles:
   def main(self):
     writer = SvWriter ('ver/cycles.sv')
     writer.indent ()
-    isa_data = IsaParsed ('data/ISA.csv').isa_table 
+    isa_data = IsaParsed ('data/ISA-am-op.csv').isa_table 
     am_data = CyclesParsed ('data/ISA-am-cycles.csv').table    
     op_data = CyclesParsed ('data/ISA-op-cycles.csv').table
     cycle_table = self.prepare (isa_data, am_data, op_data)

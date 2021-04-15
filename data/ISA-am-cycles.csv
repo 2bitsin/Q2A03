@@ -18,6 +18,7 @@
 "Absolute",1,,"G_rdwr",1
 "Absolute",1,,"{next_pch, next_pcl}","curr_pc + 1"
 "Absolute",1,,"next_adl","G_rd_data"
+,,,,
 "Absolute",1,,"next_cycle","curr_cycle + 1 "
 "Absolute",2,,"G_addr","curr_pc"
 "Absolute",2,,"{next_pch, next_pcl}","curr_pc + 1"
@@ -31,6 +32,7 @@
 "Zero Page",1,,"next_adh",0
 "Zero Page",1,,"next_adl","G_rd_data"
 "Zero Page",1,,"next_cycle","curr_cycle + 1 "
+,,,,
 "Zero Page",2,,"G_addr","curr_ad"
 "Zero Page",2,,"G_rdwr",1
 "Zero Page",2,,"next_cycle","curr_cycle + 1 "
