@@ -21,7 +21,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   input   wire        G_nmi;
   input   wire        G_ready;
   input   wire[7:0]   G_rd_data;
-  output  wire[7:0]   G_wr_data;
+  output  bit[7:0]    G_wr_data;
   output  bit         G_rdwr;
   output  bit[15:0]   G_addr;
   output  wire        G_sync;  
@@ -53,7 +53,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   wire[15:0]  curr_pc       = {curr_pch, curr_pcl};
   wire[15:0]  curr_ad       = {curr_adh, curr_adl};
 
-  reg4_type   next_cycle    = 4'h0;
+  reg4_type   next_cycle    = 0;
   reg8_type   next_a        = 0 ;
   reg8_type   next_x        = 0 ;
   reg8_type   next_y        = 0 ;
@@ -85,6 +85,30 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   wire o6 = curr_ir[6];
   wire o7 = curr_ir[7];
 
+  task read_state;
+    output reg8_type a;
+    output reg8_type x;
+    output reg8_type y; 
+    output reg8_type s; 
+    output reg8_type p; 
+    output reg8_type ir; 
+    output reg8_type pcl; 
+    output reg8_type pch;
+    output reg32_type cyc;
+    begin
+      a   = curr_a;
+      x   = curr_x;
+      y   = curr_y;
+      s   = curr_s;      
+      p   = curr_p;
+      ir  = curr_ir;
+      pcl = curr_pcl;
+      pch = curr_pch;
+      cyc = debug_tick;
+    end
+  endtask;
+  export "DPI-C" task read_state;
+
   always @*
   begin
     `include "cycles.sv"
@@ -111,6 +135,18 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
 
       curr_cycle    <= 4'hf;
 
+      next_a        = 0;
+      next_x        = 0;
+      next_y        = 0;
+      next_s        = 0;
+      next_p        = 0;
+      next_pch      = 8'hC0;
+      next_pcl      = 0;
+      next_ir       = 0;
+
+      next_cycle    = 0;
+
+
     end else 
     begin
       /* Clock divider */
@@ -122,6 +158,8 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       /* Latch state */
       if (edge_fall)
       begin
+        if (&curr_cycle) curr_cycle <= 0;
+
         debug_tick    <= debug_tick + 3;
 
         curr_a        <= next_a ;   

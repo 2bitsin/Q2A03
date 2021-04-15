@@ -1,5 +1,11 @@
 "Instruction","Cycle ","Condition","Target","Assign"
-"JMP",-1,,"{next_pch, next_pcl}","curr_ad"
+"JMP",-1,,"{next_pch, next_pcl}","next_ad"
 "JMP",-1,,"next_cycle",0
+,,,,
 "LDX",-1,,"next_x","G_rd_data"
 "LDX",-1,,"next_cycle",0
+"LDX",-1,,"G_rdwr",1
+,,,,
+"STX",-1,,"G_wr_data","curr_x"
+"STX",-1,,"next_cycle",0
+"STX",-1,,"G_rdwr",0

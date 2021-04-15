@@ -13,12 +13,15 @@ out/lib/verilated.o: $(VLTPAT)/verilated.cpp
 out/lib/verilated_vcd_c.o: $(VLTPAT)/verilated_vcd_c.cpp
 	g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
 
+out/lib/verilated_dpi.o: $(VLTPAT)/verilated_dpi.cpp
+	g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
+
 out/ver/libtestbench.a out/ver/Vtestbench.h: ver/testbench.sv ver/Q2A03.sv
 	verilator --cc -Mdir out/ver -y ver $? -CFLAGS "$(CFLAGS)" $(VFLAGS)
 	$(MAKE) -C out/ver -f Vtestbench.mk
 	mv out/ver/Vtestbench__ALL.a out/ver/libtestbench.a 
 
-out/launch: cpp/main.cpp out/ver/Vtestbench.h out/lib/verilated.o out/lib/verilated_vcd_c.o out/ver/libtestbench.a 
+out/launch: cpp/main.cpp out/ver/Vtestbench.h out/lib/verilated.o out/lib/verilated_vcd_c.o out/lib/verilated_dpi.o out/ver/libtestbench.a 
 	g++ $(CFLAGS) 													\
 		-Iout/ver 														\
 		-I$(VLTPAT) 													\
@@ -27,6 +30,7 @@ out/launch: cpp/main.cpp out/ver/Vtestbench.h out/lib/verilated.o out/lib/verila
 		-Wl,--start-group 										\
 			out/lib/verilated.o 								\
 			out/lib/verilated_vcd_c.o 					\
+			out/lib/verilated_dpi.o 						\
 			cpp/main.cpp 												\
 			out/ver/libtestbench.a 							\
 		-Wl,--end-group 

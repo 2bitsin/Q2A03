@@ -47,7 +47,21 @@
 				"kind": "build",
 				"isDefault": true
 			}
+		},
+		{
+			"label": "Generate",
+			"type": "shell",			
+			"command":"/usr/bin/env /usr/bin/python3 ./py/ProcessCycles.py",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		}
+
 
 
 	]

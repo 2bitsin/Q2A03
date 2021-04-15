@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <Vtestbench.h>
+#include <svdpi.h>
 #include "nestest.cpp"
 
 static double $time = 0;
@@ -13,11 +14,22 @@ double sc_time_stamp()
 int main(int argc, char** argv)
 { 
   unsigned char ram [0x800];
+  uint8_t a,x,y,s,p,ir,pcl,pch;
   
+  std::memset(ram, 0xff, sizeof(ram));
+
   Verilated::commandArgs(argc, argv);
   Verilated::traceEverOn(true);
   Vtestbench tb;
-  for (auto i = 0; i < 100000; ++i) {
+
+  auto scope = svGetScopeFromName("TOP.testbench.i0");
+  if (!scope)
+    return -1;
+  svSetScope(scope);
+  int last_sync = 0;
+  unsigned cycles = 0;
+  for (auto i = 0; i < 1000000; ++i) 
+  {
     tb.G_clock = !tb.G_clock;
     tb.G_reset = i >= 12;
     tb.G_ready = 1;
@@ -34,8 +46,14 @@ int main(int argc, char** argv)
         else 
           ram[tb.G_addr & 0x7ff] = tb.G_wr_data; 
       }
+      tb.read_state(&a, &x, &y, &s, &p, &ir, &pcl, &pch, &cycles);    
+      
+      if (!last_sync && tb.G_sync) {
+        std::printf("PC=%04X IR=%02X A=%02X X=%02X Y=%02X P=%02X S=%02X CYC=%d\n", (pch * 0x100 + pcl), ir, a, x, y, p, s, cycles);      
+      }
+      last_sync = tb.G_sync;
     }
-    tb.eval();    
+    tb.eval();
     $time += 1;
   }
   return 0;

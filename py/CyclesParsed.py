@@ -6,6 +6,7 @@ class CyclesParsed:
     table = []
     with open(file_name) as csvfile:
       table = list(r for r in csv.reader(csvfile, delimiter=',', quotechar='"'))[1:]
+      table = list(filter(lambda s: s[0] != '' and s[1] != '', table))
       table = list((r[0].strip(), int(r[1], 10), r[2].strip(), r[3].strip(), r[4].strip()) for r in table)
     struct_data = {}
     for name, cycle, condition, target, value in table:      
