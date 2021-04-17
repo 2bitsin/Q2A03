@@ -12,9 +12,12 @@ class ProcessCycles:
     
   def prepare(self, isa, ams, ops):  
     full_table = []  
+    instructions_assembled = 0
     for code, addressing, operation in isa:
+
       if addressing not in ams or operation not in ops:
         continue
+      instructions_assembled = instructions_assembled + 1 
       am_cycles = ams[addressing]
       op_cycles = ops[operation]
       cycles = {}
@@ -50,6 +53,7 @@ class ProcessCycles:
         'cycles'      :cycles,
         '_hexcode'    :('$%02X' % code)
       })
+    print("Instructions assembed %d/%d" % (instructions_assembled, 256))    
     return full_table
 
   def dump_flat_table(self, table):
@@ -116,7 +120,7 @@ class ProcessCycles:
       writer.unindent()
       writer.write_line('')
     self.dump_flat_table(flat_table)    
-    print ("Done")
+    print ("\nDone")
     return 
 
   def main(self):
