@@ -5,31 +5,50 @@
 "LDX",-1,,"next_x","G_rd_data"
 "LDX",-1,,"next_cycle",0
 "LDX",-1,,"G_rdwr",1
+"LDX",-1,,"{next_p[N_bit], next_p[Z_bit]}","{G_rd_data[7], G_rd_data == 0}"
+,,,,
+"LDA",-1,,"next_a","G_rd_data"
+"LDA",-1,,"next_cycle",0
+"LDA",-1,,"G_rdwr",1
+"LDA",-1,,"{next_p[N_bit], next_p[Z_bit]}","{G_rd_data[7], G_rd_data == 0}"
+,,,,
+"LDY",-1,,"next_y","G_rd_data"
+"LDY",-1,,"next_cycle",0
+"LDY",-1,,"G_rdwr",1
+"LDY",-1,,"{next_p[N_bit], next_p[Z_bit]}","{G_rd_data[7], G_rd_data == 0}"
 ,,,,
 "STX",-1,,"G_wr_data","curr_x"
 "STX",-1,,"next_cycle",0
 "STX",-1,,"G_rdwr",0
 ,,,,
+"STA",-1,,"G_wr_data","curr_a"
+"STA",-1,,"next_cycle",0
+"STA",-1,,"G_rdwr",0
+,,,,
+"STY",-1,,"G_wr_data","curr_y"
+"STY",-1,,"next_cycle",0
+"STY",-1,,"G_rdwr",0
+,,,,
 "JSR",-1,,"G_addr","curr_pc"
 "JSR",-1,,"G_rdwr",1
 "JSR",-1,,"next_adl","G_rd_data"
 "JSR",-1,,"next_cycle","curr_cycle + 1 "
+"JSR",-1,,"{next_pch, next_pcl}","curr_pc + 1"
 ,,,,
-"JSR",0,,"G_addr","{8'h0, curr_s} + stack_base"
+"JSR",0,,"G_addr","{8'h01, curr_s}"
 "JSR",0,,"G_rdwr",1
 "JSR",0,,"next_cycle","curr_cycle + 1 "
 ,,,,
-"JSR",1,,"G_addr","{8'h0, curr_s} + stack_base"
+"JSR",1,,"G_addr","{8'h01, curr_s}"
 "JSR",1,,"G_rdwr",0
 "JSR",1,,"G_wr_data","curr_pch"
 "JSR",1,,"next_s","curr_s - 1"
 "JSR",1,,"next_cycle","curr_cycle + 1 "
 ,,,,
-"JSR",2,,"G_addr","{8'h0, curr_s} + stack_base"
+"JSR",2,,"G_addr","{8'h01, curr_s}"
 "JSR",2,,"G_rdwr",0
 "JSR",2,,"G_wr_data","curr_pcl"
 "JSR",2,,"next_s","curr_s - 1"
-"JSR",2,,"{next_pch, next_pcl}","curr_pc + 1"
 "JSR",2,,"next_cycle","curr_cycle + 1 "
 ,,,,
 "JSR",3,,"G_addr","curr_pc"
@@ -37,3 +56,72 @@
 "JSR",3,,"next_adh","G_rd_data"
 "JSR",3,,"next_cycle",0
 "JSR",3,,"{next_pch, next_pcl}","next_ad"
+,,,,
+"NOP",-1,,"next_cycle",0
+,,,,
+"SEC",-1,,"next_p","curr_p | C_mask"
+"SEC",-1,,"next_cycle",0
+,,,,
+"SED",-1,,"next_p","curr_p | D_mask"
+"SED",-1,,"next_cycle",0
+,,,,
+"SEI",-1,,"next_p","curr_p | I_mask"
+"SEI",-1,,"next_cycle",0
+,,,,
+"CLC",-1,,"next_p","curr_p & ~C_mask"
+"CLC",-1,,"next_cycle",0
+,,,,
+"CLI",-1,,"next_p","curr_p & ~I_mask"
+"CLI",-1,,"next_cycle",0
+,,,,
+"CLD",-1,,"next_p","curr_p & ~D_mask"
+"CLD",-1,,"next_cycle",0
+,,,,
+"CLV",-1,,"next_p","curr_p & ~V_mask"
+"CLV",-1,,"next_cycle",0
+,,,,
+"BCS",-3,,"next_cycle","(curr_p[C_bit] ? (curr_cycle + 1) : 0)"
+,,,,
+"BCC",-3,,"next_cycle","(~curr_p[C_bit] ? (curr_cycle + 1) : 0)"
+,,,,
+"BEQ",-3,,"next_cycle","(curr_p[Z_bit] ? (curr_cycle + 1) : 0)"
+,,,,
+"BNE",-3,,"next_cycle","(~curr_p[Z_bit] ? (curr_cycle + 1) : 0)"
+,,,,
+"BMI",-3,,"next_cycle","(curr_p[N_bit] ? (curr_cycle + 1) : 0)"
+,,,,
+"BPL",-3,,"next_cycle","(~curr_p[N_bit] ? (curr_cycle + 1) : 0)"
+,,,,
+"BVS",-3,,"next_cycle","(curr_p[V_bit] ? (curr_cycle + 1) : 0)"
+,,,,
+"BVC",-3,,"next_cycle","(~curr_p[V_bit] ? (curr_cycle + 1) : 0)"
+,,,,
+"BIT",-1,,"next_cycle",0
+"BIT",-1,,"next_p[Z_bit]","(G_rd_data & curr_a) == 0"
+"BIT",-1,,"next_p[V_bit]","G_rd_data[6]"
+"BIT",-1,,"next_p[N_bit]","G_rd_data[7]"
+,,,,
+"RTS",-1,,"G_addr","curr_pc"
+"RTS",-1,,"G_rdwr",1
+"RTS",-1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTS",0,,"G_addr","{8'h01, curr_s}"
+"RTS",0,,"G_rdwr",1
+"RTS",0,,"next_s","curr_s + 1"
+"RTS",0,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTS",1,,"G_addr","{8'h01, curr_s}"
+"RTS",1,,"G_rdwr",1
+"RTS",1,,"next_pcl","G_rd_data"
+"RTS",1,,"next_s","curr_s + 1"
+"RTS",1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTS",2,,"G_addr","{8'h01, curr_s}"
+"RTS",2,,"G_rdwr",1
+"RTS",2,,"next_pch","G_rd_data"
+"RTS",2,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTS",3,,"G_addr","curr_pc"
+"RTS",3,,"G_rdwr",1
+"RTS",3,,"next_cycle",0
+"RTS",3,,"{next_pch, next_pcl}","curr_pc + 1"

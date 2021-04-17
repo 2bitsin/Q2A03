@@ -6,7 +6,7 @@ using byte = std::uint8_t;
 using dword = std::uint32_t;
 using qword = std::uint64_t;
 
-struct LogLine
+struct emu_state_type
 {  
   word addr;
   struct { byte a, x, y, p, sp; } regs;
@@ -14,17 +14,17 @@ struct LogLine
   byte nbytes;
   byte opbytes[3u];    
 
-  qword column;
-  qword scanline;
   qword cpuclock;
   qword ppuclock;
+  qword column;
+  qword scanline;
 
   bool unofficial;
   const char* instruction;
   const char* disassembly;
 };
 
-LogLine logNestest [] =
+emu_state_type nesttest_log [] =
 {
 	{0xC000, {0x00, 0x00, 0x00, 0x24, 0xFD}, 3, {0x4C, 0xF5, 0xC5},      7,      0,    0,    0, false, "JMP $C5F5", nullptr},
 	{0xC5F5, {0x00, 0x00, 0x00, 0x24, 0xFD}, 2, {0xA2, 0x00, 0x00},     10,      9,    9,    0, false, "LDX #$00", nullptr},

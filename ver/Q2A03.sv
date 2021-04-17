@@ -6,10 +6,18 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   localparam I_bit = 2 ;
   localparam D_bit = 3 ;
   localparam B_bit = 4 ;
-  localparam O_bit = 6 ;
+  localparam X_bit = 5 ;
+  localparam V_bit = 6 ;
   localparam N_bit = 7 ;
 
-  localparam stack_base = 16'h0100 ;
+  localparam C_mask = (8'h01 << C_bit);
+  localparam Z_mask = (8'h01 << Z_bit);
+  localparam I_mask = (8'h01 << I_bit);
+  localparam D_mask = (8'h01 << D_bit);
+  localparam B_mask = (8'h01 << B_bit);
+  localparam X_mask = (8'h01 << X_bit);
+  localparam V_mask = (8'h01 << V_bit);
+  localparam N_mask = (8'h01 << N_bit);
 
   typedef bit[3:0]          reg4_type;
   typedef byte unsigned     reg8_type;
@@ -47,26 +55,32 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   reg8_type   curr_s        = 8'hfd ;
   reg8_type   curr_pcl      = 0 ;
   reg8_type   curr_pch      = 0 ;
-  reg8_type   curr_p        = 0 ;
+  reg8_type   curr_p        = 8'h24 ;
   reg8_type   curr_ir       = 0 ;
   reg8_type   curr_adl      = 0 ;
   reg8_type   curr_adh      = 0 ;
+//reg8_type   curr_bal      = 0 ;
+//reg8_type   curr_bah      = 0 ;
   wire[15:0]  curr_pc       = {curr_pch, curr_pcl};
   wire[15:0]  curr_ad       = {curr_adh, curr_adl};
+//wire[15:0]  curr_ba       = {curr_bah, curr_bal};
 
   reg4_type   next_cycle    = 0;
   reg8_type   next_a        = 0 ;
   reg8_type   next_x        = 0 ;
   reg8_type   next_y        = 0 ;
   reg8_type   next_s        = 8'hfd ;
-  reg8_type   next_pch      = 8'hC0 ;
+  reg8_type   next_pch      = 8'hc0 ;
   reg8_type   next_pcl      = 0 ;
-  reg8_type   next_p        = 0 ;
+  reg8_type   next_p        = 8'h24 ;
   reg8_type   next_ir       = 0 ;
   reg8_type   next_adl      = 0 ;
   reg8_type   next_adh      = 0 ;
+//reg8_type   next_bal      = 0 ;
+//reg8_type   next_bah      = 0 ;
   wire[15:0]  next_pc       = {next_pch, next_pcl} ;
   wire[15:0]  next_ad       = {next_adh, next_adl} ;
+//wire[15:0]  next_ba       = {next_bah, next_bal} ;
 
   wire t0 = curr_cycle == 0;  
   wire t1 = curr_cycle == 1;  
@@ -129,24 +143,29 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       curr_x        <= 0;
       curr_y        <= 0;
       curr_s        <= 8'hfd ;
-      curr_p        <= 0;
-      curr_pch      <= 8'hC0;
+      curr_p        <= 8'h24 ;
+      curr_pch      <= 8'hc0 ;
       curr_pcl      <= 0;
       curr_ir       <= 0;
-
       curr_cycle    <= 4'hf;
+    //curr_bal      <= 0;
+    //curr_bah      <= 0;
+      curr_adl      <= 0;
+      curr_adh      <= 0;
 
       next_a        = 0;
       next_x        = 0;
       next_y        = 0;
       next_s        = 8'hfd ;
-      next_p        = 0;
-      next_pch      = 8'hC0;
+      next_p        = 8'h24 ;
+      next_pch      = 8'hc0 ;
       next_pcl      = 0;
       next_ir       = 0;
-
       next_cycle    = 0;
-
+    //next_bal      = 0;
+    //next_bah      = 0;
+      next_adl      = 0;
+      next_adh      = 0;
 
     end else 
     begin
@@ -159,7 +178,8 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       /* Latch state */
       if (edge_fall)
       begin
-        if (&curr_cycle) curr_cycle <= 0;
+        if (&curr_cycle) 
+          curr_cycle <= 0;
 
         debug_tick    <= debug_tick + 3;
 
@@ -173,6 +193,8 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
         curr_ir       <= next_ir ;  
         curr_adh      <= next_adh ;
         curr_adl      <= next_adl ;   
+      //curr_bah      <= next_bah ;
+      //curr_bal      <= next_bal ;   
         curr_cycle    <= next_cycle ; 
  
       end

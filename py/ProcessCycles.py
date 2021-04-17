@@ -114,7 +114,8 @@ class ProcessCycles:
       writer.indent()
       writer.write_line('%s = %s;' % action)
       writer.unindent()
-    # self.dump_flat_table(flat_table)    
+      writer.write_line('')
+    self.dump_flat_table(flat_table)    
     print ("Done")
     return 
 
