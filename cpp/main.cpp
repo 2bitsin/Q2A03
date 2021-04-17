@@ -71,16 +71,18 @@ int main(int argc, char** argv)
       const auto clocks = st_snapshot.ppuclock;
       tb.read_state(&a, &x, &y, &s, &p, &ir, &pcl, &pch, &cycles);    
       const auto pc = (pch * 0x100 + pcl);
-       std::printf("PC=%04X A=%02X X=%02X Y=%02X S=%02X P=%02X CYC=%d\n", pc, a, x, y, s, p, cycles);
+      std::printf("PC=%04X A=%02X X=%02X Y=%02X S=%02X P=%02X CYC=%d\n", pc, a, x, y, s, p, cycles);
       if (st_snapshot.addr != pc || st_snapshot.regs.a != a || st_snapshot.regs.x != x || st_snapshot.regs.y != y || st_snapshot.regs.p != p || st_snapshot.regs.sp != s || clocks != cycles)
       {
-        std::printf("PC  : %04X   / %04X\n", st_snapshot.addr, pc);
-        std::printf("A   : %02X     / %02X\n", st_snapshot.regs.a, a);
-        std::printf("X   : %02X     / %02X\n", st_snapshot.regs.x, x);
-        std::printf("Y   : %02X     / %02X\n", st_snapshot.regs.y, y);
-        std::printf("S   : %02X     / %02X\n", st_snapshot.regs.sp, s);
-        std::printf("P   : %02X     / %02X\n", st_snapshot.regs.p, p);
-        std::printf("CYC : %-6lu / %-6u\n", clocks, cycles);
+        std::printf("    : expected / actual\n");
+        std::printf("-----------------------\n");
+        std::printf("PC  : %04X     /  %04X\n", st_snapshot.addr, pc);
+        std::printf("A   : %02X       /  %02X\n", st_snapshot.regs.a, a);
+        std::printf("X   : %02X       /  %02X\n", st_snapshot.regs.x, x);
+        std::printf("Y   : %02X       /  %02X\n", st_snapshot.regs.y, y);
+        std::printf("S   : %02X       /  %02X\n", st_snapshot.regs.sp, s);
+        std::printf("P   : %02X       /  %02X\n", st_snapshot.regs.p, p);
+        std::printf("CYC : %-6lu   /  %-6u\n", clocks, cycles);
         $time += 1;
         tb.eval();
         return -1;
