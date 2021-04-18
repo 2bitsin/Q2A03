@@ -19,6 +19,8 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   localparam V_mask = (8'h01 << V_bit);
   localparam N_mask = (8'h01 << N_bit);
 
+  typedef bit[1:0]          reg2_type;
+  typedef bit[2:0]          reg3_type;
   typedef bit[3:0]          reg4_type;
   typedef byte unsigned     reg8_type;
   typedef shortint unsigned reg16_type;
@@ -43,7 +45,6 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   bit         phy1          = 0;
   wire        edge_rise     = G_reset && (G_phy2 && ~phy1);
   wire        edge_fall     = G_reset && (phy1 && ~G_phy2);
-  wire        is_op ;
 
   assign G_sync = ((curr_cycle == 0) && G_reset); 
   assign G_phy2 = (tick >= 6);
@@ -59,12 +60,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   reg8_type   curr_ir       = 0 ;
   reg8_type   curr_adl      = 0 ;
   reg8_type   curr_adh      = 0 ;
-//reg8_type   curr_bal      = 0 ;
-//reg8_type   curr_bah      = 0 ;
-  wire[15:0]  curr_pc       = {curr_pch, curr_pcl};
-  wire[15:0]  curr_ad       = {curr_adh, curr_adl};
-//wire[15:0]  curr_ba       = {curr_bah, curr_bal};
-
+  
   reg4_type   next_cycle    = 0;
   reg8_type   next_a        = 0 ;
   reg8_type   next_x        = 0 ;
@@ -76,11 +72,42 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   reg8_type   next_ir       = 0 ;
   reg8_type   next_adl      = 0 ;
   reg8_type   next_adh      = 0 ;
-//reg8_type   next_bal      = 0 ;
-//reg8_type   next_bah      = 0 ;
+
+/* Misc derivatives */
+
+  wire[15:0]  curr_pc       = {curr_pch, curr_pcl};
+  wire[15:0]  curr_ad       = {curr_adh, curr_adl};
   wire[15:0]  next_pc       = {next_pch, next_pcl} ;
   wire[15:0]  next_ad       = {next_adh, next_adl} ;
-//wire[15:0]  next_ba       = {next_bah, next_bal} ;
+
+  wire[15:0]  curr_sp       = {8'h01, curr_s};
+
+/* Arithmetic / Logic operations */
+
+  bit         alu_in_c      = 0;
+  reg8_type   alu_in_lhs    = 0;
+  reg8_type   alu_in_rhs    = 0;
+  wire[7:0]   alu_in_c8     = {7'b0, alu_in_c};
+  wire[7:0]   alu_in_nc8    = {7'b0, ~alu_in_c};
+
+  wire[7:0]   alu_and       = alu_in_lhs & alu_in_rhs;
+  wire[7:0]   alu_or        = alu_in_lhs | alu_in_rhs;
+  wire[7:0]   alu_xor       = alu_in_lhs ^ alu_in_rhs;  
+
+  wire[7:0]   alu_cmp       = alu_in_lhs - alu_in_rhs;
+  wire        alu_cmp_n     = alu_cmp[7];
+  wire        alu_cmp_z     = alu_in_lhs == alu_in_rhs;
+  wire        alu_cmp_c     = alu_cmp_z || (alu_in_lhs > alu_in_rhs);
+
+  wire[8:0]   alu_adc       = alu_in_lhs + alu_in_rhs + alu_in_c8;  
+  wire        alu_adc_c     = alu_adc[8];
+  wire        alu_adc_v     = (alu_in_lhs[7] != alu_adc[7]) && (alu_in_lhs[7] == alu_in_rhs[7]);
+
+  wire[8:0]   alu_sbc       = alu_in_lhs - alu_in_rhs - alu_in_nc8;  
+  wire        alu_sbc_c     = ~alu_sbc[8];
+  wire        alu_sbc_v     = ((alu_in_lhs[7] != alu_sbc[7]) && (alu_in_lhs[7] == alu_in_rhs[7]));
+
+/* End of Arithmetic / Logic operations */
 
   wire t0 = curr_cycle == 0;  
   wire t1 = curr_cycle == 1;  
@@ -99,30 +126,6 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   wire o5 = curr_ir[5];
   wire o6 = curr_ir[6];
   wire o7 = curr_ir[7];
-
-  task read_state;
-    output reg8_type a;
-    output reg8_type x;
-    output reg8_type y; 
-    output reg8_type s; 
-    output reg8_type p; 
-    output reg8_type ir; 
-    output reg8_type pcl; 
-    output reg8_type pch;
-    output reg32_type cyc;
-    begin
-      a   = curr_a;
-      x   = curr_x;
-      y   = curr_y;
-      s   = curr_s;      
-      p   = curr_p;
-      ir  = curr_ir;
-      pcl = curr_pcl;
-      pch = curr_pch;
-      cyc = debug_tick;
-    end
-  endtask;
-  export "DPI-C" task read_state;
 
   always @*
   begin
@@ -148,8 +151,6 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       curr_pcl      <= 0;
       curr_ir       <= 0;
       curr_cycle    <= 4'hf;
-    //curr_bal      <= 0;
-    //curr_bah      <= 0;
       curr_adl      <= 0;
       curr_adh      <= 0;
 
@@ -162,8 +163,6 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       next_pcl      = 0;
       next_ir       = 0;
       next_cycle    = 0;
-    //next_bal      = 0;
-    //next_bah      = 0;
       next_adl      = 0;
       next_adh      = 0;
 
@@ -187,19 +186,39 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
         curr_x        <= next_x ;   
         curr_y        <= next_y ;   
         curr_s        <= next_s ;   
-        curr_p        <= next_p ;   
+        curr_p        <= {next_p[7:6], 2'b10, next_p[3:0]};
         curr_pch      <= next_pch ;   
         curr_pcl      <= next_pcl ;   
         curr_ir       <= next_ir ;  
         curr_adh      <= next_adh ;
         curr_adl      <= next_adl ;   
-      //curr_bah      <= next_bah ;
-      //curr_bal      <= next_bal ;   
-        curr_cycle    <= next_cycle ; 
- 
+        curr_cycle    <= next_cycle ;  
       end
-
-    end
+    end    
   end
+
+  task read_state;
+    output reg8_type a;
+    output reg8_type x;
+    output reg8_type y; 
+    output reg8_type s; 
+    output reg8_type p; 
+    output reg8_type ir; 
+    output reg8_type pcl; 
+    output reg8_type pch;
+    output reg32_type cyc;
+    begin
+      a   = curr_a;
+      x   = curr_x;
+      y   = curr_y;
+      s   = curr_s;      
+      p   = curr_p;
+      ir  = curr_ir;
+      pcl = curr_pcl;
+      pch = curr_pch;
+      cyc = debug_tick;
+    end
+  endtask;
+  export "DPI-C" task read_state;
 
 endmodule
