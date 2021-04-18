@@ -255,3 +255,31 @@
 "DEY",-1,,"next_y","curr_y - 1"
 "DEY",-1,,"next_p[Z_bit]","next_y == 0"
 "DEY",-1,,"next_p[N_bit]","next_y[7]"
+,,,,
+"TAX",-1,,"next_cycle",0
+"TAX",-1,,"next_x","curr_a"
+"TAX",-1,,"next_p[Z_bit]","next_x == 0"
+"TAX",-1,,"next_p[N_bit]","next_x[7]"
+,,,,
+"TAY",-1,,"next_cycle",0
+"TAY",-1,,"next_y","curr_a"
+"TAY",-1,,"next_p[Z_bit]","next_y == 0"
+"TAY",-1,,"next_p[N_bit]","next_y[7]"
+,,,,
+"TYA",-1,,"next_cycle",0
+"TYA",-1,,"next_a","curr_y"
+"TYA",-1,,"next_p[Z_bit]","next_a == 0"
+"TYA",-1,,"next_p[N_bit]","next_a[7]"
+,,,,
+"TXA",-1,,"next_cycle",0
+"TXA",-1,,"next_a","curr_x"
+"TXA",-1,,"next_p[Z_bit]","next_a == 0"
+"TXA",-1,,"next_p[N_bit]","next_a[7]"
+,,,,
+"TSX",-1,,"next_cycle",0
+"TSX",-1,,"next_x","curr_s"
+"TSX",-1,,"next_p[Z_bit]","next_x == 0"
+"TSX",-1,,"next_p[N_bit]","next_x[7]"
+,,,,
+"TXS",-1,,"next_cycle",0
+"TXS",-1,,"next_s","curr_x"
