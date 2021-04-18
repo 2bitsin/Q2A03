@@ -3,26 +3,23 @@
 ,,,,
 "NOP*",-1,,"next_cycle",0
 ,,,,
-"JMP",-1,,"{next_pch, next_pcl}","next_ad"
 "JMP",-1,,"next_cycle",0
+"JMP",-1,,"{next_pch, next_pcl}","next_ad"
 ,,,,
 "LDX",-1,,"next_cycle",0
-"LDX",-1,,"G_rdwr",1
 "LDX",-1,,"next_x","G_rd_data"
-"LDX",-1,,"next_p[N_bit]","G_rd_data[7]"
-"LDX",-1,,"next_p[Z_bit]","G_rd_data == 0"
+"LDX",-1,,"next_p[N_bit]","next_x[7]"
+"LDX",-1,,"next_p[Z_bit]","next_x == 0"
 ,,,,
 "LDA",-1,,"next_cycle",0
-"LDA",-1,,"G_rdwr",1
 "LDA",-1,,"next_a","G_rd_data"
-"LDA",-1,,"next_p[N_bit]","G_rd_data[7]"
-"LDA",-1,,"next_p[Z_bit]","G_rd_data == 0"
+"LDA",-1,,"next_p[N_bit]","next_a[7]"
+"LDA",-1,,"next_p[Z_bit]","next_a == 0"
 ,,,,
 "LDY",-1,,"next_cycle",0
-"LDY",-1,,"G_rdwr",1
 "LDY",-1,,"next_y","G_rd_data"
-"LDY",-1,,"next_p[N_bit]","G_rd_data[7]"
-"LDY",-1,,"next_p[Z_bit]","G_rd_data == 0"
+"LDY",-1,,"next_p[N_bit]","next_y[7]"
+"LDY",-1,,"next_p[Z_bit]","next_y == 0"
 ,,,,
 "STX",-1,,"G_wr_data","curr_x"
 "STX",-1,,"next_cycle",0
@@ -238,3 +235,23 @@
 "CPY",-1,,"next_p[Z_bit]","alu_cmp_z"
 "CPY",-1,,"next_p[N_bit]","alu_cmp_n"
 "CPY",-1,,"next_p[C_bit]","alu_cmp_c"
+,,,,
+"INX",-1,,"next_cycle",0
+"INX",-1,,"next_x","curr_x + 1"
+"INX",-1,,"next_p[Z_bit]","next_x == 0"
+"INX",-1,,"next_p[N_bit]","next_x[7]"
+,,,,
+"INY",-1,,"next_cycle",0
+"INY",-1,,"next_y","curr_y + 1"
+"INY",-1,,"next_p[Z_bit]","next_y == 0"
+"INY",-1,,"next_p[N_bit]","next_y[7]"
+,,,,
+"DEX",-1,,"next_cycle",0
+"DEX",-1,,"next_x","curr_x - 1"
+"DEX",-1,,"next_p[Z_bit]","next_x == 0"
+"DEX",-1,,"next_p[N_bit]","next_x[7]"
+,,,,
+"DEY",-1,,"next_cycle",0
+"DEY",-1,,"next_y","curr_y - 1"
+"DEY",-1,,"next_p[Z_bit]","next_y == 0"
+"DEY",-1,,"next_p[N_bit]","next_y[7]"

@@ -82,7 +82,7 @@ int main(int argc, char** argv)
         std::printf("Y    : %02X       /  %02X\n", st_snapshot.regs.y, y);
         std::printf("S    : %02X       /  %02X\n", st_snapshot.regs.sp, s);
         std::printf("P    : %02X       /  %02X\n", st_snapshot.regs.p, p);
-        std::printf("CYC  : %-6lu   /  %-6u\n", clocks, cycles);
+        std::printf("CYC  : %-6lu   /  %-6u\n", clocks, cycles); 
         $time += 1;
         tb.eval();
         return -1;
