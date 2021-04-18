@@ -87,8 +87,6 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   bit         alu_in_c      = 0;
   reg8_type   alu_in_lhs    = 0;
   reg8_type   alu_in_rhs    = 0;
-  wire[7:0]   alu_in_c8     = {7'b0, alu_in_c};
-  wire[7:0]   alu_in_nc8    = {7'b0, ~alu_in_c};
 
   wire[7:0]   alu_and       = alu_in_lhs & alu_in_rhs;
   wire[7:0]   alu_or        = alu_in_lhs | alu_in_rhs;
@@ -99,11 +97,11 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   wire        alu_cmp_z     = alu_in_lhs == alu_in_rhs;
   wire        alu_cmp_c     = alu_cmp_z || (alu_in_lhs > alu_in_rhs);
 
-  wire[8:0]   alu_adc       = alu_in_lhs + alu_in_rhs + alu_in_c8;  
+  wire[8:0]   alu_adc       = alu_in_lhs + alu_in_rhs + {7'b0, alu_in_c};  
   wire        alu_adc_c     = alu_adc[8];
   wire        alu_adc_v     = (alu_in_lhs[7] != alu_adc[7]) && (alu_in_lhs[7] == alu_in_rhs[7]);
 
-  wire[8:0]   alu_sbc       = alu_in_lhs - alu_in_rhs - alu_in_nc8;  
+  wire[8:0]   alu_sbc       = alu_in_lhs - alu_in_rhs - {7'b0, ~alu_in_c};  
   wire        alu_sbc_c     = ~alu_sbc[8];
   wire        alu_sbc_v     = ((alu_in_lhs[7] != alu_sbc[7]) && (alu_in_lhs[7] == alu_in_rhs[7]));
 

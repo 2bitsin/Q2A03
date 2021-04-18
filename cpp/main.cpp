@@ -71,7 +71,7 @@ int main(int argc, char** argv)
       const auto clocks = st_snapshot.ppuclock;
       tb.read_state(&a, &x, &y, &s, &p, &ir, &pcl, &pch, &cycles);    
       const auto pc = (pch * 0x100 + pcl);
-      std::printf("PC=%04X A=%02X X=%02X Y=%02X S=%02X P=%02X CYC=%d\n", pc, a, x, y, s, p, cycles);
+      std::printf("[%-4d] PC=%04X A=%02X X=%02X Y=%02X S=%02X P=%02X CYC=%d\n", log_index, pc, a, x, y, s, p, cycles);
       if (st_snapshot.addr != pc || st_snapshot.regs.a != a || st_snapshot.regs.x != x || st_snapshot.regs.y != y || st_snapshot.regs.p != p || st_snapshot.regs.sp != s || clocks != cycles)
       {
         std::printf("%-4d : expected / actual\n", log_index);
