@@ -75,7 +75,7 @@
 "0x49","Immediate","EOR"
 "0x4A","Implied","LSR A"
 "0x4B","Immediate","ALR*"
-"0x4C","Absolute","JMP"
+"0x4C","Absolute*","JMP"
 "0x4D","Absolute","EOR"
 "0x4E","Absolute","LSR"
 "0x4F","Absolute","LSE*"

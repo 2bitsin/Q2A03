@@ -3,9 +3,6 @@
 ,,,,
 "NOP*",-1,,"next_cycle",0
 ,,,,
-"JMP",-1,,"next_cycle",0
-"JMP",-1,,"{next_pch, next_pcl}","next_ad"
-,,,,
 "LDX",-1,,"next_cycle",0
 "LDX",-1,,"next_x","G_rd_data"
 "LDX",-1,,"next_p[N_bit]","next_x[7]"
@@ -71,59 +68,6 @@
 "BVS",-3,,"next_cycle","(curr_p[V_bit] ? (curr_cycle + 1) : 0)"
 ,,,,
 "BVC",-3,,"next_cycle","(~curr_p[V_bit] ? (curr_cycle + 1) : 0)"
-,,,,
-"RTS",-1,,"G_addr","curr_pc"
-"RTS",-1,,"G_rdwr",1
-"RTS",-1,,"next_cycle","curr_cycle + 1 "
-,,,,
-"RTS",0,,"G_addr","curr_sp"
-"RTS",0,,"G_rdwr",1
-"RTS",0,,"next_s","curr_s + 1"
-"RTS",0,,"next_cycle","curr_cycle + 1 "
-,,,,
-"RTS",1,,"G_addr","curr_sp"
-"RTS",1,,"G_rdwr",1
-"RTS",1,,"next_pcl","G_rd_data"
-"RTS",1,,"next_s","curr_s + 1"
-"RTS",1,,"next_cycle","curr_cycle + 1 "
-,,,,
-"RTS",2,,"G_addr","curr_sp"
-"RTS",2,,"G_rdwr",1
-"RTS",2,,"next_pch","G_rd_data"
-"RTS",2,,"next_cycle","curr_cycle + 1 "
-,,,,
-"RTS",3,,"G_addr","curr_pc"
-"RTS",3,,"G_rdwr",1
-"RTS",3,,"next_cycle",0
-"RTS",3,,"{next_pch, next_pcl}","curr_pc + 1"
-,,,,
-"JSR",-1,,"G_addr","curr_pc"
-"JSR",-1,,"G_rdwr",1
-"JSR",-1,,"next_adl","G_rd_data"
-"JSR",-1,,"{next_pch, next_pcl}","curr_pc + 1"
-"JSR",-1,,"next_cycle","curr_cycle + 1 "
-,,,,
-"JSR",0,,"G_addr","curr_sp"
-"JSR",0,,"G_rdwr",1
-"JSR",0,,"next_cycle","curr_cycle + 1 "
-,,,,
-"JSR",1,,"G_addr","curr_sp"
-"JSR",1,,"G_rdwr",0
-"JSR",1,,"G_wr_data","curr_pch"
-"JSR",1,,"next_s","curr_s - 1"
-"JSR",1,,"next_cycle","curr_cycle + 1 "
-,,,,
-"JSR",2,,"G_addr","curr_sp"
-"JSR",2,,"G_rdwr",0
-"JSR",2,,"G_wr_data","curr_pcl"
-"JSR",2,,"next_s","curr_s - 1"
-"JSR",2,,"next_cycle","curr_cycle + 1 "
-,,,,
-"JSR",3,,"G_addr","curr_pc"
-"JSR",3,,"G_rdwr",1
-"JSR",3,,"next_adh","G_rd_data"
-"JSR",3,,"next_cycle",0
-"JSR",3,,"{next_pch, next_pcl}","next_ad"
 ,,,,
 "PHP",0,,"G_addr","curr_sp"
 "PHP",0,,"G_rdwr",0
@@ -283,3 +227,86 @@
 ,,,,
 "TXS",-1,,"next_cycle",0
 "TXS",-1,,"next_s","curr_x"
+,,,,
+"JSR",-1,,"G_addr","curr_pc"
+"JSR",-1,,"G_rdwr",1
+"JSR",-1,,"next_adl","G_rd_data"
+"JSR",-1,,"{next_pch, next_pcl}","curr_pc + 1"
+"JSR",-1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"JSR",0,,"G_addr","curr_sp"
+"JSR",0,,"G_rdwr",1
+"JSR",0,,"next_cycle","curr_cycle + 1 "
+,,,,
+"JSR",1,,"G_addr","curr_sp"
+"JSR",1,,"G_rdwr",0
+"JSR",1,,"G_wr_data","curr_pch"
+"JSR",1,,"next_s","curr_s - 1"
+"JSR",1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"JSR",2,,"G_addr","curr_sp"
+"JSR",2,,"G_rdwr",0
+"JSR",2,,"G_wr_data","curr_pcl"
+"JSR",2,,"next_s","curr_s - 1"
+"JSR",2,,"next_cycle","curr_cycle + 1 "
+,,,,
+"JSR",3,,"G_addr","curr_pc"
+"JSR",3,,"G_rdwr",1
+"JSR",3,,"next_adh","G_rd_data"
+"JSR",3,,"next_cycle",0
+"JSR",3,,"{next_pch, next_pcl}","next_ad"
+,,,,
+"JMP",-1,,"next_cycle",0
+"JMP",-1,,"{next_pch, next_pcl}","next_ad"
+,,,,
+"RTS",-1,,"G_addr","curr_pc"
+"RTS",-1,,"G_rdwr",1
+"RTS",-1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTS",0,,"G_addr","curr_sp"
+"RTS",0,,"G_rdwr",1
+"RTS",0,,"next_s","curr_s + 1"
+"RTS",0,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTS",1,,"G_addr","curr_sp"
+"RTS",1,,"G_rdwr",1
+"RTS",1,,"next_pcl","G_rd_data"
+"RTS",1,,"next_s","curr_s + 1"
+"RTS",1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTS",2,,"G_addr","curr_sp"
+"RTS",2,,"G_rdwr",1
+"RTS",2,,"next_pch","G_rd_data"
+"RTS",2,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTS",3,,"G_addr","curr_pc"
+"RTS",3,,"G_rdwr",1
+"RTS",3,,"next_cycle",0
+"RTS",3,,"{next_pch, next_pcl}","curr_pc + 1"
+,,,,
+"RTI",-1,,"G_addr","curr_pc"
+"RTI",-1,,"G_rdwr",1
+"RTI",-1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTI",0,,"G_addr","curr_sp"
+"RTI",0,,"G_rdwr",1
+"RTI",0,,"next_s","curr_s + 1"
+"RTI",0,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTI",1,,"G_addr","curr_sp"
+"RTI",1,,"G_rdwr",1
+"RTI",1,,"next_s","curr_s + 1"
+"RTI",1,,"next_p","G_rd_data"
+"RTI",1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTI",2,,"G_addr","curr_sp"
+"RTI",2,,"G_rdwr",1
+"RTI",2,,"next_s","curr_s + 1"
+"RTI",2,,"next_pcl","G_rd_data"
+"RTI",2,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RTI",3,,"G_addr","curr_sp"
+"RTI",3,,"G_rdwr",1
+"RTI",3,,"next_pch","G_rd_data"
+"RTI",3,,"{next_pch, next_pcl}","curr_pc + 1"
+"RTI",3,,"next_cycle",0

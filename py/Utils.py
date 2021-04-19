@@ -4,7 +4,8 @@ class Utils:
 
   @staticmethod
   def strip_name(ss):
-    return re.sub(r'(?<!^)(?=[A-Z])', '_', re.sub(r'[^a-zA-Z]+', '', ss)).lower()
+    #return re.sub(r'(?<!^)(?=[A-Z])', '_', re.sub(r'[^a-zA-Z]+', '', ss)).lower()
+    return ss
 
   @staticmethod
   def opcodes_to_hex(opcodes):

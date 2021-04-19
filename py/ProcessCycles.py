@@ -74,6 +74,8 @@ class ProcessCycles:
       addressing  = Utils.strip_name (item['addressing'])
       operation   = Utils.strip_name (item['operation'])
       q_cycles    = item['cycles']
+      #if opcode == 0x40:
+      #  print("--")
       for cycle_index, q_actions in q_cycles.items():
         for target, q_values in q_actions.items():
           for condition, value in q_values.items():
