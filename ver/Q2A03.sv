@@ -60,6 +60,8 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   reg8_type   curr_ir       = 0 ;
   reg8_type   curr_adl      = 0 ;
   reg8_type   curr_adh      = 0 ;
+  reg8_type   curr_bal      = 0 ;
+  reg8_type   curr_bah      = 0 ;
   
   reg4_type   next_cycle    = 0;
   reg8_type   next_a        = 0 ;
@@ -72,13 +74,18 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   reg8_type   next_ir       = 0 ;
   reg8_type   next_adl      = 0 ;
   reg8_type   next_adh      = 0 ;
+  reg8_type   next_bal      = 0 ;
+  reg8_type   next_bah      = 0 ;
 
 /* Misc derivatives */
 
   wire[15:0]  curr_pc       = {curr_pch, curr_pcl};
   wire[15:0]  curr_ad       = {curr_adh, curr_adl};
-  wire[15:0]  next_pc       = {next_pch, next_pcl} ;
-  wire[15:0]  next_ad       = {next_adh, next_adl} ;
+  wire[15:0]  curr_ba       = {curr_bah, curr_bal};  
+
+  wire[15:0]  next_pc       = {next_pch, next_pcl};
+  wire[15:0]  next_ad       = {next_adh, next_adl};
+  wire[15:0]  next_ba       = {next_bah, next_bal};
 
   wire[15:0]  curr_sp       = {8'h01, curr_s};
 
@@ -128,6 +135,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       tick          <= 4'hf;
       phy1          <= 1;
 
+      curr_cycle    <= 4'hf;
       curr_a        <= 0;
       curr_x        <= 0;
       curr_y        <= 0;
@@ -136,10 +144,12 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       curr_pch      <= 8'hc0 ;
       curr_pcl      <= 0;
       curr_ir       <= 0;
-      curr_cycle    <= 4'hf;
       curr_adl      <= 0;
       curr_adh      <= 0;
+      curr_bal      <= 0;
+      curr_bah      <= 0;
 
+      next_cycle    = 0;
       next_a        = 0;
       next_x        = 0;
       next_y        = 0;
@@ -148,9 +158,10 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       next_pch      = 8'hc0 ;
       next_pcl      = 0;
       next_ir       = 0;
-      next_cycle    = 0;
       next_adl      = 0;
       next_adh      = 0;
+      next_bal      = 0;
+      next_bah      = 0;
 
     end else 
     begin
@@ -168,6 +179,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
 
         debug_tick    <= debug_tick + 3;
 
+        curr_cycle    <= next_cycle ;  
         curr_a        <= next_a ;   
         curr_x        <= next_x ;   
         curr_y        <= next_y ;   
@@ -178,7 +190,8 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
         curr_ir       <= next_ir ;  
         curr_adh      <= next_adh ;
         curr_adl      <= next_adl ;   
-        curr_cycle    <= next_cycle ;  
+        curr_bah      <= next_bah ;
+        curr_bal      <= next_bal ;   
       end
     end    
   end
