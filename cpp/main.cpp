@@ -59,10 +59,16 @@ int main(int argc, char** argv)
       else if (tb.G_addr >= 0x2000)
         tb.G_rd_data = 0;
       else {
-        if (tb.G_rdwr)  
+        if (tb.G_rdwr)
+        {
           tb.G_rd_data = ram[tb.G_addr & 0x7ff];
+          //std::printf("R(%04X, %02X)\n", tb.G_addr, tb.G_wr_data);
+        }
         else 
+        {
           ram[tb.G_addr & 0x7ff] = tb.G_wr_data; 
+          //std::printf("W(%04X, %02X)\n", tb.G_addr, tb.G_wr_data);
+        }
       }
     }
     if (!last_sync && tb.G_sync) 

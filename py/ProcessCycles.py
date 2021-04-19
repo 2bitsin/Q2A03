@@ -14,7 +14,6 @@ class ProcessCycles:
     full_table = []  
     instructions_assembled = 0
     for code, addressing, operation in isa:
-
       if addressing not in ams or operation not in ops:
         continue
       instructions_assembled = instructions_assembled + 1 
@@ -74,8 +73,6 @@ class ProcessCycles:
       addressing  = Utils.strip_name (item['addressing'])
       operation   = Utils.strip_name (item['operation'])
       q_cycles    = item['cycles']
-      #if opcode == 0x40:
-      #  print("--")
       for cycle_index, q_actions in q_cycles.items():
         for target, q_values in q_actions.items():
           for condition, value in q_values.items():
