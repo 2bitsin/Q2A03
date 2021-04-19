@@ -103,6 +103,42 @@
 "PLA",1,,"next_p[N_bit]","G_rd_data[7]"
 "PLA",1,,"next_cycle",0
 ,,,,
+"LSR A",-1,,"next_cycle",0
+"LSR A",-1,,"alu_in_c",0
+"LSR A",-1,,"alu_in_lhs","curr_a"
+"LSR A",-1,,"alu_in_rhs",0
+"LSR A",-1,,"next_a","alu_ror"
+"LSR A",-1,,"next_p[C_bit]","alu_ror_c"
+"LSR A",-1,,"next_p[Z_bit]","next_a == 0"
+"LSR A",-1,,"next_p[N_bit]","next_a[7]"
+,,,,
+"ASL A",-1,,"next_cycle",0
+"ASL A",-1,,"alu_in_c",0
+"ASL A",-1,,"alu_in_lhs","curr_a"
+"ASL A",-1,,"alu_in_rhs",0
+"ASL A",-1,,"next_a","alu_rol"
+"ASL A",-1,,"next_p[C_bit]","alu_rol_c"
+"ASL A",-1,,"next_p[Z_bit]","next_a == 0"
+"ASL A",-1,,"next_p[N_bit]","next_a[7]"
+,,,,
+"ROR A",-1,,"next_cycle",0
+"ROR A",-1,,"alu_in_c","curr_p[C_bit]"
+"ROR A",-1,,"alu_in_lhs","curr_a"
+"ROR A",-1,,"alu_in_rhs",0
+"ROR A",-1,,"next_a","alu_ror"
+"ROR A",-1,,"next_p[C_bit]","alu_ror_c"
+"ROR A",-1,,"next_p[Z_bit]","next_a == 0"
+"ROR A",-1,,"next_p[N_bit]","next_a[7]"
+,,,,
+"ROL A",-1,,"next_cycle",0
+"ROL A",-1,,"alu_in_c","curr_p[C_bit]"
+"ROL A",-1,,"alu_in_lhs","curr_a"
+"ROL A",-1,,"alu_in_rhs",0
+"ROL A",-1,,"next_a","alu_rol"
+"ROL A",-1,,"next_p[C_bit]","alu_rol_c"
+"ROL A",-1,,"next_p[Z_bit]","next_a == 0"
+"ROL A",-1,,"next_p[N_bit]","next_a[7]"
+,,,,
 "BIT",-1,,"next_cycle",0
 "BIT",-1,,"alu_in_c",0
 "BIT",-1,,"alu_in_lhs","curr_a"

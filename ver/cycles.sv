@@ -1,12 +1,12 @@
 
-	if ((curr_cycle == 1)&(curr_ir inside {8'h22,8'h28,8'h18,8'h5A,8'h50,8'h88,8'h85,8'hC5,8'h86,8'hD0,8'h65,8'hC0,8'hCD,8'h49,8'h20,8'hA0,8'h8E,8'h84,8'h68,8'h2C,8'hB2,8'hA2,8'hC9,8'h10,8'hED,8'hFA,8'h70,8'h25,8'hB8,8'h09,8'h1A,8'hF8,8'h92,8'h2D,8'h48,8'h69,8'hA9,8'h8D,8'hAC,8'h9A,8'h90,8'hE4,8'hDA,8'h42,8'hC8,8'h38,8'h58,8'h05,8'h98,8'h12,8'hA5,8'h89,8'h60,8'h24,8'h6D,8'hEA,8'hE0,8'h4C,8'h08,8'hC4,8'h3A,8'h40,8'h30,8'h7A,8'hF2,8'h82,8'hCC,8'hD2,8'hC2,8'hB0,8'hA6,8'hF0,8'h80,8'h32,8'h4D,8'h64,8'hAE,8'hA4,8'h0C,8'h02,8'h44,8'hE9,8'h72,8'hEC,8'h62,8'hAD,8'hAA,8'hE2,8'hE8,8'hD8,8'h29,8'hE5,8'h0D,8'h78,8'h45,8'h52,8'hA8,8'h8C,8'h04,8'h8A,8'hCA,8'hBA})|
+	if ((curr_cycle == 1)&(curr_ir inside {8'h22,8'h28,8'h18,8'h5A,8'h50,8'h88,8'h85,8'hC5,8'h86,8'hD0,8'h65,8'hC0,8'hCD,8'h49,8'h20,8'hA0,8'h8E,8'h84,8'h68,8'h2C,8'hB2,8'hA2,8'hC9,8'h10,8'hED,8'hFA,8'h70,8'h4A,8'h25,8'hB8,8'h09,8'h1A,8'hF8,8'h92,8'h2D,8'h48,8'h69,8'hA9,8'h8D,8'hAC,8'h9A,8'h90,8'hE4,8'hDA,8'h42,8'hC8,8'h38,8'h6A,8'h58,8'h05,8'h12,8'h98,8'hA5,8'h89,8'h60,8'h24,8'h6D,8'hEA,8'hE0,8'h4C,8'h08,8'hC4,8'h3A,8'h40,8'h30,8'h7A,8'hF2,8'h82,8'hCC,8'hD2,8'hC2,8'h2A,8'hB0,8'hA6,8'hF0,8'h80,8'h32,8'h4D,8'h64,8'hAE,8'hA4,8'h0C,8'h02,8'h44,8'hE9,8'h72,8'hEC,8'h62,8'h0A,8'hAD,8'hAA,8'hE2,8'hE8,8'hD8,8'h29,8'hE5,8'h0D,8'h78,8'h45,8'h52,8'hA8,8'h8C,8'h04,8'h8A,8'hCA,8'hBA})|
 	    (curr_cycle == 3)&(curr_ir inside {8'h70,8'h50,8'h10,8'hB0,8'h90,8'hF0,8'h30,8'hD0})|
 	    (curr_cycle == 2)&(curr_ir inside {8'h8D,8'hAC,8'h0C,8'h6D,8'h4C,8'hEC,8'hCC,8'h0D,8'h4D,8'hAE,8'h8E,8'h8C,8'h2C,8'hED,8'hCD,8'h2D,8'hAD})|
 	    (curr_cycle == 5)&(curr_ir inside {8'h60,8'h20})|
 	    (curr_cycle == 0))
 		G_addr = curr_pc;
 	
-	if ((curr_cycle == 1)&(curr_ir inside {8'h22,8'h28,8'h18,8'h5A,8'h50,8'h88,8'h85,8'hC5,8'h86,8'hD0,8'h65,8'hC0,8'hCD,8'h49,8'h20,8'hA0,8'h8E,8'h84,8'h68,8'h2C,8'hB2,8'hA2,8'hC9,8'h10,8'hED,8'hFA,8'h70,8'h25,8'hB8,8'h09,8'h1A,8'hF8,8'h92,8'h2D,8'h48,8'h69,8'hA9,8'h8D,8'hAC,8'h9A,8'h90,8'hE4,8'hDA,8'h42,8'h38,8'hC8,8'h58,8'h05,8'h12,8'h98,8'hA5,8'h89,8'h60,8'h24,8'h6D,8'hEA,8'hE0,8'h4C,8'h08,8'hC4,8'h3A,8'h40,8'h30,8'h7A,8'hF2,8'h82,8'hCC,8'hD2,8'hC2,8'hB0,8'hA6,8'hF0,8'h80,8'h32,8'h4D,8'h64,8'hAE,8'hA4,8'h0C,8'h02,8'h44,8'hE9,8'h72,8'h62,8'hEC,8'hAD,8'hAA,8'hE2,8'hE8,8'hD8,8'h29,8'hE5,8'h0D,8'h78,8'h45,8'h52,8'hA8,8'h8C,8'h04,8'h8A,8'hCA,8'hBA})|
+	if ((curr_cycle == 1)&(curr_ir inside {8'h22,8'h28,8'h18,8'h5A,8'h50,8'h88,8'h85,8'hC5,8'h86,8'hD0,8'h65,8'hC0,8'hCD,8'h49,8'h20,8'hA0,8'h8E,8'h84,8'h68,8'h2C,8'hB2,8'hA2,8'hC9,8'h10,8'hED,8'hFA,8'h70,8'h4A,8'h25,8'hB8,8'h09,8'h1A,8'hF8,8'h92,8'h2D,8'h48,8'h69,8'hA9,8'h8D,8'hAC,8'h9A,8'h90,8'hE4,8'hDA,8'h42,8'h38,8'hC8,8'h6A,8'h58,8'h05,8'h12,8'h98,8'hA5,8'h89,8'h60,8'h24,8'h6D,8'hEA,8'hE0,8'h4C,8'h08,8'hC4,8'h3A,8'h40,8'h30,8'h7A,8'hF2,8'h82,8'hCC,8'hD2,8'hC2,8'h2A,8'hB0,8'hA6,8'hF0,8'h80,8'h32,8'h4D,8'h64,8'hAE,8'hA4,8'h0C,8'h02,8'h44,8'hE9,8'h72,8'h62,8'hEC,8'h0A,8'hAD,8'hAA,8'hE2,8'hE8,8'hD8,8'h29,8'hE5,8'h0D,8'h78,8'h45,8'h52,8'hA8,8'h8C,8'h04,8'h8A,8'hCA,8'hBA})|
 	    (curr_cycle == 3)&(curr_ir inside {8'hED,8'h70,8'h50,8'h10,8'h40,8'h2D,8'hCC,8'hB0,8'hCD,8'h68,8'hAC,8'h90,8'h28,8'hAE,8'h60,8'hAD,8'hF0,8'h4D,8'h0C,8'h6D,8'h30,8'hEC,8'hD0,8'h0D,8'h2C})|
 	    (curr_cycle == 2)&(curr_ir inside {8'h8D,8'hAC,8'h90,8'hF0,8'h04,8'h44,8'hA5,8'h60,8'h0C,8'h6D,8'h4C,8'h30,8'hC4,8'hEC,8'hCC,8'hB0,8'h45,8'hA6,8'h0D,8'h4D,8'h64,8'hAE,8'hA4,8'h28,8'h25,8'h65,8'hD0,8'hC5,8'h8E,8'hE5,8'hE4,8'h8C,8'h70,8'h05,8'h2C,8'h10,8'h50,8'h40,8'hED,8'hCD,8'h20,8'h2D,8'h68,8'hAD,8'h24})|
 	    (curr_cycle == 4)&(curr_ir inside {8'h60,8'h40})|
@@ -41,19 +41,19 @@
 		G_addr = curr_ad;
 	
 	if ((curr_cycle == 3)&(curr_ir inside {8'h8C,8'hED,8'h70,8'h50,8'h8D,8'h10,8'h2D,8'hCC,8'hB0,8'hCD,8'hAC,8'h68,8'h90,8'h28,8'hAE,8'hAD,8'hF0,8'h4D,8'h0C,8'h6D,8'h30,8'hEC,8'hD0,8'h8E,8'h0D,8'h2C})|
-	    (curr_cycle == 1)&(curr_ir inside {8'h18,8'h5A,8'h88,8'hC0,8'h49,8'hA0,8'hA2,8'hC9,8'hFA,8'hB8,8'h09,8'h1A,8'hF8,8'h69,8'hA9,8'h9A,8'hDA,8'h38,8'hC8,8'h58,8'h98,8'h89,8'hEA,8'hE0,8'h3A,8'h7A,8'hC2,8'h80,8'hE9,8'hAA,8'hE2,8'hE8,8'hD8,8'h29,8'h78,8'hA8,8'h8A,8'hCA,8'hBA})|
+	    (curr_cycle == 1)&(curr_ir inside {8'h18,8'h5A,8'h88,8'hC0,8'h49,8'hA0,8'hA2,8'hC9,8'hFA,8'h4A,8'hB8,8'h09,8'h1A,8'hF8,8'h69,8'hA9,8'h9A,8'hDA,8'hC8,8'h38,8'h6A,8'h58,8'h98,8'h89,8'hEA,8'hE0,8'h3A,8'h7A,8'hC2,8'h2A,8'h80,8'hE9,8'h0A,8'hAA,8'hE2,8'hE8,8'hD8,8'h29,8'h78,8'hA8,8'h8A,8'hCA,8'hBA})|
 	    (curr_cycle == 2)&(curr_ir inside {8'h04,8'h44,8'hA5,8'h4C,8'hC4,8'h45,8'hA6,8'h64,8'hA4,8'h25,8'h65,8'hC5,8'hE5,8'hE4,8'h05,8'h85,8'h86,8'h84,8'h24,8'h08,8'h48})|
 	    (curr_cycle == 5)&(curr_ir inside {8'h60,8'h40,8'h20}))
 		next_cycle = 0;
 	
 	if ((curr_cycle == 2)&(curr_ir inside {8'hC5,8'h45,8'hE4,8'h05,8'h25,8'hC4,8'h24})|
 	    (curr_cycle == 3)&(curr_ir inside {8'h4D,8'hEC,8'h2D,8'hCC,8'hCD,8'h0D,8'h2C})|
-	    (curr_cycle == 1)&(curr_ir inside {8'hE0,8'h09,8'hC0,8'h49,8'h29,8'hC9}))
+	    (curr_cycle == 1)&(curr_ir inside {8'h4A,8'hE0,8'h09,8'h0A,8'hC0,8'h49,8'h29,8'hC9}))
 		alu_in_c = 0;
 	
 	if ((curr_cycle == 2)&(curr_ir inside {8'hC5,8'hE5,8'h45,8'h05,8'h25,8'h65,8'h24})|
 	    (curr_cycle == 3)&(curr_ir inside {8'hED,8'h4D,8'h6D,8'h2D,8'hCD,8'h0D,8'h2C})|
-	    (curr_cycle == 1)&(curr_ir inside {8'hE9,8'h09,8'h69,8'h49,8'h29,8'hC9}))
+	    (curr_cycle == 1)&(curr_ir inside {8'h4A,8'hE9,8'h09,8'h0A,8'h69,8'h49,8'h29,8'h2A,8'h6A,8'hC9}))
 		alu_in_lhs = curr_a;
 	
 	if ((curr_cycle == 2)&(curr_ir inside {8'hC5,8'hE5,8'h45,8'hE4,8'h05,8'h25,8'hC4,8'h65,8'h24})|
@@ -67,12 +67,12 @@
 		next_a = alu_or;
 	
 	if ((curr_cycle == 3)&(curr_ir inside {8'hED,8'h4D,8'h6D,8'hAD,8'h2D,8'h0D})|
-	    (curr_cycle == 1)&(curr_ir inside {8'hE9,8'h09,8'h69,8'h49,8'hA9,8'h29,8'h8A,8'h98})|
+	    (curr_cycle == 1)&(curr_ir inside {8'h4A,8'hE9,8'h09,8'h0A,8'h69,8'h49,8'hA9,8'h29,8'h2A,8'h6A,8'h8A,8'h98})|
 	    (curr_cycle == 2)&(curr_ir inside {8'hE5,8'h45,8'h05,8'hA5,8'h25,8'h65}))
 		next_p[Z_bit] = next_a == 0;
 	
 	if ((curr_cycle == 3)&(curr_ir inside {8'hED,8'h4D,8'h6D,8'hAD,8'h2D,8'h0D})|
-	    (curr_cycle == 1)&(curr_ir inside {8'hE9,8'h09,8'h69,8'h49,8'hA9,8'h29,8'h8A,8'h98})|
+	    (curr_cycle == 1)&(curr_ir inside {8'h4A,8'hE9,8'h09,8'h0A,8'h69,8'h49,8'hA9,8'h29,8'h2A,8'h6A,8'h8A,8'h98})|
 	    (curr_cycle == 2)&(curr_ir inside {8'hE5,8'h45,8'h05,8'hA5,8'h25,8'h65}))
 		next_p[N_bit] = next_a[7];
 	
@@ -94,6 +94,15 @@
 	    (curr_cycle == 4)&(curr_ir == 8'h20)|
 	    (curr_cycle == 2)&(curr_ir inside {8'h08,8'h48}))
 		next_s = curr_s - 1;
+	
+	if ((curr_cycle == 1)&(curr_ir inside {8'h4A,8'h2A,8'h0A,8'h6A}))
+		alu_in_rhs = 0;
+	
+	if ((curr_cycle == 1)&(curr_ir inside {8'h2A,8'h0A}))
+		next_a = alu_rol;
+	
+	if ((curr_cycle == 1)&(curr_ir inside {8'h2A,8'h0A}))
+		next_p[C_bit] = alu_rol_c;
 	
 	if ((curr_cycle == 2)&(curr_ir inside {8'hAE,8'h4C,8'hCD,8'h8E,8'h0D,8'h2D,8'hCC,8'h8C,8'hAD,8'hEC,8'h8D,8'h4D,8'hAC,8'hED,8'h0C,8'h6D,8'h2C})|
 	    (curr_cycle == 5)&(curr_ir == 8'h20))
@@ -155,6 +164,11 @@
 	if ((curr_cycle == 3)&(curr_ir inside {8'h28,8'h40}))
 		next_p = G_rd_data;
 	
+	if ((curr_cycle == 3)&(curr_ir inside {8'hED,8'h6D})|
+	    (curr_cycle == 2)&(curr_ir inside {8'h65,8'hE5})|
+	    (curr_cycle == 1)&(curr_ir inside {8'h69,8'h6A,8'hE9,8'h2A}))
+		alu_in_c = curr_p[C_bit];
+	
 	if ((curr_cycle == 1)&(curr_ir == 8'h30))
 		next_cycle = (curr_p[N_bit] ? (curr_cycle + 1) : 0);
 	
@@ -178,16 +192,17 @@
 	    (curr_cycle == 3)&(curr_ir == 8'h8D))
 		G_wr_data = curr_a;
 	
+	if ((curr_cycle == 1)&(curr_ir inside {8'h4A,8'h6A}))
+		next_a = alu_ror;
+	
+	if ((curr_cycle == 1)&(curr_ir inside {8'h4A,8'h6A}))
+		next_p[C_bit] = alu_ror_c;
+	
 	if ((curr_cycle == 1)&(curr_ir == 8'h50))
 		next_cycle = (~curr_p[V_bit] ? (curr_cycle + 1) : 0);
 	
 	if ((curr_cycle == 1)&(curr_ir == 8'h58))
 		next_p = curr_p & ~I_mask;
-	
-	if ((curr_cycle == 3)&(curr_ir inside {8'hED,8'h6D})|
-	    (curr_cycle == 2)&(curr_ir inside {8'h65,8'hE5})|
-	    (curr_cycle == 1)&(curr_ir inside {8'h69,8'hE9}))
-		alu_in_c = curr_p[C_bit];
 	
 	if ((curr_cycle == 2)&(curr_ir == 8'h65)|
 	    (curr_cycle == 3)&(curr_ir == 8'h6D)|
