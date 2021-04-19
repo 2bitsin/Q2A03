@@ -93,34 +93,28 @@ class ProcessCycles:
     return flat_table
 
   def write_out(self, writer, flat_table):
-    o7, o6, o5, o4, o3, o2, o1, o0 = sympy.symbols('o7, o6, o5, o4, o3, o2, o1, o0')
-    t7, t6, t5, t4, t3, t2, t1, t0 = sympy.symbols('t7, t6, t5, t4, t3, t2, t1, t0')
-    symbol_cache = {}
+
     for action, q_conditions in flat_table.items():        
-      full_condition = sympy.symbols('x').subs({'x': False})
-      for opcode, cycle_index, condition in q_conditions:            
-        partial_condition = [t0, t1, t2, t3, t4, t5, t6, t7][cycle_index]
-        if opcode != None:
-          partial_condition = (
-            (o0 if ((opcode >> 0) & 1 == 1) else ~o0) &
-            (o1 if ((opcode >> 1) & 1 == 1) else ~o1) &
-            (o2 if ((opcode >> 2) & 1 == 1) else ~o2) &
-            (o3 if ((opcode >> 3) & 1 == 1) else ~o3) &
-            (o4 if ((opcode >> 4) & 1 == 1) else ~o4) &
-            (o5 if ((opcode >> 5) & 1 == 1) else ~o5) &
-            (o6 if ((opcode >> 6) & 1 == 1) else ~o6) &
-            (o7 if ((opcode >> 7) & 1 == 1) else ~o7) &
-            partial_condition)            
-        if condition != '':
-          partial_condition = partial_condition & sympy.symbols(condition)
-        full_condition = full_condition | partial_condition
-        full_condition = sympy.simplify(full_condition)
-        print(".", end="", flush=True)
-      writer.write_line('if (%s)' % (full_condition))
+      pre_cond = {}
+      for opcode, cycle_index, condition in q_conditions:
+        if cycle_index not in pre_cond:
+          pre_cond[cycle_index] = []
+        if opcode is not None:
+          pre_cond[cycle_index].append(opcode)
+      full_cond = []
+      for cycle_index, opcodes in pre_cond.items():
+        partial_cond = ['(curr_cycle == %d)' % (cycle_index)]
+        if len(opcodes) > 1:
+          partial_cond.append('(curr_ir inside {%s})' % (','.join (Utils.arr_int8_to_hex(opcodes))))
+        elif len(opcodes) == 1:
+          partial_cond.append('(curr_ir == %s)' % (Utils.int8_to_hex(opcodes[0])))          
+        full_cond.append('&'.join(partial_cond))
+      writer.write_line('if (%s)' % ('|\n    '.join(full_cond)))
       writer.indent()
       writer.write_line('%s = %s;' % action)
       writer.unindent()
       writer.write_line('')
+      print("%s = %s" % action) 
     self.dump_flat_table(flat_table)    
     print ("\nDone")
     return 

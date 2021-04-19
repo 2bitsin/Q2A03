@@ -107,24 +107,6 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
 
 /* End of Arithmetic / Logic operations */
 
-  wire t0 = curr_cycle == 0;  
-  wire t1 = curr_cycle == 1;  
-  wire t2 = curr_cycle == 2;  
-  wire t3 = curr_cycle == 3;  
-  wire t4 = curr_cycle == 4;  
-  wire t5 = curr_cycle == 5;  
-  wire t6 = curr_cycle == 6;  
-  wire t7 = curr_cycle == 7; 
-
-  wire o0 = curr_ir[0];
-  wire o1 = curr_ir[1];
-  wire o2 = curr_ir[2];
-  wire o3 = curr_ir[3];
-  wire o4 = curr_ir[4];
-  wire o5 = curr_ir[5];
-  wire o6 = curr_ir[6];
-  wire o7 = curr_ir[7];
-
   always @*
   begin
     `include "cycles.sv"

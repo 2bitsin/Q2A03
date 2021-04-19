@@ -308,5 +308,4 @@
 "RTI",3,,"G_addr","curr_sp"
 "RTI",3,,"G_rdwr",1
 "RTI",3,,"next_pch","G_rd_data"
-"RTI",3,,"{next_pch, next_pcl}","curr_pc + 1"
 "RTI",3,,"next_cycle",0

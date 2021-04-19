@@ -43,5 +43,6 @@ class SvWriter:
     self.write_line('endcase')
 
   def write_line(self, text):
+    text = text.replace('\n', '\n' + '\t'*self.tabs)
     self.new_line()
     self.file.write(text)
