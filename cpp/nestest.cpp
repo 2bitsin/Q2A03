@@ -20,8 +20,8 @@ struct emu_state_type
   qword scanline;
 
   bool unofficial;
-  const char* instruction;
   const char* disassembly;
+  const char* annotation;
 };
 
 emu_state_type nesttest_log [] =

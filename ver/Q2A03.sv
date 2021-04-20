@@ -95,6 +95,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   bit         alu_in_c      = 0;
   reg8_type   alu_in_lhs    = 0;
   reg8_type   alu_in_rhs    = 0;
+  wire[7:0]   alu_out_rhs   = alu_in_rhs;
 
   wire[7:0]   alu_and       = alu_in_lhs & alu_in_rhs;
   wire[7:0]   alu_or        = alu_in_lhs | alu_in_rhs;

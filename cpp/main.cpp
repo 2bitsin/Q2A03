@@ -60,15 +60,9 @@ int main(int argc, char** argv)
         tb.G_rd_data = 0;
       else {
         if (tb.G_rdwr)
-        {
           tb.G_rd_data = ram[tb.G_addr & 0x7ff];
-          //std::printf("R(%04X, %02X)\n", tb.G_addr, tb.G_wr_data);
-        }
         else 
-        {
           ram[tb.G_addr & 0x7ff] = tb.G_wr_data; 
-          //std::printf("W(%04X, %02X)\n", tb.G_addr, tb.G_wr_data);
-        }
       }
     }
     if (!last_sync && tb.G_sync) 
@@ -77,7 +71,15 @@ int main(int argc, char** argv)
       const auto clocks = st_snapshot.ppuclock;
       tb.read_state(&a, &x, &y, &s, &p, &ir, &pcl, &pch, &cycles);    
       const auto pc = (pch * 0x100 + pcl);
-      std::printf("[%-4d] PC=%04X A=%02X X=%02X Y=%02X S=%02X P=%02X CYC=%d\n", log_index, pc, a, x, y, s, p, cycles);
+      std::printf("[%-4d] %-15s ", log_index, st_snapshot.disassembly);
+      switch(st_snapshot.nbytes)
+      {
+      case 1: std::printf("%02X       ", st_snapshot.opbytes[0]); break;
+      case 2: std::printf("%02X %02X    ", st_snapshot.opbytes[0], st_snapshot.opbytes[1]); break;
+      case 3: std::printf("%02X %02X %02X ", st_snapshot.opbytes[0], st_snapshot.opbytes[1], st_snapshot.opbytes[2]); break;
+      }
+      
+      std::printf("   PC=%04X A=%02X X=%02X Y=%02X S=%02X P=%02X CYC=%d\n", pc, a, x, y, s, p, cycles);
       if (st_snapshot.addr != pc || st_snapshot.regs.a != a || st_snapshot.regs.x != x || st_snapshot.regs.y != y || st_snapshot.regs.p != p || st_snapshot.regs.sp != s || clocks != cycles)
       {
         std::printf("%-4d : expected / actual\n", log_index);
