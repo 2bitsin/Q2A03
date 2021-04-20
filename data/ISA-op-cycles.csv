@@ -32,42 +32,42 @@
 ,,,,
 "NOP",-1,,"next_cycle",0
 ,,,,
-"SEC",-1,,"next_p","curr_p | C_mask"
+"SEC",-1,,"next_p[C_bit]",1
 "SEC",-1,,"next_cycle",0
 ,,,,
-"SED",-1,,"next_p","curr_p | D_mask"
+"SED",-1,,"next_p[D_bit]",1
 "SED",-1,,"next_cycle",0
 ,,,,
-"SEI",-1,,"next_p","curr_p | I_mask"
+"SEI",-1,,"next_p[I_bit]",1
 "SEI",-1,,"next_cycle",0
 ,,,,
-"CLC",-1,,"next_p","curr_p & ~C_mask"
+"CLC",-1,,"next_p[C_bit]",0
 "CLC",-1,,"next_cycle",0
 ,,,,
-"CLI",-1,,"next_p","curr_p & ~I_mask"
+"CLI",-1,,"next_p[I_bit]",0
 "CLI",-1,,"next_cycle",0
 ,,,,
-"CLD",-1,,"next_p","curr_p & ~D_mask"
+"CLD",-1,,"next_p[D_bit]",0
 "CLD",-1,,"next_cycle",0
 ,,,,
-"CLV",-1,,"next_p","curr_p & ~V_mask"
+"CLV",-1,,"next_p[V_bit]",0
 "CLV",-1,,"next_cycle",0
 ,,,,
 "BCS",-3,,"next_cycle","(curr_p[C_bit] ? (curr_cycle + 1) : 0)"
 ,,,,
-"BCC",-3,,"next_cycle","(~curr_p[C_bit] ? (curr_cycle + 1) : 0)"
+"BCC",-3,,"next_cycle","(curr_p[C_bit] ? 0 : (curr_cycle + 1))"
 ,,,,
 "BEQ",-3,,"next_cycle","(curr_p[Z_bit] ? (curr_cycle + 1) : 0)"
 ,,,,
-"BNE",-3,,"next_cycle","(~curr_p[Z_bit] ? (curr_cycle + 1) : 0)"
+"BNE",-3,,"next_cycle","(curr_p[Z_bit] ? 0 : (curr_cycle + 1))"
 ,,,,
 "BMI",-3,,"next_cycle","(curr_p[N_bit] ? (curr_cycle + 1) : 0)"
 ,,,,
-"BPL",-3,,"next_cycle","(~curr_p[N_bit] ? (curr_cycle + 1) : 0)"
+"BPL",-3,,"next_cycle","(curr_p[N_bit] ? 0 : (curr_cycle + 1))"
 ,,,,
 "BVS",-3,,"next_cycle","(curr_p[V_bit] ? (curr_cycle + 1) : 0)"
 ,,,,
-"BVC",-3,,"next_cycle","(~curr_p[V_bit] ? (curr_cycle + 1) : 0)"
+"BVC",-3,,"next_cycle","(curr_p[V_bit] ? 0 : (curr_cycle + 1))"
 ,,,,
 "PHP",0,,"G_addr","curr_sp"
 "PHP",0,,"G_rdwr",0
