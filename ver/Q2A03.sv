@@ -41,6 +41,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
 /* Begin debug state */
   reg32_type  debug_tick    = 0;
 /* End debug state */
+
   bit[3:0]    tick          = 4'hf;
   bit         phy1          = 0;
   wire        edge_rise     = G_reset && (G_phy2 && ~phy1);
@@ -120,10 +121,12 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
 
 /* End of Arithmetic / Logic operations */
 
-  always @*
-  begin
+  always @* 
+  if (G_ready)
+  begin          
     `include "cycles.sv"
   end
+  
 
   always @(posedge G_clock, negedge G_reset)
   begin
@@ -166,10 +169,13 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
     end else 
     begin
       /* Clock divider */
-      tick <= tick + 4'b1;
-      if (tick >= 11)
-        tick <= 4'b0;
-      phy1 <= G_phy2;
+      if (G_ready)
+      begin
+        tick <= tick + 4'b1;
+        if (tick >= 11)
+          tick <= 4'b0;
+        phy1 <= G_phy2;        
+      end
 
       /* Latch state */
       if (edge_fall)

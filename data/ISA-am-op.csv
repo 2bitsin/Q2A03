@@ -144,7 +144,7 @@
 "0x8E","Absolute","STX"
 "0x8F","Absolute","AXS*"
 "0x90","Relative","BCC"
-"0x91","(Indirect), Y","STA"
+"0x91","(Indirect), Y*","STA"
 "0x92","Immediate","HLT*"
 "0x93","(Indirect), Y","AHX*"
 "0x94","Zero Page, X","STY"
