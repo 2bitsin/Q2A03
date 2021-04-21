@@ -191,6 +191,75 @@
 "ASL",1,,"next_p[N_bit]","alu_rol[7]"
 "ASL",1,,"next_cycle",0
 ,,,,
+"ASO*",-1,,"G_addr","curr_ad"
+"ASO*",-1,,"G_rdwr",1
+"ASO*",-1,,"alu_in_c",0
+"ASO*",-1,,"alu_in_lhs","G_rd_data"
+"ASO*",-1,,"alu_in_rhs",0
+"ASO*",-1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"ASO*",0,,"G_addr","curr_ad"
+"ASO*",0,,"G_rdwr",0
+"ASO*",0,,"G_wr_data","alu_rol"
+"ASO*",0,,"next_p[C_bit]","alu_rol_c"
+"ASO*",0,,"next_cycle","curr_cycle + 1 "
+,,,,
+"ASO*",1,,"G_addr","curr_ad"
+"ASO*",1,,"G_rdwr",1
+"ASO*",1,,"alu_in_c",0
+"ASO*",1,,"alu_in_lhs","curr_a"
+"ASO*",1,,"alu_in_rhs","G_rd_data"
+"ASO*",1,,"next_a","alu_or"
+"ASO*",1,,"next_p[Z_bit]","next_a == 0"
+"ASO*",1,,"next_p[N_bit]","next_a[7]"
+"ASO*",1,,"next_cycle",0
+,,,,
+"RLA*",-1,,"G_addr","curr_ad"
+"RLA*",-1,,"G_rdwr",1
+"RLA*",-1,,"alu_in_c","curr_p[C_bit]"
+"RLA*",-1,,"alu_in_lhs","G_rd_data"
+"RLA*",-1,,"alu_in_rhs",0
+"RLA*",-1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RLA*",0,,"G_addr","curr_ad"
+"RLA*",0,,"G_rdwr",0
+"RLA*",0,,"G_wr_data","alu_rol"
+"RLA*",0,,"next_p[C_bit]","alu_rol_c"
+"RLA*",0,,"next_p[Z_bit]","alu_rol == 0"
+"RLA*",0,,"next_p[N_bit]","alu_rol[7]"
+"RLA*",0,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RLA*",1,,"G_addr","curr_ad"
+"RLA*",1,,"G_rdwr",1
+"RLA*",1,,"alu_in_c",0
+"RLA*",1,,"alu_in_lhs","curr_a"
+"RLA*",1,,"alu_in_rhs","G_rd_data"
+"RLA*",1,,"next_a","alu_and"
+"RLA*",1,,"next_cycle",0
+,,,,
+"LSE*",-1,,"G_addr","curr_ad"
+"LSE*",-1,,"G_rdwr",1
+"LSE*",-1,,"alu_in_c",0
+"LSE*",-1,,"alu_in_lhs","G_rd_data"
+"LSE*",-1,,"alu_in_rhs",0
+"LSE*",-1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"LSE*",0,,"G_addr","curr_ad"
+"LSE*",0,,"G_rdwr",0
+"LSE*",0,,"G_wr_data","alu_ror"
+"LSE*",0,,"next_p[C_bit]","alu_ror_c"
+"LSE*",0,,"next_cycle","curr_cycle + 1 "
+,,,,
+"LSE*",1,,"G_addr","curr_ad"
+"LSE*",1,,"G_rdwr",1
+"LSE*",1,,"alu_in_c",0
+"LSE*",1,,"alu_in_lhs","curr_a"
+"LSE*",1,,"alu_in_rhs","G_rd_data"
+"LSE*",1,,"next_a","alu_xor"
+"LSE*",1,,"next_p[Z_bit]","next_a == 0"
+"LSE*",1,,"next_p[N_bit]","next_a[7]"
+"LSE*",1,,"next_cycle",0
+,,,,
 "ROR",-1,,"G_addr","curr_ad"
 "ROR",-1,,"G_rdwr",1
 "ROR",-1,,"alu_in_c","curr_p[C_bit]"
@@ -304,22 +373,6 @@
 "ISB*",1,,"next_p[Z_bit]","next_a == 0"
 "ISB*",1,,"next_p[N_bit]","next_a[7]"
 "ISB*",1,,"next_cycle",0
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
 ,,,,
 "CMP",-1,,"next_cycle",0
 "CMP",-1,,"alu_in_c",0

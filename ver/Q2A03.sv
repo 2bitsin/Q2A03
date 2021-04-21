@@ -63,6 +63,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   reg8_type   curr_adh      = 0 ;
   reg8_type   curr_bal      = 0 ;
   reg8_type   curr_bah      = 0 ;
+  reg8_type   curr_tmp      = 0 ;
   
   reg4_type   next_cycle    = 0;
   reg8_type   next_a        = 0 ;
@@ -77,6 +78,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   reg8_type   next_adh      = 0 ;
   reg8_type   next_bal      = 0 ;
   reg8_type   next_bah      = 0 ;
+  reg8_type   next_tmp      = 0 ;
 
 /* Misc derivatives */
 
@@ -152,6 +154,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       curr_adh      <= 0;
       curr_bal      <= 0;
       curr_bah      <= 0;
+      curr_tmp      <= 0;
 
       next_cycle    = 0;
       next_a        = 0;
@@ -166,6 +169,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       next_adh      = 0;
       next_bal      = 0;
       next_bah      = 0;
+      next_tmp      = 0;
 
     end else 
     begin
@@ -199,6 +203,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
         curr_adl      <= next_adl ;   
         curr_bah      <= next_bah ;
         curr_bal      <= next_bal ;   
+        curr_tmp      <= next_tmp ;
       end
     end    
   end
