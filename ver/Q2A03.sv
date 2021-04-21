@@ -39,47 +39,47 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   output  wire        G_phy2;
 
 /* Begin debug state */
-  reg32_type  debug_tick    = 0;
+  reg32_type  debug_tick  ;
 /* End debug state */
 
-  bit[3:0]    tick          = 4'hf;
-  bit         phy1          = 0;
+  bit[3:0]    tick  ;
+  bit         phy1  ;
+  bit         last_nmi ;
+
   wire        edge_rise     = G_reset && (G_phy2 && ~phy1);
   wire        edge_fall     = G_reset && (phy1 && ~G_phy2);
 
   assign G_sync = ((curr_cycle == 0) && G_reset); 
-  assign G_phy2 = (tick >= 6);
+  assign G_phy2 = (tick >= 6);  
 
-  reg4_type   curr_cycle    = 4'hf;  
-  reg8_type   curr_a        = 0 ;
-  reg8_type   curr_x        = 0 ;
-  reg8_type   curr_y        = 0 ;
-  reg8_type   curr_s        = 8'hfd ;
-  reg8_type   curr_pcl      = 0 ;
-  reg8_type   curr_pch      = 0 ;
-  reg8_type   curr_p        = 8'h24 ;
-  reg8_type   curr_ir       = 0 ;
-  reg8_type   curr_adl      = 0 ;
-  reg8_type   curr_adh      = 0 ;
-  reg8_type   curr_bal      = 0 ;
-  reg8_type   curr_bah      = 0 ;
-  reg8_type   curr_tmp      = 0 ;
+  reg4_type   curr_cycle    ;
+  reg8_type   curr_a        ;
+  reg8_type   curr_x        ;
+  reg8_type   curr_y        ;
+  reg8_type   curr_s        ;
+  reg8_type   curr_pcl      ;
+  reg8_type   curr_pch      ;
+  reg8_type   curr_p        ;
+  reg8_type   curr_ir       ;
+  reg8_type   curr_adl      ;
+  reg8_type   curr_adh      ;
+  reg8_type   curr_bal      ;
+  reg8_type   curr_bah      ;
+
+  reg4_type   next_cycle    ;
+  reg8_type   next_a        ;
+  reg8_type   next_x        ;
+  reg8_type   next_y        ;
+  reg8_type   next_s        ;
+  reg8_type   next_pch      ;
+  reg8_type   next_pcl      ;
+  reg8_type   next_p        ;
+  reg8_type   next_ir       ;
+  reg8_type   next_adl      ;
+  reg8_type   next_adh      ;
+  reg8_type   next_bal      ;
+  reg8_type   next_bah      ;
   
-  reg4_type   next_cycle    = 0;
-  reg8_type   next_a        = 0 ;
-  reg8_type   next_x        = 0 ;
-  reg8_type   next_y        = 0 ;
-  reg8_type   next_s        = 8'hfd ;
-  reg8_type   next_pch      = 8'hc0 ;
-  reg8_type   next_pcl      = 0 ;
-  reg8_type   next_p        = 8'h24 ;
-  reg8_type   next_ir       = 0 ;
-  reg8_type   next_adl      = 0 ;
-  reg8_type   next_adh      = 0 ;
-  reg8_type   next_bal      = 0 ;
-  reg8_type   next_bah      = 0 ;
-  reg8_type   next_tmp      = 0 ;
-
 /* Misc derivatives */
 
   wire[15:0]  curr_pc       = {curr_pch, curr_pcl};
@@ -92,11 +92,21 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
 
   wire[15:0]  curr_sp       = {8'h01, curr_s};
 
+  reg16_type  vec_addr      ;  
+  wire[15:0]  vec_addr_lo   = vec_addr;
+  wire[15:0]  vec_addr_hi   = vec_addr + 1;
+
+  wire        irq_p         = ~G_irq & ~curr_p[I_bit];
+  bit         res_p         ;  
+  bit         nmi_p         ;
+  wire        force_brk     = irq_p | res_p | nmi_p;
+  bit         is_soft_brk   ;
+
 /* Arithmetic / Logic operations */
 
-  bit         alu_in_c      = 0;
-  reg8_type   alu_in_lhs    = 0;
-  reg8_type   alu_in_rhs    = 0;
+  bit         alu_in_c      ;
+  reg8_type   alu_in_lhs    ;
+  reg8_type   alu_in_rhs    ;
   wire[7:0]   alu_out_rhs   = alu_in_rhs;
 
   wire[7:0]   alu_and       = alu_in_lhs & alu_in_rhs;
@@ -127,50 +137,58 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   always @* 
   if (G_ready)
   begin          
+    if (~|curr_cycle)
+    begin
+      is_soft_brk = ~force_brk;      
+
+           if (irq_p     ) vec_addr = 16'hFFFE;
+      else if (nmi_p     ) vec_addr = 16'hFFFA;
+      else if (res_p     ) vec_addr = 16'hFFFC; 
+      else if (~force_brk) vec_addr = 16'hFFFE;
+    end
+
     `include "cycles.sv"
   end
   
-
   always @(posedge G_clock, negedge G_reset)
   begin
     if (~G_reset)
     begin
       /* Reset state */
-
-      debug_tick    <= -3;
-      tick          <= 4'hf;
-      phy1          <= 1;
-
-      curr_cycle    <= 4'hf;
-      curr_a        <= 0;
-      curr_x        <= 0;
-      curr_y        <= 0;
-      curr_s        <= 8'hfd ;
-      curr_p        <= 8'h24 ;
-      curr_pch      <= 8'hc0 ;
-      curr_pcl      <= 0;
-      curr_ir       <= 0;
-      curr_adl      <= 0;
-      curr_adh      <= 0;
-      curr_bal      <= 0;
-      curr_bah      <= 0;
-      curr_tmp      <= 0;
-
+      
       next_cycle    = 0;
       next_a        = 0;
       next_x        = 0;
       next_y        = 0;
-      next_s        = 8'hfd ;
-      next_p        = 8'h24 ;
-      next_pch      = 8'hc0 ;
+      next_s        = 0;
+      next_p        = 8'h00;
+      next_pch      = 0;
       next_pcl      = 0;
       next_ir       = 0;
       next_adl      = 0;
       next_adh      = 0;
       next_bal      = 0;
       next_bah      = 0;
-      next_tmp      = 0;
-
+      
+      debug_tick    <= -21;
+      tick          <= 0;
+      phy1          <= 0;
+      res_p         <= 1;
+      
+      curr_cycle    <= next_cycle ;  
+      curr_a        <= next_a ;   
+      curr_x        <= next_x ;   
+      curr_y        <= next_y ;   
+      curr_s        <= next_s ;   
+      curr_p        <= {next_p[7:6], 2'b10, next_p[3:0]};
+      curr_pch      <= next_pch ;   
+      curr_pcl      <= next_pcl ;   
+      curr_ir       <= next_ir ;  
+      curr_adh      <= next_adh ;
+      curr_adl      <= next_adl ;   
+      curr_bah      <= next_bah ;
+      curr_bal      <= next_bal ;             
+      
     end else 
     begin
       /* Clock divider */
@@ -179,17 +197,27 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
         tick <= tick + 4'b1;
         if (tick >= 11)
           tick <= 4'b0;
-        phy1 <= G_phy2;        
+        phy1 <= G_phy2; 
+        last_nmi <= G_nmi;       
       end
+
+      /* Nmi edge detecton */
+      if (last_nmi & ~G_nmi)
+        nmi_p <= 1;
 
       /* Latch state */
       if (edge_fall)
       begin
-        if (&curr_cycle) 
-          curr_cycle <= 0;
+        if (&curr_cycle)         
+          curr_cycle <= 0;  
+
+        if (~|curr_cycle)
+        begin
+          if (nmi_p) nmi_p <= 0;
+          if (res_p) res_p <= 0;
+        end
 
         debug_tick    <= debug_tick + 3;
-
         curr_cycle    <= next_cycle ;  
         curr_a        <= next_a ;   
         curr_x        <= next_x ;   
@@ -202,8 +230,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
         curr_adh      <= next_adh ;
         curr_adl      <= next_adl ;   
         curr_bah      <= next_bah ;
-        curr_bal      <= next_bal ;   
-        curr_tmp      <= next_tmp ;
+        curr_bal      <= next_bal ;         
       end
     end    
   end

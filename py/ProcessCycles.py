@@ -15,6 +15,7 @@ class ProcessCycles:
     instructions_assembled = 0
     for code, addressing, operation in isa:
       if addressing not in ams or operation not in ops:
+        print ("Warning, $%02X not handled..." % (code))       
         continue
       instructions_assembled = instructions_assembled + 1 
       am_cycles = ams[addressing]

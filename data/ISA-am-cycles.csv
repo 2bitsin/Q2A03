@@ -1,8 +1,8 @@
 "Addressing Mode","Cycle ","Condition","Target","Assign"
 "*",0,,"G_addr ","curr_pc"
 "*",0,,"G_rdwr",1
-"*",0,,"{next_pch, next_pcl}","curr_pc + 1"
-"*",0,,"next_ir","G_rd_data"
+"*",0,,"{next_pch, next_pcl}","force_brk ? curr_pc : curr_pc + 1"
+"*",0,,"next_ir","force_brk ? 8'h00 : G_rd_data"
 "*",0,,"next_cycle","curr_cycle + 1 "
 ,,,,
 "Implied",1,,"G_addr ","curr_pc"
