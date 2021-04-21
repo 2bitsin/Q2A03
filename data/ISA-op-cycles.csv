@@ -260,6 +260,31 @@
 "LSE*",1,,"next_p[N_bit]","next_a[7]"
 "LSE*",1,,"next_cycle",0
 ,,,,
+"RRA*",-1,,"G_addr","curr_ad"
+"RRA*",-1,,"G_rdwr",1
+"RRA*",-1,,"alu_in_c","curr_p[C_bit]"
+"RRA*",-1,,"alu_in_lhs","G_rd_data"
+"RRA*",-1,,"alu_in_rhs",0
+"RRA*",-1,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RRA*",0,,"G_addr","curr_ad"
+"RRA*",0,,"G_rdwr",0
+"RRA*",0,,"G_wr_data","alu_ror"
+"RRA*",-1,,"next_p[C_bit]","alu_ror_c"
+"RRA*",0,,"next_cycle","curr_cycle + 1 "
+,,,,
+"RRA*",1,,"G_addr","curr_ad"
+"RRA*",1,,"G_rdwr",1
+"RRA*",1,,"alu_in_c","curr_p[C_bit]"
+"RRA*",1,,"alu_in_lhs","curr_a"
+"RRA*",1,,"alu_in_rhs","G_rd_data"
+"RRA*",1,,"next_a","alu_adc[7:0]"
+"RRA*",1,,"next_p[C_bit]","alu_adc_c"
+"RRA*",1,,"next_p[V_bit]","alu_adc_v"
+"RRA*",1,,"next_p[Z_bit]","next_a == 0"
+"RRA*",1,,"next_p[N_bit]","next_a[7]"
+"RRA*",1,,"next_cycle",0
+,,,,
 "ROR",-1,,"G_addr","curr_ad"
 "ROR",-1,,"G_rdwr",1
 "ROR",-1,,"alu_in_c","curr_p[C_bit]"

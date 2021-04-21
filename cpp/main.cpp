@@ -64,8 +64,8 @@ int main(int argc, char** argv)
         else 
           ram[tb.G_addr & 0x7ff] = tb.G_wr_data; 
       #if 1
-      //  if (!last_phy2 && tb.G_addr == 0x647)
-      //    printf("%s($%04X, $%02X)\n", tb.G_rdwr ? "R" : "W", tb.G_addr, tb.G_rdwr ? tb.G_rd_data : tb.G_wr_data);
+        if (!last_phy2 && tb.G_addr == 0x647)
+          printf("%s($%04X, $%02X)\n", tb.G_rdwr ? "R" : "W", tb.G_addr, tb.G_rdwr ? tb.G_rd_data : tb.G_wr_data);
       #endif
       }
       last_phy2 = tb.G_phy2;
