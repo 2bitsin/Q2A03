@@ -64,14 +64,16 @@ int main(int argc, char** argv)
         else 
           ram[tb.G_addr & 0x7ff] = tb.G_wr_data; 
       #if 1
-        if (!last_phy2 && tb.G_addr == 0x647)
-          printf("%s($%04X, $%02X)\n", tb.G_rdwr ? "R" : "W", tb.G_addr, tb.G_rdwr ? tb.G_rd_data : tb.G_wr_data);
+      //  if (!last_phy2 && tb.G_addr == 0x647)
+      //    printf("%s($%04X, $%02X)\n", tb.G_rdwr ? "R" : "W", tb.G_addr, tb.G_rdwr ? tb.G_rd_data : tb.G_wr_data);
       #endif
       }
       last_phy2 = tb.G_phy2;
     }
     if (!last_sync && tb.G_sync) 
     {
+      if (std::size(nesttest_log) <= log_index)
+        break;
       const auto& st_snapshot = nesttest_log[log_index++];
       const auto clocks = st_snapshot.ppuclock;
       tb.read_state(&a, &x, &y, &s, &p, &ir, &pcl, &pch, &cycles);    

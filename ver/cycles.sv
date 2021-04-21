@@ -323,12 +323,11 @@
 	    (curr_cycle == 3)&(curr_ir inside {8'h66,8'h47,8'h46,8'h67}))
 		G_wr_data = alu_ror;
 	
-	if ((curr_cycle == 5)&(curr_ir inside {8'h4E,8'h73,8'h56,8'h63,8'h5F,8'h6E,8'h5B,8'h76})|
-	    (curr_cycle == 6)&(curr_ir inside {8'h53,8'h43,8'h5E,8'h7E})|
+	if ((curr_cycle == 5)&(curr_ir inside {8'h4E,8'h56,8'h7F,8'h7B,8'h5F,8'h6E,8'h5B,8'h76})|
+	    (curr_cycle == 4)&(curr_ir inside {8'h6F,8'h77,8'h4F,8'h46,8'h66,8'h57})|
+	    (curr_cycle == 6)&(curr_ir inside {8'h63,8'h53,8'h43,8'h5E,8'h73,8'h7E})|
 	    (curr_cycle == 1)&(curr_ir inside {8'h4A,8'h6A})|
-	    (curr_cycle == 2)&(curr_ir == 8'h67)|
-	    (curr_cycle == 4)&(curr_ir inside {8'h4F,8'h46,8'h66,8'h7F,8'h57,8'h7B})|
-	    (curr_cycle == 3)&(curr_ir inside {8'h47,8'h6F,8'h77}))
+	    (curr_cycle == 3)&(curr_ir inside {8'h47,8'h67}))
 		next_p[C_bit] = alu_ror_c;
 	
 	if ((curr_cycle == 5)&(curr_ir inside {8'h4E,8'h56,8'h6E,8'h76})|
