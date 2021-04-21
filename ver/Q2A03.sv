@@ -211,7 +211,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
         if (&curr_cycle)         
           curr_cycle <= 0;  
 
-        if (~|curr_cycle)
+        if (curr_cycle == 0)
         begin
           if (nmi_p) nmi_p <= 0;
           if (res_p) res_p <= 0;
