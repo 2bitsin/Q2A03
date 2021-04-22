@@ -57,7 +57,7 @@
 		G_wr_data = curr_p | (is_soft_brk ? B_mask : 8'h00);
 	
 	if ((curr_cycle == 4)&(curr_ir == 8'h00))
-		next_p[I_bit] = irq_p;
+		next_p[I_bit] = irq_p | curr_p[I_bit];
 	
 	if ((curr_cycle == 5)&(curr_ir == 8'h00))
 		G_addr = vec_addr_lo;

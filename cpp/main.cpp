@@ -48,10 +48,10 @@ int main(int argc, char** argv)
   {
     tb.eval();
     tb.G_clock = !tb.G_clock;
-    tb.G_reset = i >= 12 && (i < 1000 | i >= 1010);    
+    tb.G_reset = i >= 12;    
     tb.G_ready = 1;
-    tb.G_irq = i < 1500 | i > 1710;
-    tb.G_nmi = i < 500 || i > 520;
+    tb.G_irq = 1;
+    tb.G_nmi = 1;
     if (tb.G_phy2) 
     {
       if (tb.G_addr >= 0x8000 && tb.G_rdwr)
@@ -89,8 +89,7 @@ int main(int argc, char** argv)
         case 3: std::printf("%02X %02X %02X ", st_snapshot.opbytes[0], st_snapshot.opbytes[1], st_snapshot.opbytes[2]); break;
         }
         std::printf("   PC=%04X A=%02X X=%02X Y=%02X S=%02X P=%02X CYC=%d\n", pc, a, x, y, s, p, cycles);
-        
-        /*
+
         if (st_snapshot.addr != pc || st_snapshot.regs.a != a || st_snapshot.regs.x != x || st_snapshot.regs.y != y || st_snapshot.regs.p != p || st_snapshot.regs.sp != s || clocks != cycles)
         {
           std::printf("%-4d : expected / actual\n", log_index);
@@ -102,11 +101,13 @@ int main(int argc, char** argv)
           std::printf("S    : %02X       /  %02X\n", st_snapshot.regs.sp, s);
           std::printf("P    : %02X       /  %02X\n", st_snapshot.regs.p, p);
           std::printf("CYC  : %-6lu   /  %-6u\n", clocks, cycles); 
-          $time += 1;
-          tb.eval();
+          for(auto i = 0; i < 100; ++i)
+          {
+            $time += 1;
+            tb.eval();
+          }
           return -1;
         }
-        */
       }
     }
     last_sync = tb.G_sync;    
