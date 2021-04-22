@@ -146,24 +146,8 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
 
   always @* 
   begin          
-    if (curr_cycle == 0)
-    begin
-      is_soft_brk = ~force_brk;
-           if (irq_p     ) vec_addr = 16'hFFFE;
-      else if (nmi_p     ) vec_addr = 16'hFFFA;
-      else if (res_p     ) vec_addr = 16'hFFFC; 
-      else if (~force_brk) vec_addr = 16'hFFFE;
-    end
-
-    `include "cycles.sv"
-  end
-  
-  always @(posedge G_clock, negedge G_reset)
-  begin
-    if (~G_reset)
-    begin
-      /* Reset state */
-      
+		if (~G_reset)
+		begin
       next_cycle    = 0;
       next_a        = 0;
       next_x        = 0;
@@ -176,8 +160,27 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       next_adl      = 0;
       next_adh      = 0;
       next_bal      = 0;
-      next_bah      = 0;
-      
+      next_bah      = 0;		
+		end	else
+		begin
+			if (curr_cycle == 0)
+			begin
+				is_soft_brk = ~force_brk;
+				     if (irq_p     ) vec_addr = 16'hFFFE;
+				else if (nmi_p     ) vec_addr = 16'hFFFA;
+				else if (res_p     ) vec_addr = 16'hFFFC; 
+				else if (~force_brk) vec_addr = 16'hFFFE;
+			end
+			`include "cycles.sv"
+		end		
+  end
+  
+  always @(posedge G_clock, negedge G_reset)
+  begin
+    if (~G_reset)
+    begin
+      /* Reset state */
+           
       debug_tick    <= -21;
       tick          <= 0;
       phy1          <= 0;

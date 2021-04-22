@@ -104,13 +104,13 @@ class ProcessCycles:
         partial_cond = ['(curr_cycle == %d)' % (cycle_index)]
 
         if len(opcodes) > 1:
-          
-          partial_cond.append('(curr_ir inside {%s})' % (','.join (Utils.arr_int8_to_hex(opcodes))))
+
+          partial_cond.append('(%s)' % ('|'.join ('(curr_ir == %s)' % (x) for x in Utils.arr_int8_to_hex(opcodes))))
 
         elif len(opcodes) == 1:
           partial_cond.append('(curr_ir == %s)' % (Utils.int8_to_hex(opcodes[0]))) 
 
-        full_cond.append('&'.join(partial_cond))
+        full_cond.append('(%s)' % ('&'.join(partial_cond)))
       writer.write_line('if (%s)' % ('|\n    '.join(full_cond)))
       writer.indent()
       writer.write_line('%s = %s;' % action)
