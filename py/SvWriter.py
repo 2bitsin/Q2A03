@@ -1,3 +1,4 @@
+import re
 
 class SvWriter:
   def __init__(self, svname):
@@ -15,7 +16,7 @@ class SvWriter:
       self.file.write(slist)
     elif len(slist) == 0:
       self.file.write('*')
-    elif len(slist) == 1:
+    elif len(slist) == 1 and not re.match(r'posedge|negedge', slist[0]):
       self.file.write(slist[0])
     else:
       self.file.write('(%s)'% (', '.join(slist)))

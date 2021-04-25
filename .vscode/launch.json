@@ -13,6 +13,14 @@
       "cwd": "${workspaceFolder}"
     },
     {
+      "name": "Generate ROM",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/py/MakeROM.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"      
+    },
+    {
       "name": "Launch",
       "type": "cppdbg",
       "request": "launch",

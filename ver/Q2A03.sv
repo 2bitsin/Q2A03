@@ -241,8 +241,9 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       end
     end    
   end
-
-  task read_state;
+	
+`ifdef VERILATOR
+	task read_state;
     output reg8_type a;
     output reg8_type x;
     output reg8_type y; 
@@ -265,5 +266,6 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
     end
   endtask;
   export "DPI-C" task read_state;
+`endif
 
 endmodule
