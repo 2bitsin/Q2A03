@@ -45,6 +45,6 @@ class MakeRom:
 
 print("Generating ROM ...")
 runner = MakeRom()
-runner.main("data/font8x16.bin", "ver/font8x16.sv")
-runner.main("data/screen0.bin", "ver/screen0.sv")
-
+#runner.main("data/font8x16.bin", "ver/font8x16.sv")
+#runner.main("data/screen0.bin", "ver/screen0.sv")
+runner.main("asm/test.bin", "ver/testrom.sv")
