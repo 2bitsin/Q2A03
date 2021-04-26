@@ -3,3 +3,4 @@
 /py/__pycache__/
 .~lock.ISA.ods#
 *.bak
+*.pyc

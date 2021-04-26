@@ -1,5 +1,5 @@
 
-module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rdwr, G_ready, G_sync, G_phy2);
+module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdwr, I_ready, O_sync, O_phy2);
 
   localparam C_bit = 0 ;
   localparam Z_bit = 1 ;
@@ -28,17 +28,17 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
                           
 /* Input/Output section */
 
-  input   wire        G_clock;
-  input   wire        G_reset;
-  input   wire        G_irq;
-  input   wire        G_nmi;
-  input   wire        G_ready;
-  input   wire[7:0]   G_rd_data;
-  output  bit[7:0]    G_wr_data;
-  output  bit         G_rdwr;
-  output  bit[15:0]   G_addr;
-  output  wire        G_sync;  
-  output  wire        G_phy2;
+  input   wire        I_clock;
+  input   wire        I_reset;
+  input   wire        I_irq;
+  input   wire        I_nmi;
+  input   wire        I_ready;
+  input   wire[7:0]   I_rd_data;
+  output  bit[7:0]    O_wr_data;
+  output  bit         O_rdwr;
+  output  bit[15:0]   O_addr;
+  output  wire        O_sync;  
+  output  wire        O_phy2;
 
 /* Debug state */
 
@@ -49,14 +49,14 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   bit         phy1  ;
   bit[3:0]    tick  ;
 
-  wire        edge_rise     = G_ready && G_reset && (G_phy2 && ~phy1);
-  wire        edge_fall     = G_ready && G_reset && (phy1 && ~G_phy2);
+  wire        edge_rise     = I_ready && I_reset && (O_phy2 && ~phy1);
+  wire        edge_fall     = I_ready && I_reset && (phy1 && ~O_phy2);
 
   reg4_type   curr_cycle    ;
   reg4_type   next_cycle    ;
 
-  assign G_sync = ((curr_cycle == 0) && G_reset); 
-  assign G_phy2 = (tick >= 6);  
+  assign O_sync = ((curr_cycle == 0) && I_reset); 
+  assign O_phy2 = (tick >= 6);  
 
 /* Register state */
 
@@ -106,7 +106,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
   wire[15:0]  vec_addr_lo   = vec_addr;
   wire[15:0]  vec_addr_hi   = vec_addr + 1;
 
-  wire        irq_p         = ~G_irq & ~curr_p[I_bit] ;
+  wire        irq_p         = ~I_irq & ~curr_p[I_bit] ;
   bit         res_p         ;  
   bit         nmi_p         ;
   bit         is_soft_brk   ;
@@ -146,7 +146,7 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
 
   always @* 
   begin          
-		if (~G_reset)
+		if (~I_reset)
 		begin
       next_cycle    = 0;
       next_a        = 0;
@@ -175,9 +175,9 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
 		end		
   end
   
-  always @(posedge G_clock, negedge G_reset)
+  always @(posedge I_clock, negedge I_reset)
   begin
-    if (~G_reset)
+    if (~I_reset)
     begin
       /* Reset state */
            
@@ -201,18 +201,18 @@ module Q2A03 (G_clock, G_reset, G_irq, G_nmi, G_addr, G_wr_data, G_rd_data, G_rd
       curr_bal      <= next_bal ;             
       
     end  
-    else if (G_ready) 
+    else if (I_ready) 
     begin
 
       /* Timing generation */
       tick <= tick + 4'b1;
       if (tick >= 11)
         tick <= 4'b0;
-      phy1 <= G_phy2; 
-      last_nmi <= G_nmi;       
+      phy1 <= O_phy2; 
+      last_nmi <= I_nmi;       
 
       /* NMI edge detecton */
-      if (last_nmi & ~G_nmi)
+      if (last_nmi & ~I_nmi)
         nmi_p <= 1;
 
       /* Latch state */

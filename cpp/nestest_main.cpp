@@ -22,7 +22,7 @@ int main(int argc, char** argv)
   Verilated::traceEverOn(true);
   Vtestbench tb;
 
-  auto scope = svGetScopeFromName("TOP.testbench.i0");
+  auto scope = svGetScopeFromName("TOP.testbench.q_core");
   if (!scope)
     return -1;
   svSetScope(scope);
@@ -33,44 +33,44 @@ int main(int argc, char** argv)
   int actual_cycles = 0;
   int log_index = 0;
 
-  tb.G_reset = 0;
-  tb.G_ready = 1;
-  tb.G_irq = 1;
-  tb.G_nmi = 1;
-  tb.G_clock = 0;
-  tb.G_phy2 = 0;
-  tb.G_rd_data = 0;
-  tb.G_wr_data = 0;
-  tb.G_addr = 0;
-  tb.G_sync = 0;
+  tb.I_reset = 0;
+  tb.I_ready = 1;
+  tb.I_irq = 1;
+  tb.I_nmi = 1;
+  tb.I_clock = 0;
+  tb.O_phy2 = 0;
+  tb.I_rd_data = 0;
+  tb.O_wr_data = 0;
+  tb.O_addr = 0;
+  tb.O_sync = 0;
 
   for (auto i = 0; i < 1000000; ++i) 
   {
     tb.eval();
-    tb.G_clock = !tb.G_clock;
-    tb.G_reset = i >= 12;    
-    tb.G_ready = 1;
-    tb.G_irq = 1;
-    tb.G_nmi = 1;
-    if (tb.G_phy2) 
+    tb.I_clock = !tb.I_clock;
+    tb.I_reset = i >= 12;    
+    tb.I_ready = 1;
+    tb.I_irq = 1;
+    tb.I_nmi = 1;
+    if (tb.O_phy2) 
     {
-      if (tb.G_addr >= 0x8000 && tb.G_rdwr)
-        tb.G_rd_data = prgrom[(tb.G_addr - 0x8000) & 0x3fff];      
-      else if (tb.G_addr >= 0x2000)
-        tb.G_rd_data = 0;
+      if (tb.O_addr >= 0x8000 && tb.O_rdwr)
+        tb.I_rd_data = prgrom[(tb.O_addr - 0x8000) & 0x3fff];      
+      else if (tb.O_addr >= 0x2000)
+        tb.I_rd_data = 0;
       else {
-        if (tb.G_rdwr)
-          tb.G_rd_data = ram[tb.G_addr & 0x7ff];
+        if (tb.O_rdwr)
+          tb.I_rd_data = ram[tb.O_addr & 0x7ff];
         else 
-          ram[tb.G_addr & 0x7ff] = tb.G_wr_data; 
+          ram[tb.O_addr & 0x7ff] = tb.O_wr_data; 
       #if 1
-      //  if (!last_phy2 && tb.G_addr == 0x647)
-      //    printf("%s($%04X, $%02X)\n", tb.G_rdwr ? "R" : "W", tb.G_addr, tb.G_rdwr ? tb.G_rd_data : tb.G_wr_data);
+      //  if (!last_phy2 && tb.O_addr == 0x647)
+      //    printf("%s($%04X, $%02X)\n", tb.O_rdwr ? "R" : "W", tb.O_addr, tb.O_rdwr ? tb.I_rd_data : tb.O_wr_data);
       #endif
       }
-      last_phy2 = tb.G_phy2;
+      last_phy2 = tb.O_phy2;
     }
-    if (!last_sync && tb.G_sync) 
+    if (!last_sync && tb.O_sync) 
     {
       if (std::size(nesttest_log) <= log_index)
         break;
@@ -110,10 +110,10 @@ int main(int argc, char** argv)
         }
       }
     }
-    last_sync = tb.G_sync;    
-    if (!last_phy2 && tb.G_phy2)
+    last_sync = tb.O_sync;    
+    if (!last_phy2 && tb.O_phy2)
       actual_cycles += 3;
-    last_phy2 = tb.G_phy2;
+    last_phy2 = tb.O_phy2;
     $time += 1;
   }
   return 0;

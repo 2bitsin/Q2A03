@@ -25,12 +25,14 @@ class MakeRom:
     addr_bits = int(math.ceil(math.log2(file_size)))
 
     sv_writer = SvWriter(output_path)    
-    sv_writer.write_line('module %s (clock, addr, data);' % (name))
+    sv_writer.write_line('module %s (clock, rden, addr, data);' % (name))
     sv_writer.indent()
     sv_writer.write_line('input wire clock;')    
+    sv_writer.write_line('input wire rden;')    
     sv_writer.write_line('input wire[%d:0] addr;' % (addr_bits - 1))
     sv_writer.write_line('output bit[7:0] data;')
     sv_writer.always(['posedge clock'])
+    sv_writer.write_line('if (rden)')
     sv_writer.begin()
     sv_writer.case('addr')    
     with open(input_path, mode='rb') as input_bin:      

@@ -47,7 +47,7 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"dependsOn":["Generate"]
+			"dependsOn":[]
 		},
 		{
 			"label": "Generate",
