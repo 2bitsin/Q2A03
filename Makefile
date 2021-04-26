@@ -1,5 +1,7 @@
-CFLAGS = -std=c++20 -g -O0 
-VFLAGS = --timescale "1ns/1ps" --trace
+CFLAGS = -std=c++20 -O3 
+# CFLAGS = -std=c++20 -g -O0 
+VFLAGS = 
+#VFLAGS = --timescale "1ns/1ps" --trace
 VLTPAT = /usr/share/verilator/include
 
 all: out/launch

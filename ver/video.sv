@@ -35,34 +35,49 @@ module video (
 	localparam G_ticks_h 			= G_active_h + G_blank_h;
 	localparam G_ticks_v			= G_active_v + G_blank_v;		
 	
-	bit[15:0] 	counter_v			= 0;
-	bit[15:0] 	counter_h			= 0;		
-	assign 			O_vid_clock 	= I_clock;
-	assign 			O_vid_blank 	= counter_v >= G_blank_v && counter_h >= G_blank_h;
-	
+	bit[1:0]		clk_tick      ;
+	bit					last_clk      ;
+
+	bit[15:0] 	counter_v     ;
+	bit[15:0] 	counter_h     ;		
+
+	assign 			O_vid_blank 	= (counter_v >= G_blank_v) && (counter_h >= G_blank_h);	
+	assign 			O_vid_clock 	= clk_tick[1];
 
 	always @(posedge I_clock, negedge I_reset)
 	begin
-		if (~reset) begin
-			counter_v <= 0;
-			counter_h <= 0;
+		if (~I_reset) 
+		begin
+			counter_v 	<= 0;
+			counter_h 	<= 0;
 			O_vid_hsync <= 0;
 			O_vid_vsync <= 0;
-		end
-		else begin
-										
-			if (counter_h != G_ticks_h - 1) 
-				counter_h <= counter_h + 1;				
-			else begin
-				counter_h <= 0;
-				if (counter_v != G_ticks_v - 1) 
-					counter_v <= counter_v + 1;
-				else 
-					counter_v <= 0;
-			end  				
+			last_clk 		<= 0;
+			clk_tick 		<= 3;
+		end 
+		else
+		begin			
+
+			clk_tick <= clk_tick + 1;
+			last_clk <= O_vid_clock;
+
+			if (~last_clk && O_vid_clock)
+			begin
 				
-			O_vid_hsync <= (counter_h < G_front_h) || (counter_h >= (G_blank_h - G_back_h));
-			O_vid_vsync <= (counter_v < G_front_v) || (counter_v >= (G_blank_v - G_back_v));
+				if (counter_h != G_ticks_h - 1) 
+					counter_h <= counter_h + 1;				
+				else begin
+					counter_h <= 0;
+					if (counter_v != G_ticks_v - 1) 
+						counter_v <= counter_v + 1;
+					else 
+						counter_v <= 0;
+				end  				
+					
+				O_vid_hsync <= (counter_h < G_front_h) || (counter_h >= (G_blank_h - G_back_h));
+				O_vid_vsync <= (counter_v < G_front_v) || (counter_v >= (G_blank_v - G_back_v));
+			end
+
 		end
 	end
 
