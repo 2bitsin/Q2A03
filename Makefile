@@ -1,5 +1,5 @@
 CFLAGS = -std=c++20 -O3 
-# CFLAGS = -std=c++20 -g -O0 
+#CFLAGS = -std=c++20 -g -O0 
 VFLAGS = 
 #VFLAGS = --timescale "1ns/1ps" --trace
 VLTPAT = /usr/share/verilator/include
@@ -35,4 +35,5 @@ out/launch: cpp/widget_main.cpp out/ver/Vwidget.h out/lib/verilated.o out/lib/ve
 			out/lib/verilated_dpi.o 						\
 			cpp/widget_main.cpp 								\
 			out/ver/libwidget.a 								\
-		-Wl,--end-group 
+		-Wl,--end-group 											\
+		-lpng 																

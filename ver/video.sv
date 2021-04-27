@@ -20,7 +20,6 @@ module video (
 	output 	wire[7:0] O_vid_red ;
 	output 	wire[7:0] O_vid_green ;
 	output 	wire[7:0] O_vid_blue ;
-
 	
 	localparam G_active_h 		= 256;
 	localparam G_active_v 		= 240;
@@ -41,8 +40,15 @@ module video (
 	bit[15:0] 	counter_v     ;
 	bit[15:0] 	counter_h     ;		
 
+	wire[15:0]	active_h			= counter_h - G_active_h;
+	wire[15:0]	active_v			= counter_v - G_active_v;
+
 	assign 			O_vid_blank 	= (counter_v >= G_blank_v) && (counter_h >= G_blank_h);	
 	assign 			O_vid_clock 	= clk_tick[1];
+
+	assign 			O_vid_red 		= 0;
+	assign 			O_vid_green		= 0;
+	assign			O_vid_blue		= 0;
 
 	always @(posedge I_clock, negedge I_reset)
 	begin
