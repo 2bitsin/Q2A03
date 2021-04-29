@@ -13,10 +13,10 @@
       "cwd": "${workspaceFolder}"
     },
     {
-      "name": "Generate ROM",
+      "name": "Generate Mem",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}/py/MakeROM.py",
+      "program": "${workspaceFolder}/py/MakeMem.py",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}"      
     },

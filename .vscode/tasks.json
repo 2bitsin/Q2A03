@@ -61,9 +61,19 @@
 				"kind": "build",
 				"isDefault": true
 			}
+		},
+		{
+			"label": "Generate MEM's",
+			"type": "shell",			
+			"command":"/usr/bin/env /usr/bin/python3 ./py/MakeMem.py",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		}
-
-
-
 	]
 }

@@ -1,6 +1,11 @@
 #include <cstdio>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
+
 #include <png++/png.hpp>
-#include <VWidget.h>
+#include <Vwidget.h>
+#include <Vwidget__Dpi.h>
 
 #include "utilities.hpp"
 
@@ -30,12 +35,28 @@ void image_write(unsigned index, const T_type (&data) [Y_size][X_size])
   _writer.write(name_buffer);  
 }
 
+auto time_as_string(const char* fmt = "%Y-%m-%d_%H-%M-%S") -> std::string
+{
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  std::ostringstream oss;
+  oss << std::put_time(&tm, fmt);
+  return oss.str();
+}
+
 int main(int argc, char** argv)
 {
+  using namespace std::string_literals;
+
   Verilated::commandArgs(argc, argv);
-  Verilated::traceEverOn(false);
+  Verilated::traceEverOn(true);
 
   Vwidget widget;
+
+  svScope scope; 
+  if (!(scope = svGetScopeFromName("TOP.widget.instance_of_video")))
+    return -1;
+  svSetScope(scope);  
 
   widget.I_sys_clock = 0;
   widget.I_sys_reset = 0;
@@ -53,6 +74,7 @@ int main(int argc, char** argv)
   unsigned buff_x = 0;
   unsigned buff_y = 0;
   unsigned frame_index = 0;
+  unsigned synced = 0;
   uint8_t buff[240][256][3];
 
   widget.I_sys_reset = 1;
@@ -61,12 +83,24 @@ int main(int argc, char** argv)
     widget.I_sys_clock ^= 1;
     widget.eval();
 
+    if (!synced)
+    {
+      O_vid_clock.rising();
+      O_vid_hsync.rising();
+      if (O_vid_vsync.rising())
+        ++synced;
+      continue;
+    }
+
     if (O_vid_clock.rising())
     {
       if (widget.O_vid_blank)
       {
         if (buff_y < 240 && buff_x < 256)
         {
+          short int wx, wy;
+          widget.read_xy(&wx, &wy);
+//          std::printf("%d:%d, %d:%d\n", buff_x, wx, buff_y, wy);
           buff[buff_y][buff_x][2] = widget.O_vid_red ;
           buff[buff_y][buff_x][1] = widget.O_vid_green ;
           buff[buff_y][buff_x][0] = widget.O_vid_blue  ;                               
@@ -94,7 +128,9 @@ int main(int argc, char** argv)
 
     $time += 1;
   }
-  auto res = system("ffmpeg -r 60 -f image2 -s 1280x1200 -i trace/img/%05d.png -filter:v scale=1536:1440:flags=neighbor -vcodec libx264 -pix_fmt rgb24 trace/trace.avi");
+
+  auto cmd = "ffmpeg -r 60 -f image2 -s 1280x1200 -i trace/img/%05d.png -filter:v scale=1536:1440:flags=neighbor -vcodec libx264 -pix_fmt rgb24 trace/"s + time_as_string() + ".avi"s;
+  auto res = system(cmd.data());
   //system("rm -rf trace/img/*.png");
   return 0;
 }
