@@ -10,12 +10,10 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   output wire[7:0]  O_vid_red;
   output wire[7:0]  O_vid_green;
   output wire[7:0]  O_vid_blue;
-
 		
 	wire[7:0]					W_data0;
 	wire[11:0]				W_addr0;
-	wire							W_clock0;
-  
+	wire							W_clock0;  
 	
   video inst_video (
     .I_clock      (I_sys_clock),
