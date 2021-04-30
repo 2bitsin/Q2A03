@@ -1,6 +1,25 @@
-module dpmem #(parameter P_data_bits = 8, parameter P_addr_bits = 10)
+module dpmem #(
+  parameter P_data_bits = 8, 
+  parameter P_addr_bits = 10,
 
-  (I_clock0, I_addr0, I_wren0, I_rden0, I_data0, O_data0, I_clock1, I_addr1, I_wren1, I_rden1, I_data1, O_data1);
+  parameter string P_init_bin0 = "",
+  parameter bit[P_addr_bits-1:0] P_init_beg0 = 0,  
+	parameter bit[P_addr_bits-1:0] P_init_end0 = 0,  
+
+  parameter string P_init_bin1 = "",
+  parameter bit[P_addr_bits-1:0] P_init_beg1 = 0,
+	parameter bit[P_addr_bits-1:0] P_init_end1 = 0,  
+
+  parameter string P_init_bin2 = "",
+  parameter bit[P_addr_bits-1:0] P_init_beg2 = 0,
+	parameter bit[P_addr_bits-1:0] P_init_end2 = 0,  
+
+  parameter string P_init_bin3 = "",
+  parameter bit[P_addr_bits-1:0] P_init_beg3 = 0,
+	parameter bit[P_addr_bits-1:0] P_init_end3 = 0)
+ 
+ (I_clock0, I_addr0, I_wren0, I_rden0, I_data0, O_data0, 
+  I_clock1, I_addr1, I_wren1, I_rden1, I_data1, O_data1);
 
   input wire I_clock0;
   input wire[P_addr_bits - 1:0] I_addr0;
@@ -20,19 +39,28 @@ module dpmem #(parameter P_data_bits = 8, parameter P_addr_bits = 10)
 
   always @(posedge I_clock0) 
   begin
-    if (I_wren0) bits[I_addr0] <= I_data0;
+    if (I_wren0) bits[I_addr0] <= I_data0;    
     if (I_rden0) O_data0 <= bits[I_addr0];
   end  
 
   always @(posedge I_clock1) 
   begin
-    if (I_wren1) bits[I_addr1] <= I_data1;
+    if (I_wren1) bits[I_addr1] <= I_data1;    
     if (I_rden1) O_data1 <= bits[I_addr1];
   end  
 
 	initial begin
-	  $readmemh("assets/8x8.mem", bits, 12'h000);
-    $readmemh("assets/vid.mem", bits, 12'h800);
+		if (P_init_bin0.len () > 0 && P_init_end0 - P_init_beg0 > 0) 
+			$readmemh({P_init_bin0}, bits, P_init_beg0, P_init_end0);
+			
+		if (P_init_bin1.len () > 0 && P_init_end1 - P_init_beg1 > 0) 
+			$readmemh({P_init_bin1}, bits, P_init_beg1, P_init_end1);
+			
+		if (P_init_bin2.len () > 0 && P_init_end2 - P_init_beg2 > 0) 
+			$readmemh({P_init_bin2}, bits, P_init_beg2, P_init_end2); 
+			
+		if (P_init_bin3.len () > 0 && P_init_end3 - P_init_beg3 > 0) 
+			$readmemh({P_init_bin3}, bits, P_init_beg3, P_init_end3); 
 	end
   
 endmodule

@@ -1,8 +1,8 @@
-.org $8000
+.org $fc00
 .segment "CODE"
 init:
   lda #'H'
-  sta $7e00
+  sta $800
   lda #'e'
   sta $7e01
   lda #'l'

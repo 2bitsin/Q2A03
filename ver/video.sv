@@ -25,9 +25,8 @@ module video (
 	output  wire[7:0]   O_vid_blue ;
 
 	output  wire        O_mem_clock;
-	output  bit[11:0]   O_mem_addr;
+	output  bit[15:0]   O_mem_addr;
 	input   wire[7:0]   I_mem_data;
-
 	
 	localparam G_active_h 		= 16'd256;
 	localparam G_active_v 		= 16'd240;
@@ -42,6 +41,8 @@ module video (
 	localparam G_blank_v 			= G_front_v + O_sync_v + G_back_v;	
 	localparam G_ticks_h 			= G_active_h + G_blank_h;
 	localparam G_ticks_v			= G_active_v + G_blank_v;		
+	localparam G_tiles_base 	= 16'h4000;	
+	localparam G_index_base 	= 16'h4800;	
 	
 	bit[1:0]		clk_tick      ;
 	bit					clk_last     	;
@@ -93,9 +94,9 @@ module video (
 				buf_tiles <= buf_tiles << 1;
 
 				case (prefetch_h & 7)
-					1: O_mem_addr <= 12' (16'h800 + {3'd0, prefetch_h[15:3]} + {active_v[13:3], 5'd0});
+					1: O_mem_addr <= G_index_base + {3'd0, prefetch_h[15:3]} + {active_v[13:3], 5'd0};
 					3: buf_index  <= I_mem_data;
-					5: O_mem_addr <= 12' ({buf_index, 3'd0} + {9'd0, active_v[2:0]});					
+					5: O_mem_addr <= G_tiles_base + {5'd0, buf_index, active_v[2:0]};
 					7: buf_tiles  <= I_mem_data;
 				endcase
 				
@@ -115,16 +116,5 @@ module video (
 
 		end	
 	end
-
-`ifdef VERILATOR
-	task read_xy;
-		output shortint x;
-		output shortint y;
-		begin
-			x = active_h;
-			y = active_v;
-		end
-	endtask;
-  export "DPI-C" task read_xy;
-`endif
 endmodule
+

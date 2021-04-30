@@ -5,7 +5,7 @@
 
 #include <png++/png.hpp>
 #include <Vwidget.h>
-#include <Vwidget__Dpi.h>
+//#include <Vwidget__Dpi.h>
 
 #include "utilities.hpp"
 
@@ -53,11 +53,6 @@ int main(int argc, char** argv)
 
   Vwidget widget;
 
-  svScope scope; 
-  if (!(scope = svGetScopeFromName("TOP.widget.instance_of_video")))
-    return -1;
-  svSetScope(scope);  
-
   widget.I_sys_clock = 0;
   widget.I_sys_reset = 0;
   for(auto i = 0; i < 64; ++i) {
@@ -98,9 +93,6 @@ int main(int argc, char** argv)
       {
         if (buff_y < 240 && buff_x < 256)
         {
-          short int wx, wy;
-          widget.read_xy(&wx, &wy);
-//          std::printf("%d:%d, %d:%d\n", buff_x, wx, buff_y, wy);
           buff[buff_y][buff_x][2] = widget.O_vid_red ;
           buff[buff_y][buff_x][1] = widget.O_vid_green ;
           buff[buff_y][buff_x][0] = widget.O_vid_blue  ;                               
