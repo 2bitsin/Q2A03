@@ -55,7 +55,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   assign O_sync = ((curr_cycle == 0) && I_reset); 
   assign O_phy2 = (tick >= 6);  
 
-/* Register state */
+/* Register interface */
 
   wire[3:0]     curr_cycle    ;
   wire[7:0]     curr_ir       ;
@@ -63,13 +63,10 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire[7:0]     curr_x        ;
   wire[7:0]     curr_y        ;
   wire[7:0]     curr_s        ;
-  wire[7:0]     curr_pcl      ;
-  wire[7:0]     curr_pch      ;
-  wire[7:0]     curr_adl      ;
-  wire[7:0]     curr_adh      ;
-  wire[7:0]     curr_bal      ;
-  wire[7:0]     curr_bah      ;
   wire[7:0]     curr_p        ;
+  wire[15:0]    curr_pc       ;
+  wire[15:0]    curr_ad       ;
+  wire[15:0]    curr_ba       ;
   
   reg4_type     next_cycle    ;
   reg8_type     next_ir       ;
@@ -77,14 +74,15 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   reg8_type     next_x        ;
   reg8_type     next_y        ;
   reg8_type     next_s        ;
-  reg8_type     next_pch      ;
-  reg8_type     next_pcl      ;
-  reg8_type     next_adl      ;
-  reg8_type     next_adh      ;
-  reg8_type     next_bal      ;
-  reg8_type     next_bah      ;
   reg8_type     next_p        ;
-  
+  reg16_type    next_pc       ;
+  reg16_type    next_ad       ;
+  reg16_type    next_ba       ;
+
+  wire[15:0]    curr_sp       = {8'h01, curr_s};
+
+/* Registers */
+
   register#(4)  reg_cycle (I_clock, I_reset, edge_fall, next_cycle, curr_cycle);
   register      reg_ir    (I_clock, I_reset, edge_fall, next_ir,    curr_ir   );
   register      reg_a     (I_clock, I_reset, edge_fall, next_a,     curr_a    );
@@ -92,24 +90,12 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   register      reg_y     (I_clock, I_reset, edge_fall, next_y,     curr_y    );
   register      reg_s     (I_clock, I_reset, edge_fall, next_s,     curr_s    );
 
-  register#(16) reg_pc    (I_clock, I_reset, edge_fall, {next_pch, next_pcl}, {curr_pch, curr_pcl});
-  register#(16) reg_ad    (I_clock, I_reset, edge_fall, {next_adh, next_adl}, {curr_adh, curr_adl});
-  register#(16) reg_ba    (I_clock, I_reset, edge_fall, {next_bah, next_bal}, {curr_bah, curr_bal});
-
   register      reg_p     (I_clock, I_reset, edge_fall, {next_p[7:6], 2'b10, next_p[3:0]}, curr_p);
 
+  register#(16) reg_pc    (I_clock, I_reset, edge_fall, next_pc, curr_pc);
+  register#(16) reg_ad    (I_clock, I_reset, edge_fall, next_ad, curr_ad);
+  register#(16) reg_ba    (I_clock, I_reset, edge_fall, next_ba, curr_ba);
 
-/* Misc derivatives */
-
-  wire[15:0]    curr_pc       = {curr_pch, curr_pcl};
-  wire[15:0]    curr_ad       = {curr_adh, curr_adl};
-  wire[15:0]    curr_ba       = {curr_bah, curr_bal};  
-  
-  wire[15:0]    next_pc       = {next_pch, next_pcl};
-  wire[15:0]    next_ad       = {next_adh, next_adl};
-  wire[15:0]    next_ba       = {next_bah, next_bal};
-  
-  wire[15:0]    curr_sp       = {8'h01, curr_s};
   
 /* Interrupt handling */
 
@@ -167,13 +153,10 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_y        = 0;
       next_s        = 0;
       next_p        = 8'h04;
-      next_pch      = 0;
-      next_pcl      = 0;
+      next_pc       = 0;
       next_ir       = 0;
-      next_adl      = 0;
-      next_adh      = 0;
-      next_bal      = 0;
-      next_bah      = 0;		
+      next_ad       = 0;
+      next_ba       = 0;		
 		end	else
 		begin
 			if (curr_cycle == 0)
@@ -245,8 +228,8 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       s   = curr_s;      
       p   = curr_p;
       ir  = curr_ir;
-      pcl = curr_pcl;
-      pch = curr_pch;
+      pcl = curr_pc[7:0];
+      pch = curr_pc[15:8];
       cyc = debug_tick;
     end
   endtask;

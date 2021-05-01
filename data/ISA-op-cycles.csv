@@ -531,8 +531,8 @@
 ,,,,
 "JSR",-1,,"O_addr","curr_pc"
 "JSR",-1,,"O_rdwr",1
-"JSR",-1,,"next_adl","I_rd_data"
-"JSR",-1,,"{next_pch, next_pcl}","curr_pc + 1"
+"JSR",-1,,"next_ad[7:0]","I_rd_data"
+"JSR",-1,,"next_pc","curr_pc + 1"
 "JSR",-1,,"next_cycle","curr_cycle + 1 "
 ,,,,
 "JSR",0,,"O_addr","curr_sp"
@@ -541,24 +541,24 @@
 ,,,,
 "JSR",1,,"O_addr","curr_sp"
 "JSR",1,,"O_rdwr",0
-"JSR",1,,"O_wr_data","curr_pch"
+"JSR",1,,"O_wr_data","curr_pc[15:8]"
 "JSR",1,,"next_s","curr_s - 1"
 "JSR",1,,"next_cycle","curr_cycle + 1 "
 ,,,,
 "JSR",2,,"O_addr","curr_sp"
 "JSR",2,,"O_rdwr",0
-"JSR",2,,"O_wr_data","curr_pcl"
+"JSR",2,,"O_wr_data","curr_pc[7:0]"
 "JSR",2,,"next_s","curr_s - 1"
 "JSR",2,,"next_cycle","curr_cycle + 1 "
 ,,,,
 "JSR",3,,"O_addr","curr_pc"
 "JSR",3,,"O_rdwr",1
-"JSR",3,,"next_adh","I_rd_data"
+"JSR",3,,"next_ad[15:8]","I_rd_data"
 "JSR",3,,"next_cycle",0
-"JSR",3,,"{next_pch, next_pcl}","next_ad"
+"JSR",3,,"next_pc","next_ad"
 ,,,,
 "JMP",-1,,"next_cycle",0
-"JMP",-1,,"{next_pch, next_pcl}","next_ad"
+"JMP",-1,,"next_pc","next_ad"
 ,,,,
 "RTS",-1,,"O_addr","curr_pc"
 "RTS",-1,,"O_rdwr",1
@@ -571,19 +571,19 @@
 ,,,,
 "RTS",1,,"O_addr","curr_sp"
 "RTS",1,,"O_rdwr",1
-"RTS",1,,"next_pcl","I_rd_data"
+"RTS",1,,"next_pc[7:0]","I_rd_data"
 "RTS",1,,"next_s","curr_s + 1"
 "RTS",1,,"next_cycle","curr_cycle + 1 "
 ,,,,
 "RTS",2,,"O_addr","curr_sp"
 "RTS",2,,"O_rdwr",1
-"RTS",2,,"next_pch","I_rd_data"
+"RTS",2,,"next_pc[15:8]","I_rd_data"
 "RTS",2,,"next_cycle","curr_cycle + 1 "
 ,,,,
 "RTS",3,,"O_addr","curr_pc"
 "RTS",3,,"O_rdwr",1
 "RTS",3,,"next_cycle",0
-"RTS",3,,"{next_pch, next_pcl}","curr_pc + 1"
+"RTS",3,,"next_pc","curr_pc + 1"
 ,,,,
 "RTI",-1,,"O_addr","curr_pc"
 "RTI",-1,,"O_rdwr",1
@@ -603,12 +603,12 @@
 "RTI",2,,"O_addr","curr_sp"
 "RTI",2,,"O_rdwr",1
 "RTI",2,,"next_s","curr_s + 1"
-"RTI",2,,"next_pcl","I_rd_data"
+"RTI",2,,"next_pc[7:0]","I_rd_data"
 "RTI",2,,"next_cycle","curr_cycle + 1 "
 ,,,,
 "RTI",3,,"O_addr","curr_sp"
 "RTI",3,,"O_rdwr",1
-"RTI",3,,"next_pch","I_rd_data"
+"RTI",3,,"next_pc[15:8]","I_rd_data"
 "RTI",3,,"next_cycle",0
 ,,,,
 "BRK",-1,,"O_addr","curr_pc"
@@ -617,13 +617,13 @@
 ,,,,
 "BRK",0,,"O_addr","curr_sp"
 "BRK",0,,"O_rdwr",0
-"BRK",0,,"O_wr_data","curr_pch"
+"BRK",0,,"O_wr_data","curr_pc[15:8]"
 "BRK",0,,"next_s","curr_s - 1"
 "BRK",0,,"next_cycle","curr_cycle + 1 "
 ,,,,
 "BRK",1,,"O_addr","curr_sp"
 "BRK",1,,"O_rdwr",0
-"BRK",1,,"O_wr_data","curr_pcl"
+"BRK",1,,"O_wr_data","curr_pc[7:0]"
 "BRK",1,,"next_s","curr_s - 1"
 "BRK",1,,"next_cycle","curr_cycle + 1 "
 ,,,,
@@ -636,11 +636,11 @@
 ,,,,
 "BRK",3,,"O_addr","vec_addr_lo"
 "BRK",3,,"O_rdwr",1
-"BRK",3,,"next_adl","I_rd_data"
+"BRK",3,,"next_ad[7:0]","I_rd_data"
 "BRK",3,,"next_cycle","curr_cycle + 1 "
 ,,,,
 "BRK",4,,"O_addr","vec_addr_hi"
 "BRK",4,,"O_rdwr",1
-"BRK",4,,"next_adh","I_rd_data"
-"BRK",4,,"{next_pch, next_pcl}","next_ad"
+"BRK",4,,"next_ad[15:8]","I_rd_data"
+"BRK",4,,"next_pc","next_ad"
 "BRK",4,,"next_cycle",0
