@@ -42,119 +42,118 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
 /* Debug state */
 
-  reg32_type  debug_tick  ;
+  reg32_type    debug_tick  ;
 
 /* Timing generation */
 
-  bit         phy1  ;
-  bit[3:0]    tick  ;
-
-  wire        edge_rise     = I_ready && I_reset && (O_phy2 && ~phy1);
-  wire        edge_fall     = I_ready && I_reset && (phy1 && ~O_phy2);
+  bit           phy1  ;
+  bit[3:0]      tick  ;
+ 
+  wire          edge_rise     = I_ready && I_reset && (O_phy2 && ~phy1);
+  wire          edge_fall     = I_ready && I_reset && (phy1 && ~O_phy2);
 
   assign O_sync = ((curr_cycle == 0) && I_reset); 
   assign O_phy2 = (tick >= 6);  
 
 /* Register state */
 
-  wire[3:0]    curr_cycle    ;
-  wire[7:0]    curr_ir       ;
-  wire[7:0]    curr_a        ;
-  wire[7:0]    curr_x        ;
-  wire[7:0]    curr_y        ;
-  wire[7:0]    curr_s        ;
-  wire[7:0]    curr_pcl      ;
-  wire[7:0]    curr_pch      ;
-  wire[7:0]    curr_adl      ;
-  wire[7:0]    curr_adh      ;
-  wire[7:0]    curr_bal      ;
-  wire[7:0]    curr_bah      ;
-  wire[7:0]    curr_p        ;
- 
-  reg4_type    next_cycle    ;
-  reg8_type    next_ir       ;
-  reg8_type    next_a        ;
-  reg8_type    next_x        ;
-  reg8_type    next_y        ;
-  reg8_type    next_s        ;
-  reg8_type    next_pch      ;
-  reg8_type    next_pcl      ;
-  reg8_type    next_adl      ;
-  reg8_type    next_adh      ;
-  reg8_type    next_bal      ;
-  reg8_type    next_bah      ;
-  reg8_type    next_p        ;
+  wire[3:0]     curr_cycle    ;
+  wire[7:0]     curr_ir       ;
+  wire[7:0]     curr_a        ;
+  wire[7:0]     curr_x        ;
+  wire[7:0]     curr_y        ;
+  wire[7:0]     curr_s        ;
+  wire[7:0]     curr_pcl      ;
+  wire[7:0]     curr_pch      ;
+  wire[7:0]     curr_adl      ;
+  wire[7:0]     curr_adh      ;
+  wire[7:0]     curr_bal      ;
+  wire[7:0]     curr_bah      ;
+  wire[7:0]     curr_p        ;
   
-  register#(4) reg_cycle (I_clock, I_reset, edge_fall, next_cycle, curr_cycle);
-  register     reg_ir    (I_clock, I_reset, edge_fall, next_ir,    curr_ir   );
-  register     reg_a     (I_clock, I_reset, edge_fall, next_a,     curr_a    );
-  register     reg_x     (I_clock, I_reset, edge_fall, next_x,     curr_x    );
-  register     reg_y     (I_clock, I_reset, edge_fall, next_y,     curr_y    );
-  register     reg_s     (I_clock, I_reset, edge_fall, next_s,     curr_s    );
-  register     reg_pch   (I_clock, I_reset, edge_fall, next_pch,   curr_pch  );
-  register     reg_pcl   (I_clock, I_reset, edge_fall, next_pcl,   curr_pcl  );
-  register     reg_adl   (I_clock, I_reset, edge_fall, next_adl,   curr_adl  );
-  register     reg_adh   (I_clock, I_reset, edge_fall, next_adh,   curr_adh  );
-  register     reg_bal   (I_clock, I_reset, edge_fall, next_bal,   curr_bal  );
-  register     reg_bah   (I_clock, I_reset, edge_fall, next_bah,   curr_bah  );
-  register     reg_p     (I_clock, I_reset, edge_fall, {next_p[7:6], 2'b10, next_p[3:0]}, curr_p);
+  reg4_type     next_cycle    ;
+  reg8_type     next_ir       ;
+  reg8_type     next_a        ;
+  reg8_type     next_x        ;
+  reg8_type     next_y        ;
+  reg8_type     next_s        ;
+  reg8_type     next_pch      ;
+  reg8_type     next_pcl      ;
+  reg8_type     next_adl      ;
+  reg8_type     next_adh      ;
+  reg8_type     next_bal      ;
+  reg8_type     next_bah      ;
+  reg8_type     next_p        ;
+  
+  register#(4)  reg_cycle (I_clock, I_reset, edge_fall, next_cycle, curr_cycle);
+  register      reg_ir    (I_clock, I_reset, edge_fall, next_ir,    curr_ir   );
+  register      reg_a     (I_clock, I_reset, edge_fall, next_a,     curr_a    );
+  register      reg_x     (I_clock, I_reset, edge_fall, next_x,     curr_x    );
+  register      reg_y     (I_clock, I_reset, edge_fall, next_y,     curr_y    );
+  register      reg_s     (I_clock, I_reset, edge_fall, next_s,     curr_s    );
+
+  register#(16) reg_pc    (I_clock, I_reset, edge_fall, {next_pch, next_pcl}, {curr_pch, curr_pcl});
+  register#(16) reg_ad    (I_clock, I_reset, edge_fall, {next_adh, next_adl}, {curr_adh, curr_adl});
+  register#(16) reg_ba    (I_clock, I_reset, edge_fall, {next_bah, next_bal}, {curr_bah, curr_bal});
+
+  register      reg_p     (I_clock, I_reset, edge_fall, {next_p[7:6], 2'b10, next_p[3:0]}, curr_p);
 
 
 /* Misc derivatives */
 
-  wire[15:0]  curr_pc       = {curr_pch, curr_pcl};
-  wire[15:0]  curr_ad       = {curr_adh, curr_adl};
-  wire[15:0]  curr_ba       = {curr_bah, curr_bal};  
-
-  wire[15:0]  next_pc       = {next_pch, next_pcl};
-  wire[15:0]  next_ad       = {next_adh, next_adl};
-  wire[15:0]  next_ba       = {next_bah, next_bal};
-
-  wire[15:0]  curr_sp       = {8'h01, curr_s};
-
+  wire[15:0]    curr_pc       = {curr_pch, curr_pcl};
+  wire[15:0]    curr_ad       = {curr_adh, curr_adl};
+  wire[15:0]    curr_ba       = {curr_bah, curr_bal};  
+  
+  wire[15:0]    next_pc       = {next_pch, next_pcl};
+  wire[15:0]    next_ad       = {next_adh, next_adl};
+  wire[15:0]    next_ba       = {next_bah, next_bal};
+  
+  wire[15:0]    curr_sp       = {8'h01, curr_s};
+  
 /* Interrupt handling */
 
-  bit         last_nmi      ;
-
-  reg16_type  vec_addr      ;  
-  wire[15:0]  vec_addr_lo   = vec_addr;
-  wire[15:0]  vec_addr_hi   = vec_addr + 1;
-
-  wire        irq_p         = ~I_irq & ~curr_p[I_bit] ;
-  bit         res_p         ;  
-  bit         nmi_p         ;
-  bit         is_soft_brk   ;
-  wire        force_brk     = irq_p | res_p | nmi_p;
+  bit           last_nmi      ;
+  
+  reg16_type    vec_addr      ;  
+  wire[15:0]    vec_addr_lo   = vec_addr;
+  wire[15:0]    vec_addr_hi   = vec_addr + 1;
+  
+  wire          irq_p         = ~I_irq & ~curr_p[I_bit] ;
+  bit           res_p         ;  
+  bit           nmi_p         ;
+  bit           is_soft_brk   ;
+  wire          force_brk     = irq_p | res_p | nmi_p;
 
 /* Arithmetic / Logic operations */
 
-  bit         alu_in_c      ;
-  reg8_type   alu_in_lhs    ;
-  reg8_type   alu_in_rhs    ;
-  wire[7:0]   alu_out_rhs   = alu_in_rhs;
-
-  wire[7:0]   alu_and       = alu_in_lhs & alu_in_rhs;
-  wire[7:0]   alu_or        = alu_in_lhs | alu_in_rhs;
-  wire[7:0]   alu_xor       = alu_in_lhs ^ alu_in_rhs;  
-
-  wire[7:0]   alu_ror       = {alu_in_c, alu_in_lhs[7:1]};
-  wire        alu_ror_c     = alu_in_lhs[0];
+  bit           alu_in_c      ;
+  reg8_type     alu_in_lhs    ;
+  reg8_type     alu_in_rhs    ;
+  wire[7:0]     alu_out_rhs   = alu_in_rhs;
   
-  wire[7:0]   alu_rol       = {alu_in_lhs[6:0], alu_in_c};
-  wire        alu_rol_c     = alu_in_lhs[7];
-
-  wire[7:0]   alu_cmp       = alu_in_lhs - alu_in_rhs;
-  wire        alu_cmp_n     = alu_cmp[7];
-  wire        alu_cmp_z     = alu_in_lhs == alu_in_rhs;
-  wire        alu_cmp_c     = alu_cmp_z || (alu_in_lhs > alu_in_rhs);
-
-  wire[8:0]   alu_adc       = alu_in_lhs + alu_in_rhs + {7'b0, alu_in_c};  
-  wire        alu_adc_c     = alu_adc[8];
-  wire        alu_adc_v     = (alu_in_lhs[7] != alu_adc[7]) && (alu_in_lhs[7] == alu_in_rhs[7]);
-
-  wire[8:0]   alu_sbc       = alu_in_lhs - alu_in_rhs - {7'b0, ~alu_in_c};  
-  wire        alu_sbc_c     = ~alu_sbc[8];
-  wire        alu_sbc_v     = ((alu_in_lhs[7] != alu_sbc[7]) && (alu_in_lhs[7] != alu_in_rhs[7]));
+  wire[7:0]     alu_and       = alu_in_lhs & alu_in_rhs;
+  wire[7:0]     alu_or        = alu_in_lhs | alu_in_rhs;
+  wire[7:0]     alu_xor       = alu_in_lhs ^ alu_in_rhs;  
+  
+  wire[7:0]     alu_ror       = {alu_in_c, alu_in_lhs[7:1]};
+  wire          alu_ror_c     = alu_in_lhs[0];
+    
+  wire[7:0]     alu_rol       = {alu_in_lhs[6:0], alu_in_c};
+  wire          alu_rol_c     = alu_in_lhs[7];
+  
+  wire[7:0]     alu_cmp       = alu_in_lhs - alu_in_rhs;
+  wire          alu_cmp_n     = alu_cmp[7];
+  wire          alu_cmp_z     = alu_in_lhs == alu_in_rhs;
+  wire          alu_cmp_c     = alu_cmp_z || (alu_in_lhs > alu_in_rhs);
+  
+  wire[8:0]     alu_adc       = alu_in_lhs + alu_in_rhs + {7'b0, alu_in_c};  
+  wire          alu_adc_c     = alu_adc[8];
+  wire          alu_adc_v     = (alu_in_lhs[7] != alu_adc[7]) && (alu_in_lhs[7] == alu_in_rhs[7]);
+  
+  wire[8:0]     alu_sbc       = alu_in_lhs - alu_in_rhs - {7'b0, ~alu_in_c};  
+  wire          alu_sbc_c     = ~alu_sbc[8];
+  wire          alu_sbc_v     = ((alu_in_lhs[7] != alu_sbc[7]) && (alu_in_lhs[7] != alu_in_rhs[7]));
 
 /* End of Arithmetic / Logic operations */
 
