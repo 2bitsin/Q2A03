@@ -101,7 +101,7 @@ class ProcessCycles:
           pre_cond[cycle_index].append(opcode)
       full_cond = []
       for cycle_index, opcodes in pre_cond.items():
-        partial_cond = ['(curr_cycle == %d)' % (cycle_index)]
+        partial_cond = ['(curr_t == %d)' % (cycle_index)]
 
         if len(opcodes) > 1:
 

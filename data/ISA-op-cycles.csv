@@ -1,121 +1,121 @@
 "Instruction","Cycle ","Condition","Target","Assign"
-"HLT*",-1,,"next_cycle",-1
+"HLT*",-1,,"next_t",-1
 ,,,,
-"NOP*",-1,,"next_cycle",0
+"NOP*",-1,,"next_t",0
 ,,,,
-"LDX",-1,,"next_cycle",0
+"LDX",-1,,"next_t",0
 "LDX",-1,,"next_x","I_rd_data"
 "LDX",-1,,"next_p[N_bit]","next_x[7]"
 "LDX",-1,,"next_p[Z_bit]","next_x == 0"
 ,,,,
-"LDA",-1,,"next_cycle",0
+"LDA",-1,,"next_t",0
 "LDA",-1,,"next_a","I_rd_data"
 "LDA",-1,,"next_p[N_bit]","next_a[7]"
 "LDA",-1,,"next_p[Z_bit]","next_a == 0"
 ,,,,
-"LDY",-1,,"next_cycle",0
+"LDY",-1,,"next_t",0
 "LDY",-1,,"next_y","I_rd_data"
 "LDY",-1,,"next_p[N_bit]","next_y[7]"
 "LDY",-1,,"next_p[Z_bit]","next_y == 0"
 ,,,,
-"LAX*",-1,,"next_cycle",0
+"LAX*",-1,,"next_t",0
 "LAX*",-1,,"next_a","I_rd_data"
 "LAX*",-1,,"next_x","I_rd_data"
 "LAX*",-1,,"next_p[N_bit]","next_x[7]"
 "LAX*",-1,,"next_p[Z_bit]","next_x == 0"
 ,,,,
 "STX",-1,,"O_wr_data","curr_x"
-"STX",-1,,"next_cycle",0
+"STX",-1,,"next_t",0
 "STX",-1,,"O_rdwr",0
 ,,,,
 "STA",-1,,"O_wr_data","curr_a"
-"STA",-1,,"next_cycle",0
+"STA",-1,,"next_t",0
 "STA",-1,,"O_rdwr",0
 ,,,,
 "STY",-1,,"O_wr_data","curr_y"
-"STY",-1,,"next_cycle",0
+"STY",-1,,"next_t",0
 "STY",-1,,"O_rdwr",0
 ,,,,
 "AXS*",-1,,"alu_in_lhs","curr_a"
 "AXS*",-1,,"alu_in_rhs","curr_x"
 "AXS*",-1,,"O_wr_data","alu_and"
-"AXS*",-1,,"next_cycle",0
+"AXS*",-1,,"next_t",0
 "AXS*",-1,,"O_rdwr",0
 ,,,,
-"NOP",-1,,"next_cycle",0
+"NOP",-1,,"next_t",0
 ,,,,
 "SEC",-1,,"next_p[C_bit]",1
-"SEC",-1,,"next_cycle",0
+"SEC",-1,,"next_t",0
 ,,,,
 "SED",-1,,"next_p[D_bit]",1
-"SED",-1,,"next_cycle",0
+"SED",-1,,"next_t",0
 ,,,,
 "SEI",-1,,"next_p[I_bit]",1
-"SEI",-1,,"next_cycle",0
+"SEI",-1,,"next_t",0
 ,,,,
 "CLC",-1,,"next_p[C_bit]",0
-"CLC",-1,,"next_cycle",0
+"CLC",-1,,"next_t",0
 ,,,,
 "CLI",-1,,"next_p[I_bit]",0
-"CLI",-1,,"next_cycle",0
+"CLI",-1,,"next_t",0
 ,,,,
 "CLD",-1,,"next_p[D_bit]",0
-"CLD",-1,,"next_cycle",0
+"CLD",-1,,"next_t",0
 ,,,,
 "CLV",-1,,"next_p[V_bit]",0
-"CLV",-1,,"next_cycle",0
+"CLV",-1,,"next_t",0
 ,,,,
-"BCS",-3,,"next_cycle","(curr_p[C_bit] ? (curr_cycle + 1) : 0)"
+"BCS",-3,,"next_t","(curr_p[C_bit] ? (curr_t + 1) : 0)"
 ,,,,
-"BCC",-3,,"next_cycle","(curr_p[C_bit] ? 0 : (curr_cycle + 1))"
+"BCC",-3,,"next_t","(curr_p[C_bit] ? 0 : (curr_t + 1))"
 ,,,,
-"BEQ",-3,,"next_cycle","(curr_p[Z_bit] ? (curr_cycle + 1) : 0)"
+"BEQ",-3,,"next_t","(curr_p[Z_bit] ? (curr_t + 1) : 0)"
 ,,,,
-"BNE",-3,,"next_cycle","(curr_p[Z_bit] ? 0 : (curr_cycle + 1))"
+"BNE",-3,,"next_t","(curr_p[Z_bit] ? 0 : (curr_t + 1))"
 ,,,,
-"BMI",-3,,"next_cycle","(curr_p[N_bit] ? (curr_cycle + 1) : 0)"
+"BMI",-3,,"next_t","(curr_p[N_bit] ? (curr_t + 1) : 0)"
 ,,,,
-"BPL",-3,,"next_cycle","(curr_p[N_bit] ? 0 : (curr_cycle + 1))"
+"BPL",-3,,"next_t","(curr_p[N_bit] ? 0 : (curr_t + 1))"
 ,,,,
-"BVS",-3,,"next_cycle","(curr_p[V_bit] ? (curr_cycle + 1) : 0)"
+"BVS",-3,,"next_t","(curr_p[V_bit] ? (curr_t + 1) : 0)"
 ,,,,
-"BVC",-3,,"next_cycle","(curr_p[V_bit] ? 0 : (curr_cycle + 1))"
+"BVC",-3,,"next_t","(curr_p[V_bit] ? 0 : (curr_t + 1))"
 ,,,,
 "PHP",0,,"O_addr","curr_sp"
 "PHP",0,,"O_rdwr",0
 "PHP",0,,"O_wr_data","curr_p | B_mask"
 "PHP",0,,"next_s","curr_s - 1"
-"PHP",0,,"next_cycle",0
+"PHP",0,,"next_t",0
 ,,,,
 "PHA",0,,"O_addr","curr_sp"
 "PHA",0,,"O_rdwr",0
 "PHA",0,,"O_wr_data","curr_a"
 "PHA",0,,"next_s","curr_s - 1"
-"PHA",0,,"next_cycle",0
+"PHA",0,,"next_t",0
 ,,,,
 "PLP",0,,"O_addr","curr_sp"
 "PLP",0,,"O_rdwr",1
 "PLP",0,,"next_s","curr_s + 1"
-"PLP",0,,"next_cycle","curr_cycle + 1 "
+"PLP",0,,"next_t","curr_t + 1 "
 ,,,,
 "PLP",1,,"O_addr","curr_sp"
 "PLP",1,,"O_rdwr",1
 "PLP",1,,"next_p","I_rd_data"
-"PLP",1,,"next_cycle",0
+"PLP",1,,"next_t",0
 ,,,,
 "PLA",0,,"O_addr","curr_sp"
 "PLA",0,,"O_rdwr",1
 "PLA",0,,"next_s","curr_s + 1"
-"PLA",0,,"next_cycle","curr_cycle + 1 "
+"PLA",0,,"next_t","curr_t + 1 "
 ,,,,
 "PLA",1,,"O_addr","curr_sp"
 "PLA",1,,"O_rdwr",1
 "PLA",1,,"next_a","I_rd_data"
 "PLA",1,,"next_p[Z_bit]","I_rd_data == 0"
 "PLA",1,,"next_p[N_bit]","I_rd_data[7]"
-"PLA",1,,"next_cycle",0
+"PLA",1,,"next_t",0
 ,,,,
-"LSR A",-1,,"next_cycle",0
+"LSR A",-1,,"next_t",0
 "LSR A",-1,,"alu_in_c",0
 "LSR A",-1,,"alu_in_lhs","curr_a"
 "LSR A",-1,,"alu_in_rhs",0
@@ -124,7 +124,7 @@
 "LSR A",-1,,"next_p[Z_bit]","next_a == 0"
 "LSR A",-1,,"next_p[N_bit]","next_a[7]"
 ,,,,
-"ASL A",-1,,"next_cycle",0
+"ASL A",-1,,"next_t",0
 "ASL A",-1,,"alu_in_c",0
 "ASL A",-1,,"alu_in_lhs","curr_a"
 "ASL A",-1,,"alu_in_rhs",0
@@ -133,7 +133,7 @@
 "ASL A",-1,,"next_p[Z_bit]","next_a == 0"
 "ASL A",-1,,"next_p[N_bit]","next_a[7]"
 ,,,,
-"ROR A",-1,,"next_cycle",0
+"ROR A",-1,,"next_t",0
 "ROR A",-1,,"alu_in_c","curr_p[C_bit]"
 "ROR A",-1,,"alu_in_lhs","curr_a"
 "ROR A",-1,,"alu_in_rhs",0
@@ -142,7 +142,7 @@
 "ROR A",-1,,"next_p[Z_bit]","next_a == 0"
 "ROR A",-1,,"next_p[N_bit]","next_a[7]"
 ,,,,
-"ROL A",-1,,"next_cycle",0
+"ROL A",-1,,"next_t",0
 "ROL A",-1,,"alu_in_c","curr_p[C_bit]"
 "ROL A",-1,,"alu_in_lhs","curr_a"
 "ROL A",-1,,"alu_in_rhs",0
@@ -156,12 +156,12 @@
 "LSR",-1,,"alu_in_c",0
 "LSR",-1,,"alu_in_lhs","I_rd_data"
 "LSR",-1,,"alu_in_rhs",0
-"LSR",-1,,"next_cycle","curr_cycle + 1 "
+"LSR",-1,,"next_t","curr_t + 1 "
 ,,,,
 "LSR",0,,"O_addr","curr_ad"
 "LSR",0,,"O_rdwr",0
 "LSR",0,,"O_wr_data","alu_ror"
-"LSR",0,,"next_cycle","curr_cycle + 1 "
+"LSR",0,,"next_t","curr_t + 1 "
 ,,,,
 "LSR",1,,"O_addr","curr_ad"
 "LSR",1,,"O_rdwr",0
@@ -169,19 +169,19 @@
 "LSR",1,,"next_p[C_bit]","alu_ror_c"
 "LSR",1,,"next_p[Z_bit]","alu_ror == 0"
 "LSR",1,,"next_p[N_bit]","alu_ror[7]"
-"LSR",1,,"next_cycle",0
+"LSR",1,,"next_t",0
 ,,,,
 "ASL",-1,,"O_addr","curr_ad"
 "ASL",-1,,"O_rdwr",1
 "ASL",-1,,"alu_in_c",0
 "ASL",-1,,"alu_in_lhs","I_rd_data"
 "ASL",-1,,"alu_in_rhs",0
-"ASL",-1,,"next_cycle","curr_cycle + 1 "
+"ASL",-1,,"next_t","curr_t + 1 "
 ,,,,
 "ASL",0,,"O_addr","curr_ad"
 "ASL",0,,"O_rdwr",0
 "ASL",0,,"O_wr_data","alu_rol"
-"ASL",0,,"next_cycle","curr_cycle + 1 "
+"ASL",0,,"next_t","curr_t + 1 "
 ,,,,
 "ASL",1,,"O_addr","curr_ad"
 "ASL",1,,"O_rdwr",0
@@ -189,20 +189,20 @@
 "ASL",1,,"next_p[C_bit]","alu_rol_c"
 "ASL",1,,"next_p[Z_bit]","alu_rol == 0"
 "ASL",1,,"next_p[N_bit]","alu_rol[7]"
-"ASL",1,,"next_cycle",0
+"ASL",1,,"next_t",0
 ,,,,
 "ASO*",-1,,"O_addr","curr_ad"
 "ASO*",-1,,"O_rdwr",1
 "ASO*",-1,,"alu_in_c",0
 "ASO*",-1,,"alu_in_lhs","I_rd_data"
 "ASO*",-1,,"alu_in_rhs",0
-"ASO*",-1,,"next_cycle","curr_cycle + 1 "
+"ASO*",-1,,"next_t","curr_t + 1 "
 ,,,,
 "ASO*",0,,"O_addr","curr_ad"
 "ASO*",0,,"O_rdwr",0
 "ASO*",0,,"O_wr_data","alu_rol"
 "ASO*",0,,"next_p[C_bit]","alu_rol_c"
-"ASO*",0,,"next_cycle","curr_cycle + 1 "
+"ASO*",0,,"next_t","curr_t + 1 "
 ,,,,
 "ASO*",1,,"O_addr","curr_ad"
 "ASO*",1,,"O_rdwr",1
@@ -212,14 +212,14 @@
 "ASO*",1,,"next_a","alu_or"
 "ASO*",1,,"next_p[Z_bit]","next_a == 0"
 "ASO*",1,,"next_p[N_bit]","next_a[7]"
-"ASO*",1,,"next_cycle",0
+"ASO*",1,,"next_t",0
 ,,,,
 "RLA*",-1,,"O_addr","curr_ad"
 "RLA*",-1,,"O_rdwr",1
 "RLA*",-1,,"alu_in_c","curr_p[C_bit]"
 "RLA*",-1,,"alu_in_lhs","I_rd_data"
 "RLA*",-1,,"alu_in_rhs",0
-"RLA*",-1,,"next_cycle","curr_cycle + 1 "
+"RLA*",-1,,"next_t","curr_t + 1 "
 ,,,,
 "RLA*",0,,"O_addr","curr_ad"
 "RLA*",0,,"O_rdwr",0
@@ -227,7 +227,7 @@
 "RLA*",0,,"next_p[C_bit]","alu_rol_c"
 "RLA*",0,,"next_p[Z_bit]","alu_rol == 0"
 "RLA*",0,,"next_p[N_bit]","alu_rol[7]"
-"RLA*",0,,"next_cycle","curr_cycle + 1 "
+"RLA*",0,,"next_t","curr_t + 1 "
 ,,,,
 "RLA*",1,,"O_addr","curr_ad"
 "RLA*",1,,"O_rdwr",1
@@ -235,20 +235,20 @@
 "RLA*",1,,"alu_in_lhs","curr_a"
 "RLA*",1,,"alu_in_rhs","I_rd_data"
 "RLA*",1,,"next_a","alu_and"
-"RLA*",1,,"next_cycle",0
+"RLA*",1,,"next_t",0
 ,,,,
 "LSE*",-1,,"O_addr","curr_ad"
 "LSE*",-1,,"O_rdwr",1
 "LSE*",-1,,"alu_in_c",0
 "LSE*",-1,,"alu_in_lhs","I_rd_data"
 "LSE*",-1,,"alu_in_rhs",0
-"LSE*",-1,,"next_cycle","curr_cycle + 1 "
+"LSE*",-1,,"next_t","curr_t + 1 "
 ,,,,
 "LSE*",0,,"O_addr","curr_ad"
 "LSE*",0,,"O_rdwr",0
 "LSE*",0,,"O_wr_data","alu_ror"
 "LSE*",0,,"next_p[C_bit]","alu_ror_c"
-"LSE*",0,,"next_cycle","curr_cycle + 1 "
+"LSE*",0,,"next_t","curr_t + 1 "
 ,,,,
 "LSE*",1,,"O_addr","curr_ad"
 "LSE*",1,,"O_rdwr",1
@@ -258,20 +258,20 @@
 "LSE*",1,,"next_a","alu_xor"
 "LSE*",1,,"next_p[Z_bit]","next_a == 0"
 "LSE*",1,,"next_p[N_bit]","next_a[7]"
-"LSE*",1,,"next_cycle",0
+"LSE*",1,,"next_t",0
 ,,,,
 "RRA*",-1,,"O_addr","curr_ad"
 "RRA*",-1,,"O_rdwr",1
 "RRA*",-1,,"alu_in_c","curr_p[C_bit]"
 "RRA*",-1,,"alu_in_lhs","I_rd_data"
 "RRA*",-1,,"alu_in_rhs",0
-"RRA*",-1,,"next_cycle","curr_cycle + 1 "
+"RRA*",-1,,"next_t","curr_t + 1 "
 ,,,,
 "RRA*",0,,"O_addr","curr_ad"
 "RRA*",0,,"O_rdwr",0
 "RRA*",0,,"O_wr_data","alu_ror"
 "RRA*",0,,"next_p[C_bit]","alu_ror_c"
-"RRA*",0,,"next_cycle","curr_cycle + 1 "
+"RRA*",0,,"next_t","curr_t + 1 "
 ,,,,
 "RRA*",1,,"O_addr","curr_ad"
 "RRA*",1,,"O_rdwr",1
@@ -283,19 +283,19 @@
 "RRA*",1,,"next_p[V_bit]","alu_adc_v"
 "RRA*",1,,"next_p[Z_bit]","next_a == 0"
 "RRA*",1,,"next_p[N_bit]","next_a[7]"
-"RRA*",1,,"next_cycle",0
+"RRA*",1,,"next_t",0
 ,,,,
 "ROR",-1,,"O_addr","curr_ad"
 "ROR",-1,,"O_rdwr",1
 "ROR",-1,,"alu_in_c","curr_p[C_bit]"
 "ROR",-1,,"alu_in_lhs","I_rd_data"
 "ROR",-1,,"alu_in_rhs",0
-"ROR",-1,,"next_cycle","curr_cycle + 1 "
+"ROR",-1,,"next_t","curr_t + 1 "
 ,,,,
 "ROR",0,,"O_addr","curr_ad"
 "ROR",0,,"O_rdwr",0
 "ROR",0,,"O_wr_data","alu_ror"
-"ROR",0,,"next_cycle","curr_cycle + 1 "
+"ROR",0,,"next_t","curr_t + 1 "
 ,,,,
 "ROR",1,,"O_addr","curr_ad"
 "ROR",1,,"O_rdwr",0
@@ -303,19 +303,19 @@
 "ROR",1,,"next_p[C_bit]","alu_ror_c"
 "ROR",1,,"next_p[Z_bit]","alu_ror == 0"
 "ROR",1,,"next_p[N_bit]","alu_ror[7]"
-"ROR",1,,"next_cycle",0
+"ROR",1,,"next_t",0
 ,,,,
 "ROL",-1,,"O_addr","curr_ad"
 "ROL",-1,,"O_rdwr",1
 "ROL",-1,,"alu_in_c","curr_p[C_bit]"
 "ROL",-1,,"alu_in_lhs","I_rd_data"
 "ROL",-1,,"alu_in_rhs",0
-"ROL",-1,,"next_cycle","curr_cycle + 1 "
+"ROL",-1,,"next_t","curr_t + 1 "
 ,,,,
 "ROL",0,,"O_addr","curr_ad"
 "ROL",0,,"O_rdwr",0
 "ROL",0,,"O_wr_data","alu_rol"
-"ROL",0,,"next_cycle","curr_cycle + 1 "
+"ROL",0,,"next_t","curr_t + 1 "
 ,,,,
 "ROL",1,,"O_addr","curr_ad"
 "ROL",1,,"O_rdwr",0
@@ -323,9 +323,9 @@
 "ROL",1,,"next_p[C_bit]","alu_rol_c"
 "ROL",1,,"next_p[Z_bit]","alu_rol == 0"
 "ROL",1,,"next_p[N_bit]","alu_rol[7]"
-"ROL",1,,"next_cycle",0
+"ROL",1,,"next_t",0
 ,,,,
-"BIT",-1,,"next_cycle",0
+"BIT",-1,,"next_t",0
 "BIT",-1,,"alu_in_c",0
 "BIT",-1,,"alu_in_lhs","curr_a"
 "BIT",-1,,"alu_in_rhs","I_rd_data"
@@ -333,7 +333,7 @@
 "BIT",-1,,"next_p[V_bit]","I_rd_data[6]"
 "BIT",-1,,"next_p[N_bit]","I_rd_data[7]"
 ,,,,
-"AND",-1,,"next_cycle",0
+"AND",-1,,"next_t",0
 "AND",-1,,"alu_in_c",0
 "AND",-1,,"alu_in_lhs","curr_a"
 "AND",-1,,"alu_in_rhs","I_rd_data"
@@ -341,7 +341,7 @@
 "AND",-1,,"next_p[Z_bit]","next_a == 0"
 "AND",-1,,"next_p[N_bit]","next_a[7]"
 ,,,,
-"ORA",-1,,"next_cycle",0
+"ORA",-1,,"next_t",0
 "ORA",-1,,"alu_in_c",0
 "ORA",-1,,"alu_in_lhs","curr_a"
 "ORA",-1,,"alu_in_rhs","I_rd_data"
@@ -349,7 +349,7 @@
 "ORA",-1,,"next_p[Z_bit]","next_a == 0"
 "ORA",-1,,"next_p[N_bit]","next_a[7]"
 ,,,,
-"EOR",-1,,"next_cycle",0
+"EOR",-1,,"next_t",0
 "EOR",-1,,"alu_in_c",0
 "EOR",-1,,"alu_in_lhs","curr_a"
 "EOR",-1,,"alu_in_rhs","I_rd_data"
@@ -357,7 +357,7 @@
 "EOR",-1,,"next_p[Z_bit]","next_a == 0"
 "EOR",-1,,"next_p[N_bit]","next_a[7]"
 ,,,,
-"ADC",-1,,"next_cycle",0
+"ADC",-1,,"next_t",0
 "ADC",-1,,"alu_in_c","curr_p[C_bit]"
 "ADC",-1,,"alu_in_lhs","curr_a"
 "ADC",-1,,"alu_in_rhs","I_rd_data"
@@ -367,7 +367,7 @@
 "ADC",-1,,"next_p[Z_bit]","next_a == 0"
 "ADC",-1,,"next_p[N_bit]","next_a[7]"
 ,,,,
-"SBC",-1,,"next_cycle",0
+"SBC",-1,,"next_t",0
 "SBC",-1,,"alu_in_c","curr_p[C_bit]"
 "SBC",-1,,"alu_in_lhs","curr_a"
 "SBC",-1,,"alu_in_rhs","I_rd_data"
@@ -382,12 +382,12 @@
 "ISB*",-1,,"alu_in_c","curr_p[C_bit]"
 "ISB*",-1,,"alu_in_lhs","curr_a"
 "ISB*",-1,,"alu_in_rhs","I_rd_data + 1"
-"ISB*",-1,,"next_cycle","curr_cycle + 1 "
+"ISB*",-1,,"next_t","curr_t + 1 "
 ,,,,
 "ISB*",0,,"O_addr","curr_ad"
 "ISB*",0,,"O_rdwr",0
 "ISB*",0,,"O_wr_data","alu_out_rhs"
-"ISB*",0,,"next_cycle","curr_cycle + 1 "
+"ISB*",0,,"next_t","curr_t + 1 "
 ,,,,
 "ISB*",1,,"O_addr","curr_ad"
 "ISB*",1,,"O_rdwr",0
@@ -397,9 +397,9 @@
 "ISB*",1,,"next_p[V_bit]","alu_sbc_v"
 "ISB*",1,,"next_p[Z_bit]","next_a == 0"
 "ISB*",1,,"next_p[N_bit]","next_a[7]"
-"ISB*",1,,"next_cycle",0
+"ISB*",1,,"next_t",0
 ,,,,
-"CMP",-1,,"next_cycle",0
+"CMP",-1,,"next_t",0
 "CMP",-1,,"alu_in_c",0
 "CMP",-1,,"alu_in_lhs","curr_a"
 "CMP",-1,,"alu_in_rhs","I_rd_data"
@@ -412,7 +412,7 @@
 "DCM*",-1,,"alu_in_c",0
 "DCM*",-1,,"alu_in_lhs","curr_a"
 "DCM*",-1,,"alu_in_rhs","I_rd_data - 1"
-"DCM*",-1,,"next_cycle","curr_cycle + 1 "
+"DCM*",-1,,"next_t","curr_t + 1 "
 ,,,,
 "DCM*",0,,"O_addr","curr_ad"
 "DCM*",0,,"O_rdwr",0
@@ -420,14 +420,14 @@
 "DCM*",0,,"next_p[Z_bit]","alu_cmp_z"
 "DCM*",0,,"next_p[N_bit]","alu_cmp_n"
 "DCM*",0,,"next_p[C_bit]","alu_cmp_c"
-"DCM*",0,,"next_cycle","curr_cycle + 1 "
+"DCM*",0,,"next_t","curr_t + 1 "
 ,,,,
 "DCM*",1,,"O_addr","curr_ad"
 "DCM*",1,,"O_rdwr",0
 "DCM*",1,,"O_wr_data","alu_out_rhs"
-"DCM*",1,,"next_cycle",0
+"DCM*",1,,"next_t",0
 ,,,,
-"CPX",-1,,"next_cycle",0
+"CPX",-1,,"next_t",0
 "CPX",-1,,"alu_in_c",0
 "CPX",-1,,"alu_in_lhs","curr_x"
 "CPX",-1,,"alu_in_rhs","I_rd_data"
@@ -435,7 +435,7 @@
 "CPX",-1,,"next_p[N_bit]","alu_cmp_n"
 "CPX",-1,,"next_p[C_bit]","alu_cmp_c"
 ,,,,
-"CPY",-1,,"next_cycle",0
+"CPY",-1,,"next_t",0
 "CPY",-1,,"alu_in_c",0
 "CPY",-1,,"alu_in_lhs","curr_y"
 "CPY",-1,,"alu_in_rhs","I_rd_data"
@@ -443,12 +443,12 @@
 "CPY",-1,,"next_p[N_bit]","alu_cmp_n"
 "CPY",-1,,"next_p[C_bit]","alu_cmp_c"
 ,,,,
-"INX",-1,,"next_cycle",0
+"INX",-1,,"next_t",0
 "INX",-1,,"next_x","curr_x + 1"
 "INX",-1,,"next_p[Z_bit]","next_x == 0"
 "INX",-1,,"next_p[N_bit]","next_x[7]"
 ,,,,
-"INY",-1,,"next_cycle",0
+"INY",-1,,"next_t",0
 "INY",-1,,"next_y","curr_y + 1"
 "INY",-1,,"next_p[Z_bit]","next_y == 0"
 "INY",-1,,"next_p[N_bit]","next_y[7]"
@@ -458,189 +458,189 @@
 "INC",-1,,"alu_in_c",0
 "INC",-1,,"alu_in_lhs","I_rd_data"
 "INC",-1,,"alu_in_rhs","8'h01"
-"INC",-1,,"next_cycle","curr_cycle + 1 "
+"INC",-1,,"next_t","curr_t + 1 "
 ,,,,
 "INC",0,,"O_addr","curr_ad"
 "INC",0,,"O_rdwr",0
 "INC",0,,"O_wr_data","alu_adc[7:0]"
-"INC",0,,"next_cycle","curr_cycle + 1 "
+"INC",0,,"next_t","curr_t + 1 "
 ,,,,
 "INC",1,,"O_addr","curr_ad"
 "INC",1,,"O_rdwr",0
 "INC",1,,"O_wr_data","alu_adc[7:0]"
 "INC",1,,"next_p[Z_bit]","alu_adc[7:0] == 0"
 "INC",1,,"next_p[N_bit]","alu_adc[7]"
-"INC",1,,"next_cycle",0
+"INC",1,,"next_t",0
 ,,,,
 "DEC",-1,,"O_addr","curr_ad"
 "DEC",-1,,"O_rdwr",1
 "DEC",-1,,"alu_in_c",0
 "DEC",-1,,"alu_in_lhs","I_rd_data"
 "DEC",-1,,"alu_in_rhs","8'hFF"
-"DEC",-1,,"next_cycle","curr_cycle + 1 "
+"DEC",-1,,"next_t","curr_t + 1 "
 ,,,,
 "DEC",0,,"O_addr","curr_ad"
 "DEC",0,,"O_rdwr",0
 "DEC",0,,"O_wr_data","alu_adc[7:0]"
-"DEC",0,,"next_cycle","curr_cycle + 1 "
+"DEC",0,,"next_t","curr_t + 1 "
 ,,,,
 "DEC",1,,"O_addr","curr_ad"
 "DEC",1,,"O_rdwr",0
 "DEC",1,,"O_wr_data","alu_adc[7:0]"
 "DEC",1,,"next_p[Z_bit]","alu_adc[7:0] == 0"
 "DEC",1,,"next_p[N_bit]","alu_adc[7]"
-"DEC",1,,"next_cycle",0
+"DEC",1,,"next_t",0
 ,,,,
-"DEX",-1,,"next_cycle",0
+"DEX",-1,,"next_t",0
 "DEX",-1,,"next_x","curr_x - 1"
 "DEX",-1,,"next_p[Z_bit]","next_x == 0"
 "DEX",-1,,"next_p[N_bit]","next_x[7]"
 ,,,,
-"DEY",-1,,"next_cycle",0
+"DEY",-1,,"next_t",0
 "DEY",-1,,"next_y","curr_y - 1"
 "DEY",-1,,"next_p[Z_bit]","next_y == 0"
 "DEY",-1,,"next_p[N_bit]","next_y[7]"
 ,,,,
-"TAX",-1,,"next_cycle",0
+"TAX",-1,,"next_t",0
 "TAX",-1,,"next_x","curr_a"
 "TAX",-1,,"next_p[Z_bit]","next_x == 0"
 "TAX",-1,,"next_p[N_bit]","next_x[7]"
 ,,,,
-"TAY",-1,,"next_cycle",0
+"TAY",-1,,"next_t",0
 "TAY",-1,,"next_y","curr_a"
 "TAY",-1,,"next_p[Z_bit]","next_y == 0"
 "TAY",-1,,"next_p[N_bit]","next_y[7]"
 ,,,,
-"TYA",-1,,"next_cycle",0
+"TYA",-1,,"next_t",0
 "TYA",-1,,"next_a","curr_y"
 "TYA",-1,,"next_p[Z_bit]","next_a == 0"
 "TYA",-1,,"next_p[N_bit]","next_a[7]"
 ,,,,
-"TXA",-1,,"next_cycle",0
+"TXA",-1,,"next_t",0
 "TXA",-1,,"next_a","curr_x"
 "TXA",-1,,"next_p[Z_bit]","next_a == 0"
 "TXA",-1,,"next_p[N_bit]","next_a[7]"
 ,,,,
-"TSX",-1,,"next_cycle",0
+"TSX",-1,,"next_t",0
 "TSX",-1,,"next_x","curr_s"
 "TSX",-1,,"next_p[Z_bit]","next_x == 0"
 "TSX",-1,,"next_p[N_bit]","next_x[7]"
 ,,,,
-"TXS",-1,,"next_cycle",0
+"TXS",-1,,"next_t",0
 "TXS",-1,,"next_s","curr_x"
 ,,,,
 "JSR",-1,,"O_addr","curr_pc"
 "JSR",-1,,"O_rdwr",1
 "JSR",-1,,"next_ad[7:0]","I_rd_data"
 "JSR",-1,,"next_pc","curr_pc + 1"
-"JSR",-1,,"next_cycle","curr_cycle + 1 "
+"JSR",-1,,"next_t","curr_t + 1 "
 ,,,,
 "JSR",0,,"O_addr","curr_sp"
 "JSR",0,,"O_rdwr",1
-"JSR",0,,"next_cycle","curr_cycle + 1 "
+"JSR",0,,"next_t","curr_t + 1 "
 ,,,,
 "JSR",1,,"O_addr","curr_sp"
 "JSR",1,,"O_rdwr",0
 "JSR",1,,"O_wr_data","curr_pc[15:8]"
 "JSR",1,,"next_s","curr_s - 1"
-"JSR",1,,"next_cycle","curr_cycle + 1 "
+"JSR",1,,"next_t","curr_t + 1 "
 ,,,,
 "JSR",2,,"O_addr","curr_sp"
 "JSR",2,,"O_rdwr",0
 "JSR",2,,"O_wr_data","curr_pc[7:0]"
 "JSR",2,,"next_s","curr_s - 1"
-"JSR",2,,"next_cycle","curr_cycle + 1 "
+"JSR",2,,"next_t","curr_t + 1 "
 ,,,,
 "JSR",3,,"O_addr","curr_pc"
 "JSR",3,,"O_rdwr",1
 "JSR",3,,"next_ad[15:8]","I_rd_data"
-"JSR",3,,"next_cycle",0
+"JSR",3,,"next_t",0
 "JSR",3,,"next_pc","next_ad"
 ,,,,
-"JMP",-1,,"next_cycle",0
+"JMP",-1,,"next_t",0
 "JMP",-1,,"next_pc","next_ad"
 ,,,,
 "RTS",-1,,"O_addr","curr_pc"
 "RTS",-1,,"O_rdwr",1
-"RTS",-1,,"next_cycle","curr_cycle + 1 "
+"RTS",-1,,"next_t","curr_t + 1 "
 ,,,,
 "RTS",0,,"O_addr","curr_sp"
 "RTS",0,,"O_rdwr",1
 "RTS",0,,"next_s","curr_s + 1"
-"RTS",0,,"next_cycle","curr_cycle + 1 "
+"RTS",0,,"next_t","curr_t + 1 "
 ,,,,
 "RTS",1,,"O_addr","curr_sp"
 "RTS",1,,"O_rdwr",1
 "RTS",1,,"next_pc[7:0]","I_rd_data"
 "RTS",1,,"next_s","curr_s + 1"
-"RTS",1,,"next_cycle","curr_cycle + 1 "
+"RTS",1,,"next_t","curr_t + 1 "
 ,,,,
 "RTS",2,,"O_addr","curr_sp"
 "RTS",2,,"O_rdwr",1
 "RTS",2,,"next_pc[15:8]","I_rd_data"
-"RTS",2,,"next_cycle","curr_cycle + 1 "
+"RTS",2,,"next_t","curr_t + 1 "
 ,,,,
 "RTS",3,,"O_addr","curr_pc"
 "RTS",3,,"O_rdwr",1
-"RTS",3,,"next_cycle",0
+"RTS",3,,"next_t",0
 "RTS",3,,"next_pc","curr_pc + 1"
 ,,,,
 "RTI",-1,,"O_addr","curr_pc"
 "RTI",-1,,"O_rdwr",1
-"RTI",-1,,"next_cycle","curr_cycle + 1 "
+"RTI",-1,,"next_t","curr_t + 1 "
 ,,,,
 "RTI",0,,"O_addr","curr_sp"
 "RTI",0,,"O_rdwr",1
 "RTI",0,,"next_s","curr_s + 1"
-"RTI",0,,"next_cycle","curr_cycle + 1 "
+"RTI",0,,"next_t","curr_t + 1 "
 ,,,,
 "RTI",1,,"O_addr","curr_sp"
 "RTI",1,,"O_rdwr",1
 "RTI",1,,"next_s","curr_s + 1"
 "RTI",1,,"next_p","I_rd_data"
-"RTI",1,,"next_cycle","curr_cycle + 1 "
+"RTI",1,,"next_t","curr_t + 1 "
 ,,,,
 "RTI",2,,"O_addr","curr_sp"
 "RTI",2,,"O_rdwr",1
 "RTI",2,,"next_s","curr_s + 1"
 "RTI",2,,"next_pc[7:0]","I_rd_data"
-"RTI",2,,"next_cycle","curr_cycle + 1 "
+"RTI",2,,"next_t","curr_t + 1 "
 ,,,,
 "RTI",3,,"O_addr","curr_sp"
 "RTI",3,,"O_rdwr",1
 "RTI",3,,"next_pc[15:8]","I_rd_data"
-"RTI",3,,"next_cycle",0
+"RTI",3,,"next_t",0
 ,,,,
 "BRK",-1,,"O_addr","curr_pc"
 "BRK",-1,,"O_rdwr",1
-"BRK",-1,,"next_cycle","curr_cycle + 1 "
+"BRK",-1,,"next_t","curr_t + 1 "
 ,,,,
 "BRK",0,,"O_addr","curr_sp"
 "BRK",0,,"O_rdwr",0
 "BRK",0,,"O_wr_data","curr_pc[15:8]"
 "BRK",0,,"next_s","curr_s - 1"
-"BRK",0,,"next_cycle","curr_cycle + 1 "
+"BRK",0,,"next_t","curr_t + 1 "
 ,,,,
 "BRK",1,,"O_addr","curr_sp"
 "BRK",1,,"O_rdwr",0
 "BRK",1,,"O_wr_data","curr_pc[7:0]"
 "BRK",1,,"next_s","curr_s - 1"
-"BRK",1,,"next_cycle","curr_cycle + 1 "
+"BRK",1,,"next_t","curr_t + 1 "
 ,,,,
 "BRK",2,,"O_addr","curr_sp"
 "BRK",2,,"O_rdwr",0
 "BRK",2,,"O_wr_data","curr_p | (is_soft_brk ? B_mask : 8'h00)"
 "BRK",2,,"next_p[I_bit]","irq_p | curr_p[I_bit]"
 "BRK",2,,"next_s","curr_s - 1"
-"BRK",2,,"next_cycle","curr_cycle + 1 "
+"BRK",2,,"next_t","curr_t + 1 "
 ,,,,
 "BRK",3,,"O_addr","vec_addr_lo"
 "BRK",3,,"O_rdwr",1
 "BRK",3,,"next_ad[7:0]","I_rd_data"
-"BRK",3,,"next_cycle","curr_cycle + 1 "
+"BRK",3,,"next_t","curr_t + 1 "
 ,,,,
 "BRK",4,,"O_addr","vec_addr_hi"
 "BRK",4,,"O_rdwr",1
 "BRK",4,,"next_ad[15:8]","I_rd_data"
 "BRK",4,,"next_pc","next_ad"
-"BRK",4,,"next_cycle",0
+"BRK",4,,"next_t",0

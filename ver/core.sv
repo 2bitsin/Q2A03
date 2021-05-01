@@ -52,12 +52,12 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire          edge_rise     = I_ready && I_reset && (O_phy2 && ~phy1);
   wire          edge_fall     = I_ready && I_reset && (phy1 && ~O_phy2);
 
-  assign O_sync = ((curr_cycle == 0) && I_reset); 
+  assign O_sync = ((curr_t == 0) && I_reset); 
   assign O_phy2 = (tick >= 6);  
 
 /* Register interface */
 
-  wire[3:0]     curr_cycle    ;
+  wire[3:0]     curr_t        ;
   wire[7:0]     curr_ir       ;
   wire[7:0]     curr_a        ;
   wire[7:0]     curr_x        ;
@@ -68,7 +68,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire[15:0]    curr_ad       ;
   wire[15:0]    curr_ba       ;
   
-  reg4_type     next_cycle    ;
+  reg4_type     next_t        ;
   reg8_type     next_ir       ;
   reg8_type     next_a        ;
   reg8_type     next_x        ;
@@ -83,7 +83,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
 /* Registers */
 
-  register#(4)  reg_cycle (I_clock, I_reset, edge_fall, next_cycle, curr_cycle);
+  register#(4)  reg_t     (I_clock, I_reset, edge_fall, next_t,     curr_t    );
   register      reg_ir    (I_clock, I_reset, edge_fall, next_ir,    curr_ir   );
   register      reg_a     (I_clock, I_reset, edge_fall, next_a,     curr_a    );
   register      reg_x     (I_clock, I_reset, edge_fall, next_x,     curr_x    );
@@ -92,9 +92,9 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
   register      reg_p     (I_clock, I_reset, edge_fall, {next_p[7:6], 2'b10, next_p[3:0]}, curr_p);
 
-  register#(16) reg_pc    (I_clock, I_reset, edge_fall, next_pc, curr_pc);
-  register#(16) reg_ad    (I_clock, I_reset, edge_fall, next_ad, curr_ad);
-  register#(16) reg_ba    (I_clock, I_reset, edge_fall, next_ba, curr_ba);
+  register#(16) reg_pc    (I_clock, I_reset, edge_fall, next_pc,    curr_pc   );
+  register#(16) reg_ad    (I_clock, I_reset, edge_fall, next_ad,    curr_ad   );
+  register#(16) reg_ba    (I_clock, I_reset, edge_fall, next_ba,    curr_ba   );
 
   
 /* Interrupt handling */
@@ -147,7 +147,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   begin          
 		if (~I_reset)
 		begin
-      next_cycle    = 0;
+      next_t        = 0;
       next_a        = 0;
       next_x        = 0;
       next_y        = 0;
@@ -159,7 +159,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_ba       = 0;		
 		end	else
 		begin
-			if (curr_cycle == 0)
+			if (curr_t == 0)
 			begin
 				is_soft_brk = ~force_brk;
 				     if (irq_p     ) vec_addr = 16'hFFFE;
@@ -200,7 +200,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       /* Latch state */
       if (edge_fall)
       begin            
-        if (curr_cycle == 0)
+        if (curr_t == 0)
         begin                   
                if (res_p) res_p <= 0; 
           else if (nmi_p) nmi_p <= 0;
