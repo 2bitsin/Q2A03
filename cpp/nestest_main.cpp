@@ -1,5 +1,6 @@
 #include <cstdio>
-#include <Vtestbench.h>
+#include <iterator>
+#include <Vcore.h>
 #include <svdpi.h>
 #include "nestest.cpp"
 
@@ -20,9 +21,9 @@ int main(int argc, char** argv)
 
   Verilated::commandArgs(argc, argv);
   Verilated::traceEverOn(true);
-  Vtestbench tb;
+  Vcore tb;
 
-  auto scope = svGetScopeFromName("TOP.testbench.q_core");
+  auto scope = svGetScopeFromName("TOP.core");
   if (!scope)
     return -1;
   svSetScope(scope);

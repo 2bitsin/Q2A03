@@ -52,40 +52,54 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire        edge_rise     = I_ready && I_reset && (O_phy2 && ~phy1);
   wire        edge_fall     = I_ready && I_reset && (phy1 && ~O_phy2);
 
-  reg4_type   curr_cycle    ;
-  reg4_type   next_cycle    ;
-
   assign O_sync = ((curr_cycle == 0) && I_reset); 
   assign O_phy2 = (tick >= 6);  
 
 /* Register state */
 
-  reg8_type   curr_ir       ;
-  reg8_type   curr_a        ;
-  reg8_type   curr_x        ;
-  reg8_type   curr_y        ;
-  reg8_type   curr_s        ;
-  reg8_type   curr_pcl      ;
-  reg8_type   curr_pch      ;
-  reg8_type   curr_p        ;
-  reg8_type   curr_adl      ;
-  reg8_type   curr_adh      ;
-  reg8_type   curr_bal      ;
-  reg8_type   curr_bah      ;
-
-  reg8_type   next_ir       ;
-  reg8_type   next_a        ;
-  reg8_type   next_x        ;
-  reg8_type   next_y        ;
-  reg8_type   next_s        ;
-  reg8_type   next_pch      ;
-  reg8_type   next_pcl      ;
-  reg8_type   next_p        ;
-  reg8_type   next_adl      ;
-  reg8_type   next_adh      ;
-  reg8_type   next_bal      ;
-  reg8_type   next_bah      ;
+  wire[3:0]    curr_cycle    ;
+  wire[7:0]    curr_ir       ;
+  wire[7:0]    curr_a        ;
+  wire[7:0]    curr_x        ;
+  wire[7:0]    curr_y        ;
+  wire[7:0]    curr_s        ;
+  wire[7:0]    curr_pcl      ;
+  wire[7:0]    curr_pch      ;
+  wire[7:0]    curr_adl      ;
+  wire[7:0]    curr_adh      ;
+  wire[7:0]    curr_bal      ;
+  wire[7:0]    curr_bah      ;
+  wire[7:0]    curr_p        ;
+ 
+  reg4_type    next_cycle    ;
+  reg8_type    next_ir       ;
+  reg8_type    next_a        ;
+  reg8_type    next_x        ;
+  reg8_type    next_y        ;
+  reg8_type    next_s        ;
+  reg8_type    next_pch      ;
+  reg8_type    next_pcl      ;
+  reg8_type    next_adl      ;
+  reg8_type    next_adh      ;
+  reg8_type    next_bal      ;
+  reg8_type    next_bah      ;
+  reg8_type    next_p        ;
   
+  register#(4) reg_cycle (I_clock, I_reset, edge_fall, next_cycle, curr_cycle);
+  register     reg_ir    (I_clock, I_reset, edge_fall, next_ir,    curr_ir   );
+  register     reg_a     (I_clock, I_reset, edge_fall, next_a,     curr_a    );
+  register     reg_x     (I_clock, I_reset, edge_fall, next_x,     curr_x    );
+  register     reg_y     (I_clock, I_reset, edge_fall, next_y,     curr_y    );
+  register     reg_s     (I_clock, I_reset, edge_fall, next_s,     curr_s    );
+  register     reg_pch   (I_clock, I_reset, edge_fall, next_pch,   curr_pch  );
+  register     reg_pcl   (I_clock, I_reset, edge_fall, next_pcl,   curr_pcl  );
+  register     reg_adl   (I_clock, I_reset, edge_fall, next_adl,   curr_adl  );
+  register     reg_adh   (I_clock, I_reset, edge_fall, next_adh,   curr_adh  );
+  register     reg_bal   (I_clock, I_reset, edge_fall, next_bal,   curr_bal  );
+  register     reg_bah   (I_clock, I_reset, edge_fall, next_bah,   curr_bah  );
+  register     reg_p     (I_clock, I_reset, edge_fall, {next_p[7:6], 2'b10, next_p[3:0]}, curr_p);
+
+
 /* Misc derivatives */
 
   wire[15:0]  curr_pc       = {curr_pch, curr_pcl};
@@ -185,21 +199,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       tick          <= 0;
       phy1          <= 0;
       res_p         <= 1;
-      
-      curr_cycle    <= next_cycle ;  
-      curr_a        <= next_a ;   
-      curr_x        <= next_x ;   
-      curr_y        <= next_y ;   
-      curr_s        <= next_s ;   
-      curr_p        <= {next_p[7:6], 2'b10, next_p[3:0]};
-      curr_pch      <= next_pch ;   
-      curr_pcl      <= next_pcl ;   
-      curr_ir       <= next_ir ;  
-      curr_adh      <= next_adh ;
-      curr_adl      <= next_adl ;   
-      curr_bah      <= next_bah ;
-      curr_bal      <= next_bal ;             
-      
+          
     end  
     else if (I_ready) 
     begin
@@ -223,21 +223,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
                if (res_p) res_p <= 0; 
           else if (nmi_p) nmi_p <= 0;
         end
-
         debug_tick    <= debug_tick + 3;
-        curr_cycle    <= next_cycle ;  
-        curr_a        <= next_a ;   
-        curr_x        <= next_x ;   
-        curr_y        <= next_y ;   
-        curr_s        <= next_s ;   
-        curr_p        <= {next_p[7:6], 2'b10, next_p[3:0]};
-        curr_pch      <= next_pch ;   
-        curr_pcl      <= next_pcl ;   
-        curr_ir       <= next_ir ;  
-        curr_adh      <= next_adh ;
-        curr_adl      <= next_adl ;   
-        curr_bah      <= next_bah ;
-        curr_bal      <= next_bal ;         
       end
     end    
   end
@@ -266,6 +252,13 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
     end
   endtask;
   export "DPI-C" task read_state;
+
+  initial begin
+    $dumpfile("trace/core.vcd");
+    $dumpvars(999, core);
+  end
 `endif
+
+
 
 endmodule
