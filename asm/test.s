@@ -1,6 +1,6 @@
 .org $c000
 .segment "CODE"
-G_screen = $4800
+G_screen = $4840 
 init:
   lda #'H'
   sta G_screen + 0
