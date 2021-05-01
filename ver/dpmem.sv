@@ -35,6 +35,7 @@ module dpmem #(
   input wire[P_data_bits - 1:0] I_data1;
   output bit[P_data_bits - 1:0] O_data1;
 
+  (* ramstyle = "no_rw_check, M10K" *)
   bit[P_data_bits - 1:0] bits [0:(2**P_addr_bits) - 1];
 
   always @(posedge I_clock0) 

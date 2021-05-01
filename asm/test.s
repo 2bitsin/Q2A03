@@ -1,30 +1,31 @@
-.org $fc00
+.org $c000
 .segment "CODE"
+G_screen = $4800
 init:
   lda #'H'
-  sta $800
+  sta G_screen + 0
   lda #'e'
-  sta $7e01
+  sta G_screen + 1
   lda #'l'
-  sta $7e02
+  sta G_screen + 2
   lda #'l'
-  sta $7e03
+  sta G_screen + 3
   lda #'o'
-  sta $7e04
+  sta G_screen + 4
   lda #' '
-  sta $7e05
+  sta G_screen + 5
   lda #'W'
-  sta $7e06
+  sta G_screen + 6
   lda #'o'
-  sta $7e07
+  sta G_screen + 7
   lda #'r'
-  sta $7e08
+  sta G_screen + 8
   lda #'l'
-  sta $7e09
+  sta G_screen + 9
   lda #'d'
-  sta $7e0a
+  sta G_screen + 10
   lda #'!'
-  sta $7e0b
+  sta G_screen + 11
 
   .byte $f2
 
