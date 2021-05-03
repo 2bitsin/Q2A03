@@ -64,12 +64,11 @@ int main(int argc, char** argv)
           tb.I_rd_data = ram[tb.O_addr & 0x7ff];
         else 
           ram[tb.O_addr & 0x7ff] = tb.O_wr_data; 
+      }      
       #if 1
-      //  if (!last_phy2 && tb.O_addr == 0x647)
-      //    printf("%s($%04X, $%02X)\n", tb.O_rdwr ? "R" : "W", tb.O_addr, tb.O_rdwr ? tb.I_rd_data : tb.O_wr_data);
+      if (!last_phy2 /*&& tb.O_addr == 0x633*/)
+        printf("\x1b[31m%s(\x1b[93m$%04X, $%02X\x1b[31m)\x1b[0m\n", tb.O_rdwr ? "R" : "W", tb.O_addr, tb.O_rdwr ? tb.I_rd_data : tb.O_wr_data);
       #endif
-      }
-      last_phy2 = tb.O_phy2;
     }
     if (!last_sync && tb.O_sync) 
     {
@@ -111,9 +110,9 @@ int main(int argc, char** argv)
         }
       }
     }
-    last_sync = tb.O_sync;    
     if (!last_phy2 && tb.O_phy2)
       actual_cycles += 3;
+    last_sync = tb.O_sync;    
     last_phy2 = tb.O_phy2;
     $time += 1;
   }

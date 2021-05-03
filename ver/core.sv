@@ -65,6 +65,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire[7:0]     curr_y        ;
   wire[7:0]     curr_s        ;
   wire[7:0]     curr_p        ;
+  wire[7:0]     curr_rmw      ;
   wire[15:0]    curr_pc       ;
   wire[15:0]    curr_ad       ;
   wire[15:0]    curr_ba       ;
@@ -76,6 +77,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   reg8_type     next_y        ;
   reg8_type     next_s        ;
   reg8_type     next_p        ;
+  reg8_type     next_rmw      ;
   reg16_type    next_pc       ;
   reg16_type    next_ad       ;
   reg16_type    next_ba       ;
@@ -90,6 +92,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   register      reg_x     (I_clock, I_reset, edge_fall, next_x,     curr_x    );
   register      reg_y     (I_clock, I_reset, edge_fall, next_y,     curr_y    );
   register      reg_s     (I_clock, I_reset, edge_fall, next_s,     curr_s    );
+  register      reg_rmw   (I_clock, I_reset, edge_fall, next_rmw,   curr_rmw  );
 
   register      reg_p     (I_clock, I_reset, edge_fall, {next_p[7:6], 2'b10, next_p[3:0]}, curr_p);
 
@@ -172,21 +175,39 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 		if (~I_reset)
 		begin      
       I_alu_control = control_nop;
-      I_alu_lhs     = curr_a;
-      I_alu_rhs     = I_rd_data;  
+      I_alu_lhs = curr_a;
+      I_alu_rhs = I_rd_data;  
+      
+      next_rmw = 0;
+      next_pc  = 0;
+      next_ir  = 0;
+      next_ad  = 0;
+      next_ba  = 0;
+      next_t   = 0;
+      next_a   = 0;
+      next_x   = 0;
+      next_y   = 0;
+      next_s   = 0;
+      next_p   = 0;
 
-      next_t        = 0;
-      next_a        = 0;
-      next_x        = 0;
-      next_y        = 0;
-      next_s        = 0;
-      next_p        = 8'h04;
-      next_pc       = 0;
-      next_ir       = 0;
-      next_ad       = 0;
-      next_ba       = 0;
 		end	else
-		begin
+		begin    
+      I_alu_control = control_nop;
+      I_alu_lhs = 0;
+      I_alu_rhs = 0;
+  
+      next_rmw = curr_rmw;
+      next_pc  = curr_pc;
+      next_ir  = curr_ir;
+      next_ad  = curr_ad;
+      next_ba  = curr_ba;
+      next_t   = curr_t;
+      next_a   = curr_a;
+      next_x   = curr_x;
+      next_y   = curr_y;
+      next_s   = curr_s;
+      next_p   = curr_p;
+
 			if (curr_t == 0)
 			begin
         vec_addr = 16'hFFFE;
@@ -196,8 +217,11 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 				else if (nmi_p) 
           vec_addr = 16'hFFFA;
 				else if (res_p) 
-          vec_addr = 16'hFFFC;          
+          vec_addr = 16'hFFFC;
+        
+        next_p[I_bit] = res_p | curr_p[I_bit];
 			end
+
 			`include "cycles.svi"
 		end		
   end
@@ -232,9 +256,9 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       if (edge_fall)
       begin            
         if (curr_t == 0)
-        begin                   
-               if (res_p) res_p <= 0; 
-          else if (nmi_p) nmi_p <= 0;
+        begin                       
+          if (res_p) res_p <= 0; else
+          if (nmi_p) nmi_p <= 0;
         end
         debug_tick <= debug_tick + 3;
       end

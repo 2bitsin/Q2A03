@@ -1,6 +1,6 @@
 `include "core_alu.svi"
 
-module co_alu (I_control, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O_result, O_carry, O_overflow, O_sign, O_zero);
+module core_alu (I_control, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O_result, O_carry, O_overflow, O_sign, O_zero);
 
   input control_type I_control;
   input wire[7:0] I_lhs;
@@ -30,7 +30,7 @@ module co_alu (I_control, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O_r
     I_rhs9      = 9' (I_rhs);
     I_carry9    = 9' (I_carry);
 
-    unique case (I_control)
+    case (I_control)
       control_sbc: 
         I_rhs9 = ~I_rhs9;
 
@@ -40,14 +40,25 @@ module co_alu (I_control, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O_r
       control_dec:
         I_rhs9 = -9'd1;
 
-      control_cmp: 
-        I_carry9 = 9'd0;
-
       default:;
     endcase    
 
+    case (I_control)
+      
+      control_cmp, 
+      control_inc, 
+      control_dec: 
+        I_carry9 = 9'd0;
+
+      default:;
+    endcase
+
     unique case (I_control) 
-      control_adc, control_sbc, control_cmp, control_inc, control_dec: 
+      control_adc, 
+      control_sbc, 
+      control_cmp, 
+      control_inc, 
+      control_dec: 
       begin      
         {O_carry, O_result} = 9' (I_lhs) + I_rhs9 + I_carry9;
         O_overflow = (I_lhs[7] != O_result[7]) && (I_lhs[7] == I_rhs9[7]);        
@@ -74,10 +85,10 @@ module co_alu (I_control, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O_r
       control_lsr:
         {O_result, O_carry} = {1'b0, I_lhs};
 
-      control_ldl: 
+      control_txl: 
         O_result = I_lhs;
 
-      control_ldr: 
+      control_txr: 
         O_result = I_rhs;
  
       default:;
