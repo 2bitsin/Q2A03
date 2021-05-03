@@ -158,22 +158,22 @@
 	    ((curr_t == 2)&(curr_ir == 8'h05)))
 		next_a = alu_or;
 	
-	if (((curr_t == 5)&((curr_ir == 8'h0F)|(curr_ir == 8'h57)|(curr_ir == 8'h01)|(curr_ir == 8'hA1)|(curr_ir == 8'hF1)|(curr_ir == 8'hEF)|(curr_ir == 8'h31)|(curr_ir == 8'h41)|(curr_ir == 8'hE1)|(curr_ir == 8'h71)|(curr_ir == 8'hF7)|(curr_ir == 8'h6F)|(curr_ir == 8'hB1)|(curr_ir == 8'h21)|(curr_ir == 8'h17)|(curr_ir == 8'h11)|(curr_ir == 8'h61)|(curr_ir == 8'h51)|(curr_ir == 8'h4F)|(curr_ir == 8'h77)))|
-	    ((curr_t == 3)&((curr_ir == 8'hED)|(curr_ir == 8'hF5)|(curr_ir == 8'h35)|(curr_ir == 8'h75)|(curr_ir == 8'h2D)|(curr_ir == 8'hAD)|(curr_ir == 8'h15)|(curr_ir == 8'h55)|(curr_ir == 8'hB5)|(curr_ir == 8'h4D)|(curr_ir == 8'h6D)|(curr_ir == 8'h0D)))|
-	    ((curr_t == 4)&((curr_ir == 8'hE7)|(curr_ir == 8'h39)|(curr_ir == 8'hFD)|(curr_ir == 8'hF9)|(curr_ir == 8'hB9)|(curr_ir == 8'h59)|(curr_ir == 8'h3D)|(curr_ir == 8'h19)|(curr_ir == 8'h79)|(curr_ir == 8'h07)|(curr_ir == 8'h7D)|(curr_ir == 8'hBD)|(curr_ir == 8'h1D)|(curr_ir == 8'h67)|(curr_ir == 8'h5D)|(curr_ir == 8'h47)))|
-	    ((curr_t == 6)&((curr_ir == 8'hFF)|(curr_ir == 8'h1F)|(curr_ir == 8'hFB)|(curr_ir == 8'h5B)|(curr_ir == 8'h1B)|(curr_ir == 8'h7B)|(curr_ir == 8'h5F)|(curr_ir == 8'h7F)))|
-	    ((curr_t == 7)&((curr_ir == 8'hE3)|(curr_ir == 8'h73)|(curr_ir == 8'h63)|(curr_ir == 8'h43)|(curr_ir == 8'h13)|(curr_ir == 8'hF3)|(curr_ir == 8'h03)|(curr_ir == 8'h53)))|
-	    ((curr_t == 1)&((curr_ir == 8'h49)|(curr_ir == 8'h4A)|(curr_ir == 8'h09)|(curr_ir == 8'hEB)|(curr_ir == 8'h69)|(curr_ir == 8'hA9)|(curr_ir == 8'h6A)|(curr_ir == 8'h98)|(curr_ir == 8'h2A)|(curr_ir == 8'hE9)|(curr_ir == 8'h0A)|(curr_ir == 8'h29)|(curr_ir == 8'h8A)))|
-	    ((curr_t == 2)&((curr_ir == 8'hA5)|(curr_ir == 8'h45)|(curr_ir == 8'h25)|(curr_ir == 8'h65)|(curr_ir == 8'hE5)|(curr_ir == 8'h05))))
+	if (((curr_t == 5)&((curr_ir == 8'h0F)|(curr_ir == 8'hF1)|(curr_ir == 8'h71)|(curr_ir == 8'hE1)|(curr_ir == 8'hF7)|(curr_ir == 8'h57)|(curr_ir == 8'hEF)|(curr_ir == 8'h01)|(curr_ir == 8'h6F)|(curr_ir == 8'h31)|(curr_ir == 8'h21)|(curr_ir == 8'h17)|(curr_ir == 8'h11)|(curr_ir == 8'h61)|(curr_ir == 8'h51)|(curr_ir == 8'h4F)|(curr_ir == 8'h77)|(curr_ir == 8'h41)))|
+	    ((curr_t == 4)&((curr_ir == 8'h59)|(curr_ir == 8'h3D)|(curr_ir == 8'hE7)|(curr_ir == 8'h39)|(curr_ir == 8'h1D)|(curr_ir == 8'h07)|(curr_ir == 8'hFD)|(curr_ir == 8'h5D)|(curr_ir == 8'h67)|(curr_ir == 8'h7D)|(curr_ir == 8'hF9)|(curr_ir == 8'h19)|(curr_ir == 8'h79)|(curr_ir == 8'h47)))|
+	    ((curr_t == 7)&((curr_ir == 8'h13)|(curr_ir == 8'h03)|(curr_ir == 8'hF3)|(curr_ir == 8'h73)|(curr_ir == 8'h63)|(curr_ir == 8'hE3)|(curr_ir == 8'h53)|(curr_ir == 8'h43)))|
+	    ((curr_t == 3)&((curr_ir == 8'hED)|(curr_ir == 8'h4D)|(curr_ir == 8'h6D)|(curr_ir == 8'hF5)|(curr_ir == 8'h15)|(curr_ir == 8'h75)|(curr_ir == 8'h55)|(curr_ir == 8'h2D)|(curr_ir == 8'h35)|(curr_ir == 8'h0D)))|
+	    ((curr_t == 1)&((curr_ir == 8'h4A)|(curr_ir == 8'hE9)|(curr_ir == 8'h09)|(curr_ir == 8'hEB)|(curr_ir == 8'h0A)|(curr_ir == 8'h69)|(curr_ir == 8'h49)|(curr_ir == 8'h29)|(curr_ir == 8'h2A)|(curr_ir == 8'h6A)|(curr_ir == 8'h8A)|(curr_ir == 8'h98)))|
+	    ((curr_t == 6)&((curr_ir == 8'h7B)|(curr_ir == 8'hFF)|(curr_ir == 8'h5F)|(curr_ir == 8'hFB)|(curr_ir == 8'h5B)|(curr_ir == 8'h1F)|(curr_ir == 8'h1B)|(curr_ir == 8'h7F)))|
+	    ((curr_t == 2)&((curr_ir == 8'hE5)|(curr_ir == 8'h45)|(curr_ir == 8'h05)|(curr_ir == 8'h25)|(curr_ir == 8'h65))))
 		next_p[Z_bit] = next_a == 0;
 	
-	if (((curr_t == 5)&((curr_ir == 8'h0F)|(curr_ir == 8'h57)|(curr_ir == 8'h01)|(curr_ir == 8'hA1)|(curr_ir == 8'hF1)|(curr_ir == 8'hEF)|(curr_ir == 8'h31)|(curr_ir == 8'h41)|(curr_ir == 8'hE1)|(curr_ir == 8'h71)|(curr_ir == 8'hF7)|(curr_ir == 8'h6F)|(curr_ir == 8'hB1)|(curr_ir == 8'h21)|(curr_ir == 8'h17)|(curr_ir == 8'h11)|(curr_ir == 8'h61)|(curr_ir == 8'h51)|(curr_ir == 8'h4F)|(curr_ir == 8'h77)))|
-	    ((curr_t == 3)&((curr_ir == 8'hED)|(curr_ir == 8'hF5)|(curr_ir == 8'h35)|(curr_ir == 8'h75)|(curr_ir == 8'h2D)|(curr_ir == 8'hAD)|(curr_ir == 8'h15)|(curr_ir == 8'h55)|(curr_ir == 8'hB5)|(curr_ir == 8'h4D)|(curr_ir == 8'h6D)|(curr_ir == 8'h0D)))|
-	    ((curr_t == 4)&((curr_ir == 8'hE7)|(curr_ir == 8'h39)|(curr_ir == 8'hFD)|(curr_ir == 8'hF9)|(curr_ir == 8'hB9)|(curr_ir == 8'h59)|(curr_ir == 8'h3D)|(curr_ir == 8'h19)|(curr_ir == 8'h79)|(curr_ir == 8'h07)|(curr_ir == 8'h7D)|(curr_ir == 8'hBD)|(curr_ir == 8'h1D)|(curr_ir == 8'h67)|(curr_ir == 8'h5D)|(curr_ir == 8'h47)))|
-	    ((curr_t == 6)&((curr_ir == 8'hFF)|(curr_ir == 8'h1F)|(curr_ir == 8'hFB)|(curr_ir == 8'h5B)|(curr_ir == 8'h1B)|(curr_ir == 8'h7B)|(curr_ir == 8'h5F)|(curr_ir == 8'h7F)))|
-	    ((curr_t == 7)&((curr_ir == 8'hE3)|(curr_ir == 8'h73)|(curr_ir == 8'h63)|(curr_ir == 8'h43)|(curr_ir == 8'h13)|(curr_ir == 8'hF3)|(curr_ir == 8'h03)|(curr_ir == 8'h53)))|
-	    ((curr_t == 1)&((curr_ir == 8'h49)|(curr_ir == 8'h4A)|(curr_ir == 8'h09)|(curr_ir == 8'hEB)|(curr_ir == 8'h69)|(curr_ir == 8'hA9)|(curr_ir == 8'h6A)|(curr_ir == 8'h98)|(curr_ir == 8'h2A)|(curr_ir == 8'hE9)|(curr_ir == 8'h0A)|(curr_ir == 8'h29)|(curr_ir == 8'h8A)))|
-	    ((curr_t == 2)&((curr_ir == 8'hA5)|(curr_ir == 8'h45)|(curr_ir == 8'h25)|(curr_ir == 8'h65)|(curr_ir == 8'hE5)|(curr_ir == 8'h05))))
+	if (((curr_t == 5)&((curr_ir == 8'h0F)|(curr_ir == 8'hF1)|(curr_ir == 8'h71)|(curr_ir == 8'hE1)|(curr_ir == 8'hF7)|(curr_ir == 8'h57)|(curr_ir == 8'hEF)|(curr_ir == 8'h01)|(curr_ir == 8'h6F)|(curr_ir == 8'h31)|(curr_ir == 8'h21)|(curr_ir == 8'h17)|(curr_ir == 8'h11)|(curr_ir == 8'h61)|(curr_ir == 8'h51)|(curr_ir == 8'h4F)|(curr_ir == 8'h77)|(curr_ir == 8'h41)))|
+	    ((curr_t == 4)&((curr_ir == 8'h59)|(curr_ir == 8'h3D)|(curr_ir == 8'hE7)|(curr_ir == 8'h39)|(curr_ir == 8'h1D)|(curr_ir == 8'h07)|(curr_ir == 8'hFD)|(curr_ir == 8'h5D)|(curr_ir == 8'h67)|(curr_ir == 8'h7D)|(curr_ir == 8'hF9)|(curr_ir == 8'h19)|(curr_ir == 8'h79)|(curr_ir == 8'h47)))|
+	    ((curr_t == 7)&((curr_ir == 8'h13)|(curr_ir == 8'h03)|(curr_ir == 8'hF3)|(curr_ir == 8'h73)|(curr_ir == 8'h63)|(curr_ir == 8'hE3)|(curr_ir == 8'h53)|(curr_ir == 8'h43)))|
+	    ((curr_t == 3)&((curr_ir == 8'hED)|(curr_ir == 8'h4D)|(curr_ir == 8'h6D)|(curr_ir == 8'hF5)|(curr_ir == 8'h15)|(curr_ir == 8'h75)|(curr_ir == 8'h55)|(curr_ir == 8'h2D)|(curr_ir == 8'h35)|(curr_ir == 8'h0D)))|
+	    ((curr_t == 1)&((curr_ir == 8'h4A)|(curr_ir == 8'hE9)|(curr_ir == 8'h09)|(curr_ir == 8'hEB)|(curr_ir == 8'h0A)|(curr_ir == 8'h69)|(curr_ir == 8'h49)|(curr_ir == 8'h29)|(curr_ir == 8'h2A)|(curr_ir == 8'h6A)|(curr_ir == 8'h8A)|(curr_ir == 8'h98)))|
+	    ((curr_t == 6)&((curr_ir == 8'h7B)|(curr_ir == 8'hFF)|(curr_ir == 8'h5F)|(curr_ir == 8'hFB)|(curr_ir == 8'h5B)|(curr_ir == 8'h1F)|(curr_ir == 8'h1B)|(curr_ir == 8'h7F)))|
+	    ((curr_t == 2)&((curr_ir == 8'hE5)|(curr_ir == 8'h45)|(curr_ir == 8'h05)|(curr_ir == 8'h25)|(curr_ir == 8'h65))))
 		next_p[N_bit] = next_a[7];
 	
 	if (((curr_t == 1)&((curr_ir == 8'h22)|(curr_ir == 8'h52)|(curr_ir == 8'h82)|(curr_ir == 8'h42)|(curr_ir == 8'h02)|(curr_ir == 8'hB2)|(curr_ir == 8'hD2)|(curr_ir == 8'h32)|(curr_ir == 8'h92)|(curr_ir == 8'hF2)|(curr_ir == 8'h72)|(curr_ir == 8'h62)|(curr_ir == 8'h12))))
@@ -398,11 +398,11 @@
 	    ((curr_t == 1)&(curr_ir == 8'h69)))
 		next_p[V_bit] = alu_adc_v;
 	
-	if (((curr_t == 4)&((curr_ir == 8'hBD)|(curr_ir == 8'hBF)|(curr_ir == 8'hB9)))|
-	    ((curr_t == 1)&((curr_ir == 8'hA9)|(curr_ir == 8'hAB)))|
-	    ((curr_t == 3)&((curr_ir == 8'h68)|(curr_ir == 8'hAF)|(curr_ir == 8'hB7)|(curr_ir == 8'hAD)|(curr_ir == 8'hB5)))|
-	    ((curr_t == 2)&((curr_ir == 8'hA5)|(curr_ir == 8'hA7)))|
-	    ((curr_t == 5)&((curr_ir == 8'hA1)|(curr_ir == 8'hB1)|(curr_ir == 8'hB3)|(curr_ir == 8'hA3))))
+	if (((curr_t == 3)&((curr_ir == 8'h68)|(curr_ir == 8'hAF)|(curr_ir == 8'hB7)))|
+	    ((curr_t == 2)&(curr_ir == 8'hA7))|
+	    ((curr_t == 4)&(curr_ir == 8'hBF))|
+	    ((curr_t == 5)&((curr_ir == 8'hB3)|(curr_ir == 8'hA3)))|
+	    ((curr_t == 1)&(curr_ir == 8'hAB)))
 		next_a = I_rd_data;
 	
 	if (((curr_t == 3)&(curr_ir == 8'h68)))
@@ -437,16 +437,10 @@
 	if (((curr_t == 1)&(curr_ir == 8'h88)))
 		next_y = curr_y - 1;
 	
-	if (((curr_t == 2)&(curr_ir == 8'hA4))|
-	    ((curr_t == 1)&((curr_ir == 8'hA8)|(curr_ir == 8'hC8)|(curr_ir == 8'hA0)|(curr_ir == 8'h88)))|
-	    ((curr_t == 3)&((curr_ir == 8'hAC)|(curr_ir == 8'hB4)))|
-	    ((curr_t == 4)&(curr_ir == 8'hBC)))
+	if (((curr_t == 1)&((curr_ir == 8'h88)|(curr_ir == 8'hA8)|(curr_ir == 8'hC8))))
 		next_p[Z_bit] = next_y == 0;
 	
-	if (((curr_t == 2)&(curr_ir == 8'hA4))|
-	    ((curr_t == 1)&((curr_ir == 8'hA8)|(curr_ir == 8'hC8)|(curr_ir == 8'hA0)|(curr_ir == 8'h88)))|
-	    ((curr_t == 3)&((curr_ir == 8'hAC)|(curr_ir == 8'hB4)))|
-	    ((curr_t == 4)&(curr_ir == 8'hBC)))
+	if (((curr_t == 1)&((curr_ir == 8'h88)|(curr_ir == 8'hA8)|(curr_ir == 8'hC8))))
 		next_p[N_bit] = next_y[7];
 	
 	if (((curr_t == 1)&(curr_ir == 8'h8A)))
@@ -464,30 +458,71 @@
 	if (((curr_t == 1)&(curr_ir == 8'h9A)))
 		next_s = curr_x;
 	
+	if (((curr_t == 4)&((curr_ir == 8'hBD)|(curr_ir == 8'hBE)|(curr_ir == 8'hBC)|(curr_ir == 8'hB9)))|
+	    ((curr_t == 2)&((curr_ir == 8'hA4)|(curr_ir == 8'hA5)|(curr_ir == 8'hA6)))|
+	    ((curr_t == 3)&((curr_ir == 8'hAE)|(curr_ir == 8'hAC)|(curr_ir == 8'hB6)|(curr_ir == 8'hAD)|(curr_ir == 8'hB5)|(curr_ir == 8'hB4)))|
+	    ((curr_t == 1)&((curr_ir == 8'hA9)|(curr_ir == 8'hA2)|(curr_ir == 8'hA0)))|
+	    ((curr_t == 5)&((curr_ir == 8'hB1)|(curr_ir == 8'hA1))))
+		I_alu_rhs = I_rd_data;
+	
 	if (((curr_t == 2)&(curr_ir == 8'hA4))|
 	    ((curr_t == 3)&((curr_ir == 8'hAC)|(curr_ir == 8'hB4)))|
 	    ((curr_t == 4)&(curr_ir == 8'hBC))|
 	    ((curr_t == 1)&(curr_ir == 8'hA0)))
-		next_y = I_rd_data;
+		next_y = O_alu_result;
 	
-	if (((curr_t == 3)&((curr_ir == 8'hAE)|(curr_ir == 8'hAF)|(curr_ir == 8'hB6)|(curr_ir == 8'hB7)))|
-	    ((curr_t == 4)&((curr_ir == 8'hBE)|(curr_ir == 8'hBF)))|
-	    ((curr_t == 1)&((curr_ir == 8'hA2)|(curr_ir == 8'hAB)))|
-	    ((curr_t == 2)&((curr_ir == 8'hA7)|(curr_ir == 8'hA6)))|
-	    ((curr_t == 5)&((curr_ir == 8'hB3)|(curr_ir == 8'hA3))))
+	if (((curr_t == 4)&((curr_ir == 8'hBD)|(curr_ir == 8'hBE)|(curr_ir == 8'hBC)|(curr_ir == 8'hB9)))|
+	    ((curr_t == 2)&((curr_ir == 8'hA4)|(curr_ir == 8'hA5)|(curr_ir == 8'hA6)))|
+	    ((curr_t == 3)&((curr_ir == 8'hAE)|(curr_ir == 8'hAC)|(curr_ir == 8'hB6)|(curr_ir == 8'hAD)|(curr_ir == 8'hB5)|(curr_ir == 8'hB4)))|
+	    ((curr_t == 1)&((curr_ir == 8'hA9)|(curr_ir == 8'hA2)|(curr_ir == 8'hA0)))|
+	    ((curr_t == 5)&((curr_ir == 8'hB1)|(curr_ir == 8'hA1))))
+		next_p[N_bit] = O_alu_sign;
+	
+	if (((curr_t == 4)&((curr_ir == 8'hBD)|(curr_ir == 8'hBE)|(curr_ir == 8'hBC)|(curr_ir == 8'hB9)))|
+	    ((curr_t == 2)&((curr_ir == 8'hA4)|(curr_ir == 8'hA5)|(curr_ir == 8'hA6)))|
+	    ((curr_t == 3)&((curr_ir == 8'hAE)|(curr_ir == 8'hAC)|(curr_ir == 8'hB6)|(curr_ir == 8'hAD)|(curr_ir == 8'hB5)|(curr_ir == 8'hB4)))|
+	    ((curr_t == 1)&((curr_ir == 8'hA9)|(curr_ir == 8'hA2)|(curr_ir == 8'hA0)))|
+	    ((curr_t == 5)&((curr_ir == 8'hB1)|(curr_ir == 8'hA1))))
+		next_p[Z_bit] = O_alu_zero;
+	
+	if (((curr_t == 4)&((curr_ir == 8'hBD)|(curr_ir == 8'hBE)|(curr_ir == 8'hBC)|(curr_ir == 8'hB9)))|
+	    ((curr_t == 2)&((curr_ir == 8'hA4)|(curr_ir == 8'hA5)|(curr_ir == 8'hA6)))|
+	    ((curr_t == 3)&((curr_ir == 8'hAE)|(curr_ir == 8'hAC)|(curr_ir == 8'hB6)|(curr_ir == 8'hAD)|(curr_ir == 8'hB5)|(curr_ir == 8'hB4)))|
+	    ((curr_t == 1)&((curr_ir == 8'hA9)|(curr_ir == 8'hA2)|(curr_ir == 8'hA0)))|
+	    ((curr_t == 5)&((curr_ir == 8'hB1)|(curr_ir == 8'hA1))))
+		I_alu_control = control_ldr;
+	
+	if (((curr_t == 4)&((curr_ir == 8'hBD)|(curr_ir == 8'hB9)))|
+	    ((curr_t == 1)&(curr_ir == 8'hA9))|
+	    ((curr_t == 2)&(curr_ir == 8'hA5))|
+	    ((curr_t == 5)&((curr_ir == 8'hB1)|(curr_ir == 8'hA1)))|
+	    ((curr_t == 3)&((curr_ir == 8'hAD)|(curr_ir == 8'hB5))))
+		next_a = O_alu_result;
+	
+	if (((curr_t == 3)&((curr_ir == 8'hAE)|(curr_ir == 8'hB6)))|
+	    ((curr_t == 4)&(curr_ir == 8'hBE))|
+	    ((curr_t == 1)&(curr_ir == 8'hA2))|
+	    ((curr_t == 2)&(curr_ir == 8'hA6)))
+		next_x = O_alu_result;
+	
+	if (((curr_t == 3)&((curr_ir == 8'hAF)|(curr_ir == 8'hB7)))|
+	    ((curr_t == 2)&(curr_ir == 8'hA7))|
+	    ((curr_t == 4)&(curr_ir == 8'hBF))|
+	    ((curr_t == 5)&((curr_ir == 8'hB3)|(curr_ir == 8'hA3)))|
+	    ((curr_t == 1)&(curr_ir == 8'hAB)))
 		next_x = I_rd_data;
 	
-	if (((curr_t == 1)&((curr_ir == 8'hBA)|(curr_ir == 8'hE8)|(curr_ir == 8'hA2)|(curr_ir == 8'hCA)|(curr_ir == 8'hAA)|(curr_ir == 8'hAB)))|
-	    ((curr_t == 3)&((curr_ir == 8'hAE)|(curr_ir == 8'hAF)|(curr_ir == 8'hB6)|(curr_ir == 8'hB7)))|
-	    ((curr_t == 4)&((curr_ir == 8'hBE)|(curr_ir == 8'hBF)))|
-	    ((curr_t == 2)&((curr_ir == 8'hA7)|(curr_ir == 8'hA6)))|
+	if (((curr_t == 1)&((curr_ir == 8'hBA)|(curr_ir == 8'hE8)|(curr_ir == 8'hCA)|(curr_ir == 8'hAA)|(curr_ir == 8'hAB)))|
+	    ((curr_t == 3)&((curr_ir == 8'hAF)|(curr_ir == 8'hB7)))|
+	    ((curr_t == 2)&(curr_ir == 8'hA7))|
+	    ((curr_t == 4)&(curr_ir == 8'hBF))|
 	    ((curr_t == 5)&((curr_ir == 8'hB3)|(curr_ir == 8'hA3))))
 		next_p[N_bit] = next_x[7];
 	
-	if (((curr_t == 1)&((curr_ir == 8'hBA)|(curr_ir == 8'hE8)|(curr_ir == 8'hA2)|(curr_ir == 8'hCA)|(curr_ir == 8'hAA)|(curr_ir == 8'hAB)))|
-	    ((curr_t == 3)&((curr_ir == 8'hAE)|(curr_ir == 8'hAF)|(curr_ir == 8'hB6)|(curr_ir == 8'hB7)))|
-	    ((curr_t == 4)&((curr_ir == 8'hBE)|(curr_ir == 8'hBF)))|
-	    ((curr_t == 2)&((curr_ir == 8'hA7)|(curr_ir == 8'hA6)))|
+	if (((curr_t == 1)&((curr_ir == 8'hBA)|(curr_ir == 8'hE8)|(curr_ir == 8'hCA)|(curr_ir == 8'hAA)|(curr_ir == 8'hAB)))|
+	    ((curr_t == 3)&((curr_ir == 8'hAF)|(curr_ir == 8'hB7)))|
+	    ((curr_t == 2)&(curr_ir == 8'hA7))|
+	    ((curr_t == 4)&(curr_ir == 8'hBF))|
 	    ((curr_t == 5)&((curr_ir == 8'hB3)|(curr_ir == 8'hA3))))
 		next_p[Z_bit] = next_x == 0;
 	

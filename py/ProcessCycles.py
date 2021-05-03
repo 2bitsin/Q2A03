@@ -122,7 +122,7 @@ class ProcessCycles:
     return 
 
   def main(self):
-    writer = SvWriter ('ver/cycles.sv')
+    writer = SvWriter ('ver/cycles.svi')
     writer.indent ()
     isa_data = IsaParsed ('data/ISA-am-op.csv').isa_table 
     am_data = CyclesParsed ('data/ISA-am-cycles.csv').table    

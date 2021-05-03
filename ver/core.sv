@@ -1,5 +1,6 @@
-
 module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdwr, I_ready, O_sync, O_phy2);
+
+  `include "core_alu.svi"
 
   localparam C_bit = 0 ;
   localparam Z_bit = 1 ;
@@ -96,22 +97,31 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   register#(16) reg_ad    (I_clock, I_reset, edge_fall, next_ad,    curr_ad   );
   register#(16) reg_ba    (I_clock, I_reset, edge_fall, next_ba,    curr_ba   );
 
-  
-/* Interrupt handling */
-
-  bit           last_nmi      ;
-  
-  reg16_type    vec_addr      ;  
-  wire[15:0]    vec_addr_lo   = vec_addr;
-  wire[15:0]    vec_addr_hi   = vec_addr + 1;
-  
-  wire          irq_p         = ~I_irq & ~curr_p[I_bit] ;
-  bit           res_p         ;  
-  bit           nmi_p         ;
-  bit           is_soft_brk   ;
-  wire          force_brk     = irq_p | res_p | nmi_p;
-
 /* Arithmetic / Logic operations */
+
+  control_type  I_alu_control;
+  bit[7:0]      I_alu_lhs;
+  bit[7:0]      I_alu_rhs;  
+
+  wire[7:0]     O_alu_result;
+  wire          O_alu_carry;
+  wire          O_alu_overflow;
+  wire          O_alu_sign;
+  wire          O_alu_zero;
+  
+  core_alu      inst_alu  
+                ( .I_control  (I_alu_control), 
+                  .I_lhs      (I_alu_lhs), 
+                  .I_rhs      (I_alu_rhs), 
+                  .I_carry    (curr_p[C_bit]), 
+                  .I_overflow (curr_p[V_bit]), 
+                  .I_sign     (curr_p[N_bit]), 
+                  .I_zero     (curr_p[Z_bit]), 
+                  .O_result   (O_alu_result), 
+                  .O_carry    (O_alu_carry), 
+                  .O_overflow (O_alu_overflow), 
+                  .O_sign     (O_alu_sign), 
+                  .O_zero     (O_alu_zero)); 
 
   bit           alu_in_c      ;
   reg8_type     alu_in_lhs    ;
@@ -133,20 +143,38 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire          alu_cmp_z     = alu_in_lhs == alu_in_rhs;
   wire          alu_cmp_c     = alu_cmp_z || (alu_in_lhs > alu_in_rhs);
   
-  wire[8:0]     alu_adc       = alu_in_lhs + alu_in_rhs + {7'b0, alu_in_c};  
+  wire[8:0]     alu_adc       = 9'(alu_in_lhs) + 9'(alu_in_c) + 9'(alu_in_rhs);  
   wire          alu_adc_c     = alu_adc[8];
   wire          alu_adc_v     = (alu_in_lhs[7] != alu_adc[7]) && (alu_in_lhs[7] == alu_in_rhs[7]);
   
-  wire[8:0]     alu_sbc       = alu_in_lhs - alu_in_rhs - {7'b0, ~alu_in_c};  
+  /* verilator lint_off WIDTH */
+  wire[8:0]     alu_sbc       = 9'(alu_in_lhs) + 9'(alu_in_c) + 9'(~alu_in_rhs);  
   wire          alu_sbc_c     = ~alu_sbc[8];
-  wire          alu_sbc_v     = ((alu_in_lhs[7] != alu_sbc[7]) && (alu_in_lhs[7] != alu_in_rhs[7]));
+  wire          alu_sbc_v     = ((alu_in_lhs[7] != alu_sbc[7]) && (alu_in_lhs[7] == (~alu_in_rhs[7])));
+  /* verilator lint_on WIDTH */
 
-/* End of Arithmetic / Logic operations */
+/* Interrupt handling */
+
+  bit           last_nmi      ;
+  
+  reg16_type    vec_addr      ;  
+  wire[15:0]    vec_addr_lo   = vec_addr;
+  wire[15:0]    vec_addr_hi   = vec_addr + 1;
+  
+  wire          irq_p         = ~I_irq & ~curr_p[I_bit] ;
+  bit           res_p         ;  
+  bit           nmi_p         ;
+  bit           is_soft_brk   ;
+  wire          force_brk     = irq_p | res_p | nmi_p;
 
   always @* 
   begin          
 		if (~I_reset)
-		begin
+		begin      
+      I_alu_control = control_nop;
+      I_alu_lhs     = curr_a;
+      I_alu_rhs     = I_rd_data;  
+
       next_t        = 0;
       next_a        = 0;
       next_x        = 0;
@@ -156,18 +184,21 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_pc       = 0;
       next_ir       = 0;
       next_ad       = 0;
-      next_ba       = 0;		
+      next_ba       = 0;
 		end	else
 		begin
 			if (curr_t == 0)
 			begin
+        vec_addr = 16'hFFFE;
 				is_soft_brk = ~force_brk;
-				     if (irq_p     ) vec_addr = 16'hFFFE;
-				else if (nmi_p     ) vec_addr = 16'hFFFA;
-				else if (res_p     ) vec_addr = 16'hFFFC; 
-				else if (~force_brk) vec_addr = 16'hFFFE;
+				if (irq_p | ~force_brk) 
+          vec_addr = 16'hFFFE;
+				else if (nmi_p) 
+          vec_addr = 16'hFFFA;
+				else if (res_p) 
+          vec_addr = 16'hFFFC;          
 			end
-			`include "cycles.sv"
+			`include "cycles.svi"
 		end		
   end
   
@@ -177,10 +208,10 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
     begin
       /* Reset state */
            
-      debug_tick    <= -21;
-      tick          <= 0;
-      phy1          <= 0;
-      res_p         <= 1;
+      debug_tick <= -21;
+      tick       <= 0;
+      phy1       <= 0;
+      res_p      <= 1;
           
     end  
     else if (I_ready) 
@@ -205,7 +236,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
                if (res_p) res_p <= 0; 
           else if (nmi_p) nmi_p <= 0;
         end
-        debug_tick    <= debug_tick + 3;
+        debug_tick <= debug_tick + 3;
       end
     end    
   end

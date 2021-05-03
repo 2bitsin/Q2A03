@@ -16,7 +16,7 @@ out/lib/verilated_vcd_c.o: $(VLTPAT)/verilated_vcd_c.cpp
 out/lib/verilated_dpi.o: $(VLTPAT)/verilated_dpi.cpp
 	g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
 
-out/ver/libtestbench.a out/ver/Vtestbench.h: ver/core.sv ver/cycles.sv
+out/ver/libtestbench.a out/ver/Vtestbench.h: ver/core.sv ver/cycles.svi ver/core_alu.sv ver/core_alu.svi ver/register.sv 
 	verilator --cc -Mdir out/ver -y ver --top-module core $< -CFLAGS "$(CFLAGS)" $(VFLAGS)
 	$(MAKE) -C out/ver -f Vcore.mk
 	mv out/ver/Vcore__ALL.a out/ver/libtestbench.a 

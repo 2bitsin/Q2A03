@@ -4,19 +4,25 @@
 "NOP*",-1,,"next_t",0
 ,,,,
 "LDX",-1,,"next_t",0
-"LDX",-1,,"next_x","I_rd_data"
-"LDX",-1,,"next_p[N_bit]","next_x[7]"
-"LDX",-1,,"next_p[Z_bit]","next_x == 0"
+"LDX",-1,,"I_alu_rhs","I_rd_data"
+"LDX",-1,,"next_x","O_alu_result"
+"LDX",-1,,"next_p[N_bit]","O_alu_sign"
+"LDX",-1,,"next_p[Z_bit]","O_alu_zero"
+"LDX",-1,,"I_alu_control","control_ldr"
 ,,,,
 "LDA",-1,,"next_t",0
-"LDA",-1,,"next_a","I_rd_data"
-"LDA",-1,,"next_p[N_bit]","next_a[7]"
-"LDA",-1,,"next_p[Z_bit]","next_a == 0"
+"LDA",-1,,"I_alu_rhs","I_rd_data"
+"LDA",-1,,"next_a","O_alu_result"
+"LDA",-1,,"next_p[N_bit]","O_alu_sign"
+"LDA",-1,,"next_p[Z_bit]","O_alu_zero"
+"LDA",-1,,"I_alu_control","control_ldr"
 ,,,,
 "LDY",-1,,"next_t",0
-"LDY",-1,,"next_y","I_rd_data"
-"LDY",-1,,"next_p[N_bit]","next_y[7]"
-"LDY",-1,,"next_p[Z_bit]","next_y == 0"
+"LDY",-1,,"I_alu_rhs","I_rd_data"
+"LDY",-1,,"next_y","O_alu_result"
+"LDY",-1,,"next_p[N_bit]","O_alu_sign"
+"LDY",-1,,"next_p[Z_bit]","O_alu_zero"
+"LDY",-1,,"I_alu_control","control_ldr"
 ,,,,
 "LAX*",-1,,"next_t",0
 "LAX*",-1,,"next_a","I_rd_data"
