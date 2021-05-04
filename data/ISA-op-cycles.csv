@@ -29,6 +29,7 @@
 ,,,,
 "LAX*",-1,,"next_t",0
 "LAX*",-1,,"I_alu_rhs","I_rd_data"
+"LAX*",-1,,"I_alu_control","control_txr"
 "LAX*",-1,,"next_a","O_alu_result"
 "LAX*",-1,,"next_x","O_alu_result"
 "LAX*",-1,,"next_p[N_bit]","O_alu_sign"

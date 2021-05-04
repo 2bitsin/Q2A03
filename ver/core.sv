@@ -84,6 +84,22 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
   wire[15:0]    curr_sp       = {8'h01, curr_s};
 
+/* For vcd dump only */
+
+  wire[7:0]     curr_adl      = curr_ad[7:0];
+  wire[7:0]     curr_adh      = curr_ad[15:8];
+  wire[7:0]     curr_bal      = curr_ba[7:0];
+  wire[7:0]     curr_bah      = curr_ba[15:8];
+  wire[7:0]     curr_pcl      = curr_pc[7:0];
+  wire[7:0]     curr_pch      = curr_pc[15:8];
+
+  wire[7:0]     next_adl      = next_ad[7:0];
+  wire[7:0]     next_adh      = next_ad[15:8];
+  wire[7:0]     next_bal      = next_ba[7:0];
+  wire[7:0]     next_bah      = next_ba[15:8];
+  wire[7:0]     next_pcl      = next_pc[7:0];
+  wire[7:0]     next_pch      = next_pc[15:8];
+
 /* Registers */
 
   register#(4)  reg_t     (I_clock, I_reset, edge_fall, next_t,     curr_t    );
@@ -156,6 +172,16 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire          alu_sbc_v     = ((alu_in_lhs[7] != alu_sbc[7]) && (alu_in_lhs[7] == (~alu_in_rhs[7])));
   /* verilator lint_on WIDTH */
 
+/* Address decoder */
+
+  bit[15:0]    addr_lhs = 0;
+  bit[7:0]     addr_rhs = 0;
+
+  wire[15:0]   addr_with_carry = addr_lhs + 16'(addr_rhs);
+  wire[15:0]   addr_without_carry = {addr_lhs[15:8], addr_with_carry[7:0]};
+  wire         addr_just_carry = addr_lhs[15:8] != addr_with_carry[15:8];
+  wire         addr_inv_carry = ~addr_just_carry;
+
 /* Interrupt handling */
 
   bit           last_nmi      ;
@@ -195,7 +221,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       I_alu_control = control_nop;
       I_alu_lhs = 0;
       I_alu_rhs = 0;
-  
+
       next_rmw = curr_rmw;
       next_pc  = curr_pc;
       next_ir  = curr_ir;
@@ -207,7 +233,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_y   = curr_y;
       next_s   = curr_s;
       next_p   = curr_p;
-
+    
 			if (curr_t == 0)
 			begin
         vec_addr = 16'hFFFE;

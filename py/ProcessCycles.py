@@ -53,6 +53,9 @@ class ProcessCycles:
         'cycles'      :cycles,
         '_hexcode'    :('$%02X' % code)
       })
+      if code == 0xBC:
+        print("What!")
+
     print("Instructions assembed %d/%d" % (instructions_assembled, 256))    
     return full_table
 
