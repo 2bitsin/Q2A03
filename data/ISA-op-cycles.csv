@@ -390,24 +390,27 @@
 ,,,,
 "ISB*",-1,,"O_addr","curr_ad"
 "ISB*",-1,,"O_rdwr",1
-"ISB*",-1,,"alu_in_c","curr_p[C_bit]"
-"ISB*",-1,,"alu_in_lhs","curr_a"
-"ISB*",-1,,"alu_in_rhs","I_rd_data + 1"
+"ISB*",-1,,"I_alu_ctl","control_inc"
+"ISB*",-1,,"I_alu_lhs","I_rd_data"
+"ISB*",-1,,"next_rmw","O_alu_result"
 "ISB*",-1,,"next_t","curr_t + 1 "
 ,,,,
 "ISB*",0,,"O_addr","curr_ad"
 "ISB*",0,,"O_rdwr",0
-"ISB*",0,,"O_wr_data","alu_out_rhs"
+"ISB*",0,,"O_wr_data","curr_rmw"
+"ISB*",0,,"I_alu_ctl","control_sbc"
+"ISB*",0,,"I_alu_lhs","curr_a"
+"ISB*",0,,"I_alu_rhs","curr_rmw"
+"ISB*",0,,"next_a","O_alu_result"
+"ISB*",0,,"next_p[C_bit]","O_alu_carry"
+"ISB*",0,,"next_p[V_bit]","O_alu_overflow"
+"ISB*",0,,"next_p[Z_bit]","O_alu_zero"
+"ISB*",0,,"next_p[N_bit]","O_alu_sign"
 "ISB*",0,,"next_t","curr_t + 1 "
 ,,,,
 "ISB*",1,,"O_addr","curr_ad"
 "ISB*",1,,"O_rdwr",0
-"ISB*",1,,"O_wr_data","alu_out_rhs"
-"ISB*",1,,"next_a","alu_sbc[7:0]"
-"ISB*",1,,"next_p[C_bit]","alu_sbc_c"
-"ISB*",1,,"next_p[V_bit]","alu_sbc_v"
-"ISB*",1,,"next_p[Z_bit]","next_a == 0"
-"ISB*",1,,"next_p[N_bit]","next_a[7]"
+"ISB*",1,,"O_wr_data","curr_rmw"
 "ISB*",1,,"next_t",0
 ,,,,
 "CMP",-1,,"next_t",0
@@ -428,9 +431,9 @@
 "DCM*",0,,"O_addr","curr_ad"
 "DCM*",0,,"O_rdwr",0
 "DCM*",0,,"O_wr_data","curr_rmw"
+"DCM*",0,,"I_alu_ctl","control_cmp"
 "DCM*",0,,"I_alu_lhs","curr_a"
 "DCM*",0,,"I_alu_rhs","curr_rmw"
-"DCM*",0,,"I_alu_ctl","control_cmp"
 "DCM*",0,,"next_p[Z_bit]","O_alu_zero"
 "DCM*",0,,"next_p[N_bit]","O_alu_sign"
 "DCM*",0,,"next_p[C_bit]","O_alu_carry"
@@ -473,40 +476,42 @@
 ,,,,
 "INC",-1,,"O_addr","curr_ad"
 "INC",-1,,"O_rdwr",1
-"INC",-1,,"alu_in_c",0
-"INC",-1,,"alu_in_lhs","I_rd_data"
-"INC",-1,,"alu_in_rhs","8'h01"
+"INC",-1,,"next_rmw","I_rd_data"
 "INC",-1,,"next_t","curr_t + 1 "
 ,,,,
 "INC",0,,"O_addr","curr_ad"
 "INC",0,,"O_rdwr",0
-"INC",0,,"O_wr_data","alu_adc[7:0]"
+"INC",0,,"O_wr_data","curr_rmw"
+"INC",0,,"I_alu_ctl","control_inc"
+"INC",0,,"I_alu_lhs","curr_rmw"
+"INC",0,,"next_p[Z_bit]","O_alu_zero"
+"INC",0,,"next_p[N_bit]","O_alu_sign"
+"INC",0,,"next_rmw","O_alu_result"
 "INC",0,,"next_t","curr_t + 1 "
 ,,,,
 "INC",1,,"O_addr","curr_ad"
 "INC",1,,"O_rdwr",0
-"INC",1,,"O_wr_data","alu_adc[7:0]"
-"INC",1,,"next_p[Z_bit]","alu_adc[7:0] == 0"
-"INC",1,,"next_p[N_bit]","alu_adc[7]"
+"INC",1,,"O_wr_data","curr_rmw"
 "INC",1,,"next_t",0
 ,,,,
 "DEC",-1,,"O_addr","curr_ad"
 "DEC",-1,,"O_rdwr",1
-"DEC",-1,,"alu_in_c",0
-"DEC",-1,,"alu_in_lhs","I_rd_data"
-"DEC",-1,,"alu_in_rhs","8'hFF"
+"DEC",-1,,"next_rmw","I_rd_data"
 "DEC",-1,,"next_t","curr_t + 1 "
 ,,,,
 "DEC",0,,"O_addr","curr_ad"
 "DEC",0,,"O_rdwr",0
-"DEC",0,,"O_wr_data","alu_adc[7:0]"
+"DEC",0,,"O_wr_data","curr_rmw"
+"DEC",0,,"I_alu_ctl","control_dec"
+"DEC",0,,"I_alu_lhs","curr_rmw"
+"DEC",0,,"next_p[Z_bit]","O_alu_zero"
+"DEC",0,,"next_p[N_bit]","O_alu_sign"
+"DEC",0,,"next_rmw","O_alu_result"
 "DEC",0,,"next_t","curr_t + 1 "
 ,,,,
 "DEC",1,,"O_addr","curr_ad"
 "DEC",1,,"O_rdwr",0
-"DEC",1,,"O_wr_data","alu_adc[7:0]"
-"DEC",1,,"next_p[Z_bit]","alu_adc[7:0] == 0"
-"DEC",1,,"next_p[N_bit]","alu_adc[7]"
+"DEC",1,,"O_wr_data","curr_rmw"
 "DEC",1,,"next_t",0
 ,,,,
 "DEX",-1,,"next_t",0
