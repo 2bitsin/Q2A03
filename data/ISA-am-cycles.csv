@@ -54,21 +54,6 @@
 "Zero Page",2,,"O_rdwr",1
 "Zero Page",2,,"next_t","curr_t + 1 "
 ,,,,
-"Relative",1,,"O_addr","curr_pc"
-"Relative",1,,"O_rdwr",1
-"Relative",1,,"next_t",0
-"Relative",1,,"next_pc","curr_pc + 1"
-"Relative",1,,"next_ad","16'(I_rd_data) + (curr_pc + 1) - {8'(I_rd_data[7]), 8'h00}  "
-,,,,
-"Relative",2,,"O_addr","{curr_pc[15:8], curr_ad[7:0]}"
-"Relative",2,,"O_rdwr",1
-"Relative",2,,"next_pc","curr_ad"
-"Relative",2,,"next_t","((curr_ad[15:8] != curr_pc[15:8]) ? (curr_t + 1) : 0)"
-,,,,
-"Relative",3,,"O_addr","curr_pc"
-"Relative",3,,"O_rdwr",1
-"Relative",3,,"next_t",0
-,,,,
 "Zero Page, X",1,,"O_addr","curr_pc"
 "Zero Page, X",1,,"O_rdwr",1
 "Zero Page, X",1,,"next_ad[7:0]","I_rd_data"
@@ -283,7 +268,7 @@
 "Absolute, X*",2,,"next_ad[7:0]","O_alu_result"
 "Absolute, X*",2,,"next_ad[15:8]","I_rd_data"
 "Absolute, X*",2,,"next_ba[8]","O_alu_carry"
-"Absolute, X*",2,,"next_t","curr_t + 4'd1"
+"Absolute, X*",2,,"next_t","curr_t + 1"
 ,,,,
 "Absolute, X*",3,,"O_addr","curr_ad"
 "Absolute, X*",3,,"O_rdwr",1
@@ -314,7 +299,7 @@
 "Absolute, Y*",2,,"next_ad[7:0]","O_alu_result"
 "Absolute, Y*",2,,"next_ad[15:8]","I_rd_data"
 "Absolute, Y*",2,,"next_ba[8]","O_alu_carry"
-"Absolute, Y*",2,,"next_t","curr_t + 4'd1"
+"Absolute, Y*",2,,"next_t","curr_t + 1"
 ,,,,
 "Absolute, Y*",3,,"O_addr","curr_ad"
 "Absolute, Y*",3,,"O_rdwr",1
@@ -328,3 +313,27 @@
 "Absolute, Y*",4,,"O_addr","curr_ad"
 "Absolute, Y*",4,,"O_rdwr",1
 "Absolute, Y*",4,,"next_t","curr_t + 1 "
+,,,,
+"Relative",1,,"O_addr","curr_pc"
+"Relative",1,,"O_rdwr",1
+"Relative",1,,"next_t",0
+"Relative",1,,"next_pc","curr_pc + 1"
+"Relative",1,,"I_alu_ctl","control_adc"
+"Relative",1,,"I_alu_carry",1
+"Relative",1,,"I_alu_lhs","curr_pc[7:0]"
+"Relative",1,,"I_alu_rhs","I_rd_data"
+"Relative",1,,"next_ba[7:0]","{8{I_rd_data[7]}}"
+"Relative",1,,"next_pc[7:0]","O_alu_result"
+"Relative",1,,"next_ba[8]","O_alu_carry"
+,,,,
+"Relative",2,,"O_addr","curr_pc"
+"Relative",2,,"O_rdwr",1
+"Relative",2,,"I_alu_ctl","control_adc"
+"Relative",2,,"I_alu_carry","curr_ba[8]"
+"Relative",2,,"I_alu_lhs","curr_pc[15:8]"
+"Relative",2,,"I_alu_rhs","curr_ba[7:0]"
+"Relative",2,,"next_t","curr_ba[8] ? curr_t + 1 : 0"
+,,,,
+"Relative",3,,"O_addr","curr_pc"
+"Relative",3,,"O_rdwr",1
+"Relative",3,,"next_t",0

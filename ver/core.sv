@@ -144,13 +144,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
                   .O_overflow (O_alu_overflow), 
                   .O_sign     (O_alu_sign), 
                   .O_zero     (O_alu_zero)); 
-
-  bit           alu_in_c      ;
-  reg8_type     alu_in_lhs    ;
-  reg8_type     alu_in_rhs    ;
-  wire[7:0]     alu_out_rhs   = alu_in_rhs;
     
-
 /* Interrupt handling */
 
   bit           last_nmi      ;
