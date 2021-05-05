@@ -18,5 +18,5 @@
     control_inc = 4'hC,
     control_dec = 4'hD,
     control_txl = 4'hE,
-    control_txr = 4'hF    
+    control_txr = 4'hF
   } control_type;

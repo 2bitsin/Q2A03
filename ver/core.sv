@@ -109,18 +109,20 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   register      reg_y     (I_clock, I_reset, edge_fall, next_y,     curr_y    );
   register      reg_s     (I_clock, I_reset, edge_fall, next_s,     curr_s    );
   register      reg_rmw   (I_clock, I_reset, edge_fall, next_rmw,   curr_rmw  );
-
-  register      reg_p     (I_clock, I_reset, edge_fall, {next_p[7:6], 2'b10, next_p[3:0]}, curr_p);
-
   register#(16) reg_pc    (I_clock, I_reset, edge_fall, next_pc,    curr_pc   );
   register#(16) reg_ad    (I_clock, I_reset, edge_fall, next_ad,    curr_ad   );
   register#(16) reg_ba    (I_clock, I_reset, edge_fall, next_ba,    curr_ba   );
+  register      reg_p     (I_clock, I_reset, edge_fall, {next_p[7:6], 2'b10, next_p[3:0]}, curr_p);
 
 /* Arithmetic / Logic operations */
 
-  control_type  I_alu_control;
+  control_type  I_alu_ctl;
   bit[7:0]      I_alu_lhs;
-  bit[7:0]      I_alu_rhs;  
+  bit[7:0]      I_alu_rhs; 
+  bit           I_alu_carry;
+  bit           I_alu_overflow;
+  bit           I_alu_sign; 
+  bit           I_alu_zero;
 
   wire[7:0]     O_alu_result;
   wire          O_alu_carry;
@@ -129,13 +131,14 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire          O_alu_zero;
   
   core_alu      inst_alu  
-                ( .I_control  (I_alu_control), 
+                ( .I_control  (I_alu_ctl), 
+                  .I_mask_p   (4'b1111),
                   .I_lhs      (I_alu_lhs), 
                   .I_rhs      (I_alu_rhs), 
-                  .I_carry    (curr_p[C_bit]), 
-                  .I_overflow (curr_p[V_bit]), 
-                  .I_sign     (curr_p[N_bit]), 
-                  .I_zero     (curr_p[Z_bit]), 
+                  .I_carry    (I_alu_carry), 
+                  .I_overflow (I_alu_overflow), 
+                  .I_sign     (I_alu_sign), 
+                  .I_zero     (I_alu_zero), 
                   .O_result   (O_alu_result), 
                   .O_carry    (O_alu_carry), 
                   .O_overflow (O_alu_overflow), 
@@ -172,15 +175,6 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire          alu_sbc_v     = ((alu_in_lhs[7] != alu_sbc[7]) && (alu_in_lhs[7] == (~alu_in_rhs[7])));
   /* verilator lint_on WIDTH */
 
-/* Address decoder */
-
-  bit[15:0]    addr_lhs;
-  bit[7:0]     addr_rhs;
-
-  wire[15:0]   addr_with_carry = addr_lhs + 16'(addr_rhs);
-  wire[15:0]   addr_without_carry = {addr_lhs[15:8], addr_with_carry[7:0]};
-  wire         addr_just_carry = addr_lhs[15:8] != addr_with_carry[15:8];
-  wire         addr_inv_carry = ~addr_just_carry;
 
 /* Interrupt handling */
 
@@ -200,42 +194,44 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   begin          
 		if (~I_reset)
 		begin      
-      I_alu_control = control_nop;
-      I_alu_lhs = curr_a;
-      I_alu_rhs = I_rd_data;  
-      addr_lhs = 0;
-      addr_rhs = 0;
-      
-      next_rmw = 0;
-      next_pc  = 0;
-      next_ir  = 0;
-      next_ad  = 0;
-      next_ba  = 0;
-      next_t   = 0;
-      next_a   = 0;
-      next_x   = 0;
-      next_y   = 0;
-      next_s   = 0;
-      next_p   = 0;
-
+      I_alu_overflow = 0;
+      I_alu_carry    = 0;
+      I_alu_sign     = 0;
+      I_alu_zero     = 0;  
+      I_alu_ctl      = 0;
+      I_alu_lhs      = 0;
+      I_alu_rhs      = 0;
+      next_rmw       = 0;
+      next_pc        = 0;
+      next_ir        = 0;
+      next_ad        = 0;
+      next_ba        = 0;
+      next_t         = 0;
+      next_a         = 0;
+      next_x         = 0;
+      next_y         = 0;
+      next_s         = 0;
+      next_p         = 0;
 		end	else
 		begin    
-      I_alu_control = control_nop;
-      I_alu_lhs     = 0;
-      I_alu_rhs     = 0;
-      addr_lhs      = 0;
-      addr_rhs      = 0;
-      next_rmw      = curr_rmw;
-      next_pc       = curr_pc;
-      next_ir       = curr_ir;
-      next_ad       = curr_ad;
-      next_ba       = curr_ba;
-      next_t        = curr_t;
-      next_a        = curr_a;
-      next_x        = curr_x;
-      next_y        = curr_y;
-      next_s        = curr_s;
-      next_p        = curr_p;
+      I_alu_overflow = curr_p[V_bit];
+      I_alu_carry    = curr_p[C_bit];
+      I_alu_sign     = curr_p[N_bit];
+      I_alu_zero     = curr_p[Z_bit];
+      I_alu_ctl      = control_nop;
+      I_alu_lhs      = 0;
+      I_alu_rhs      = 0;
+      next_rmw       = curr_rmw;
+      next_pc        = curr_pc;
+      next_ir        = curr_ir;
+      next_ad        = curr_ad;
+      next_ba        = curr_ba;
+      next_t         = curr_t;
+      next_a         = curr_a;
+      next_x         = curr_x;
+      next_y         = curr_y;
+      next_s         = curr_s;
+      next_p         = curr_p;
     
 			if (curr_t == 0)
 			begin
