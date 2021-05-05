@@ -83,6 +83,8 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   reg16_type    next_ba       ;
 
   wire[15:0]    curr_sp       = {8'h01, curr_s};
+  wire[7:0]     curr_s_p1     = curr_s + 1;
+  wire[7:0]     curr_s_m1     = curr_s - 1;
   wire[15:0]    curr_pc_p1    = curr_pc + 1;
   wire[3:0]     curr_t_p1     = curr_t + 1;
 
@@ -147,8 +149,8 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
   always @* 
   begin          
-		if (~I_reset)
-		begin      
+    if (~I_reset)
+    begin      
       I_alu_overflow = 0;
       I_alu_carry    = 0;
       I_alu_sign     = 0;
@@ -167,8 +169,8 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_y         = 0;
       next_s         = 0;
       next_p         = 0;
-		end	else
-		begin    
+    end  else
+    begin    
       I_alu_overflow = curr_p[V_bit];
       I_alu_carry    = curr_p[C_bit];
       I_alu_sign     = curr_p[N_bit];
@@ -188,22 +190,22 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_s         = curr_s;
       next_p         = curr_p;
     
-			if (curr_t == 0)
-			begin
+      if (curr_t == 0)
+      begin
         vec_addr = 16'hFFFE;
-				is_soft_brk = ~force_brk;
-				if (irq_p | ~force_brk) 
+        is_soft_brk = ~force_brk;
+        if (irq_p | ~force_brk) 
           vec_addr = 16'hFFFE;
-				else if (nmi_p) 
+        else if (nmi_p) 
           vec_addr = 16'hFFFA;
-				else if (res_p) 
+        else if (res_p) 
           vec_addr = 16'hFFFC;
         
         next_p[I_bit] = res_p | curr_p[I_bit];
-			end
+      end
 
-			`include "cycles.svi"
-		end		
+      `include "cycles.svi"
+    end    
   end
   
   always @(posedge I_clock, negedge I_reset)
@@ -244,9 +246,9 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       end
     end    
   end
-	
+  
 `ifdef VERILATOR
-	task read_state;
+  task read_state;
     output reg8_type a;
     output reg8_type x;
     output reg8_type y; 

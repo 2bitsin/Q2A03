@@ -96,18 +96,18 @@
 "PHP",0,,"O_addr","curr_sp"
 "PHP",0,,"O_rdwr",0
 "PHP",0,,"O_wr_data","curr_p | B_mask"
-"PHP",0,,"next_s","curr_s - 1"
+"PHP",0,,"next_s","curr_s_m1"
 "PHP",0,,"next_t",0
 ,,,,
 "PHA",0,,"O_addr","curr_sp"
 "PHA",0,,"O_rdwr",0
 "PHA",0,,"O_wr_data","curr_a"
-"PHA",0,,"next_s","curr_s - 1"
+"PHA",0,,"next_s","curr_s_m1"
 "PHA",0,,"next_t",0
 ,,,,
 "PLP",0,,"O_addr","curr_sp"
 "PLP",0,,"O_rdwr",1
-"PLP",0,,"next_s","curr_s + 1"
+"PLP",0,,"next_s","curr_s_p1"
 "PLP",0,,"next_t","curr_t_p1 "
 ,,,,
 "PLP",1,,"O_addr","curr_sp"
@@ -117,14 +117,16 @@
 ,,,,
 "PLA",0,,"O_addr","curr_sp"
 "PLA",0,,"O_rdwr",1
-"PLA",0,,"next_s","curr_s + 1"
+"PLA",0,,"next_s","curr_s_p1"
 "PLA",0,,"next_t","curr_t_p1 "
 ,,,,
 "PLA",1,,"O_addr","curr_sp"
 "PLA",1,,"O_rdwr",1
-"PLA",1,,"next_a","I_rd_data"
-"PLA",1,,"next_p[Z_bit]","I_rd_data == 0"
-"PLA",1,,"next_p[N_bit]","I_rd_data[7]"
+"PLA",1,,"I_alu_ctl","control_txr"
+"PLA",1,,"I_alu_rhs","I_rd_data"
+"PLA",1,,"next_a","O_alu_result"
+"PLA",1,,"next_p[Z_bit]","O_alu_zero"
+"PLA",1,,"next_p[N_bit]","O_alu_sign"
 "PLA",1,,"next_t",0
 ,,,,
 "LSR A",-1,,"next_t",0
@@ -586,13 +588,13 @@
 "JSR",1,,"O_addr","curr_sp"
 "JSR",1,,"O_rdwr",0
 "JSR",1,,"O_wr_data","curr_pc[15:8]"
-"JSR",1,,"next_s","curr_s - 1"
+"JSR",1,,"next_s","curr_s_m1"
 "JSR",1,,"next_t","curr_t_p1 "
 ,,,,
 "JSR",2,,"O_addr","curr_sp"
 "JSR",2,,"O_rdwr",0
 "JSR",2,,"O_wr_data","curr_pc[7:0]"
-"JSR",2,,"next_s","curr_s - 1"
+"JSR",2,,"next_s","curr_s_m1"
 "JSR",2,,"next_t","curr_t_p1 "
 ,,,,
 "JSR",3,,"O_addr","curr_pc"
@@ -610,13 +612,13 @@
 ,,,,
 "RTS",0,,"O_addr","curr_sp"
 "RTS",0,,"O_rdwr",1
-"RTS",0,,"next_s","curr_s + 1"
+"RTS",0,,"next_s","curr_s_p1"
 "RTS",0,,"next_t","curr_t_p1 "
 ,,,,
 "RTS",1,,"O_addr","curr_sp"
 "RTS",1,,"O_rdwr",1
 "RTS",1,,"next_pc[7:0]","I_rd_data"
-"RTS",1,,"next_s","curr_s + 1"
+"RTS",1,,"next_s","curr_s_p1"
 "RTS",1,,"next_t","curr_t_p1 "
 ,,,,
 "RTS",2,,"O_addr","curr_sp"
@@ -635,18 +637,18 @@
 ,,,,
 "RTI",0,,"O_addr","curr_sp"
 "RTI",0,,"O_rdwr",1
-"RTI",0,,"next_s","curr_s + 1"
+"RTI",0,,"next_s","curr_s_p1"
 "RTI",0,,"next_t","curr_t_p1 "
 ,,,,
 "RTI",1,,"O_addr","curr_sp"
 "RTI",1,,"O_rdwr",1
-"RTI",1,,"next_s","curr_s + 1"
+"RTI",1,,"next_s","curr_s_p1"
 "RTI",1,,"next_p","I_rd_data"
 "RTI",1,,"next_t","curr_t_p1 "
 ,,,,
 "RTI",2,,"O_addr","curr_sp"
 "RTI",2,,"O_rdwr",1
-"RTI",2,,"next_s","curr_s + 1"
+"RTI",2,,"next_s","curr_s_p1"
 "RTI",2,,"next_pc[7:0]","I_rd_data"
 "RTI",2,,"next_t","curr_t_p1 "
 ,,,,
