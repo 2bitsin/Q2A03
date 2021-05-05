@@ -576,7 +576,7 @@
 "JSR",-1,,"O_addr","curr_pc"
 "JSR",-1,,"O_rdwr",1
 "JSR",-1,,"next_ad[7:0]","I_rd_data"
-"JSR",-1,,"next_pc","curr_pc + 1"
+"JSR",-1,,"next_pc","curr_pc_p1"
 "JSR",-1,,"next_t","curr_t + 1 "
 ,,,,
 "JSR",0,,"O_addr","curr_sp"
@@ -627,7 +627,7 @@
 "RTS",3,,"O_addr","curr_pc"
 "RTS",3,,"O_rdwr",1
 "RTS",3,,"next_t",0
-"RTS",3,,"next_pc","curr_pc + 1"
+"RTS",3,,"next_pc","curr_pc_p1"
 ,,,,
 "RTI",-1,,"O_addr","curr_pc"
 "RTI",-1,,"O_rdwr",1

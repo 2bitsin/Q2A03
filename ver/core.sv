@@ -83,22 +83,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   reg16_type    next_ba       ;
 
   wire[15:0]    curr_sp       = {8'h01, curr_s};
-
-/* For vcd dump only */
-
-  wire[7:0]     curr_adl      = curr_ad[7:0];
-  wire[7:0]     curr_adh      = curr_ad[15:8];
-  wire[7:0]     curr_bal      = curr_ba[7:0];
-  wire[7:0]     curr_bah      = curr_ba[15:8];
-  wire[7:0]     curr_pcl      = curr_pc[7:0];
-  wire[7:0]     curr_pch      = curr_pc[15:8];
-
-  wire[7:0]     next_adl      = next_ad[7:0];
-  wire[7:0]     next_adh      = next_ad[15:8];
-  wire[7:0]     next_bal      = next_ba[7:0];
-  wire[7:0]     next_bah      = next_ba[15:8];
-  wire[7:0]     next_pcl      = next_pc[7:0];
-  wire[7:0]     next_pch      = next_pc[15:8];
+  wire[15:0]    curr_pc_p1    = curr_pc + 1;
 
 /* Registers */
 
