@@ -253,8 +253,6 @@
 "LSE*",-1,,"I_alu_ctl","control_lsr"
 "LSE*",-1,,"I_alu_lhs","I_rd_data"
 "LSE*",-1,,"next_p[C_bit]","O_alu_carry"
-"LSE*",-1,,"next_p[Z_bit]","O_alu_zero"
-"LSE*",-1,,"next_p[N_bit]","O_alu_sign"
 "LSE*",-1,,"next_rmw","O_alu_result"
 "LSE*",-1,,"next_t","curr_t + 1 "
 ,,,,
@@ -268,6 +266,8 @@
 "LSE*",1,,"I_alu_ctl","control_xor"
 "LSE*",1,,"I_alu_lhs","curr_a"
 "LSE*",1,,"I_alu_rhs","I_rd_data"
+"LSE*",1,,"next_p[Z_bit]","O_alu_zero"
+"LSE*",1,,"next_p[N_bit]","O_alu_sign"
 "LSE*",1,,"next_a","O_alu_result"
 "LSE*",1,,"next_t",0
 ,,,,

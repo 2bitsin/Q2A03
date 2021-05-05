@@ -154,6 +154,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire[7:0]     alu_or        = alu_in_lhs | alu_in_rhs;
   wire[7:0]     alu_xor       = alu_in_lhs ^ alu_in_rhs;  
   
+
 /* Interrupt handling */
 
   bit           last_nmi      ;
