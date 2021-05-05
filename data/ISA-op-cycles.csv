@@ -273,27 +273,27 @@
 ,,,,
 "RRA*",-1,,"O_addr","curr_ad"
 "RRA*",-1,,"O_rdwr",1
-"RRA*",-1,,"alu_in_c","curr_p[C_bit]"
-"RRA*",-1,,"alu_in_lhs","I_rd_data"
-"RRA*",-1,,"alu_in_rhs",0
+"RRA*",-1,,"I_alu_ctl","control_ror"
+"RRA*",-1,,"I_alu_lhs","I_rd_data"
+"RRA*",-1,,"next_rmw","O_alu_result"
+"RRA*",-1,,"next_p[C_bit]","O_alu_carry"
 "RRA*",-1,,"next_t","curr_t + 1 "
 ,,,,
 "RRA*",0,,"O_addr","curr_ad"
 "RRA*",0,,"O_rdwr",0
-"RRA*",0,,"O_wr_data","alu_ror"
-"RRA*",0,,"next_p[C_bit]","alu_ror_c"
+"RRA*",0,,"O_wr_data","curr_rmw"
 "RRA*",0,,"next_t","curr_t + 1 "
 ,,,,
 "RRA*",1,,"O_addr","curr_ad"
 "RRA*",1,,"O_rdwr",1
-"RRA*",1,,"alu_in_c","curr_p[C_bit]"
-"RRA*",1,,"alu_in_lhs","curr_a"
-"RRA*",1,,"alu_in_rhs","I_rd_data"
-"RRA*",1,,"next_a","alu_adc[7:0]"
-"RRA*",1,,"next_p[C_bit]","alu_adc_c"
-"RRA*",1,,"next_p[V_bit]","alu_adc_v"
-"RRA*",1,,"next_p[Z_bit]","next_a == 0"
-"RRA*",1,,"next_p[N_bit]","next_a[7]"
+"RRA*",1,,"I_alu_ctl","control_adc"
+"RRA*",1,,"I_alu_lhs","curr_a"
+"RRA*",1,,"I_alu_rhs","I_rd_data"
+"RRA*",1,,"next_a","O_alu_result"
+"RRA*",1,,"next_p[C_bit]","O_alu_carry"
+"RRA*",1,,"next_p[V_bit]","O_alu_overflow"
+"RRA*",1,,"next_p[Z_bit]","O_alu_zero"
+"RRA*",1,,"next_p[N_bit]","O_alu_sign"
 "RRA*",1,,"next_t",0
 ,,,,
 "ROR",-1,,"O_addr","curr_ad"
