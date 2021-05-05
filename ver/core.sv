@@ -84,6 +84,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
   wire[15:0]    curr_sp       = {8'h01, curr_s};
   wire[15:0]    curr_pc_p1    = curr_pc + 1;
+  wire[3:0]     curr_t_p1     = curr_t + 1;
 
 /* Registers */
 

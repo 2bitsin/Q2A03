@@ -54,22 +54,6 @@
 "Zero Page",2,,"O_rdwr",1
 "Zero Page",2,,"next_t","curr_t + 1 "
 ,,,,
-"Zero Page, X",1,,"O_addr","curr_pc"
-"Zero Page, X",1,,"O_rdwr",1
-"Zero Page, X",1,,"next_ad[7:0]","I_rd_data"
-"Zero Page, X",1,,"next_ad[15:8]",0
-"Zero Page, X",1,,"next_pc","curr_pc_p1"
-"Zero Page, X",1,,"next_t","curr_t + 1 "
-,,,,
-"Zero Page, X",2,,"O_addr","curr_ad"
-"Zero Page, X",2,,"O_rdwr",1
-"Zero Page, X",2,,"next_ad[7:0]","curr_ad[7:0] + curr_x"
-"Zero Page, X",2,,"next_t","curr_t + 1 "
-,,,,
-"Zero Page, X",3,,"O_addr","curr_ad"
-"Zero Page, X",3,,"O_rdwr",1
-"Zero Page, X",3,,"next_t","curr_t + 1 "
-,,,,
 "Zero Page, Y",1,,"O_addr","curr_pc"
 "Zero Page, Y",1,,"O_rdwr",1
 "Zero Page, Y",1,,"next_ad[7:0]","I_rd_data"
@@ -341,3 +325,23 @@
 "Relative",3,,"O_rdwr",1
 "Relative",3,,"next_pc","curr_ad"
 "Relative",3,,"next_t",0
+,,,,
+"Zero Page, X",1,,"O_addr","curr_pc"
+"Zero Page, X",1,,"O_rdwr",1
+"Zero Page, X",1,,"next_ad[7:0]","I_rd_data"
+"Zero Page, X",1,,"next_ad[15:8]",0
+"Zero Page, X",1,,"next_pc","curr_pc_p1"
+"Zero Page, X",1,,"next_t","curr_t + 1 "
+,,,,
+"Zero Page, X",2,,"O_addr","curr_ad"
+"Zero Page, X",2,,"O_rdwr",1
+"Zero Page, X",2,,"I_alu_ctl","control_adc"
+"Zero Page, X",2,,"I_alu_carry",0
+"Zero Page, X",2,,"I_alu_lhs","curr_ad[7:0]"
+"Zero Page, X",2,,"I_alu_rhs","curr_x"
+"Zero Page, X",2,,"next_ad[7:0]","O_alu_result"
+"Zero Page, X",2,,"next_t","curr_t + 1 "
+,,,,
+"Zero Page, X",3,,"O_addr","curr_ad"
+"Zero Page, X",3,,"O_rdwr",1
+"Zero Page, X",3,,"next_t","curr_t + 1 "
