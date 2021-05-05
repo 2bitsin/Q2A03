@@ -154,17 +154,6 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire[7:0]     alu_or        = alu_in_lhs | alu_in_rhs;
   wire[7:0]     alu_xor       = alu_in_lhs ^ alu_in_rhs;  
   
-  wire[7:0]     alu_ror       = {alu_in_c, alu_in_lhs[7:1]};
-  wire          alu_ror_c     = alu_in_lhs[0];
-    
-  wire[7:0]     alu_rol       = {alu_in_lhs[6:0], alu_in_c};
-  wire          alu_rol_c     = alu_in_lhs[7];
-  
-  wire[7:0]     alu_cmp       = alu_in_lhs - alu_in_rhs;
-  wire          alu_cmp_n     = alu_cmp[7];
-  wire          alu_cmp_z     = alu_in_lhs == alu_in_rhs;
-  wire          alu_cmp_c     = alu_cmp_z || (alu_in_lhs > alu_in_rhs);
-
 /* Interrupt handling */
 
   bit           last_nmi      ;
