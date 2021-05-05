@@ -24,6 +24,9 @@
 	    ((curr_t == 0)))
 		next_t = curr_t_p1;
 	
+	if (((curr_t == 1)&(curr_ir == 8'h00)))
+		next_p[I_bit] = curr_p[I_bit] | irq_p;
+	
 	if (((curr_t == 3)&((curr_ir == 8'h28)|(curr_ir == 8'h00)|(curr_ir == 8'h40)|(curr_ir == 8'h60)|(curr_ir == 8'h20)|(curr_ir == 8'h68)))|
 	    ((curr_t == 2)&((curr_ir == 8'h20)|(curr_ir == 8'h68)|(curr_ir == 8'h00)|(curr_ir == 8'h40)|(curr_ir == 8'h60)|(curr_ir == 8'h28)|(curr_ir == 8'h08)|(curr_ir == 8'h48)))|
 	    ((curr_t == 4)&((curr_ir == 8'h20)|(curr_ir == 8'h00)|(curr_ir == 8'h40)|(curr_ir == 8'h60)))|
@@ -52,11 +55,9 @@
 	    ((curr_t == 4)&(curr_ir == 8'h20)))
 		O_wr_data = curr_pc[7:0];
 	
-	if (((curr_t == 4)&(curr_ir == 8'h00)))
-		O_wr_data = curr_p | (is_soft_brk ? B_mask : 8'h00);
-	
-	if (((curr_t == 4)&(curr_ir == 8'h00)))
-		next_p[I_bit] = irq_p | curr_p[I_bit];
+	if (((curr_t == 2)&(curr_ir == 8'h08))|
+	    ((curr_t == 4)&(curr_ir == 8'h00)))
+		O_wr_data = curr_p_wr;
 	
 	if (((curr_t == 5)&(curr_ir == 8'h00)))
 		O_addr = vec_addr_lo;
@@ -235,9 +236,6 @@
 	    ((curr_t == 1)&(curr_ir == 8'hCB))|
 	    ((curr_t == 2)&(curr_ir == 8'h87)))
 		O_wr_data = O_alu_result;
-	
-	if (((curr_t == 2)&(curr_ir == 8'h08)))
-		O_wr_data = curr_p | B_mask;
 	
 	if (((curr_t == 3)&(curr_ir == 8'h20))|
 	    ((curr_t == 4)&(curr_ir == 8'h20))|

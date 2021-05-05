@@ -95,7 +95,7 @@
 ,,,,
 "PHP",0,,"O_addr","curr_sp"
 "PHP",0,,"O_rdwr",0
-"PHP",0,,"O_wr_data","curr_p | B_mask"
+"PHP",0,,"O_wr_data","curr_p_wr"
 "PHP",0,,"next_s","curr_s_m1"
 "PHP",0,,"next_t",0
 ,,,,
@@ -660,6 +660,7 @@
 "BRK",-1,,"O_addr","curr_pc"
 "BRK",-1,,"O_rdwr",1
 "BRK",-1,,"next_t","curr_t_p1 "
+"BRK",-1,,"next_p[I_bit]","curr_p[I_bit] | irq_p"
 ,,,,
 "BRK",0,,"O_addr","curr_sp"
 "BRK",0,,"O_rdwr",0
@@ -675,8 +676,7 @@
 ,,,,
 "BRK",2,,"O_addr","curr_sp"
 "BRK",2,,"O_rdwr",0
-"BRK",2,,"O_wr_data","curr_p | (is_soft_brk ? B_mask : 8'h00)"
-"BRK",2,,"next_p[I_bit]","irq_p | curr_p[I_bit]"
+"BRK",2,,"O_wr_data","curr_p_wr"
 "BRK",2,,"next_s","curr_s - 1"
 "BRK",2,,"next_t","curr_t_p1 "
 ,,,,

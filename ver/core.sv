@@ -82,11 +82,14 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   reg16_type    next_ad       ;
   reg16_type    next_ba       ;
 
+/* Misc derivatives */
+
   wire[15:0]    curr_sp       = {8'h01, curr_s};
-  wire[7:0]     curr_s_p1     = curr_s + 1;
-  wire[7:0]     curr_s_m1     = curr_s - 1;
   wire[15:0]    curr_pc_p1    = curr_pc + 1;
-  wire[3:0]     curr_t_p1     = curr_t + 1;
+  wire[7:0]     curr_s_p1     = curr_s  + 1;
+  wire[7:0]     curr_s_m1     = curr_s  - 1;
+  wire[3:0]     curr_t_p1     = curr_t  + 1;
+  wire[7:0]     curr_p_wr     = {curr_p[7:6], 1'b1, is_soft_brk, curr_p[3:0]};
 
 /* Registers */
 
