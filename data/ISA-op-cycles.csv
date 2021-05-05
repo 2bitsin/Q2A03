@@ -47,11 +47,12 @@
 "STY",-1,,"next_t",0
 "STY",-1,,"O_rdwr",0
 ,,,,
-"AXS*",-1,,"alu_in_lhs","curr_a"
-"AXS*",-1,,"alu_in_rhs","curr_x"
-"AXS*",-1,,"O_wr_data","alu_and"
-"AXS*",-1,,"next_t",0
 "AXS*",-1,,"O_rdwr",0
+"AXS*",-1,,"I_alu_ctl","control_and"
+"AXS*",-1,,"I_alu_lhs","curr_a"
+"AXS*",-1,,"I_alu_rhs","curr_x"
+"AXS*",-1,,"O_wr_data","O_alu_result"
+"AXS*",-1,,"next_t",0
 ,,,,
 "NOP",-1,,"next_t",0
 ,,,,
@@ -339,10 +340,10 @@
 "ROL",1,,"next_t",0
 ,,,,
 "BIT",-1,,"next_t",0
-"BIT",-1,,"alu_in_c",0
-"BIT",-1,,"alu_in_lhs","curr_a"
-"BIT",-1,,"alu_in_rhs","I_rd_data"
-"BIT",-1,,"next_p[Z_bit]","alu_and == 0"
+"BIT",-1,,"I_alu_ctl","control_and"
+"BIT",-1,,"I_alu_lhs","curr_a"
+"BIT",-1,,"I_alu_rhs","I_rd_data"
+"BIT",-1,,"next_p[Z_bit]","O_alu_zero"
 "BIT",-1,,"next_p[V_bit]","I_rd_data[6]"
 "BIT",-1,,"next_p[N_bit]","I_rd_data[7]"
 ,,,,
