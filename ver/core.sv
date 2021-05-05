@@ -174,8 +174,8 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
 /* Address decoder */
 
-  bit[15:0]    addr_lhs = 0;
-  bit[7:0]     addr_rhs = 0;
+  bit[15:0]    addr_lhs;
+  bit[7:0]     addr_rhs;
 
   wire[15:0]   addr_with_carry = addr_lhs + 16'(addr_rhs);
   wire[15:0]   addr_without_carry = {addr_lhs[15:8], addr_with_carry[7:0]};
@@ -203,6 +203,8 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       I_alu_control = control_nop;
       I_alu_lhs = curr_a;
       I_alu_rhs = I_rd_data;  
+      addr_lhs = 0;
+      addr_rhs = 0;
       
       next_rmw = 0;
       next_pc  = 0;
@@ -219,20 +221,21 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 		end	else
 		begin    
       I_alu_control = control_nop;
-      I_alu_lhs = 0;
-      I_alu_rhs = 0;
-
-      next_rmw = curr_rmw;
-      next_pc  = curr_pc;
-      next_ir  = curr_ir;
-      next_ad  = curr_ad;
-      next_ba  = curr_ba;
-      next_t   = curr_t;
-      next_a   = curr_a;
-      next_x   = curr_x;
-      next_y   = curr_y;
-      next_s   = curr_s;
-      next_p   = curr_p;
+      I_alu_lhs     = 0;
+      I_alu_rhs     = 0;
+      addr_lhs      = 0;
+      addr_rhs      = 0;
+      next_rmw      = curr_rmw;
+      next_pc       = curr_pc;
+      next_ir       = curr_ir;
+      next_ad       = curr_ad;
+      next_ba       = curr_ba;
+      next_t        = curr_t;
+      next_a        = curr_a;
+      next_x        = curr_x;
+      next_y        = curr_y;
+      next_s        = curr_s;
+      next_p        = curr_p;
     
 			if (curr_t == 0)
 			begin
