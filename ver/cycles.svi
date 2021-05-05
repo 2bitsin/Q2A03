@@ -22,7 +22,7 @@
 	    ((curr_t == 6)&((curr_ir == 8'hF3)|(curr_ir == 8'h63)|(curr_ir == 8'h53)|(curr_ir == 8'hE3)|(curr_ir == 8'h33)|(curr_ir == 8'h03)|(curr_ir == 8'h23)|(curr_ir == 8'h43)|(curr_ir == 8'hD3)|(curr_ir == 8'h73)|(curr_ir == 8'h13)|(curr_ir == 8'hC3)))|
 	    ((curr_t == 5)&((curr_ir == 8'hD3)|(curr_ir == 8'h3B)|(curr_ir == 8'h7B)|(curr_ir == 8'h5F)|(curr_ir == 8'h43)|(curr_ir == 8'hDE)|(curr_ir == 8'h1B)|(curr_ir == 8'hFE)|(curr_ir == 8'h73)|(curr_ir == 8'hFF)|(curr_ir == 8'h23)|(curr_ir == 8'h13)|(curr_ir == 8'h1E)|(curr_ir == 8'h63)|(curr_ir == 8'hDF)|(curr_ir == 8'h7E)|(curr_ir == 8'hC3)|(curr_ir == 8'h5B)|(curr_ir == 8'h3E)|(curr_ir == 8'h00)|(curr_ir == 8'hE3)|(curr_ir == 8'hF3)|(curr_ir == 8'h3F)|(curr_ir == 8'h7F)|(curr_ir == 8'hFB)|(curr_ir == 8'h1F)|(curr_ir == 8'h03)|(curr_ir == 8'hDB)|(curr_ir == 8'h53)|(curr_ir == 8'h5E)|(curr_ir == 8'h33)))|
 	    ((curr_t == 0)))
-		next_t = curr_t + 1;
+		next_t = curr_t_p1;
 	
 	if (((curr_t == 3)&((curr_ir == 8'h28)|(curr_ir == 8'h00)|(curr_ir == 8'h40)|(curr_ir == 8'h60)|(curr_ir == 8'h20)|(curr_ir == 8'h68)))|
 	    ((curr_t == 2)&((curr_ir == 8'h20)|(curr_ir == 8'h68)|(curr_ir == 8'h00)|(curr_ir == 8'h40)|(curr_ir == 8'h60)|(curr_ir == 8'h28)|(curr_ir == 8'h08)|(curr_ir == 8'h48)))|
@@ -243,9 +243,9 @@
 		next_pc = curr_pc;
 	
 	if (((curr_t == 1)&(curr_ir == 8'h10)))
-		next_t = (curr_p[N_bit] ? 0 : (curr_t + 1));
+		next_t = (curr_p[N_bit] ? 0 : (curr_t_p1));
 	
-	if (((curr_t == 2)&((curr_ir == 8'h5F)|(curr_ir == 8'h55)|(curr_ir == 8'hB5)|(curr_ir == 8'h90)|(curr_ir == 8'h1D)|(curr_ir == 8'h5D)|(curr_ir == 8'hD5)|(curr_ir == 8'hF0)|(curr_ir == 8'h37)|(curr_ir == 8'hFD)|(curr_ir == 8'hD4)|(curr_ir == 8'h3F)|(curr_ir == 8'h7C)|(curr_ir == 8'h1E)|(curr_ir == 8'h7F)|(curr_ir == 8'h59)|(curr_ir == 8'hDF)|(curr_ir == 8'h30)|(curr_ir == 8'h3D)|(curr_ir == 8'h14)|(curr_ir == 8'hFF)|(curr_ir == 8'h75)|(curr_ir == 8'hFE)|(curr_ir == 8'h5C)|(curr_ir == 8'hD9)|(curr_ir == 8'hB0)|(curr_ir == 8'hDE)|(curr_ir == 8'h1F)|(curr_ir == 8'h36)|(curr_ir == 8'h76)|(curr_ir == 8'hFC)|(curr_ir == 8'hF7)|(curr_ir == 8'hD6)|(curr_ir == 8'h34)|(curr_ir == 8'h95)|(curr_ir == 8'hF6)|(curr_ir == 8'h19)|(curr_ir == 8'hD0)|(curr_ir == 8'h65)|(curr_ir == 8'hF5)|(curr_ir == 8'hB9)|(curr_ir == 8'h9D)|(curr_ir == 8'h16)|(curr_ir == 8'h17)|(curr_ir == 8'hBC)|(curr_ir == 8'hF4)|(curr_ir == 8'h5E)|(curr_ir == 8'h35)|(curr_ir == 8'h99)|(curr_ir == 8'h70)|(curr_ir == 8'hD7)|(curr_ir == 8'h10)|(curr_ir == 8'h50)|(curr_ir == 8'h3E)|(curr_ir == 8'hDD)|(curr_ir == 8'h3B)|(curr_ir == 8'h7E)|(curr_ir == 8'h7B)|(curr_ir == 8'h79)|(curr_ir == 8'h3C)|(curr_ir == 8'hDB)|(curr_ir == 8'hB4)|(curr_ir == 8'h39)|(curr_ir == 8'hFB)|(curr_ir == 8'h77)|(curr_ir == 8'h5B)|(curr_ir == 8'h74)|(curr_ir == 8'hBE)|(curr_ir == 8'hBF)|(curr_ir == 8'h1B)|(curr_ir == 8'h1C)|(curr_ir == 8'h56)|(curr_ir == 8'h7D)|(curr_ir == 8'h54)|(curr_ir == 8'hF9)|(curr_ir == 8'hBD)|(curr_ir == 8'h57)|(curr_ir == 8'h94)|(curr_ir == 8'hDC)|(curr_ir == 8'h15)))|
+	if (((curr_t == 2)&((curr_ir == 8'h5F)|(curr_ir == 8'h55)|(curr_ir == 8'hB6)|(curr_ir == 8'hB5)|(curr_ir == 8'h90)|(curr_ir == 8'h1D)|(curr_ir == 8'h5D)|(curr_ir == 8'hD5)|(curr_ir == 8'hF0)|(curr_ir == 8'h37)|(curr_ir == 8'hFD)|(curr_ir == 8'hD4)|(curr_ir == 8'h3F)|(curr_ir == 8'h7C)|(curr_ir == 8'h1E)|(curr_ir == 8'h7F)|(curr_ir == 8'hB7)|(curr_ir == 8'h59)|(curr_ir == 8'hDF)|(curr_ir == 8'h30)|(curr_ir == 8'h3D)|(curr_ir == 8'h14)|(curr_ir == 8'hFF)|(curr_ir == 8'h75)|(curr_ir == 8'hFE)|(curr_ir == 8'h5C)|(curr_ir == 8'hD9)|(curr_ir == 8'hB0)|(curr_ir == 8'hDE)|(curr_ir == 8'h1F)|(curr_ir == 8'h36)|(curr_ir == 8'h76)|(curr_ir == 8'hFC)|(curr_ir == 8'hF7)|(curr_ir == 8'hD6)|(curr_ir == 8'h34)|(curr_ir == 8'h95)|(curr_ir == 8'hF6)|(curr_ir == 8'h19)|(curr_ir == 8'hD0)|(curr_ir == 8'h65)|(curr_ir == 8'hF5)|(curr_ir == 8'hB9)|(curr_ir == 8'h9D)|(curr_ir == 8'h16)|(curr_ir == 8'h17)|(curr_ir == 8'hBC)|(curr_ir == 8'hF4)|(curr_ir == 8'h5E)|(curr_ir == 8'h35)|(curr_ir == 8'h96)|(curr_ir == 8'h99)|(curr_ir == 8'h70)|(curr_ir == 8'hD7)|(curr_ir == 8'h10)|(curr_ir == 8'h50)|(curr_ir == 8'h3E)|(curr_ir == 8'hDD)|(curr_ir == 8'h3B)|(curr_ir == 8'h7E)|(curr_ir == 8'h97)|(curr_ir == 8'h7B)|(curr_ir == 8'h79)|(curr_ir == 8'h3C)|(curr_ir == 8'hDB)|(curr_ir == 8'hB4)|(curr_ir == 8'h39)|(curr_ir == 8'hFB)|(curr_ir == 8'h77)|(curr_ir == 8'h5B)|(curr_ir == 8'h74)|(curr_ir == 8'hBE)|(curr_ir == 8'hBF)|(curr_ir == 8'h1B)|(curr_ir == 8'h1C)|(curr_ir == 8'h56)|(curr_ir == 8'h7D)|(curr_ir == 8'h54)|(curr_ir == 8'hF9)|(curr_ir == 8'hBD)|(curr_ir == 8'h57)|(curr_ir == 8'h94)|(curr_ir == 8'hDC)|(curr_ir == 8'h15)))|
 	    ((curr_t == 3)&((curr_ir == 8'h99)|(curr_ir == 8'hBD)|(curr_ir == 8'h7B)|(curr_ir == 8'h5E)|(curr_ir == 8'hFB)|(curr_ir == 8'h5D)|(curr_ir == 8'h5B)|(curr_ir == 8'h7D)|(curr_ir == 8'hBF)|(curr_ir == 8'hDD)|(curr_ir == 8'h3B)|(curr_ir == 8'h5F)|(curr_ir == 8'hDB)|(curr_ir == 8'h75)|(curr_ir == 8'h39)|(curr_ir == 8'hDE)|(curr_ir == 8'hDC)|(curr_ir == 8'h1D)|(curr_ir == 8'hD9)|(curr_ir == 8'h1B)|(curr_ir == 8'hBE)|(curr_ir == 8'h1C)|(curr_ir == 8'hF9)|(curr_ir == 8'h7E)|(curr_ir == 8'h7C)|(curr_ir == 8'h7F)|(curr_ir == 8'hB9)|(curr_ir == 8'hFF)|(curr_ir == 8'hFD)|(curr_ir == 8'h3E)|(curr_ir == 8'h3F)|(curr_ir == 8'h1E)|(curr_ir == 8'h6D)|(curr_ir == 8'h19)|(curr_ir == 8'h59)|(curr_ir == 8'h79)|(curr_ir == 8'hDF)|(curr_ir == 8'h3D)|(curr_ir == 8'h3C)|(curr_ir == 8'h9D)|(curr_ir == 8'hFE)|(curr_ir == 8'h5C)|(curr_ir == 8'h1F)|(curr_ir == 8'hBC)|(curr_ir == 8'hFC)))|
 	    ((curr_t == 1)&((curr_ir == 8'h50)|(curr_ir == 8'hD0)|(curr_ir == 8'h10)|(curr_ir == 8'h70)|(curr_ir == 8'h69)|(curr_ir == 8'h90)|(curr_ir == 8'h30)|(curr_ir == 8'hB0)|(curr_ir == 8'hF0)))|
 	    ((curr_t == 7)&((curr_ir == 8'h73)|(curr_ir == 8'h63)))|
@@ -254,14 +254,14 @@
 	    ((curr_t == 6)&((curr_ir == 8'h7B)|(curr_ir == 8'h7F))))
 		I_alu_ctl = control_adc;
 	
-	if (((curr_t == 2)&((curr_ir == 8'h5F)|(curr_ir == 8'h55)|(curr_ir == 8'hB5)|(curr_ir == 8'h1D)|(curr_ir == 8'h5D)|(curr_ir == 8'hD5)|(curr_ir == 8'h37)|(curr_ir == 8'hFD)|(curr_ir == 8'hD4)|(curr_ir == 8'h3F)|(curr_ir == 8'h7C)|(curr_ir == 8'h1E)|(curr_ir == 8'h7F)|(curr_ir == 8'h59)|(curr_ir == 8'hDF)|(curr_ir == 8'h3D)|(curr_ir == 8'h14)|(curr_ir == 8'hFF)|(curr_ir == 8'h75)|(curr_ir == 8'hFE)|(curr_ir == 8'h5C)|(curr_ir == 8'hD9)|(curr_ir == 8'hDE)|(curr_ir == 8'h1F)|(curr_ir == 8'h36)|(curr_ir == 8'h76)|(curr_ir == 8'hFC)|(curr_ir == 8'hF7)|(curr_ir == 8'hD6)|(curr_ir == 8'h34)|(curr_ir == 8'h95)|(curr_ir == 8'hF6)|(curr_ir == 8'h19)|(curr_ir == 8'hF5)|(curr_ir == 8'hB9)|(curr_ir == 8'h9D)|(curr_ir == 8'h16)|(curr_ir == 8'h17)|(curr_ir == 8'hBC)|(curr_ir == 8'hF4)|(curr_ir == 8'h5E)|(curr_ir == 8'h35)|(curr_ir == 8'h99)|(curr_ir == 8'hD7)|(curr_ir == 8'h3E)|(curr_ir == 8'hDD)|(curr_ir == 8'h3B)|(curr_ir == 8'h7E)|(curr_ir == 8'h7B)|(curr_ir == 8'h79)|(curr_ir == 8'hDB)|(curr_ir == 8'h3C)|(curr_ir == 8'hB4)|(curr_ir == 8'h39)|(curr_ir == 8'hFB)|(curr_ir == 8'h77)|(curr_ir == 8'h5B)|(curr_ir == 8'h74)|(curr_ir == 8'hBE)|(curr_ir == 8'hBF)|(curr_ir == 8'h1B)|(curr_ir == 8'h1C)|(curr_ir == 8'h56)|(curr_ir == 8'h7D)|(curr_ir == 8'h54)|(curr_ir == 8'hF9)|(curr_ir == 8'hBD)|(curr_ir == 8'h57)|(curr_ir == 8'h94)|(curr_ir == 8'hDC)|(curr_ir == 8'h15)))|
+	if (((curr_t == 2)&((curr_ir == 8'h5F)|(curr_ir == 8'h55)|(curr_ir == 8'hB6)|(curr_ir == 8'hB5)|(curr_ir == 8'h1D)|(curr_ir == 8'h5D)|(curr_ir == 8'hD5)|(curr_ir == 8'h37)|(curr_ir == 8'hFD)|(curr_ir == 8'hD4)|(curr_ir == 8'h3F)|(curr_ir == 8'h7C)|(curr_ir == 8'h1E)|(curr_ir == 8'h7F)|(curr_ir == 8'hB7)|(curr_ir == 8'h59)|(curr_ir == 8'hDF)|(curr_ir == 8'h3D)|(curr_ir == 8'h14)|(curr_ir == 8'hFF)|(curr_ir == 8'h75)|(curr_ir == 8'hFE)|(curr_ir == 8'h5C)|(curr_ir == 8'hD9)|(curr_ir == 8'hDE)|(curr_ir == 8'h1F)|(curr_ir == 8'h36)|(curr_ir == 8'h76)|(curr_ir == 8'hFC)|(curr_ir == 8'hF7)|(curr_ir == 8'hD6)|(curr_ir == 8'h34)|(curr_ir == 8'h95)|(curr_ir == 8'hF6)|(curr_ir == 8'h19)|(curr_ir == 8'hF5)|(curr_ir == 8'hB9)|(curr_ir == 8'h9D)|(curr_ir == 8'h16)|(curr_ir == 8'h17)|(curr_ir == 8'hBC)|(curr_ir == 8'hF4)|(curr_ir == 8'h5E)|(curr_ir == 8'h35)|(curr_ir == 8'h96)|(curr_ir == 8'h99)|(curr_ir == 8'hD7)|(curr_ir == 8'h3E)|(curr_ir == 8'hDD)|(curr_ir == 8'h3B)|(curr_ir == 8'h7E)|(curr_ir == 8'h97)|(curr_ir == 8'h7B)|(curr_ir == 8'h79)|(curr_ir == 8'hDB)|(curr_ir == 8'h3C)|(curr_ir == 8'hB4)|(curr_ir == 8'h39)|(curr_ir == 8'hFB)|(curr_ir == 8'h77)|(curr_ir == 8'h5B)|(curr_ir == 8'h74)|(curr_ir == 8'hBE)|(curr_ir == 8'hBF)|(curr_ir == 8'h1B)|(curr_ir == 8'h1C)|(curr_ir == 8'h56)|(curr_ir == 8'h7D)|(curr_ir == 8'h54)|(curr_ir == 8'hF9)|(curr_ir == 8'hBD)|(curr_ir == 8'h57)|(curr_ir == 8'h94)|(curr_ir == 8'hDC)|(curr_ir == 8'h15)))|
 	    ((curr_t == 1)&((curr_ir == 8'h50)|(curr_ir == 8'hD0)|(curr_ir == 8'h10)|(curr_ir == 8'h70)|(curr_ir == 8'h90)|(curr_ir == 8'h30)|(curr_ir == 8'hB0)|(curr_ir == 8'hF0))))
 		I_alu_carry = 0;
 	
 	if (((curr_t == 1)&((curr_ir == 8'h70)|(curr_ir == 8'h30)|(curr_ir == 8'h50)|(curr_ir == 8'h10)|(curr_ir == 8'hB0)|(curr_ir == 8'hD0)|(curr_ir == 8'h90)|(curr_ir == 8'hF0))))
 		I_alu_lhs = curr_pc_p1[7:0];
 	
-	if (((curr_t == 2)&((curr_ir == 8'h5F)|(curr_ir == 8'h55)|(curr_ir == 8'hB5)|(curr_ir == 8'h1D)|(curr_ir == 8'h5D)|(curr_ir == 8'hD5)|(curr_ir == 8'h37)|(curr_ir == 8'hFD)|(curr_ir == 8'hD4)|(curr_ir == 8'h3F)|(curr_ir == 8'h7C)|(curr_ir == 8'h1E)|(curr_ir == 8'h7F)|(curr_ir == 8'h59)|(curr_ir == 8'hDF)|(curr_ir == 8'h3D)|(curr_ir == 8'h14)|(curr_ir == 8'hFF)|(curr_ir == 8'h75)|(curr_ir == 8'hFE)|(curr_ir == 8'h5C)|(curr_ir == 8'hD9)|(curr_ir == 8'hDE)|(curr_ir == 8'h1F)|(curr_ir == 8'h36)|(curr_ir == 8'h76)|(curr_ir == 8'hFC)|(curr_ir == 8'hF7)|(curr_ir == 8'hD6)|(curr_ir == 8'h34)|(curr_ir == 8'h95)|(curr_ir == 8'hF6)|(curr_ir == 8'h19)|(curr_ir == 8'hF5)|(curr_ir == 8'hB9)|(curr_ir == 8'h9D)|(curr_ir == 8'h16)|(curr_ir == 8'h17)|(curr_ir == 8'hBC)|(curr_ir == 8'hF4)|(curr_ir == 8'h5E)|(curr_ir == 8'h35)|(curr_ir == 8'h99)|(curr_ir == 8'hD7)|(curr_ir == 8'h3E)|(curr_ir == 8'hDD)|(curr_ir == 8'h3B)|(curr_ir == 8'h7E)|(curr_ir == 8'h7B)|(curr_ir == 8'h79)|(curr_ir == 8'hDB)|(curr_ir == 8'h3C)|(curr_ir == 8'hB4)|(curr_ir == 8'h39)|(curr_ir == 8'hFB)|(curr_ir == 8'h77)|(curr_ir == 8'h5B)|(curr_ir == 8'h74)|(curr_ir == 8'hBE)|(curr_ir == 8'hBF)|(curr_ir == 8'h1B)|(curr_ir == 8'h1C)|(curr_ir == 8'h56)|(curr_ir == 8'h7D)|(curr_ir == 8'h54)|(curr_ir == 8'hF9)|(curr_ir == 8'hBD)|(curr_ir == 8'h57)|(curr_ir == 8'h94)|(curr_ir == 8'hDC)|(curr_ir == 8'h15)))|
+	if (((curr_t == 2)&((curr_ir == 8'h5F)|(curr_ir == 8'h55)|(curr_ir == 8'hB6)|(curr_ir == 8'hB5)|(curr_ir == 8'h1D)|(curr_ir == 8'h5D)|(curr_ir == 8'hD5)|(curr_ir == 8'h37)|(curr_ir == 8'hFD)|(curr_ir == 8'hD4)|(curr_ir == 8'h3F)|(curr_ir == 8'h7C)|(curr_ir == 8'h1E)|(curr_ir == 8'h7F)|(curr_ir == 8'hB7)|(curr_ir == 8'h59)|(curr_ir == 8'hDF)|(curr_ir == 8'h3D)|(curr_ir == 8'h14)|(curr_ir == 8'hFF)|(curr_ir == 8'h75)|(curr_ir == 8'hFE)|(curr_ir == 8'h5C)|(curr_ir == 8'hD9)|(curr_ir == 8'hDE)|(curr_ir == 8'h1F)|(curr_ir == 8'h36)|(curr_ir == 8'h76)|(curr_ir == 8'hFC)|(curr_ir == 8'hF7)|(curr_ir == 8'hD6)|(curr_ir == 8'h34)|(curr_ir == 8'h95)|(curr_ir == 8'hF6)|(curr_ir == 8'h19)|(curr_ir == 8'hF5)|(curr_ir == 8'hB9)|(curr_ir == 8'h9D)|(curr_ir == 8'h16)|(curr_ir == 8'h17)|(curr_ir == 8'hBC)|(curr_ir == 8'hF4)|(curr_ir == 8'h5E)|(curr_ir == 8'h35)|(curr_ir == 8'h96)|(curr_ir == 8'h99)|(curr_ir == 8'hD7)|(curr_ir == 8'h3E)|(curr_ir == 8'hDD)|(curr_ir == 8'h3B)|(curr_ir == 8'h7E)|(curr_ir == 8'h97)|(curr_ir == 8'h7B)|(curr_ir == 8'h79)|(curr_ir == 8'hDB)|(curr_ir == 8'h3C)|(curr_ir == 8'hB4)|(curr_ir == 8'h39)|(curr_ir == 8'hFB)|(curr_ir == 8'h77)|(curr_ir == 8'h5B)|(curr_ir == 8'h74)|(curr_ir == 8'hBE)|(curr_ir == 8'hBF)|(curr_ir == 8'h1B)|(curr_ir == 8'h1C)|(curr_ir == 8'h56)|(curr_ir == 8'h7D)|(curr_ir == 8'h54)|(curr_ir == 8'hF9)|(curr_ir == 8'hBD)|(curr_ir == 8'h57)|(curr_ir == 8'h94)|(curr_ir == 8'hDC)|(curr_ir == 8'h15)))|
 	    ((curr_t == 1)&((curr_ir == 8'h50)|(curr_ir == 8'hD0)|(curr_ir == 8'h10)|(curr_ir == 8'h70)|(curr_ir == 8'h90)|(curr_ir == 8'h30)|(curr_ir == 8'hB0)|(curr_ir == 8'hF0))))
 		next_ad[7:0] = O_alu_result;
 	
@@ -295,7 +295,7 @@
 		next_pc = curr_ad;
 	
 	if (((curr_t == 2)&((curr_ir == 8'h10)|(curr_ir == 8'hD0)|(curr_ir == 8'h30)|(curr_ir == 8'h50)|(curr_ir == 8'hF0)|(curr_ir == 8'hB0)|(curr_ir == 8'h70)|(curr_ir == 8'h90))))
-		next_t = curr_ba[8] ^ curr_ba[0] ? curr_t + 1 : 0;
+		next_t = curr_ba[8] ^ curr_ba[0] ? curr_t_p1 : 0;
 	
 	if (((curr_t == 2)&((curr_ir == 8'h71)|(curr_ir == 8'hB3)|(curr_ir == 8'h13)|(curr_ir == 8'hD1)|(curr_ir == 8'h91)|(curr_ir == 8'hB1)|(curr_ir == 8'h33)|(curr_ir == 8'hD3)|(curr_ir == 8'hF3)|(curr_ir == 8'h11)|(curr_ir == 8'h53)|(curr_ir == 8'h31)|(curr_ir == 8'h73)|(curr_ir == 8'h51)|(curr_ir == 8'hF1))))
 		next_ad[7:0] = curr_ad[7:0] + 1;
@@ -308,12 +308,12 @@
 		next_ad = {I_rd_data, curr_ba[7:0]}  + 16'(curr_y);
 	
 	if (((curr_t == 3)&((curr_ir == 8'h71)|(curr_ir == 8'h13)|(curr_ir == 8'hF1)|(curr_ir == 8'h51)|(curr_ir == 8'hF3)|(curr_ir == 8'h11)|(curr_ir == 8'h53)|(curr_ir == 8'hB3)|(curr_ir == 8'h31)|(curr_ir == 8'h73)|(curr_ir == 8'hD1)|(curr_ir == 8'hD3)|(curr_ir == 8'hB1)|(curr_ir == 8'h33))))
-		next_t = curr_t + 1 + ((I_rd_data != next_ad[15:8]) ? 0 : 1);
+		next_t = curr_t_p1 + ((I_rd_data != next_ad[15:8]) ? 0 : 1);
 	
 	if (((curr_t == 4)&((curr_ir == 8'hB1)|(curr_ir == 8'h33)|(curr_ir == 8'hF3)|(curr_ir == 8'h53)|(curr_ir == 8'h13)|(curr_ir == 8'hD1)|(curr_ir == 8'h73)|(curr_ir == 8'hF1)|(curr_ir == 8'h11)|(curr_ir == 8'hB3)|(curr_ir == 8'h51)|(curr_ir == 8'h71)|(curr_ir == 8'h31)|(curr_ir == 8'h91)|(curr_ir == 8'hD3))))
 		O_addr = {curr_ba[15:8], curr_ad[7:0]};
 	
-	if (((curr_t == 2)&((curr_ir == 8'h75)|(curr_ir == 8'h16)|(curr_ir == 8'hB4)|(curr_ir == 8'h55)|(curr_ir == 8'h17)|(curr_ir == 8'h77)|(curr_ir == 8'hB5)|(curr_ir == 8'h74)|(curr_ir == 8'hF4)|(curr_ir == 8'h35)|(curr_ir == 8'h36)|(curr_ir == 8'hD5)|(curr_ir == 8'h76)|(curr_ir == 8'h37)|(curr_ir == 8'hD4)|(curr_ir == 8'hF7)|(curr_ir == 8'hD7)|(curr_ir == 8'hD6)|(curr_ir == 8'h56)|(curr_ir == 8'h34)|(curr_ir == 8'h95)|(curr_ir == 8'h54)|(curr_ir == 8'h94)|(curr_ir == 8'h57)|(curr_ir == 8'hF6)|(curr_ir == 8'hF5)|(curr_ir == 8'h14)|(curr_ir == 8'h15))))
+	if (((curr_t == 2)&((curr_ir == 8'h75)|(curr_ir == 8'h16)|(curr_ir == 8'hB4)|(curr_ir == 8'h55)|(curr_ir == 8'h17)|(curr_ir == 8'hB6)|(curr_ir == 8'h77)|(curr_ir == 8'hB5)|(curr_ir == 8'h74)|(curr_ir == 8'hF4)|(curr_ir == 8'h35)|(curr_ir == 8'h36)|(curr_ir == 8'h96)|(curr_ir == 8'hD5)|(curr_ir == 8'h76)|(curr_ir == 8'h37)|(curr_ir == 8'hD4)|(curr_ir == 8'hF7)|(curr_ir == 8'hD7)|(curr_ir == 8'hD6)|(curr_ir == 8'h56)|(curr_ir == 8'h34)|(curr_ir == 8'h95)|(curr_ir == 8'h54)|(curr_ir == 8'h94)|(curr_ir == 8'h57)|(curr_ir == 8'h97)|(curr_ir == 8'hF6)|(curr_ir == 8'hB7)|(curr_ir == 8'hF5)|(curr_ir == 8'h14)|(curr_ir == 8'h15))))
 		I_alu_lhs = curr_ad[7:0];
 	
 	if (((curr_t == 2)&((curr_ir == 8'hFF)|(curr_ir == 8'h75)|(curr_ir == 8'h16)|(curr_ir == 8'h5F)|(curr_ir == 8'hB4)|(curr_ir == 8'h55)|(curr_ir == 8'hFE)|(curr_ir == 8'h17)|(curr_ir == 8'h5C)|(curr_ir == 8'h77)|(curr_ir == 8'hBC)|(curr_ir == 8'hB5)|(curr_ir == 8'h74)|(curr_ir == 8'hF4)|(curr_ir == 8'h5E)|(curr_ir == 8'hDE)|(curr_ir == 8'h1D)|(curr_ir == 8'h35)|(curr_ir == 8'h1F)|(curr_ir == 8'h36)|(curr_ir == 8'h5D)|(curr_ir == 8'hD5)|(curr_ir == 8'h76)|(curr_ir == 8'hFC)|(curr_ir == 8'h37)|(curr_ir == 8'hFD)|(curr_ir == 8'hD4)|(curr_ir == 8'hF7)|(curr_ir == 8'hD7)|(curr_ir == 8'h1C)|(curr_ir == 8'hD6)|(curr_ir == 8'h3F)|(curr_ir == 8'h7C)|(curr_ir == 8'h56)|(curr_ir == 8'h34)|(curr_ir == 8'h7D)|(curr_ir == 8'h1E)|(curr_ir == 8'h54)|(curr_ir == 8'h7F)|(curr_ir == 8'h3E)|(curr_ir == 8'h95)|(curr_ir == 8'hDD)|(curr_ir == 8'hBD)|(curr_ir == 8'h57)|(curr_ir == 8'h94)|(curr_ir == 8'h7E)|(curr_ir == 8'hF6)|(curr_ir == 8'hF5)|(curr_ir == 8'hDF)|(curr_ir == 8'h3D)|(curr_ir == 8'h14)|(curr_ir == 8'h9D)|(curr_ir == 8'h87)|(curr_ir == 8'hDC)|(curr_ir == 8'h15)|(curr_ir == 8'h3C)))|
@@ -328,7 +328,7 @@
 	if (((curr_t == 2)&((curr_ir == 8'hFF)|(curr_ir == 8'h5F)|(curr_ir == 8'h39)|(curr_ir == 8'hFE)|(curr_ir == 8'h5C)|(curr_ir == 8'hFB)|(curr_ir == 8'hD9)|(curr_ir == 8'hBC)|(curr_ir == 8'h5B)|(curr_ir == 8'h5E)|(curr_ir == 8'hDE)|(curr_ir == 8'h1D)|(curr_ir == 8'h1F)|(curr_ir == 8'hBE)|(curr_ir == 8'h5D)|(curr_ir == 8'hFC)|(curr_ir == 8'hBF)|(curr_ir == 8'h99)|(curr_ir == 8'h1B)|(curr_ir == 8'hFD)|(curr_ir == 8'h1C)|(curr_ir == 8'h3F)|(curr_ir == 8'h7C)|(curr_ir == 8'h7D)|(curr_ir == 8'h1E)|(curr_ir == 8'h7F)|(curr_ir == 8'hF9)|(curr_ir == 8'h3E)|(curr_ir == 8'hDD)|(curr_ir == 8'hBD)|(curr_ir == 8'h3B)|(curr_ir == 8'h7E)|(curr_ir == 8'hDB)|(curr_ir == 8'h19)|(curr_ir == 8'h7B)|(curr_ir == 8'h59)|(curr_ir == 8'hDF)|(curr_ir == 8'h79)|(curr_ir == 8'hB9)|(curr_ir == 8'h3D)|(curr_ir == 8'h9D)|(curr_ir == 8'hDC)|(curr_ir == 8'h3C))))
 		I_alu_lhs = curr_ba[7:0];
 	
-	if (((curr_t == 2)&((curr_ir == 8'hDB)|(curr_ir == 8'hBE)|(curr_ir == 8'h39)|(curr_ir == 8'h19)|(curr_ir == 8'h7B)|(curr_ir == 8'h59)|(curr_ir == 8'h79)|(curr_ir == 8'hB9)|(curr_ir == 8'hBF)|(curr_ir == 8'hF9)|(curr_ir == 8'hFB)|(curr_ir == 8'hD9)|(curr_ir == 8'h99)|(curr_ir == 8'h1B)|(curr_ir == 8'h5B)|(curr_ir == 8'h3B))))
+	if (((curr_t == 2)&((curr_ir == 8'h39)|(curr_ir == 8'hB6)|(curr_ir == 8'hFB)|(curr_ir == 8'hD9)|(curr_ir == 8'h5B)|(curr_ir == 8'hBE)|(curr_ir == 8'h96)|(curr_ir == 8'hBF)|(curr_ir == 8'h99)|(curr_ir == 8'h1B)|(curr_ir == 8'hF9)|(curr_ir == 8'h97)|(curr_ir == 8'h3B)|(curr_ir == 8'hB7)|(curr_ir == 8'h19)|(curr_ir == 8'h7B)|(curr_ir == 8'h59)|(curr_ir == 8'h79)|(curr_ir == 8'hB9)|(curr_ir == 8'hDB))))
 		I_alu_rhs = curr_y;
 	
 	if (((curr_t == 2)&((curr_ir == 8'hFF)|(curr_ir == 8'h5F)|(curr_ir == 8'h39)|(curr_ir == 8'h5C)|(curr_ir == 8'hFB)|(curr_ir == 8'hD9)|(curr_ir == 8'hBC)|(curr_ir == 8'h5B)|(curr_ir == 8'h1D)|(curr_ir == 8'h1F)|(curr_ir == 8'hBE)|(curr_ir == 8'h5D)|(curr_ir == 8'hFC)|(curr_ir == 8'hBF)|(curr_ir == 8'h1B)|(curr_ir == 8'hFD)|(curr_ir == 8'h1C)|(curr_ir == 8'h3F)|(curr_ir == 8'h7C)|(curr_ir == 8'h7D)|(curr_ir == 8'h7F)|(curr_ir == 8'hF9)|(curr_ir == 8'hDD)|(curr_ir == 8'hBD)|(curr_ir == 8'h3B)|(curr_ir == 8'hDB)|(curr_ir == 8'h19)|(curr_ir == 8'h7B)|(curr_ir == 8'h59)|(curr_ir == 8'hDF)|(curr_ir == 8'h79)|(curr_ir == 8'hB9)|(curr_ir == 8'h3D)|(curr_ir == 8'hDC)|(curr_ir == 8'h3C))))
@@ -370,7 +370,7 @@
 		next_p = I_rd_data;
 	
 	if (((curr_t == 1)&(curr_ir == 8'h30)))
-		next_t = (curr_p[N_bit] ? (curr_t + 1) : 0);
+		next_t = (curr_p[N_bit] ? (curr_t_p1) : 0);
 	
 	if (((curr_t == 1)&(curr_ir == 8'h38)))
 		next_p[C_bit] = 1;
@@ -407,7 +407,7 @@
 		O_wr_data = curr_a;
 	
 	if (((curr_t == 1)&(curr_ir == 8'h50)))
-		next_t = (curr_p[V_bit] ? 0 : (curr_t + 1));
+		next_t = (curr_p[V_bit] ? 0 : (curr_t_p1));
 	
 	if (((curr_t == 1)&(curr_ir == 8'h58)))
 		next_p[I_bit] = 0;
@@ -435,7 +435,7 @@
 		next_p[Z_bit] = I_rd_data == 0;
 	
 	if (((curr_t == 1)&(curr_ir == 8'h70)))
-		next_t = (curr_p[V_bit] ? (curr_t + 1) : 0);
+		next_t = (curr_p[V_bit] ? (curr_t_p1) : 0);
 	
 	if (((curr_t == 1)&(curr_ir == 8'h78)))
 		next_p[I_bit] = 1;
@@ -475,13 +475,10 @@
 		I_alu_ctl = control_txl;
 	
 	if (((curr_t == 1)&(curr_ir == 8'h90)))
-		next_t = (curr_p[C_bit] ? 0 : (curr_t + 1));
+		next_t = (curr_p[C_bit] ? 0 : (curr_t_p1));
 	
 	if (((curr_t == 3)&(curr_ir == 8'h91)))
 		next_ad = {I_rd_data, curr_ba[7:0]} + 16'(curr_y);
-	
-	if (((curr_t == 2)&((curr_ir == 8'hB6)|(curr_ir == 8'hB7)|(curr_ir == 8'h96)|(curr_ir == 8'h97))))
-		next_ad[7:0] = curr_ad[7:0] + curr_y;
 	
 	if (((curr_t == 1)&(curr_ir == 8'h9A)))
 		I_alu_ctl = control_nop;
@@ -504,7 +501,7 @@
 		next_x = O_alu_result;
 	
 	if (((curr_t == 1)&(curr_ir == 8'hB0)))
-		next_t = (curr_p[C_bit] ? (curr_t + 1) : 0);
+		next_t = (curr_p[C_bit] ? (curr_t_p1) : 0);
 	
 	if (((curr_t == 1)&(curr_ir == 8'hB8)))
 		next_p[V_bit] = 0;
@@ -534,7 +531,7 @@
 		I_alu_ctl = control_inc;
 	
 	if (((curr_t == 1)&(curr_ir == 8'hD0)))
-		next_t = (curr_p[Z_bit] ? 0 : (curr_t + 1));
+		next_t = (curr_p[Z_bit] ? 0 : (curr_t_p1));
 	
 	if (((curr_t == 1)&(curr_ir == 8'hD8)))
 		next_p[D_bit] = 0;
@@ -548,7 +545,7 @@
 		I_alu_ctl = control_sbc;
 	
 	if (((curr_t == 1)&(curr_ir == 8'hF0)))
-		next_t = (curr_p[Z_bit] ? (curr_t + 1) : 0);
+		next_t = (curr_p[Z_bit] ? (curr_t_p1) : 0);
 	
 	if (((curr_t == 1)&(curr_ir == 8'hF8)))
 		next_p[D_bit] = 1;

@@ -3,182 +3,166 @@
 "*",0,,"O_rdwr",1
 "*",0,,"next_pc","force_brk ? curr_pc : curr_pc_p1"
 "*",0,,"next_ir","force_brk ? 8'h00 : I_rd_data"
-"*",0,,"next_t","curr_t + 1 "
+"*",0,,"next_t","curr_t_p1 "
 ,,,,
 "Implied",1,,"O_addr ","curr_pc"
 "Implied",1,,"O_rdwr",1
-"Implied",1," ","next_t","curr_t + 1 "
+"Implied",1," ","next_t","curr_t_p1 "
 ,,,,
 "Immediate",1,,"O_addr ","curr_pc"
 "Immediate",1,,"O_rdwr",1
 "Immediate",1,,"next_pc","curr_pc_p1"
-"Immediate",1,,"next_t","curr_t + 1 "
+"Immediate",1,,"next_t","curr_t_p1 "
 ,,,,
 "Absolute",1,,"O_addr ","curr_pc"
 "Absolute",1,,"O_rdwr",1
 "Absolute",1,,"next_pc","curr_pc_p1"
 "Absolute",1,,"next_ad[7:0]","I_rd_data"
-"Absolute",1,,"next_t","curr_t + 1 "
+"Absolute",1,,"next_t","curr_t_p1 "
 ,,,,
 "Absolute",2,,"O_addr","curr_pc"
 "Absolute",2,,"next_pc","curr_pc_p1"
 "Absolute",2,,"O_rdwr",1
 "Absolute",2,,"next_ad[15:8]","I_rd_data"
-"Absolute",2,,"next_t","curr_t + 1 "
+"Absolute",2,,"next_t","curr_t_p1 "
 ,,,,
 "Absolute",3,,"O_addr","curr_ad"
 "Absolute",3,,"O_rdwr",1
 "Absolute",3,,"next_pc","curr_pc"
-"Absolute",3,,"next_t","curr_t + 1 "
+"Absolute",3,,"next_t","curr_t_p1 "
 ,,,,
 "Absolute*",1,,"O_addr ","curr_pc"
 "Absolute*",1,,"O_rdwr",1
 "Absolute*",1,,"next_pc","curr_pc_p1"
 "Absolute*",1,,"next_ad[7:0]","I_rd_data"
-"Absolute*",1,,"next_t","curr_t + 1 "
+"Absolute*",1,,"next_t","curr_t_p1 "
 ,,,,
 "Absolute*",2,,"O_addr","curr_pc"
 "Absolute*",2,,"next_pc","curr_pc_p1"
 "Absolute*",2,,"O_rdwr",1
 "Absolute*",2,,"next_ad[15:8]","I_rd_data"
-"Absolute*",2,,"next_t","curr_t + 1 "
+"Absolute*",2,,"next_t","curr_t_p1 "
 ,,,,
 "Zero Page",1,,"O_addr","curr_pc"
 "Zero Page",1,,"O_rdwr",1
 "Zero Page",1,,"next_pc","curr_pc_p1"
 "Zero Page",1,,"next_ad[15:8]",0
 "Zero Page",1,,"next_ad[7:0]","I_rd_data"
-"Zero Page",1,,"next_t","curr_t + 1 "
+"Zero Page",1,,"next_t","curr_t_p1 "
 ,,,,
 "Zero Page",2,,"O_addr","curr_ad"
 "Zero Page",2,,"O_rdwr",1
-"Zero Page",2,,"next_t","curr_t + 1 "
-,,,,
-"Zero Page, Y",1,,"O_addr","curr_pc"
-"Zero Page, Y",1,,"O_rdwr",1
-"Zero Page, Y",1,,"next_ad[7:0]","I_rd_data"
-"Zero Page, Y",1,,"next_ad[15:8]",0
-"Zero Page, Y",1,,"next_pc","curr_pc_p1"
-"Zero Page, Y",1,,"next_t","curr_t + 1 "
-,,,,
-"Zero Page, Y",2,,"O_addr","curr_ad"
-"Zero Page, Y",2,,"O_rdwr",1
-"Zero Page, Y",2,,"next_ad[7:0]","curr_ad[7:0] + curr_y"
-"Zero Page, Y",2,,"next_t","curr_t + 1 "
-,,,,
-"Zero Page, Y",3,,"O_addr","curr_ad"
-"Zero Page, Y",3,,"O_rdwr",1
-"Zero Page, Y",3,,"next_t","curr_t + 1 "
+"Zero Page",2,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect, X)",1,,"O_addr","curr_pc"
 "(Indirect, X)",1,,"O_rdwr",1
 "(Indirect, X)",1,,"next_pc","curr_pc_p1"
 "(Indirect, X)",1,,"next_ba[15:8]",0
 "(Indirect, X)",1,,"next_ba[7:0]","I_rd_data"
-"(Indirect, X)",1,,"next_t","curr_t + 1 "
+"(Indirect, X)",1,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect, X)",2,,"O_addr","curr_ba"
 "(Indirect, X)",2,,"O_rdwr",1
 "(Indirect, X)",2,,"next_ba[7:0]","curr_ba[7:0] + curr_x"
-"(Indirect, X)",2,,"next_t","curr_t + 1 "
+"(Indirect, X)",2,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect, X)",3,,"O_addr","curr_ba"
 "(Indirect, X)",3,,"O_rdwr",1
 "(Indirect, X)",3,,"next_ad[7:0]","I_rd_data"
 "(Indirect, X)",3,,"next_ba[7:0]","curr_ba[7:0] + 1"
-"(Indirect, X)",3,,"next_t","curr_t + 1 "
+"(Indirect, X)",3,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect, X)",4,,"O_addr","curr_ba"
 "(Indirect, X)",4,,"O_rdwr",1
 "(Indirect, X)",4,,"next_ad[15:8]","I_rd_data"
-"(Indirect, X)",4,,"next_t","curr_t + 1 "
+"(Indirect, X)",4,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect, X)",5,,"O_addr","curr_ad"
 "(Indirect, X)",5,,"O_rdwr",1
-"(Indirect, X)",5,,"next_t","curr_t + 1 "
+"(Indirect, X)",5,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect), Y",1,,"O_addr","curr_pc"
 "(Indirect), Y",1,,"O_rdwr",1
 "(Indirect), Y",1,,"next_ad[7:0]","I_rd_data"
 "(Indirect), Y",1,,"next_ad[15:8]",0
 "(Indirect), Y",1,,"next_pc","curr_pc_p1"
-"(Indirect), Y",1,,"next_t","curr_t + 1 "
+"(Indirect), Y",1,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect), Y",2,,"O_addr","curr_ad"
 "(Indirect), Y",2,,"O_rdwr",1
 "(Indirect), Y",2,,"next_ba[7:0]","I_rd_data"
 "(Indirect), Y",2,,"next_ad[7:0]","curr_ad[7:0] + 1"
-"(Indirect), Y",2,,"next_t","curr_t + 1 "
+"(Indirect), Y",2,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect), Y",3,,"O_addr","curr_ad"
 "(Indirect), Y",3,,"O_rdwr",1
 "(Indirect), Y",3,,"next_ba[15:8]","I_rd_data"
 "(Indirect), Y",3,,"next_ad","{I_rd_data, curr_ba[7:0]}  + 16'(curr_y)"
-"(Indirect), Y",3,,"next_t","curr_t + 1 + ((I_rd_data != next_ad[15:8]) ? 0 : 1)"
+"(Indirect), Y",3,,"next_t","curr_t_p1 + ((I_rd_data != next_ad[15:8]) ? 0 : 1)"
 ,,,,
 "(Indirect), Y",4,,"O_addr","{curr_ba[15:8], curr_ad[7:0]}"
 "(Indirect), Y",4,,"O_rdwr",1
-"(Indirect), Y",4,,"next_t","curr_t + 1"
+"(Indirect), Y",4,,"next_t","curr_t_p1"
 ,,,,
 "(Indirect), Y",5,,"O_addr","curr_ad"
 "(Indirect), Y",5,,"O_rdwr",1
-"(Indirect), Y",5,,"next_t","curr_t + 1 "
+"(Indirect), Y",5,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect), Y*",1,,"O_addr","curr_pc"
 "(Indirect), Y*",1,,"O_rdwr",1
 "(Indirect), Y*",1,,"next_ad[7:0]","I_rd_data"
 "(Indirect), Y*",1,,"next_ad[15:8]",0
 "(Indirect), Y*",1,,"next_pc","curr_pc_p1"
-"(Indirect), Y*",1,,"next_t","curr_t + 1 "
+"(Indirect), Y*",1,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect), Y*",2,,"O_addr","curr_ad"
 "(Indirect), Y*",2,,"O_rdwr",1
 "(Indirect), Y*",2,,"next_ba[7:0]","I_rd_data"
 "(Indirect), Y*",2,,"next_ad[7:0]","curr_ad[7:0] + 1"
-"(Indirect), Y*",2,,"next_t","curr_t + 1 "
+"(Indirect), Y*",2,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect), Y*",3,,"O_addr","curr_ad"
 "(Indirect), Y*",3,,"O_rdwr",1
 "(Indirect), Y*",3,,"next_ba[15:8]","I_rd_data"
 "(Indirect), Y*",3,,"next_ad","{I_rd_data, curr_ba[7:0]} + 16'(curr_y)"
-"(Indirect), Y*",3,,"next_t","curr_t + 1"
+"(Indirect), Y*",3,,"next_t","curr_t_p1"
 ,,,,
 "(Indirect), Y*",4,,"O_addr","{curr_ba[15:8], curr_ad[7:0]}"
 "(Indirect), Y*",4,,"O_rdwr",1
-"(Indirect), Y*",4,,"next_t","curr_t + 1"
+"(Indirect), Y*",4,,"next_t","curr_t_p1"
 ,,,,
 "(Indirect), Y*",5,,"O_addr","curr_ad"
 "(Indirect), Y*",5,,"O_rdwr",1
-"(Indirect), Y*",5,,"next_t","curr_t + 1 "
+"(Indirect), Y*",5,,"next_t","curr_t_p1 "
 ,,,,
 "(Indirect)",1,,"O_addr","curr_pc"
 "(Indirect)",1,,"O_rdwr",1
 "(Indirect)",1,,"next_pc","curr_pc_p1"
 "(Indirect)",1,,"next_ba[7:0]","I_rd_data"
-"(Indirect)",1,,"next_t","curr_t + 1"
+"(Indirect)",1,,"next_t","curr_t_p1"
 ,,,,
 "(Indirect)",2,,"O_addr","curr_pc"
 "(Indirect)",2,,"O_rdwr",1
 "(Indirect)",2,,"next_pc","curr_pc_p1"
 "(Indirect)",2,,"next_ba[15:8]","I_rd_data"
-"(Indirect)",2,,"next_t","curr_t + 1"
+"(Indirect)",2,,"next_t","curr_t_p1"
 ,,,,
 "(Indirect)",3,,"O_addr","curr_ba"
 "(Indirect)",3,,"O_rdwr",1
 "(Indirect)",3,,"next_ad[7:0]","I_rd_data"
 "(Indirect)",3,,"next_ba[7:0]","curr_ba[7:0] + 1"
-"(Indirect)",3,,"next_t","curr_t + 1"
+"(Indirect)",3,,"next_t","curr_t_p1"
 ,,,,
 "(Indirect)",4,,"O_addr","curr_ba"
 "(Indirect)",4,,"O_rdwr",1
 "(Indirect)",4,,"next_ad[15:8]","I_rd_data"
-"(Indirect)",4,,"next_t","curr_t + 1"
+"(Indirect)",4,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, X",1,,"O_addr","curr_pc"
 "Absolute, X",1,,"O_rdwr",1
 "Absolute, X",1,,"next_pc","curr_pc_p1"
 "Absolute, X",1,,"next_ba[7:0]","I_rd_data"
-"Absolute, X",1,,"next_t","curr_t + 1"
+"Absolute, X",1,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, X",2,,"O_addr","curr_pc"
 "Absolute, X",2,,"O_rdwr",1
@@ -199,17 +183,17 @@
 "Absolute, X",3,,"I_alu_lhs","curr_ad[15:8]"
 "Absolute, X",3,,"I_alu_rhs",0
 "Absolute, X",3,,"next_ad[15:8]","O_alu_result"
-"Absolute, X",3,,"next_t","curr_t + 1"
+"Absolute, X",3,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, X",4,,"O_addr","curr_ad"
 "Absolute, X",4,,"O_rdwr",1
-"Absolute, X",4,,"next_t","curr_t + 1 "
+"Absolute, X",4,,"next_t","curr_t_p1 "
 ,,,,
 "Absolute, Y",1,,"O_addr","curr_pc"
 "Absolute, Y",1,,"O_rdwr",1
 "Absolute, Y",1,,"next_pc","curr_pc_p1"
 "Absolute, Y",1,,"next_ba[7:0]","I_rd_data"
-"Absolute, Y",1,,"next_t","curr_t + 1"
+"Absolute, Y",1,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, Y",2,,"O_addr","curr_pc"
 "Absolute, Y",2,,"O_rdwr",1
@@ -230,17 +214,17 @@
 "Absolute, Y",3,,"I_alu_lhs","curr_ad[15:8]"
 "Absolute, Y",3,,"I_alu_rhs",0
 "Absolute, Y",3,,"next_ad[15:8]","O_alu_result"
-"Absolute, Y",3,,"next_t","curr_t + 1"
+"Absolute, Y",3,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, Y",4,,"O_addr","curr_ad"
 "Absolute, Y",4,,"O_rdwr",1
-"Absolute, Y",4,,"next_t","curr_t + 1 "
+"Absolute, Y",4,,"next_t","curr_t_p1 "
 ,,,,
 "Absolute, X*",1,,"O_addr","curr_pc"
 "Absolute, X*",1,,"O_rdwr",1
 "Absolute, X*",1,,"next_pc","curr_pc_p1"
 "Absolute, X*",1,,"next_ba[7:0]","I_rd_data"
-"Absolute, X*",1,,"next_t","curr_t + 1"
+"Absolute, X*",1,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, X*",2,,"O_addr","curr_pc"
 "Absolute, X*",2,,"O_rdwr",1
@@ -252,7 +236,7 @@
 "Absolute, X*",2,,"next_ad[7:0]","O_alu_result"
 "Absolute, X*",2,,"next_ad[15:8]","I_rd_data"
 "Absolute, X*",2,,"next_ba[8]","O_alu_carry"
-"Absolute, X*",2,,"next_t","curr_t + 1"
+"Absolute, X*",2,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, X*",3,,"O_addr","curr_ad"
 "Absolute, X*",3,,"O_rdwr",1
@@ -261,17 +245,17 @@
 "Absolute, X*",3,,"I_alu_lhs","curr_ad[15:8]"
 "Absolute, X*",3,,"I_alu_rhs",0
 "Absolute, X*",3,,"next_ad[15:8]","O_alu_result"
-"Absolute, X*",3,,"next_t","curr_t + 1"
+"Absolute, X*",3,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, X*",4,,"O_addr","curr_ad"
 "Absolute, X*",4,,"O_rdwr",1
-"Absolute, X*",4,,"next_t","curr_t + 1 "
+"Absolute, X*",4,,"next_t","curr_t_p1 "
 ,,,,
 "Absolute, Y*",1,,"O_addr","curr_pc"
 "Absolute, Y*",1,,"O_rdwr",1
 "Absolute, Y*",1,,"next_pc","curr_pc_p1"
 "Absolute, Y*",1,,"next_ba[7:0]","I_rd_data"
-"Absolute, Y*",1,,"next_t","curr_t + 1"
+"Absolute, Y*",1,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, Y*",2,,"O_addr","curr_pc"
 "Absolute, Y*",2,,"O_rdwr",1
@@ -283,7 +267,7 @@
 "Absolute, Y*",2,,"next_ad[7:0]","O_alu_result"
 "Absolute, Y*",2,,"next_ad[15:8]","I_rd_data"
 "Absolute, Y*",2,,"next_ba[8]","O_alu_carry"
-"Absolute, Y*",2,,"next_t","curr_t + 1"
+"Absolute, Y*",2,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, Y*",3,,"O_addr","curr_ad"
 "Absolute, Y*",3,,"O_rdwr",1
@@ -292,11 +276,11 @@
 "Absolute, Y*",3,,"I_alu_lhs","curr_ad[15:8]"
 "Absolute, Y*",3,,"I_alu_rhs",0
 "Absolute, Y*",3,,"next_ad[15:8]","O_alu_result"
-"Absolute, Y*",3,,"next_t","curr_t + 1"
+"Absolute, Y*",3,,"next_t","curr_t_p1"
 ,,,,
 "Absolute, Y*",4,,"O_addr","curr_ad"
 "Absolute, Y*",4,,"O_rdwr",1
-"Absolute, Y*",4,,"next_t","curr_t + 1 "
+"Absolute, Y*",4,,"next_t","curr_t_p1 "
 ,,,,
 "Relative",1,,"O_addr","curr_pc"
 "Relative",1,,"O_rdwr",1
@@ -319,7 +303,7 @@
 "Relative",2,,"I_alu_rhs","curr_ba[7:0]"
 "Relative",2,,"next_ad[15:8]","O_alu_result"
 "Relative",2,,"next_pc","curr_ad"
-"Relative",2,,"next_t","curr_ba[8] ^ curr_ba[0] ? curr_t + 1 : 0"
+"Relative",2,,"next_t","curr_ba[8] ^ curr_ba[0] ? curr_t_p1 : 0"
 ,,,,
 "Relative",3,,"O_addr","curr_ad"
 "Relative",3,,"O_rdwr",1
@@ -331,7 +315,7 @@
 "Zero Page, X",1,,"next_ad[7:0]","I_rd_data"
 "Zero Page, X",1,,"next_ad[15:8]",0
 "Zero Page, X",1,,"next_pc","curr_pc_p1"
-"Zero Page, X",1,,"next_t","curr_t + 1 "
+"Zero Page, X",1,,"next_t","curr_t_p1 "
 ,,,,
 "Zero Page, X",2,,"O_addr","curr_ad"
 "Zero Page, X",2,,"O_rdwr",1
@@ -340,8 +324,28 @@
 "Zero Page, X",2,,"I_alu_lhs","curr_ad[7:0]"
 "Zero Page, X",2,,"I_alu_rhs","curr_x"
 "Zero Page, X",2,,"next_ad[7:0]","O_alu_result"
-"Zero Page, X",2,,"next_t","curr_t + 1 "
+"Zero Page, X",2,,"next_t","curr_t_p1 "
 ,,,,
 "Zero Page, X",3,,"O_addr","curr_ad"
 "Zero Page, X",3,,"O_rdwr",1
-"Zero Page, X",3,,"next_t","curr_t + 1 "
+"Zero Page, X",3,,"next_t","curr_t_p1 "
+,,,,
+"Zero Page, Y",1,,"O_addr","curr_pc"
+"Zero Page, Y",1,,"O_rdwr",1
+"Zero Page, Y",1,,"next_ad[7:0]","I_rd_data"
+"Zero Page, Y",1,,"next_ad[15:8]",0
+"Zero Page, Y",1,,"next_pc","curr_pc_p1"
+"Zero Page, Y",1,,"next_t","curr_t_p1 "
+,,,,
+"Zero Page, Y",2,,"O_addr","curr_ad"
+"Zero Page, Y",2,,"O_rdwr",1
+"Zero Page, Y",2,,"I_alu_ctl","control_adc"
+"Zero Page, Y",2,,"I_alu_carry",0
+"Zero Page, Y",2,,"I_alu_lhs","curr_ad[7:0]"
+"Zero Page, Y",2,,"I_alu_rhs","curr_y"
+"Zero Page, Y",2,,"next_ad[7:0]","O_alu_result"
+"Zero Page, Y",2,,"next_t","curr_t_p1 "
+,,,,
+"Zero Page, Y",3,,"O_addr","curr_ad"
+"Zero Page, Y",3,,"O_rdwr",1
+"Zero Page, Y",3,,"next_t","curr_t_p1 "
