@@ -181,6 +181,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       I_alu_ctl      = control_nop;
       I_alu_lhs      = 0;
       I_alu_rhs      = 0;
+      next_p         = curr_p;
       next_rmw       = curr_rmw;
       next_pc        = curr_pc;
       next_ir        = curr_ir;
@@ -191,7 +192,6 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_x         = curr_x;
       next_y         = curr_y;
       next_s         = curr_s;
-      next_p         = curr_p;
     
       if (curr_t == 0)
       begin

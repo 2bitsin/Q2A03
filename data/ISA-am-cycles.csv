@@ -54,33 +54,6 @@
 "Zero Page",2,,"O_rdwr",1
 "Zero Page",2,,"next_t","curr_t_p1 "
 ,,,,
-"(Indirect, X)",1,,"O_addr","curr_pc"
-"(Indirect, X)",1,,"O_rdwr",1
-"(Indirect, X)",1,,"next_pc","curr_pc_p1"
-"(Indirect, X)",1,,"next_ba[15:8]",0
-"(Indirect, X)",1,,"next_ba[7:0]","I_rd_data"
-"(Indirect, X)",1,,"next_t","curr_t_p1 "
-,,,,
-"(Indirect, X)",2,,"O_addr","curr_ba"
-"(Indirect, X)",2,,"O_rdwr",1
-"(Indirect, X)",2,,"next_ba[7:0]","curr_ba[7:0] + curr_x"
-"(Indirect, X)",2,,"next_t","curr_t_p1 "
-,,,,
-"(Indirect, X)",3,,"O_addr","curr_ba"
-"(Indirect, X)",3,,"O_rdwr",1
-"(Indirect, X)",3,,"next_ad[7:0]","I_rd_data"
-"(Indirect, X)",3,,"next_ba[7:0]","curr_ba[7:0] + 1"
-"(Indirect, X)",3,,"next_t","curr_t_p1 "
-,,,,
-"(Indirect, X)",4,,"O_addr","curr_ba"
-"(Indirect, X)",4,,"O_rdwr",1
-"(Indirect, X)",4,,"next_ad[15:8]","I_rd_data"
-"(Indirect, X)",4,,"next_t","curr_t_p1 "
-,,,,
-"(Indirect, X)",5,,"O_addr","curr_ad"
-"(Indirect, X)",5,,"O_rdwr",1
-"(Indirect, X)",5,,"next_t","curr_t_p1 "
-,,,,
 "(Indirect), Y",1,,"O_addr","curr_pc"
 "(Indirect), Y",1,,"O_rdwr",1
 "(Indirect), Y",1,,"next_ad[7:0]","I_rd_data"
@@ -349,3 +322,36 @@
 "Zero Page, Y",3,,"O_addr","curr_ad"
 "Zero Page, Y",3,,"O_rdwr",1
 "Zero Page, Y",3,,"next_t","curr_t_p1 "
+,,,,
+"(Indirect, X)",1,,"O_addr","curr_pc"
+"(Indirect, X)",1,,"O_rdwr",1
+"(Indirect, X)",1,,"next_pc","curr_pc_p1"
+"(Indirect, X)",1,,"next_ba[15:8]",0
+"(Indirect, X)",1,,"next_ba[7:0]","I_rd_data"
+"(Indirect, X)",1,,"next_t","curr_t_p1 "
+,,,,
+"(Indirect, X)",2,,"O_addr","curr_ba"
+"(Indirect, X)",2,,"O_rdwr",1
+"(Indirect, X)",2,,"I_alu_ctl","control_adc"
+"(Indirect, X)",2,,"I_alu_carry",0
+"(Indirect, X)",2,,"I_alu_lhs","curr_ba[7:0]"
+"(Indirect, X)",2,,"I_alu_rhs","curr_x"
+"(Indirect, X)",2,,"next_ba[7:0]","O_alu_result"
+"(Indirect, X)",2,,"next_t","curr_t_p1 "
+,,,,
+"(Indirect, X)",3,,"O_addr","curr_ba"
+"(Indirect, X)",3,,"O_rdwr",1
+"(Indirect, X)",3,,"I_alu_ctl","control_inc"
+"(Indirect, X)",3,,"I_alu_lhs","curr_ba[7:0]"
+"(Indirect, X)",3,,"next_ad[7:0]","I_rd_data"
+"(Indirect, X)",3,,"next_ba[7:0]","O_alu_result"
+"(Indirect, X)",3,,"next_t","curr_t_p1 "
+,,,,
+"(Indirect, X)",4,,"O_addr","curr_ba"
+"(Indirect, X)",4,,"O_rdwr",1
+"(Indirect, X)",4,,"next_ad[15:8]","I_rd_data"
+"(Indirect, X)",4,,"next_t","curr_t_p1 "
+,,,,
+"(Indirect, X)",5,,"O_addr","curr_ad"
+"(Indirect, X)",5,,"O_rdwr",1
+"(Indirect, X)",5,,"next_t","curr_t_p1 "
