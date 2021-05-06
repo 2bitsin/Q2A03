@@ -42,16 +42,17 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
 /* Debug state */
 
-  reg32_type    debug_tick  ;
+  reg32_type    debug_tick    ;
 
 /* Timing generation */
 
-  bit           phy1  ;
-  bit[3:0]      tick  ;
+  bit           last_phy2     ;
+  bit           last_sync     ;
+  bit[3:0]      tick          ;
  
-  wire          edge_rise     = I_ready && I_reset && (O_phy2 && ~phy1);
-  wire          edge_fall     = I_ready && I_reset && (phy1 && ~O_phy2);
-
+  wire          edge_fall     = I_ready && I_reset && (last_phy2 && ~O_phy2);
+  wire          sync_rise     = ~last_sync && O_sync;
+  
   assign O_sync = ((curr_t == 0) && I_reset); 
   assign O_phy2 = (tick >= 6);  
 
@@ -84,14 +85,14 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 /* Misc derivatives */
 
   wire[15:0]    curr_sp       = {8'h01, curr_s};
-  wire[15:0]    curr_pc_p1    = curr_pc + 1;
-  wire[7:0]     curr_s_p1     = curr_s  + 1;
-  wire[7:0]     curr_s_m1     = curr_s  - 1;
-  wire[3:0]     curr_t_p1     = curr_t  + 1;
+  wire[15:0]    curr_pc_p1    = curr_pc + 16'd1;
+  wire[7:0]     curr_s_p1     = curr_s  +  8'd1;
+  wire[7:0]     curr_s_m1     = curr_s  -  8'd1;
+  wire[3:0]     curr_t_p1     = curr_t  +  4'd1;
   wire[7:0]     curr_p_wr     = {curr_p[7:6], 1'b1, is_soft_brk, curr_p[3:0]};
 
 /* Registers */
-
+ 
   register#(4)  reg_t     (I_clock, I_reset, edge_fall, next_t,     curr_t    );
   register      reg_ir    (I_clock, I_reset, edge_fall, next_ir,    curr_ir   );
   register      reg_a     (I_clock, I_reset, edge_fall, next_a,     curr_a    );
@@ -136,23 +137,29 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
                   .O_zero     (O_alu_zero)); 
     
 /* Interrupt handling */
-
-  bit           last_nmi      ;
   
-  reg16_type    vec_addr      ;  
-  wire[15:0]    vec_addr_lo   = vec_addr;
-  wire[15:0]    vec_addr_hi   = vec_addr + 1;
-  
-  wire          irq_p         = ~I_irq & ~curr_p[I_bit] ;
+  reg4_type     vec_addr      ;  
+  wire[15:0]    vec_addr_lo   = {12'hFFF, vec_addr};
+  wire[15:0]    vec_addr_hi   = {12'hFFF, vec_addr + 4'd1};
+    
+  bit           irq_p         ;
   bit           res_p         ;  
   bit           nmi_p         ;
-  bit           is_soft_brk   ;
+
+  bit           last_nmi      ;
+
   wire          force_brk     = irq_p | res_p | nmi_p;
+  wire          is_soft_brk   = ~force_brk;
+
+  bit           raise_nmi     ;
+  bit           raise_res     ;
+  wire          raise_irq     = ~I_irq & ~curr_p[I_bit];
 
   always @* 
   begin          
     if (~I_reset)
     begin      
+      
       I_alu_overflow = 0;
       I_alu_carry    = 0;
       I_alu_sign     = 0;
@@ -160,6 +167,13 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       I_alu_ctl      = control_nop;
       I_alu_lhs      = 0;
       I_alu_rhs      = 0;
+
+      vec_addr       = 4'hE;
+
+      O_addr         = 0;
+      O_rdwr         = 1;
+      O_wr_data      = 0;
+
       next_rmw       = 0;
       next_pc        = 0;
       next_ir        = 0;
@@ -171,8 +185,16 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_y         = 0;
       next_s         = 0;
       next_p         = 0;
-    end  else
+
+    end else
     begin    
+
+      vec_addr = 4'hE;
+      if (nmi_p) 
+        vec_addr = 4'hA;
+      else if (res_p) 
+        vec_addr = 4'hC;
+
       I_alu_overflow = curr_p[V_bit];
       I_alu_carry    = curr_p[C_bit];
       I_alu_sign     = curr_p[N_bit];
@@ -180,6 +202,11 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       I_alu_ctl      = control_nop;
       I_alu_lhs      = 0;
       I_alu_rhs      = 0;
+
+      O_addr         = curr_pc;      
+      O_rdwr         = 1;
+      O_wr_data      = 0;
+
       next_p         = curr_p;
       next_rmw       = curr_rmw;
       next_pc        = curr_pc;
@@ -191,21 +218,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_x         = curr_x;
       next_y         = curr_y;
       next_s         = curr_s;
-    
-      if (curr_t == 0)
-      begin
-        vec_addr = 16'hFFFE;
-        is_soft_brk = ~force_brk;
-        if (irq_p | ~force_brk) 
-          vec_addr = 16'hFFFE;
-        else if (nmi_p) 
-          vec_addr = 16'hFFFA;
-        else if (res_p) 
-          vec_addr = 16'hFFFC;
         
-        next_p[I_bit] = res_p | curr_p[I_bit];
-      end
-
       `include "cycles.svi"
     end    
   end
@@ -214,13 +227,22 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   begin
     if (~I_reset)
     begin
-      /* Reset state */
-           
+      /* Reset state */           
       debug_tick <= -21;
+
       tick       <= 0;
-      phy1       <= 0;
-      res_p      <= 1;
-          
+      last_phy2  <= 0;
+
+      /* Reset interrupt logic */
+      last_nmi   <= 0;
+
+      res_p      <= 0;
+      nmi_p      <= 0;
+      irq_p      <= 0;
+      
+      raise_nmi  <= 0;
+      raise_res  <= 1; // Rairse reset 
+
     end  
     else if (I_ready) 
     begin
@@ -229,23 +251,36 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       tick <= tick + 4'b1;
       if (tick >= 11)
         tick <= 4'b0;
-      phy1 <= O_phy2; 
-      last_nmi <= I_nmi;       
+      last_phy2 <= O_phy2;
 
       /* NMI edge detecton */
+      last_nmi <= I_nmi;
       if (last_nmi & ~I_nmi)
-        nmi_p <= 1;
+        raise_nmi <= 1;      
 
-      /* Latch state */
-      if (edge_fall)
-      begin            
-        if (curr_t == 0)
-        begin                       
+      /* Interrupt logic */
+      last_sync <= O_sync;
+      if (sync_rise)
+      begin        
+          /* Interrupt request latched */
+
+          if (raise_res) 
+            res_p <= raise_res;
+          if (raise_nmi) 
+            nmi_p <= raise_nmi;
+          irq_p <= raise_irq;
+          
+          raise_res <= 0;
+          raise_nmi <= 0;
+
+          /* Finished servicing interrupt */
           if (res_p) res_p <= 0; else
-          if (nmi_p) nmi_p <= 0;
-        end
+          if (nmi_p) nmi_p <= 0; else
+          if (irq_p) irq_p <= 0;         
+      end 
+
+      if (edge_fall)
         debug_tick <= debug_tick + 3;
-      end
     end    
   end
   

@@ -30,60 +30,45 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
     I_rhs9      = 9' (I_rhs);
     I_carry9    = 9' (I_carry);
 
-    case (I_control)
-      control_sbc: I_rhs9 = ~I_rhs9;
-      control_inc: I_rhs9 = +9'd1;
-      control_dec: I_rhs9 = -9'd1;
-      default:;
-    endcase    
-
-    case (I_control)      
-      control_cmp, 
-      control_inc, 
-      control_dec: I_carry9 = 9'd0;      
-      default:;
-    endcase
-
-    unique case (I_control) 
-      control_adc, 
-      control_sbc: 
-      begin      
-        {O_carry, O_result} = 9' (I_lhs) + I_rhs9 + I_carry9;
-        O_overflow = (I_lhs[7] != O_result[7]) && (I_lhs[7] == I_rhs9[7]);
-      end
-
-      control_inc: O_result = I_lhs + 1; 
-      control_dec: O_result = I_lhs - 1;
-      control_cmp: O_result = I_lhs - I_rhs;
-      control_bit, 
-      control_and: O_result = I_lhs & I_rhs;
-      control_or : O_result = I_lhs | I_rhs;
-      control_xor: O_result = I_lhs ^ I_rhs;            
-      control_rol: {O_carry, O_result} = {I_lhs, I_carry};
-      control_asl: {O_carry, O_result} = {I_lhs, 1'b0};
-      control_ror: {O_result, O_carry} = {I_carry, I_lhs};
-      control_lsr: {O_result, O_carry} = {1'b0, I_lhs};
-      control_txl: O_result = I_lhs;
-      control_txr: O_result = I_rhs; 
-      default:;
-    endcase
+    if (I_control[control_sbc_bit]) I_rhs9 = ~I_rhs9;
+    if (I_control[control_inc_bit]) I_rhs9 = +9'd1;
+    if (I_control[control_dec_bit]) I_rhs9 = -9'd1;
     
-    if (I_control != control_nop)
+    if (I_control[control_cmp_bit] | I_control[control_inc_bit] | I_control[control_dec_bit]) 
+      I_carry9 = 9'd0;      
+
+    if (I_control[control_adc_bit] | I_control[control_sbc_bit])
+    begin      
+      {O_carry, O_result} = 9' (I_lhs) + I_rhs9 + I_carry9;
+      O_overflow = (I_lhs[7] != O_result[7]) && (I_lhs[7] == I_rhs9[7]);
+    end
+
+    if (I_control[control_inc_bit]) O_result = I_lhs + 1; 
+    if (I_control[control_dec_bit]) O_result = I_lhs - 1;
+    if (I_control[control_cmp_bit]) O_result = I_lhs - I_rhs;
+    if (I_control[control_bit_bit] | I_control[control_and_bit]) O_result = I_lhs & I_rhs;
+    if (I_control[control_oor_bit]) O_result = I_lhs | I_rhs;
+    if (I_control[control_xor_bit]) O_result = I_lhs ^ I_rhs;            
+    if (I_control[control_rol_bit]) {O_carry, O_result} = {I_lhs, I_carry};
+    if (I_control[control_asl_bit]) {O_carry, O_result} = {I_lhs, 1'b0};
+    if (I_control[control_ror_bit]) {O_result, O_carry} = {I_carry, I_lhs};
+    if (I_control[control_lsr_bit]) {O_result, O_carry} = {1'b0, I_lhs};
+    if (I_control[control_txl_bit]) O_result = I_lhs;
+    if (I_control[control_txr_bit]) O_result = I_rhs; 
+            
+    if (|I_control)
     begin
       O_zero = O_result == 0;
       O_sign = O_result[7];      
     end
-
-    unique case(I_control)
-      control_sbc: O_carry = ~O_carry;                    
-      control_cmp: O_carry = O_zero || (I_lhs > I_rhs);      
-      control_bit: 
-      begin
-        O_overflow = I_rhs[6];
-        O_sign = I_rhs[7];
-      end
-      default:;
-    endcase
+    
+    if (I_control[control_sbc_bit]) O_carry = ~O_carry;                    
+    if (I_control[control_cmp_bit]) O_carry = O_zero || (I_lhs > I_rhs);      
+    if (I_control[control_bit_bit])
+    begin
+      O_overflow = I_rhs[6];
+      O_sign = I_rhs[7];
+    end
 
     if (~I_mask_p[0]) O_carry    = I_carry;
     if (~I_mask_p[1]) O_zero     = I_zero;      

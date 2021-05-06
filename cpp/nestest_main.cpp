@@ -4,6 +4,8 @@
 #include <svdpi.h>
 #include "nestest.cpp"
 
+#define TEST_INTERRUPTS 0 
+
 static double $time = 0;
 
 double sc_time_stamp()
@@ -51,8 +53,13 @@ int main(int argc, char** argv)
     tb.I_clock = !tb.I_clock;
     tb.I_reset = i >= 12;    
     tb.I_ready = 1;
-    tb.I_irq = 1;
-    tb.I_nmi = 1;
+  #if !defined(TEST_INTERRUPTS) || !TEST_INTERRUPTS    
+    tb.I_irq   = 1;
+    tb.I_nmi   = 1;
+  #else
+    tb.I_irq   = !(i >=  500 && i <  600);
+    tb.I_nmi   = !(i >= 1000 && i < 1010);
+  #endif
     if (tb.O_phy2) 
     {
       if (tb.O_addr >= 0x8000 && tb.O_rdwr)
@@ -76,6 +83,7 @@ int main(int argc, char** argv)
         break;
 
       tb.read_state(&a, &x, &y, &s, &p, &ir, &pcl, &pch, (unsigned*)&cycles);    
+    #if !defined(TEST_INTERRUPTS) || !TEST_INTERRUPTS
       if (cycles >= 0)
       {
         const auto& st_snapshot = nesttest_log[log_index++];
@@ -109,6 +117,10 @@ int main(int argc, char** argv)
           return -1;
         }
       }
+    #else
+        const auto pc = (pch * 0x100 + pcl);
+        std::printf("PC=%04X A=%02X X=%02X Y=%02X S=%02X P=%02X CYC=%d\n", pc, a, x, y, s, p, cycles);
+    #endif
     }
     if (!last_phy2 && tb.O_phy2)
       actual_cycles += 3;
