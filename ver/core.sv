@@ -123,7 +123,6 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   
   core_alu      inst_alu  
                 ( .I_control  (I_alu_ctl), 
-                  .I_mask_p   (4'b1111),
                   .I_lhs      (I_alu_lhs), 
                   .I_rhs      (I_alu_rhs), 
                   .I_carry    (I_alu_carry), 

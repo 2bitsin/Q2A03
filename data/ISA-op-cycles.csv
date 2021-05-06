@@ -342,12 +342,12 @@
 "ROL",1,,"next_t",0
 ,,,,
 "BIT",-1,,"next_t",0
-"BIT",-1,,"I_alu_ctl","control_and"
+"BIT",-1,,"I_alu_ctl","control_bit"
 "BIT",-1,,"I_alu_lhs","curr_a"
 "BIT",-1,,"I_alu_rhs","I_rd_data"
 "BIT",-1,,"next_p[Z_bit]","O_alu_zero"
-"BIT",-1,,"next_p[V_bit]","I_rd_data[6]"
-"BIT",-1,,"next_p[N_bit]","I_rd_data[7]"
+"BIT",-1,,"next_p[V_bit]","O_alu_overflow"
+"BIT",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "AND",-1,,"next_t",0
 "AND",-1,,"I_alu_ctl","control_and"

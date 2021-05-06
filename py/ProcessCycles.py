@@ -94,7 +94,7 @@ class ProcessCycles:
     return flat_table
 
   def write_out(self, writer, flat_table):
-
+    action_info = []
     for action, q_conditions in flat_table.items():        
       pre_cond = {}
       for opcode, cycle_index, condition in q_conditions:
@@ -104,7 +104,7 @@ class ProcessCycles:
           pre_cond[cycle_index].append(opcode)
       full_cond = []
       for cycle_index, opcodes in pre_cond.items():
-        partial_cond = ['(curr_t == %d)' % (cycle_index)]
+        partial_cond = ['(curr_t == 4\'d%d)' % (cycle_index)]
 
         if len(opcodes) > 1:
 
@@ -119,8 +119,10 @@ class ProcessCycles:
       writer.write_line('%s = %s;' % action)
       writer.unindent()
       writer.write_line('')
-      print("%s = %s" % action) 
+      action_info.append("%s = %s" % action)
     self.dump_flat_table(flat_table)    
+    for item in sorted(action_info):
+      print(item)
     print ("\nDone")
     return 
 
