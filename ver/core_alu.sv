@@ -1,6 +1,6 @@
-`include "core_alu.svi"
-
 module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O_result, O_carry, O_overflow, O_sign, O_zero);
+
+  import core_alu_ctl::*;
 
   input control_type I_control;  
   input wire[3:0] I_mask_p;
