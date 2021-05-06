@@ -665,19 +665,19 @@
 "BRK",0,,"O_addr","curr_sp"
 "BRK",0,,"O_rdwr",0
 "BRK",0,,"O_wr_data","curr_pc[15:8]"
-"BRK",0,,"next_s","curr_s - 1"
+"BRK",0,,"next_s","curr_s_m1"
 "BRK",0,,"next_t","curr_t_p1 "
 ,,,,
 "BRK",1,,"O_addr","curr_sp"
 "BRK",1,,"O_rdwr",0
 "BRK",1,,"O_wr_data","curr_pc[7:0]"
-"BRK",1,,"next_s","curr_s - 1"
+"BRK",1,,"next_s","curr_s_m1"
 "BRK",1,,"next_t","curr_t_p1 "
 ,,,,
 "BRK",2,,"O_addr","curr_sp"
 "BRK",2,,"O_rdwr",0
 "BRK",2,,"O_wr_data","curr_p_wr"
-"BRK",2,,"next_s","curr_s - 1"
+"BRK",2,,"next_s","curr_s_m1"
 "BRK",2,,"next_t","curr_t_p1 "
 ,,,,
 "BRK",3,,"O_addr","vec_addr_lo"
