@@ -26,8 +26,7 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
     O_overflow  = I_overflow;
     O_sign      = I_sign;
     O_carry     = I_carry;
-    O_result    = I_lhs;
-
+    
 
     rhs = 9'(I_rhs);
     if (I_control[control_clear_rhs])
@@ -43,16 +42,14 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
       carry = ~carry;
     
     unique case (I_control[control_select_b2:control_select_b0])
-      3'd0:;                                                  // =lhs 000
+      3'd0: O_result = I_lhs;                                 // =lhs 000
       3'd1: O_result = rhs[7:0];                              // =rhs 001
       3'd2: {carry, O_result} = 9'(I_lhs) + rhs + 9'(carry);  // adc  010
       3'd3: O_result = I_lhs & rhs[7:0];                      // and  011
       3'd4: O_result = I_lhs | rhs[7:0];                      // or   100
       3'd5: O_result = I_lhs ^ rhs[7:0];                      // xor  101
       3'd6: {carry, O_result} = {I_lhs, carry};               // asl  110
-      3'd7: {O_result, carry} = {carry, I_lhs};               // lsr  111
-      default:;
-
+      3'd7: {O_result, carry} = {carry, I_lhs};               // lsr  111      
     endcase
 
     if (I_mask_p)
@@ -67,17 +64,13 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
       else if (I_control[control_result_sign])
         O_sign = O_result[7];
 
+      if (I_control[control_inv_O_carry])
+        O_carry = ~carry;
+      else if (I_control[control_set_carry])
+        O_carry = carry;
+
       if (I_control[control_result_zero])
         O_zero = ~|O_result;
-    end
-    
-    if (I_control[control_inv_O_carry])
-      carry = ~carry;
-
-    if (I_mask_p)
-    begin
-      if (I_control[control_set_carry])
-        O_carry = carry;
     end
   end
 
