@@ -42,7 +42,7 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
       carry = 1'b0;
     if (I_control[control_inv_I_carry])
       carry = ~carry;
-
+    
     if (I_control[control_rhs_assign])
       O_result = rhs[7:0];
     else if (I_control[control_adc_rhs])
