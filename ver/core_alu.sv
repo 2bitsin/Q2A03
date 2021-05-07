@@ -2,7 +2,7 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
 
   import core_alu_ctl::*;
 
-  input control_type I_control;    
+  input control_type I_control;
   input wire I_mask_p;
   input wire[7:0] I_lhs;
   input wire[7:0] I_rhs;
@@ -15,7 +15,7 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
   output bit O_carry;
   output bit O_overflow;
   output bit O_sign;
-  output bit O_zero;  
+  output bit O_zero;
 
   logic[8:0]  rhs;
   logic       carry;
@@ -28,7 +28,7 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
     O_carry     = I_carry;
     O_result    = I_lhs;
 
-    
+
     rhs = 9'(I_rhs);
 
     if (I_control[control_clear_rhs])
@@ -48,9 +48,9 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
     else if (I_control[control_adc_rhs])
       {carry, O_result} = 9'(I_lhs) + rhs + 9'(carry);
     else if (I_control[control_result_and])
-      O_result = I_lhs & rhs[7:0];    
+      O_result = I_lhs & rhs[7:0];
     else if (I_control[control_result_nor])
-      O_result = I_lhs | rhs[7:0];    
+      O_result = I_lhs | rhs[7:0];
     else if (I_control[control_result_xor])
       O_result = I_lhs ^ rhs[7:0];
     else if (I_control[control_rotate_left])
@@ -59,27 +59,21 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
       {O_result, carry} = {carry, I_lhs};
 
     if (I_mask_p)
-    begin        
-      if (I_control[control_adc_overflow])
-        O_overflow = (I_lhs[7] != O_result[7]) && (I_lhs[7] == rhs[7]);
-      else if (I_control[control_ovfl_rhs_m6])
+    begin  
+      if (I_control[control_ovfl_rhs_m6])
         O_overflow = I_rhs[6];
-    end
-      
-    if (I_mask_p)
-    begin      
-      if (I_control[control_result_sign])
+      else if (I_control[control_adc_overflow])
+        O_overflow = (I_lhs[7] != O_result[7]) && (I_lhs[7] == rhs[7]);
+
+      if (I_control[control_sign_rhs_m7])
+        O_sign = I_rhs[7];
+      else if (I_control[control_result_sign])
         O_sign = O_result[7];
-      else if (I_control[control_sign_rhs_m7])
-        O_sign = I_rhs[7];      
+
+      if (I_control[control_result_zero])
+        O_zero = ~|O_result;
     end
     
-    if (I_mask_p)
-    begin
-      if (I_control[control_result_zero])
-        O_zero = ~|O_result;      
-    end
-
     if (I_control[control_inv_O_carry])
       carry = ~carry;
 
