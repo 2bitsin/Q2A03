@@ -401,7 +401,7 @@
 	    ((curr_t == 4'd5)&(curr_ir == 8'h83))|
 	    ((curr_t == 4'd1)&(curr_ir == 8'hCB))|
 	    ((curr_t == 4'd2)&(curr_ir == 8'h87)))
-		I_alu_mask_p = 4'b0000;
+		I_alu_mask_p = 0;
 	
 	if (((curr_t == 4'd3)&((curr_ir == 8'h8F)|(curr_ir == 8'h97)))|
 	    ((curr_t == 4'd5)&(curr_ir == 8'h83))|

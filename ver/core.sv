@@ -122,7 +122,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   control_type  I_alu_ctl;
   bit[7:0]      I_alu_lhs;
   bit[7:0]      I_alu_rhs; 
-  bit[3:0]      I_alu_mask_p;
+  bit           I_alu_mask_p;
   bit           I_alu_carry;
   bit           I_alu_overflow;
   bit           I_alu_sign; 
@@ -174,7 +174,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
     begin      
       
       I_alu_ctl      = control_nop;
-      I_alu_mask_p   = 4'b1111;
+      I_alu_mask_p   = 1;
       I_alu_lhs      = 0;
       I_alu_rhs      = 0;
       I_alu_overflow = 0;
@@ -214,7 +214,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
         vec_addr = 4'hC;
 
       I_alu_ctl      = control_nop;
-      I_alu_mask_p   = 4'b1111;
+      I_alu_mask_p   = 1;
       I_alu_lhs      = 0;
       I_alu_rhs      = 0;
       I_alu_overflow = curr_p[V_bit];

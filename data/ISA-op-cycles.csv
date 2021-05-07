@@ -41,7 +41,7 @@
 ,,,,
 "AXS*",-1,,"O_rdwr",0
 "AXS*",-1,,"I_alu_ctl","control_and"
-"AXS*",-1,,"I_alu_mask_p","4'b0000"
+"AXS*",-1,,"I_alu_mask_p",0
 "AXS*",-1,,"I_alu_lhs","curr_a"
 "AXS*",-1,,"I_alu_rhs","curr_x"
 "AXS*",-1,,"O_wr_data","O_alu_result"
