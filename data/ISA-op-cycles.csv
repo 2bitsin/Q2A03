@@ -202,9 +202,6 @@
 "RLA*",-1,,"O_rdwr",1
 "RLA*",-1,,"I_alu_ctl","control_rol"
 "RLA*",-1,,"I_alu_lhs","I_rd_data"
-"RLA*",-1,,"next_p[C_bit]","O_alu_carry"
-"RLA*",-1,,"next_p[Z_bit]","O_alu_zero"
-"RLA*",-1,,"next_p[N_bit]","O_alu_sign"
 "RLA*",-1,,"next_rmw","O_alu_result"
 "RLA*",-1,,"next_t","curr_t_p1 "
 ,,,,
@@ -225,7 +222,6 @@
 "LSE*",-1,,"O_rdwr",1
 "LSE*",-1,,"I_alu_ctl","control_lsr"
 "LSE*",-1,,"I_alu_lhs","I_rd_data"
-"LSE*",-1,,"next_p[C_bit]","O_alu_carry"
 "LSE*",-1,,"next_rmw","O_alu_result"
 "LSE*",-1,,"next_t","curr_t_p1 "
 ,,,,
@@ -239,8 +235,6 @@
 "LSE*",1,,"I_alu_ctl","control_xor"
 "LSE*",1,,"I_alu_lhs","curr_a"
 "LSE*",1,,"I_alu_rhs","I_rd_data"
-"LSE*",1,,"next_p[Z_bit]","O_alu_zero"
-"LSE*",1,,"next_p[N_bit]","O_alu_sign"
 "LSE*",1,,"next_a","O_alu_result"
 "LSE*",1,,"next_t",0
 ,,,,
@@ -249,7 +243,6 @@
 "RRA*",-1,,"I_alu_ctl","control_ror"
 "RRA*",-1,,"I_alu_lhs","I_rd_data"
 "RRA*",-1,,"next_rmw","O_alu_result"
-"RRA*",-1,,"next_p[C_bit]","O_alu_carry"
 "RRA*",-1,,"next_t","curr_t_p1 "
 ,,,,
 "RRA*",0,,"O_addr","curr_ad"
@@ -263,10 +256,6 @@
 "RRA*",1,,"I_alu_lhs","curr_a"
 "RRA*",1,,"I_alu_rhs","I_rd_data"
 "RRA*",1,,"next_a","O_alu_result"
-"RRA*",1,,"next_p[C_bit]","O_alu_carry"
-"RRA*",1,,"next_p[V_bit]","O_alu_overflow"
-"RRA*",1,,"next_p[Z_bit]","O_alu_zero"
-"RRA*",1,,"next_p[N_bit]","O_alu_sign"
 "RRA*",1,,"next_t",0
 ,,,,
 "ROR",-1,,"O_addr","curr_ad"
@@ -354,10 +343,6 @@
 "ISB*",0,,"I_alu_lhs","curr_a"
 "ISB*",0,,"I_alu_rhs","curr_rmw"
 "ISB*",0,,"next_a","O_alu_result"
-"ISB*",0,,"next_p[C_bit]","O_alu_carry"
-"ISB*",0,,"next_p[V_bit]","O_alu_overflow"
-"ISB*",0,,"next_p[Z_bit]","O_alu_zero"
-"ISB*",0,,"next_p[N_bit]","O_alu_sign"
 "ISB*",0,,"next_t","curr_t_p1 "
 ,,,,
 "ISB*",1,,"O_addr","curr_ad"
@@ -383,9 +368,6 @@
 "DCM*",0,,"I_alu_ctl","control_cmp"
 "DCM*",0,,"I_alu_lhs","curr_a"
 "DCM*",0,,"I_alu_rhs","curr_rmw"
-"DCM*",0,,"next_p[Z_bit]","O_alu_zero"
-"DCM*",0,,"next_p[N_bit]","O_alu_sign"
-"DCM*",0,,"next_p[C_bit]","O_alu_carry"
 "DCM*",0,,"next_t","curr_t_p1 "
 ,,,,
 "DCM*",1,,"O_addr","curr_ad"
