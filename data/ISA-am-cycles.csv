@@ -69,7 +69,8 @@
 "(Indirect)",3,,"O_addr","curr_ba"
 "(Indirect)",3,,"O_rdwr",1
 "(Indirect)",3,,"next_ad[7:0]","I_rd_data"
-"(Indirect)",3,,"next_ba[7:0]","curr_ba[7:0] + 1"
+"(Indirect)",3,,"I_addr_lhs","curr_ba[7:0]"
+"(Indirect)",3,,"next_ba[7:0]","O_addr_lhs_p1"
 "(Indirect)",3,,"next_t","curr_t_p1"
 ,,,,
 "(Indirect)",4,,"O_addr","curr_ba"
@@ -125,7 +126,6 @@
 "Absolute, Y",3,,"O_rdwr",1
 "Absolute, Y",3,,"I_addr_carry","curr_ba[8]"
 "Absolute, Y",3,,"I_addr_lhs","curr_ad[15:8]"
-"Absolute, Y",3,,"I_addr_rhs",0
 "Absolute, Y",3,,"next_ad[15:8]","O_addr_sum"
 "Absolute, Y",3,,"next_t","curr_t_p1"
 ,,,,
