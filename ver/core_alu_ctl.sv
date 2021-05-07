@@ -10,36 +10,31 @@
     parameter control_adc_overflow = 7;
   
     parameter control_clear_rhs    = 8;
-    parameter control_rhs_assign   = 9;  // 
-    parameter control_rotate_left  = 10; //
-    parameter control_rotate_right = 11; //
-  
-    parameter control_result_and   = 12; //
-    parameter control_result_nor   = 13; //
-    parameter control_result_xor   = 14; //
-    parameter control_adc_rhs      = 15; //
-  
-    parameter control_sign_rhs_m7  = 16;
-    parameter control_ovfl_rhs_m6  = 16;
+    parameter control_select_b0    = 9;
+    parameter control_select_b1    = 10;
+    parameter control_select_b2    = 11;  
+
+    parameter control_flags_rhs    = 12;
     
-    typedef enum logic[16:0]
+    typedef enum logic[12:0]
     {
-      control_nop    = 17'b0_0000_0000_0000_0000,
-      control_adc    = 17'b0_1000_0000_1010_0110,
-      control_sbc    = 17'b0_1000_0000_1011_0111,
-      control_inc    = 17'b0_1000_0001_0100_1110,
-      control_dec    = 17'b0_1000_0001_0101_0110,
-      control_cmp    = 17'b0_1000_0000_0111_1111,
-      control_bit    = 17'b1_0001_0000_0000_0010,
-      control_and    = 17'b0_0001_0000_0000_0110,
-      control_or     = 17'b0_0010_0000_0000_0110,
-      control_xor    = 17'b0_0100_0000_0000_0110,
-      control_rol    = 17'b0_0000_0100_0010_0110,
-      control_ror    = 17'b0_0000_1000_0010_0110,
-      control_asl    = 17'b0_0000_0100_0110_0110,
-      control_lsr    = 17'b0_0000_1000_0110_0110,
-      control_txr    = 17'b0_0000_0010_0010_0110,
-      control_txl    = 17'b0_0000_0000_0010_0110
+      control_nop    = 13'b0_0000_0000_0000,
+      control_txl    = 13'b0_0000_0010_0110,
+      control_txr    = 13'b0_0010_0010_0110,
+      control_adc    = 13'b0_0100_1010_0110,
+      control_sbc    = 13'b0_0100_1011_0111,
+      control_inc    = 13'b0_0101_0100_1110,
+      control_dec    = 13'b0_0101_0101_0110,
+      control_cmp    = 13'b0_0100_0111_1111,
+      control_bit    = 13'b1_0110_0000_0010,
+      control_and    = 13'b0_0110_0000_0110,
+      control_or     = 13'b0_1000_0000_0110,
+      control_xor    = 13'b0_1010_0000_0110,
+      control_rol    = 13'b0_1100_0010_0110,
+      control_ror    = 13'b0_1110_0010_0110,
+      control_asl    = 13'b0_1100_0110_0110,
+      control_lsr    = 13'b0_1110_0110_0110
+
     } control_type;
 
   endpackage
