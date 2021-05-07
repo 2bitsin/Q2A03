@@ -1,8 +1,9 @@
-module core_alu (I_control, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O_result, O_carry, O_overflow, O_sign, O_zero);
+module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O_result, O_carry, O_overflow, O_sign, O_zero);
 
   import core_alu_ctl::*;
 
   input control_type I_control;    
+  input wire[3:0] I_mask_p;
   input wire[7:0] I_lhs;
   input wire[7:0] I_rhs;
   input wire I_carry;
@@ -16,8 +17,8 @@ module core_alu (I_control, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O
   output bit O_sign;
   output bit O_zero;  
 
-  logic       carry;
   logic[8:0]  rhs;
+  logic       carry;
 
   always @* begin
 
@@ -27,7 +28,7 @@ module core_alu (I_control, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O
     O_carry     = I_carry;
     O_result    = I_lhs;
 
-    carry       = I_carry;
+    carry    = I_carry;
     rhs         = 9'(I_rhs);
 
     if (I_control[control_rhs_assign])
@@ -60,23 +61,36 @@ module core_alu (I_control, I_lhs, I_rhs, I_carry, I_overflow, I_sign, I_zero, O
     else if (I_control[control_rotate_right])
       {O_result, carry} = {carry, I_lhs};
 
-    if (I_control[control_adc_overflow])
-      O_overflow = (I_lhs[7] != O_result[7]) && (I_lhs[7] == rhs[7]);
-    else if (I_control[control_ovfl_rhs_m6])
-      O_overflow = I_rhs[6];
+    if (I_mask_p[2])
+    begin        
+      if (I_control[control_adc_overflow])
+        O_overflow = (I_lhs[7] != O_result[7]) && (I_lhs[7] == rhs[7]);
+      else if (I_control[control_ovfl_rhs_m6])
+        O_overflow = I_rhs[6];
+    end
       
-    if (I_control[control_result_sign])
-      O_sign = O_result[7];
-    else if (I_control[control_sign_rhs_m7])
-      O_sign = I_rhs[7];      
+    if (I_mask_p[3])
+    begin      
+      if (I_control[control_result_sign])
+        O_sign = O_result[7];
+      else if (I_control[control_sign_rhs_m7])
+        O_sign = I_rhs[7];      
+    end
+    
+    if (I_mask_p[1])
+    begin
+      if (I_control[control_result_zero])
+        O_zero = ~|O_result;      
+    end
 
-    if (I_control[control_result_zero])
-      O_zero = ~|O_result;
     if (I_control[control_inv_O_carry])
       carry = ~carry;
-    if (I_control[control_set_carry])
-      O_carry = carry;
 
+    if (I_mask_p[0])
+    begin
+      if (I_control[control_set_carry])
+        O_carry = carry;
+    end
   end
 
 

@@ -40,9 +40,7 @@
       control_asl    = 19'b101_0000_0000_0100_0110,
       control_lsr    = 19'b110_0000_0000_0100_0110,
       control_txr    = 19'b100_0000_0000_0000_0111,
-      control_txl    = 19'b100_0000_0000_0000_0110,
-      control_adc_ex = 19'b000_0000_0000_0010_0000,
-      control_inc_ex = 19'b000_0000_0001_0110_0000
+      control_txl    = 19'b100_0000_0000_0000_0110
     } control_type;
 
   endpackage

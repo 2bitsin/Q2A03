@@ -7,24 +7,18 @@
 "LDX",-1,,"I_alu_rhs","I_rd_data"
 "LDX",-1,,"I_alu_ctl","control_txr"
 "LDX",-1,,"next_x","O_alu_result"
-"LDX",-1,,"next_p[N_bit]","O_alu_sign"
-"LDX",-1,,"next_p[Z_bit]","O_alu_zero"
 "LDX",-1,,"next_t",0
 ,,,,
 "LDA",-1,,"O_rdwr",1
 "LDA",-1,,"I_alu_rhs","I_rd_data"
 "LDA",-1,,"I_alu_ctl","control_txr"
 "LDA",-1,,"next_a","O_alu_result"
-"LDA",-1,,"next_p[N_bit]","O_alu_sign"
-"LDA",-1,,"next_p[Z_bit]","O_alu_zero"
 "LDA",-1,,"next_t",0
 ,,,,
 "LDY",-1,,"O_rdwr",1
 "LDY",-1,,"I_alu_rhs","I_rd_data"
 "LDY",-1,,"I_alu_ctl","control_txr"
 "LDY",-1,,"next_y","O_alu_result"
-"LDY",-1,,"next_p[N_bit]","O_alu_sign"
-"LDY",-1,,"next_p[Z_bit]","O_alu_zero"
 "LDY",-1,,"next_t",0
 ,,,,
 "LAX*",-1,,"next_t",0
@@ -32,8 +26,6 @@
 "LAX*",-1,,"I_alu_ctl","control_txr"
 "LAX*",-1,,"next_a","O_alu_result"
 "LAX*",-1,,"next_x","O_alu_result"
-"LAX*",-1,,"next_p[N_bit]","O_alu_sign"
-"LAX*",-1,,"next_p[Z_bit]","O_alu_zero"
 ,,,,
 "STX",-1,,"O_wr_data","curr_x"
 "STX",-1,,"next_t",0
@@ -49,6 +41,7 @@
 ,,,,
 "AXS*",-1,,"O_rdwr",0
 "AXS*",-1,,"I_alu_ctl","control_and"
+"AXS*",-1,,"I_alu_mask_p","4'b0000"
 "AXS*",-1,,"I_alu_lhs","curr_a"
 "AXS*",-1,,"I_alu_rhs","curr_x"
 "AXS*",-1,,"O_wr_data","O_alu_result"
@@ -125,41 +118,27 @@
 "PLA",1,,"I_alu_ctl","control_txr"
 "PLA",1,,"I_alu_rhs","I_rd_data"
 "PLA",1,,"next_a","O_alu_result"
-"PLA",1,,"next_p[Z_bit]","O_alu_zero"
-"PLA",1,,"next_p[N_bit]","O_alu_sign"
 "PLA",1,,"next_t",0
 ,,,,
 "LSR A",-1,,"next_t",0
 "LSR A",-1,,"I_alu_ctl","control_lsr"
 "LSR A",-1,,"I_alu_lhs","curr_a"
 "LSR A",-1,,"next_a","O_alu_result"
-"LSR A",-1,,"next_p[C_bit]","O_alu_carry"
-"LSR A",-1,,"next_p[Z_bit]","O_alu_zero"
-"LSR A",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "ASL A",-1,,"next_t",0
 "ASL A",-1,,"I_alu_ctl","control_asl"
 "ASL A",-1,,"I_alu_lhs","curr_a"
 "ASL A",-1,,"next_a","O_alu_result"
-"ASL A",-1,,"next_p[C_bit]","O_alu_carry"
-"ASL A",-1,,"next_p[Z_bit]","O_alu_zero"
-"ASL A",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "ROR A",-1,,"next_t",0
 "ROR A",-1,,"I_alu_ctl","control_ror"
 "ROR A",-1,,"I_alu_lhs","curr_a"
 "ROR A",-1,,"next_a","O_alu_result"
-"ROR A",-1,,"next_p[C_bit]","O_alu_carry"
-"ROR A",-1,,"next_p[Z_bit]","O_alu_zero"
-"ROR A",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "ROL A",-1,,"next_t",0
 "ROL A",-1,,"I_alu_ctl","control_rol"
 "ROL A",-1,,"I_alu_lhs","curr_a"
 "ROL A",-1,,"next_a","O_alu_result"
-"ROL A",-1,,"next_p[C_bit]","O_alu_carry"
-"ROL A",-1,,"next_p[Z_bit]","O_alu_zero"
-"ROL A",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "LSR",-1,,"O_addr","curr_ad"
 "LSR",-1,,"O_rdwr",1
@@ -171,9 +150,6 @@
 "LSR",0,,"I_alu_lhs","curr_rmw"
 "LSR",0,,"I_alu_ctl","control_lsr"
 "LSR",0,,"O_wr_data","O_alu_result"
-"LSR",0,,"next_p[C_bit]","O_alu_carry"
-"LSR",0,,"next_p[Z_bit]","O_alu_zero"
-"LSR",0,,"next_p[N_bit]","O_alu_sign"
 "LSR",0,,"next_t","curr_t_p1 "
 ,,,,
 "LSR",1,,"O_addr","curr_ad"
@@ -193,9 +169,6 @@
 "ASL",0,,"I_alu_lhs","curr_rmw"
 "ASL",0,,"I_alu_ctl","control_asl"
 "ASL",0,,"O_wr_data","O_alu_result"
-"ASL",0,,"next_p[C_bit]","O_alu_carry"
-"ASL",0,,"next_p[Z_bit]","O_alu_zero"
-"ASL",0,,"next_p[N_bit]","O_alu_sign"
 "ASL",0,,"next_t","curr_t_p1 "
 ,,,,
 "ASL",1,,"O_addr","curr_ad"
@@ -310,9 +283,6 @@
 "ROR",0,,"I_alu_ctl","control_ror"
 "ROR",0,,"I_alu_lhs","curr_rmw"
 "ROR",0,,"next_rmw","O_alu_result"
-"ROR",0,,"next_p[C_bit]","O_alu_carry"
-"ROR",0,,"next_p[Z_bit]","O_alu_zero"
-"ROR",0,,"next_p[N_bit]","O_alu_sign"
 "ROR",0,,"next_t","curr_t_p1 "
 ,,,,
 "ROR",1,,"O_addr","curr_ad"
@@ -331,9 +301,6 @@
 "ROL",0,,"I_alu_ctl","control_rol"
 "ROL",0,,"I_alu_lhs","curr_rmw"
 "ROL",0,,"next_rmw","O_alu_result"
-"ROL",0,,"next_p[C_bit]","O_alu_carry"
-"ROL",0,,"next_p[Z_bit]","O_alu_zero"
-"ROL",0,,"next_p[N_bit]","O_alu_sign"
 "ROL",0,,"next_t","curr_t_p1 "
 ,,,,
 "ROL",1,,"O_addr","curr_ad"
@@ -345,53 +312,36 @@
 "BIT",-1,,"I_alu_ctl","control_bit"
 "BIT",-1,,"I_alu_lhs","curr_a"
 "BIT",-1,,"I_alu_rhs","I_rd_data"
-"BIT",-1,,"next_p[Z_bit]","O_alu_zero"
-"BIT",-1,,"next_p[V_bit]","O_alu_overflow"
-"BIT",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "AND",-1,,"next_t",0
 "AND",-1,,"I_alu_ctl","control_and"
 "AND",-1,,"I_alu_lhs","curr_a"
 "AND",-1,,"I_alu_rhs","I_rd_data"
 "AND",-1,,"next_a","O_alu_result"
-"AND",-1,,"next_p[Z_bit]","O_alu_zero"
-"AND",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "ORA",-1,,"next_t",0
 "ORA",-1,,"I_alu_ctl","control_or"
 "ORA",-1,,"I_alu_lhs","curr_a"
 "ORA",-1,,"I_alu_rhs","I_rd_data"
 "ORA",-1,,"next_a","O_alu_result"
-"ORA",-1,,"next_p[Z_bit]","O_alu_zero"
-"ORA",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "EOR",-1,,"next_t",0
 "EOR",-1,,"I_alu_ctl","control_xor"
 "EOR",-1,,"I_alu_lhs","curr_a"
 "EOR",-1,,"I_alu_rhs","I_rd_data"
 "EOR",-1,,"next_a","O_alu_result"
-"EOR",-1,,"next_p[Z_bit]","O_alu_zero"
-"EOR",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "ADC",-1,,"next_t",0
 "ADC",-1,,"I_alu_ctl","control_adc"
 "ADC",-1,,"I_alu_lhs","curr_a"
 "ADC",-1,,"I_alu_rhs","I_rd_data"
 "ADC",-1,,"next_a","O_alu_result"
-"ADC",-1,,"next_p[C_bit]","O_alu_carry"
-"ADC",-1,,"next_p[V_bit]","O_alu_overflow"
-"ADC",-1,,"next_p[Z_bit]","O_alu_zero"
-"ADC",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "SBC",-1,,"next_t",0
 "SBC",-1,,"I_alu_ctl","control_sbc"
 "SBC",-1,,"I_alu_lhs","curr_a"
 "SBC",-1,,"I_alu_rhs","I_rd_data"
 "SBC",-1,,"next_a","O_alu_result"
-"SBC",-1,,"next_p[C_bit]","O_alu_carry"
-"SBC",-1,,"next_p[V_bit]","O_alu_overflow"
-"SBC",-1,,"next_p[Z_bit]","O_alu_zero"
-"SBC",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "ISB*",-1,,"O_addr","curr_ad"
 "ISB*",-1,,"O_rdwr",1
@@ -422,9 +372,6 @@
 "CMP",-1,,"I_alu_ctl","control_cmp"
 "CMP",-1,,"I_alu_lhs","curr_a"
 "CMP",-1,,"I_alu_rhs","I_rd_data"
-"CMP",-1,,"next_p[Z_bit]","O_alu_zero"
-"CMP",-1,,"next_p[N_bit]","O_alu_sign"
-"CMP",-1,,"next_p[C_bit]","O_alu_carry"
 ,,,,
 "DCM*",-1,,"O_addr","curr_ad"
 "DCM*",-1,,"O_rdwr",1
@@ -453,31 +400,21 @@
 "CPX",-1,,"I_alu_ctl","control_cmp"
 "CPX",-1,,"I_alu_lhs","curr_x"
 "CPX",-1,,"I_alu_rhs","I_rd_data"
-"CPX",-1,,"next_p[Z_bit]","O_alu_zero"
-"CPX",-1,,"next_p[N_bit]","O_alu_sign"
-"CPX",-1,,"next_p[C_bit]","O_alu_carry"
 ,,,,
 "CPY",-1,,"next_t",0
 "CPY",-1,,"I_alu_ctl","control_cmp"
 "CPY",-1,,"I_alu_lhs","curr_y"
 "CPY",-1,,"I_alu_rhs","I_rd_data"
-"CPY",-1,,"next_p[Z_bit]","O_alu_zero"
-"CPY",-1,,"next_p[N_bit]","O_alu_sign"
-"CPY",-1,,"next_p[C_bit]","O_alu_carry"
 ,,,,
 "INX",-1,,"next_t",0
 "INX",-1,,"I_alu_lhs","curr_x"
 "INX",-1,,"I_alu_ctl","control_inc"
 "INX",-1,,"next_x","O_alu_result"
-"INX",-1,,"next_p[Z_bit]","O_alu_zero"
-"INX",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "INY",-1,,"next_t",0
 "INY",-1,,"I_alu_lhs","curr_y"
 "INY",-1,,"I_alu_ctl","control_inc"
 "INY",-1,,"next_y","O_alu_result"
-"INY",-1,,"next_p[Z_bit]","O_alu_zero"
-"INY",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "INC",-1,,"O_addr","curr_ad"
 "INC",-1,,"O_rdwr",1
@@ -489,8 +426,6 @@
 "INC",0,,"O_wr_data","curr_rmw"
 "INC",0,,"I_alu_ctl","control_inc"
 "INC",0,,"I_alu_lhs","curr_rmw"
-"INC",0,,"next_p[Z_bit]","O_alu_zero"
-"INC",0,,"next_p[N_bit]","O_alu_sign"
 "INC",0,,"next_rmw","O_alu_result"
 "INC",0,,"next_t","curr_t_p1 "
 ,,,,
@@ -509,8 +444,6 @@
 "DEC",0,,"O_wr_data","curr_rmw"
 "DEC",0,,"I_alu_ctl","control_dec"
 "DEC",0,,"I_alu_lhs","curr_rmw"
-"DEC",0,,"next_p[Z_bit]","O_alu_zero"
-"DEC",0,,"next_p[N_bit]","O_alu_sign"
 "DEC",0,,"next_rmw","O_alu_result"
 "DEC",0,,"next_t","curr_t_p1 "
 ,,,,
@@ -523,57 +456,41 @@
 "DEX",-1,,"I_alu_lhs","curr_x"
 "DEX",-1,,"I_alu_ctl","control_dec"
 "DEX",-1,,"next_x","O_alu_result"
-"DEX",-1,,"next_p[Z_bit]","O_alu_zero"
-"DEX",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "DEY",-1,,"next_t",0
 "DEY",-1,,"I_alu_lhs","curr_y"
 "DEY",-1,,"I_alu_ctl","control_dec"
 "DEY",-1,,"next_y","O_alu_result"
-"DEY",-1,,"next_p[Z_bit]","O_alu_zero"
-"DEY",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "TAX",-1,,"next_t",0
 "TAX",-1,,"I_alu_lhs","curr_a"
 "TAX",-1,,"I_alu_ctl","control_txl"
 "TAX",-1,,"next_x","O_alu_result"
-"TAX",-1,,"next_p[Z_bit]","O_alu_zero"
-"TAX",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "TAY",-1,,"next_t",0
 "TAY",-1,,"I_alu_lhs","curr_a"
 "TAY",-1,,"I_alu_ctl","control_txl"
 "TAY",-1,,"next_y","O_alu_result"
-"TAY",-1,,"next_p[Z_bit]","O_alu_zero"
-"TAY",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "TYA",-1,,"next_t",0
 "TYA",-1,,"I_alu_lhs","curr_y"
 "TYA",-1,,"I_alu_ctl","control_txl"
 "TYA",-1,,"next_a","O_alu_result"
-"TYA",-1,,"next_p[Z_bit]","O_alu_zero"
-"TYA",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "TXA",-1,,"next_t",0
 "TXA",-1,,"I_alu_lhs","curr_x"
 "TXA",-1,,"I_alu_ctl","control_txl"
 "TXA",-1,,"next_a","O_alu_result"
-"TXA",-1,,"next_p[Z_bit]","O_alu_zero"
-"TXA",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "TSX",-1,,"next_t",0
 "TSX",-1,,"I_alu_lhs","curr_s"
 "TSX",-1,,"I_alu_ctl","control_txl"
 "TSX",-1,,"next_x","O_alu_result"
-"TSX",-1,,"next_p[Z_bit]","O_alu_zero"
-"TSX",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "TXS",-1,,"next_t",0
 "TXS",-1,,"I_alu_lhs","curr_x"
 "TXS",-1,,"I_alu_ctl","control_nop"
 "TXS",-1,,"next_s","O_alu_result"
-"TXS",-1,,"next_p[Z_bit]","O_alu_zero"
-"TXS",-1,,"next_p[N_bit]","O_alu_sign"
 ,,,,
 "JSR",-1,,"O_addr","curr_pc"
 "JSR",-1,,"O_rdwr",1
