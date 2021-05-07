@@ -225,6 +225,9 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_p[C_bit]  = O_alu_carry;
       next_p[N_bit]  = O_alu_sign;
       next_p[Z_bit]  = O_alu_zero;
+      
+      next_p[D_bit]  = curr_p[D_bit];
+      next_p[I_bit]  = curr_p[I_bit];
 
       O_addr         = curr_pc;      
       O_rdwr         = 1;

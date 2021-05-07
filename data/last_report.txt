@@ -1,0 +1,94 @@
+Flow Status  Successful - Thu May 06 18:08:14 2021
+Quartus Prime Version  20.1.1 Build 720 11/11/2020 SJ Lite Edition
+Revision Name  FPGame
+Top-level Entity Name  top
+Family  Cyclone V
+Device  5CEFA2F23I7
+Timing Models  Final
+Logic utilization (in ALMs)  814 / 9,430 ( 9 % )
+Total registers  227
+Total pins  111 / 224 ( 50 % )
+Total virtual pins  0
+Total block memory bits  524,288 / 1,802,240 ( 29 % )
+Total DSP Blocks  0 / 25 ( 0 % )
+Total HSSI RX PCSs  0
+Total HSSI PMA RX Deserializers  0
+Total HSSI TX PCSs  0
+Total HSSI PMA TX Serializers  0
+Total PLLs  1 / 4 ( 25 % )
+Total DLLs  0 / 4 ( 0 % )
+
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+
+Flow Status  Successful - Thu May 06 23:24:51 2021
+Quartus Prime Version  20.1.1 Build 720 11/11/2020 SJ Lite Edition
+Revision Name  FPGame
+Top-level Entity Name  top
+Family  Cyclone V
+Device  5CEFA2F23I7
+Timing Models  Final
+Logic utilization (in ALMs)  814 / 9,430 ( 9 % )
+Total registers  227
+Total pins  111 / 224 ( 50 % )
+Total virtual pins  0
+Total block memory bits  524,288 / 1,802,240 ( 29 % )
+Total DSP Blocks  0 / 25 ( 0 % )
+Total HSSI RX PCSs  0
+Total HSSI PMA RX Deserializers  0
+Total HSSI TX PCSs  0
+Total HSSI PMA TX Serializers  0
+Total PLLs  1 / 4 ( 25 % )
+Total DLLs  0 / 4 ( 0 % )
+
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+
+Flow Status  Successful - Fri May 07 21:37:43 2021
+Quartus Prime Version  20.1.1 Build 720 11/11/2020 SJ Lite Edition
+Revision Name  FPGame
+Top-level Entity Name  top
+Family  Cyclone V
+Device  5CEFA2F23I7
+Timing Models  Final
+Logic utilization (in ALMs)  789 / 9,430 ( 8 % )
+Total registers  214
+Total pins  111 / 224 ( 50 % )
+Total virtual pins  0
+Total block memory bits  524,288 / 1,802,240 ( 29 % )
+Total DSP Blocks  0 / 25 ( 0 % )
+Total HSSI RX PCSs  0
+Total HSSI PMA RX Deserializers  0
+Total HSSI TX PCSs  0
+Total HSSI PMA TX Serializers  0
+Total PLLs  1 / 4 ( 25 % )
+Total DLLs  0 / 4 ( 0 % )
+
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+
+Flow Status  Successful - Fri May 07 21:45:16 2021
+Quartus Prime Version  20.1.1 Build 720 11/11/2020 SJ Lite Edition
+Revision Name  FPGame
+Top-level Entity Name  top
+Family  Cyclone V
+Device  5CEFA2F23I7
+Timing Models  Final
+Logic utilization (in ALMs)  777 / 9,430 ( 8 % )
+Total registers  237
+Total pins  111 / 224 ( 50 % )
+Total virtual pins  0
+Total block memory bits  524,288 / 1,802,240 ( 29 % )
+Total DSP Blocks  0 / 25 ( 0 % )
+Total HSSI RX PCSs  0
+Total HSSI PMA RX Deserializers  0
+Total HSSI TX PCSs  0
+Total HSSI PMA TX Serializers  0
+Total PLLs  1 / 4 ( 25 % )
+Total DLLs  0 / 4 ( 0 % )
