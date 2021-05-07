@@ -3,19 +3,16 @@
 ,,,,
 "NOP*",-1,,"next_t",0
 ,,,,
-"LDX",-1,,"O_rdwr",1
 "LDX",-1,,"I_alu_rhs","I_rd_data"
 "LDX",-1,,"I_alu_ctl","control_txr"
 "LDX",-1,,"next_x","O_alu_result"
 "LDX",-1,,"next_t",0
 ,,,,
-"LDA",-1,,"O_rdwr",1
 "LDA",-1,,"I_alu_rhs","I_rd_data"
 "LDA",-1,,"I_alu_ctl","control_txr"
 "LDA",-1,,"next_a","O_alu_result"
 "LDA",-1,,"next_t",0
 ,,,,
-"LDY",-1,,"O_rdwr",1
 "LDY",-1,,"I_alu_rhs","I_rd_data"
 "LDY",-1,,"I_alu_ctl","control_txr"
 "LDY",-1,,"next_y","O_alu_result"
@@ -27,17 +24,17 @@
 "LAX*",-1,,"next_a","O_alu_result"
 "LAX*",-1,,"next_x","O_alu_result"
 ,,,,
+"STX",-1,,"O_rdwr",0
 "STX",-1,,"O_wr_data","curr_x"
 "STX",-1,,"next_t",0
-"STX",-1,,"O_rdwr",0
 ,,,,
+"STA",-1,,"O_rdwr",0
 "STA",-1,,"O_wr_data","curr_a"
 "STA",-1,,"next_t",0
-"STA",-1,,"O_rdwr",0
 ,,,,
+"STY",-1,,"O_rdwr",0
 "STY",-1,,"O_wr_data","curr_y"
 "STY",-1,,"next_t",0
-"STY",-1,,"O_rdwr",0
 ,,,,
 "AXS*",-1,,"O_rdwr",0
 "AXS*",-1,,"I_alu_ctl","control_and"
@@ -99,22 +96,18 @@
 "PHA",0,,"next_t",0
 ,,,,
 "PLP",0,,"O_addr","curr_sp"
-"PLP",0,,"O_rdwr",1
 "PLP",0,,"next_s","curr_s_p1"
 "PLP",0,,"next_t","curr_t_p1 "
 ,,,,
 "PLP",1,,"O_addr","curr_sp"
-"PLP",1,,"O_rdwr",1
 "PLP",1,,"next_p","I_rd_data"
 "PLP",1,,"next_t",0
 ,,,,
 "PLA",0,,"O_addr","curr_sp"
-"PLA",0,,"O_rdwr",1
 "PLA",0,,"next_s","curr_s_p1"
 "PLA",0,,"next_t","curr_t_p1 "
 ,,,,
 "PLA",1,,"O_addr","curr_sp"
-"PLA",1,,"O_rdwr",1
 "PLA",1,,"I_alu_ctl","control_txr"
 "PLA",1,,"I_alu_rhs","I_rd_data"
 "PLA",1,,"next_a","O_alu_result"
@@ -141,7 +134,6 @@
 "ROL A",-1,,"next_a","O_alu_result"
 ,,,,
 "LSR",-1,,"O_addr","curr_ad"
-"LSR",-1,,"O_rdwr",1
 "LSR",-1,,"next_rmw","I_rd_data"
 "LSR",-1,,"next_t","curr_t_p1 "
 ,,,,
@@ -160,7 +152,6 @@
 "LSR",1,,"next_t",0
 ,,,,
 "ASL",-1,,"O_addr","curr_ad"
-"ASL",-1,,"O_rdwr",1
 "ASL",-1,,"next_rmw","I_rd_data"
 "ASL",-1,,"next_t","curr_t_p1 "
 ,,,,
@@ -179,7 +170,6 @@
 "ASL",1,,"next_t",0
 ,,,,
 "ASO*",-1,,"O_addr","curr_ad"
-"ASO*",-1,,"O_rdwr",1
 "ASO*",-1,,"I_alu_ctl","control_asl"
 "ASO*",-1,,"I_alu_lhs","I_rd_data"
 "ASO*",-1,,"next_rmw","O_alu_result"
@@ -191,7 +181,6 @@
 "ASO*",0,,"next_t","curr_t_p1 "
 ,,,,
 "ASO*",1,,"O_addr","curr_ad"
-"ASO*",1,,"O_rdwr",1
 "ASO*",1,,"I_alu_ctl","control_or"
 "ASO*",1,,"I_alu_lhs","curr_a"
 "ASO*",1,,"I_alu_rhs","I_rd_data"
@@ -199,7 +188,6 @@
 "ASO*",1,,"next_t",0
 ,,,,
 "RLA*",-1,,"O_addr","curr_ad"
-"RLA*",-1,,"O_rdwr",1
 "RLA*",-1,,"I_alu_ctl","control_rol"
 "RLA*",-1,,"I_alu_lhs","I_rd_data"
 "RLA*",-1,,"next_rmw","O_alu_result"
@@ -211,7 +199,6 @@
 "RLA*",0,,"next_t","curr_t_p1 "
 ,,,,
 "RLA*",1,,"O_addr","curr_ad"
-"RLA*",1,,"O_rdwr",1
 "RLA*",1,,"I_alu_ctl","control_and"
 "RLA*",1,,"I_alu_lhs","curr_a"
 "RLA*",1,,"I_alu_rhs","I_rd_data"
@@ -219,7 +206,6 @@
 "RLA*",1,,"next_t",0
 ,,,,
 "LSE*",-1,,"O_addr","curr_ad"
-"LSE*",-1,,"O_rdwr",1
 "LSE*",-1,,"I_alu_ctl","control_lsr"
 "LSE*",-1,,"I_alu_lhs","I_rd_data"
 "LSE*",-1,,"next_rmw","O_alu_result"
@@ -231,7 +217,6 @@
 "LSE*",0,,"next_t","curr_t_p1 "
 ,,,,
 "LSE*",1,,"O_addr","curr_ad"
-"LSE*",1,,"O_rdwr",1
 "LSE*",1,,"I_alu_ctl","control_xor"
 "LSE*",1,,"I_alu_lhs","curr_a"
 "LSE*",1,,"I_alu_rhs","I_rd_data"
@@ -239,7 +224,6 @@
 "LSE*",1,,"next_t",0
 ,,,,
 "RRA*",-1,,"O_addr","curr_ad"
-"RRA*",-1,,"O_rdwr",1
 "RRA*",-1,,"I_alu_ctl","control_ror"
 "RRA*",-1,,"I_alu_lhs","I_rd_data"
 "RRA*",-1,,"next_rmw","O_alu_result"
@@ -251,7 +235,6 @@
 "RRA*",0,,"next_t","curr_t_p1 "
 ,,,,
 "RRA*",1,,"O_addr","curr_ad"
-"RRA*",1,,"O_rdwr",1
 "RRA*",1,,"I_alu_ctl","control_adc"
 "RRA*",1,,"I_alu_lhs","curr_a"
 "RRA*",1,,"I_alu_rhs","I_rd_data"
@@ -259,7 +242,6 @@
 "RRA*",1,,"next_t",0
 ,,,,
 "ROR",-1,,"O_addr","curr_ad"
-"ROR",-1,,"O_rdwr",1
 "ROR",-1,,"next_rmw","I_rd_data"
 "ROR",-1,,"next_t","curr_t_p1 "
 ,,,,
@@ -277,7 +259,6 @@
 "ROR",1,,"next_t",0
 ,,,,
 "ROL",-1,,"O_addr","curr_ad"
-"ROL",-1,,"O_rdwr",1
 "ROL",-1,,"next_rmw","I_rd_data"
 "ROL",-1,,"next_t","curr_t_p1 "
 ,,,,
@@ -330,7 +311,6 @@
 "SBC",-1,,"next_a","O_alu_result"
 ,,,,
 "ISB*",-1,,"O_addr","curr_ad"
-"ISB*",-1,,"O_rdwr",1
 "ISB*",-1,,"I_alu_ctl","control_inc"
 "ISB*",-1,,"I_alu_lhs","I_rd_data"
 "ISB*",-1,,"next_rmw","O_alu_result"
@@ -356,7 +336,6 @@
 "CMP",-1,,"I_alu_rhs","I_rd_data"
 ,,,,
 "DCM*",-1,,"O_addr","curr_ad"
-"DCM*",-1,,"O_rdwr",1
 "DCM*",-1,,"I_alu_ctl","control_dec"
 "DCM*",-1,,"I_alu_lhs","I_rd_data"
 "DCM*",-1,,"next_rmw","O_alu_result"
@@ -396,7 +375,6 @@
 "INY",-1,,"next_y","O_alu_result"
 ,,,,
 "INC",-1,,"O_addr","curr_ad"
-"INC",-1,,"O_rdwr",1
 "INC",-1,,"next_rmw","I_rd_data"
 "INC",-1,,"next_t","curr_t_p1 "
 ,,,,
@@ -414,7 +392,6 @@
 "INC",1,,"next_t",0
 ,,,,
 "DEC",-1,,"O_addr","curr_ad"
-"DEC",-1,,"O_rdwr",1
 "DEC",-1,,"next_rmw","I_rd_data"
 "DEC",-1,,"next_t","curr_t_p1 "
 ,,,,
@@ -472,13 +449,11 @@
 "TXS",-1,,"next_s","O_alu_result"
 ,,,,
 "JSR",-1,,"O_addr","curr_pc"
-"JSR",-1,,"O_rdwr",1
 "JSR",-1,,"next_ad[7:0]","I_rd_data"
 "JSR",-1,,"next_pc","curr_pc_p1"
 "JSR",-1,,"next_t","curr_t_p1 "
 ,,,,
 "JSR",0,,"O_addr","curr_sp"
-"JSR",0,,"O_rdwr",1
 "JSR",0,,"next_t","curr_t_p1 "
 ,,,,
 "JSR",1,,"O_addr","curr_sp"
@@ -494,7 +469,6 @@
 "JSR",2,,"next_t","curr_t_p1 "
 ,,,,
 "JSR",3,,"O_addr","curr_pc"
-"JSR",3,,"O_rdwr",1
 "JSR",3,,"next_ad[15:8]","I_rd_data"
 "JSR",3,,"next_t",0
 "JSR",3,,"next_pc","next_ad"
@@ -503,58 +477,47 @@
 "JMP",-1,,"next_pc","next_ad"
 ,,,,
 "RTS",-1,,"O_addr","curr_pc"
-"RTS",-1,,"O_rdwr",1
 "RTS",-1,,"next_t","curr_t_p1 "
 ,,,,
 "RTS",0,,"O_addr","curr_sp"
-"RTS",0,,"O_rdwr",1
 "RTS",0,,"next_s","curr_s_p1"
 "RTS",0,,"next_t","curr_t_p1 "
 ,,,,
 "RTS",1,,"O_addr","curr_sp"
-"RTS",1,,"O_rdwr",1
 "RTS",1,,"next_pc[7:0]","I_rd_data"
 "RTS",1,,"next_s","curr_s_p1"
 "RTS",1,,"next_t","curr_t_p1 "
 ,,,,
 "RTS",2,,"O_addr","curr_sp"
-"RTS",2,,"O_rdwr",1
 "RTS",2,,"next_pc[15:8]","I_rd_data"
 "RTS",2,,"next_t","curr_t_p1 "
 ,,,,
 "RTS",3,,"O_addr","curr_pc"
-"RTS",3,,"O_rdwr",1
 "RTS",3,,"next_t",0
 "RTS",3,,"next_pc","curr_pc_p1"
 ,,,,
 "RTI",-1,,"O_addr","curr_pc"
-"RTI",-1,,"O_rdwr",1
 "RTI",-1,,"next_t","curr_t_p1 "
 ,,,,
 "RTI",0,,"O_addr","curr_sp"
-"RTI",0,,"O_rdwr",1
 "RTI",0,,"next_s","curr_s_p1"
 "RTI",0,,"next_t","curr_t_p1 "
 ,,,,
 "RTI",1,,"O_addr","curr_sp"
-"RTI",1,,"O_rdwr",1
 "RTI",1,,"next_s","curr_s_p1"
 "RTI",1,,"next_p","I_rd_data"
 "RTI",1,,"next_t","curr_t_p1 "
 ,,,,
 "RTI",2,,"O_addr","curr_sp"
-"RTI",2,,"O_rdwr",1
 "RTI",2,,"next_s","curr_s_p1"
 "RTI",2,,"next_pc[7:0]","I_rd_data"
 "RTI",2,,"next_t","curr_t_p1 "
 ,,,,
 "RTI",3,,"O_addr","curr_sp"
-"RTI",3,,"O_rdwr",1
 "RTI",3,,"next_pc[15:8]","I_rd_data"
 "RTI",3,,"next_t",0
 ,,,,
 "BRK",-1,,"O_addr","curr_pc"
-"BRK",-1,,"O_rdwr",1
 "BRK",-1,,"next_t","curr_t_p1 "
 ,,,,
 "BRK",0,,"O_addr","curr_sp"
@@ -577,12 +540,10 @@
 "BRK",2,,"next_t","curr_t_p1 "
 ,,,,
 "BRK",3,,"O_addr","vec_addr_lo"
-"BRK",3,,"O_rdwr",1
 "BRK",3,,"next_ad[7:0]","I_rd_data"
 "BRK",3,,"next_t","curr_t_p1 "
 ,,,,
 "BRK",4,,"O_addr","vec_addr_hi"
-"BRK",4,,"O_rdwr",1
 "BRK",4,,"next_ad[15:8]","I_rd_data"
 "BRK",4,,"next_pc","next_ad"
 "BRK",4,,"next_t",0
