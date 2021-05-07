@@ -182,7 +182,6 @@
 "ASO*",-1,,"O_rdwr",1
 "ASO*",-1,,"I_alu_ctl","control_asl"
 "ASO*",-1,,"I_alu_lhs","I_rd_data"
-"ASO*",-1,,"next_p[C_bit]","O_alu_carry"
 "ASO*",-1,,"next_rmw","O_alu_result"
 "ASO*",-1,,"next_t","curr_t_p1 "
 ,,,,
@@ -197,8 +196,6 @@
 "ASO*",1,,"I_alu_lhs","curr_a"
 "ASO*",1,,"I_alu_rhs","I_rd_data"
 "ASO*",1,,"next_a","O_alu_result"
-"ASO*",1,,"next_p[Z_bit]","O_alu_zero"
-"ASO*",1,,"next_p[N_bit]","O_alu_sign"
 "ASO*",1,,"next_t",0
 ,,,,
 "RLA*",-1,,"O_addr","curr_ad"
