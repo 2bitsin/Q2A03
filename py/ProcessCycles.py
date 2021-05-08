@@ -135,8 +135,23 @@ class ProcessCycles:
     return 
 
   def write_out_control(self, writer, indexes, last_index):
+    map_target = {}
     for action, index in indexes.items(): 
-      writer.write_line ('if (G_control[%3u]) %s = %s;' % (index, action[0], action[1]))
+      lhs, rhs = action
+      if lhs not in map_target:
+        map_target[lhs] = {}
+      map_target[lhs][rhs] = index
+
+    for lhs, rhs_index in map_target.items():
+      is_first = True
+      for rhs, index  in rhs_index.items():
+        combo = (index, lhs, rhs)
+        if is_first:               
+          writer.write_line ('     if (G_control[%3u]) %s = %s;' % combo)
+        else:
+          writer.write_line ('else if (G_control[%3u]) %s = %s;' % combo)
+        is_first = False
+      writer.write_line('')
     return
 
 
