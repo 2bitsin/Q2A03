@@ -278,9 +278,6 @@
 	if (((curr_t == 4'd1)&(curr_ir == 8'h18)))
 		next_p[C_bit] = 0;
 	
-	if (((curr_t == 4'd3)&((curr_ir == 8'h7D)|(curr_ir == 8'h1C)|(curr_ir == 8'h3F)|(curr_ir == 8'hDD)|(curr_ir == 8'hBD)|(curr_ir == 8'h7C)|(curr_ir == 8'h7F)|(curr_ir == 8'hDF)|(curr_ir == 8'h5F)|(curr_ir == 8'h3D)|(curr_ir == 8'h3C)|(curr_ir == 8'hDC)|(curr_ir == 8'h1D)|(curr_ir == 8'hFF)|(curr_ir == 8'h5C)|(curr_ir == 8'h1F)|(curr_ir == 8'hBC)|(curr_ir == 8'h5D)|(curr_ir == 8'hFC)|(curr_ir == 8'hFD))))
-		I_addr_rhs = 0;
-	
 	if (((curr_t == 4'd4)&((curr_ir == 8'h3D)|(curr_ir == 8'h39)|(curr_ir == 8'h27)))|
 	    ((curr_t == 4'd5)&((curr_ir == 8'h37)|(curr_ir == 8'h31)|(curr_ir == 8'h21)|(curr_ir == 8'h2F)|(curr_ir == 8'h83)))|
 	    ((curr_t == 4'd7)&((curr_ir == 8'h33)|(curr_ir == 8'h23)))|
@@ -345,9 +342,6 @@
 	    ((curr_t == 4'd4)&((curr_ir == 8'h99)|(curr_ir == 8'h9D)))|
 	    ((curr_t == 4'd5)&((curr_ir == 8'h91)|(curr_ir == 8'h81))))
 		O_wr_data = curr_a;
-	
-	if (((curr_t == 4'd2)&(curr_ir == 8'h4C)))
-		O_rdwr = 1;
 	
 	if (((curr_t == 4'd1)&(curr_ir == 8'h50)))
 		next_t = (curr_p[V_bit] ? 0 : (curr_t_p1));

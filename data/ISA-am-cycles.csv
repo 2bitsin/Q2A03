@@ -32,7 +32,6 @@
 ,,,,
 "Absolute*",2,,"O_addr","curr_pc"
 "Absolute*",2,,"next_pc","curr_pc_p1"
-"Absolute*",2,,"O_rdwr",1
 "Absolute*",2,,"next_ad[15:8]","I_rd_data"
 "Absolute*",2,,"next_t","curr_t_p1 "
 ,,,,
@@ -82,7 +81,6 @@
 "Absolute, X",3,,"O_addr","curr_ad"
 "Absolute, X",3,,"I_addr_carry","curr_ba[8]"
 "Absolute, X",3,,"I_addr_lhs","curr_ad[15:8]"
-"Absolute, X",3,,"I_addr_rhs",0
 "Absolute, X",3,,"next_ad[15:8]","O_addr_sum"
 "Absolute, X",3,,"next_t","curr_t_p1"
 ,,,,
