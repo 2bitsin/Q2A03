@@ -1,5 +1,6 @@
 module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdwr, I_ready, O_sync, O_phy2);
-  import core_alu_ctl::*;
+
+  import core_alu_control::*;
 
   localparam C_bit = 0 ;
   localparam Z_bit = 1 ;
@@ -41,9 +42,9 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   output  wire        O_phy2;
 
 /* Debug state */
-
+`ifdef VERILATOR
   reg32_type    debug_tick    ;
-
+`endif
 /* Timing generation */
 
   bit           last_phy2     ;
@@ -65,7 +66,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire[7:0]     curr_y        ;
   wire[7:0]     curr_s        ;
   wire[7:0]     curr_p        ;
-  wire[7:0]     curr_rmw      ;
+  wire[7:0]     curr_dr       ;
   wire[15:0]    curr_pc       ;
   wire[15:0]    curr_ad       ;
   wire[15:0]    curr_ba       ;
@@ -77,15 +78,25 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   reg8_type     next_y        ;
   reg8_type     next_s        ;
   reg8_type     next_p        ;
-  reg8_type     next_rmw      ;
+  reg8_type     next_dr       ;
   reg16_type    next_pc       ;
   reg16_type    next_ad       ;
   reg16_type    next_ba       ;
 
+/* Decoder logic */
+
+  wire[100:0] G_control;
+
+  core_decoder inst_core_decoder 
+               ( .I_ir      (curr_ir),
+                 .I_t       (curr_t),
+                 .O_control (G_control));
+
 /* Misc derivatives */
 
-  wire[15:0]    curr_sp       = {8'h01, curr_s};
+
   wire[15:0]    curr_pc_p1    = curr_pc + 16'd1;
+  wire[15:0]    curr_sp       = {8'h01, curr_s};
   wire[7:0]     curr_s_p1     = curr_s  +  8'd1;
   wire[7:0]     curr_s_m1     = curr_s  -  8'd1;
   wire[3:0]     curr_t_p1     = curr_t  +  4'd1;
@@ -111,7 +122,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   register      reg_x     (I_clock, I_reset, edge_fall, next_x,     curr_x    );
   register      reg_y     (I_clock, I_reset, edge_fall, next_y,     curr_y    );
   register      reg_s     (I_clock, I_reset, edge_fall, next_s,     curr_s    );
-  register      reg_rmw   (I_clock, I_reset, edge_fall, next_rmw,   curr_rmw  );
+  register      reg_rmw   (I_clock, I_reset, edge_fall, next_dr,    curr_dr   );
   register#(16) reg_pc    (I_clock, I_reset, edge_fall, next_pc,    curr_pc   );
   register#(16) reg_ad    (I_clock, I_reset, edge_fall, next_ad,    curr_ad   );
   register#(16) reg_ba    (I_clock, I_reset, edge_fall, next_ba,    curr_ba   );
@@ -192,7 +203,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       O_rdwr         = 1;
       O_wr_data      = 0;
 
-      next_rmw       = 0;
+      next_dr        = 0;
       next_pc        = 0;
       next_ir        = 0;
       next_ad        = 0;
@@ -217,10 +228,12 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       I_alu_mask_p   = 1;
       I_alu_lhs      = 0;
       I_alu_rhs      = 0;
+
       I_alu_overflow = curr_p[V_bit];
       I_alu_carry    = curr_p[C_bit];
       I_alu_sign     = curr_p[N_bit];
       I_alu_zero     = curr_p[Z_bit];
+
       next_p[V_bit]  = O_alu_overflow;
       next_p[C_bit]  = O_alu_carry;
       next_p[N_bit]  = O_alu_sign;
@@ -237,7 +250,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       I_addr_rhs     = 0; 
       I_addr_carry   = 0;
 
-      next_rmw       = curr_rmw;
+      next_dr        = curr_dr;
       next_pc        = curr_pc;
       next_ir        = curr_ir;
       next_ad        = curr_ad;
@@ -248,7 +261,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_y         = curr_y;
       next_s         = curr_s;
         
-      `include "cycles.svi"
+      `include "core_control.svi"
     end    
   end
   
@@ -256,8 +269,10 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   begin
     if (~I_reset)
     begin
-      /* Reset state */           
+      /* Reset state */   
+    `ifdef VERILATOR
       debug_tick <= -21;
+    `endif 
 
       tick       <= 0;
       last_phy2  <= 0;
@@ -308,8 +323,10 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
           if (irq_p) irq_p <= 0;         
       end 
 
+    `ifdef VERILATOR
       if (edge_fall)
         debug_tick <= debug_tick + 3;
+    `endif
     end    
   end
   
@@ -321,9 +338,8 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
     output reg8_type s; 
     output reg8_type p; 
     output reg8_type ir; 
-    output reg8_type pcl; 
-    output reg8_type pch;
-    output reg32_type cyc;
+    output reg16_type pc;     
+    output reg32_type t;
     begin
       a   = curr_a;
       x   = curr_x;
@@ -331,9 +347,8 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       s   = curr_s;      
       p   = curr_p;
       ir  = curr_ir;
-      pcl = curr_pc[7:0];
-      pch = curr_pc[15:8];
-      cyc = debug_tick;
+      pc  = curr_pc;      
+      t   = debug_tick;
     end
   endtask;
   export "DPI-C" task read_state;

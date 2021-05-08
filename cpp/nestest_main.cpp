@@ -17,7 +17,6 @@ double sc_time_stamp()
 int main(int argc, char** argv)
 { 
   unsigned char ram [0x800];
-  uint8_t a,x,y,s,p,ir,pcl,pch;
   
   std::memset(ram, 0x00, sizeof(ram));
 
@@ -82,13 +81,15 @@ int main(int argc, char** argv)
       if (std::size(nesttest_log) <= log_index)
         break;
 
-      tb.read_state(&a, &x, &y, &s, &p, &ir, &pcl, &pch, (unsigned*)&cycles);    
+      uint8_t a,x,y,s,p,ir;
+      uint16_t pc;  
+      tb.read_state(&a, &x, &y, &s, &p, &ir, &pc, (unsigned*)&cycles);    
     #if !defined(TEST_INTERRUPTS) || !TEST_INTERRUPTS
       if (cycles >= 0)
       {
         const auto& st_snapshot = nesttest_log[log_index++];
         const auto clocks = st_snapshot.ppuclock;      
-        const auto pc = (pch * 0x100 + pcl);
+        
         std::printf("[%-4d] %-15s ", log_index, st_snapshot.disassembly);
         switch(st_snapshot.nbytes)
         {

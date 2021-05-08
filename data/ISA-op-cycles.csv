@@ -1,6 +1,4 @@
 "Instruction","Cycle ","Condition","Target","Assign"
-"HLT*",-1,,"next_t",-1
-,,,,
 "NOP*",-1,,"next_t",0
 ,,,,
 "LDX",-1,,"I_alu_rhs","I_rd_data"
@@ -67,21 +65,21 @@
 "CLV",-1,,"next_p[V_bit]",0
 "CLV",-1,,"next_t",0
 ,,,,
-"BCS",-3,,"next_t","(curr_p[C_bit] ? (curr_t_p1) : 0)"
+"BCS",-3,,"next_t","( curr_p[C_bit] ? (curr_t_p1) : 0)"
 ,,,,
-"BCC",-3,,"next_t","(curr_p[C_bit] ? 0 : (curr_t_p1))"
+"BCC",-3,,"next_t","(~curr_p[C_bit] ? (curr_t_p1) : 0)"
 ,,,,
-"BEQ",-3,,"next_t","(curr_p[Z_bit] ? (curr_t_p1) : 0)"
+"BEQ",-3,,"next_t","( curr_p[Z_bit] ? (curr_t_p1) : 0)"
 ,,,,
-"BNE",-3,,"next_t","(curr_p[Z_bit] ? 0 : (curr_t_p1))"
+"BNE",-3,,"next_t","(~curr_p[Z_bit] ? (curr_t_p1) : 0)"
 ,,,,
-"BMI",-3,,"next_t","(curr_p[N_bit] ? (curr_t_p1) : 0)"
+"BMI",-3,,"next_t","( curr_p[N_bit] ? (curr_t_p1) : 0)"
 ,,,,
-"BPL",-3,,"next_t","(curr_p[N_bit] ? 0 : (curr_t_p1))"
+"BPL",-3,,"next_t","(~curr_p[N_bit] ? (curr_t_p1) : 0)"
 ,,,,
-"BVS",-3,,"next_t","(curr_p[V_bit] ? (curr_t_p1) : 0)"
+"BVS",-3,,"next_t","( curr_p[V_bit] ? (curr_t_p1) : 0)"
 ,,,,
-"BVC",-3,,"next_t","(curr_p[V_bit] ? 0 : (curr_t_p1))"
+"BVC",-3,,"next_t","(~curr_p[V_bit] ? (curr_t_p1) : 0)"
 ,,,,
 "PHP",0,,"O_addr","curr_sp"
 "PHP",0,,"O_rdwr",0
@@ -134,37 +132,37 @@
 "ROL A",-1,,"next_a","O_alu_result"
 ,,,,
 "LSR",-1,,"O_addr","curr_ad"
-"LSR",-1,,"next_rmw","I_rd_data"
+"LSR",-1,,"next_dr","I_rd_data"
 "LSR",-1,,"next_t","curr_t_p1 "
 ,,,,
 "LSR",0,,"O_addr","curr_ad"
 "LSR",0,,"O_rdwr",0
-"LSR",0,,"I_alu_lhs","curr_rmw"
+"LSR",0,,"I_alu_lhs","curr_dr"
 "LSR",0,,"I_alu_ctl","control_lsr"
 "LSR",0,,"O_wr_data","O_alu_result"
 "LSR",0,,"next_t","curr_t_p1 "
 ,,,,
 "LSR",1,,"O_addr","curr_ad"
 "LSR",1,,"O_rdwr",0
-"LSR",1,,"I_alu_lhs","curr_rmw"
+"LSR",1,,"I_alu_lhs","curr_dr"
 "LSR",1,,"I_alu_ctl","control_lsr"
 "LSR",1,,"O_wr_data","O_alu_result"
 "LSR",1,,"next_t",0
 ,,,,
 "ASL",-1,,"O_addr","curr_ad"
-"ASL",-1,,"next_rmw","I_rd_data"
+"ASL",-1,,"next_dr","I_rd_data"
 "ASL",-1,,"next_t","curr_t_p1 "
 ,,,,
 "ASL",0,,"O_addr","curr_ad"
 "ASL",0,,"O_rdwr",0
-"ASL",0,,"I_alu_lhs","curr_rmw"
+"ASL",0,,"I_alu_lhs","curr_dr"
 "ASL",0,,"I_alu_ctl","control_asl"
 "ASL",0,,"O_wr_data","O_alu_result"
 "ASL",0,,"next_t","curr_t_p1 "
 ,,,,
 "ASL",1,,"O_addr","curr_ad"
 "ASL",1,,"O_rdwr",0
-"ASL",1,,"I_alu_lhs","curr_rmw"
+"ASL",1,,"I_alu_lhs","curr_dr"
 "ASL",1,,"I_alu_ctl","control_asl"
 "ASL",1,,"O_wr_data","O_alu_result"
 "ASL",1,,"next_t",0
@@ -172,12 +170,12 @@
 "ASO*",-1,,"O_addr","curr_ad"
 "ASO*",-1,,"I_alu_ctl","control_asl"
 "ASO*",-1,,"I_alu_lhs","I_rd_data"
-"ASO*",-1,,"next_rmw","O_alu_result"
+"ASO*",-1,,"next_dr","O_alu_result"
 "ASO*",-1,,"next_t","curr_t_p1 "
 ,,,,
 "ASO*",0,,"O_addr","curr_ad"
 "ASO*",0,,"O_rdwr",0
-"ASO*",0,,"O_wr_data","curr_rmw"
+"ASO*",0,,"O_wr_data","curr_dr"
 "ASO*",0,,"next_t","curr_t_p1 "
 ,,,,
 "ASO*",1,,"O_addr","curr_ad"
@@ -190,12 +188,12 @@
 "RLA*",-1,,"O_addr","curr_ad"
 "RLA*",-1,,"I_alu_ctl","control_rol"
 "RLA*",-1,,"I_alu_lhs","I_rd_data"
-"RLA*",-1,,"next_rmw","O_alu_result"
+"RLA*",-1,,"next_dr","O_alu_result"
 "RLA*",-1,,"next_t","curr_t_p1 "
 ,,,,
 "RLA*",0,,"O_addr","curr_ad"
 "RLA*",0,,"O_rdwr",0
-"RLA*",0,,"O_wr_data","curr_rmw"
+"RLA*",0,,"O_wr_data","curr_dr"
 "RLA*",0,,"next_t","curr_t_p1 "
 ,,,,
 "RLA*",1,,"O_addr","curr_ad"
@@ -208,12 +206,12 @@
 "LSE*",-1,,"O_addr","curr_ad"
 "LSE*",-1,,"I_alu_ctl","control_lsr"
 "LSE*",-1,,"I_alu_lhs","I_rd_data"
-"LSE*",-1,,"next_rmw","O_alu_result"
+"LSE*",-1,,"next_dr","O_alu_result"
 "LSE*",-1,,"next_t","curr_t_p1 "
 ,,,,
 "LSE*",0,,"O_addr","curr_ad"
 "LSE*",0,,"O_rdwr",0
-"LSE*",0,,"O_wr_data","curr_rmw"
+"LSE*",0,,"O_wr_data","curr_dr"
 "LSE*",0,,"next_t","curr_t_p1 "
 ,,,,
 "LSE*",1,,"O_addr","curr_ad"
@@ -226,12 +224,12 @@
 "RRA*",-1,,"O_addr","curr_ad"
 "RRA*",-1,,"I_alu_ctl","control_ror"
 "RRA*",-1,,"I_alu_lhs","I_rd_data"
-"RRA*",-1,,"next_rmw","O_alu_result"
+"RRA*",-1,,"next_dr","O_alu_result"
 "RRA*",-1,,"next_t","curr_t_p1 "
 ,,,,
 "RRA*",0,,"O_addr","curr_ad"
 "RRA*",0,,"O_rdwr",0
-"RRA*",0,,"O_wr_data","curr_rmw"
+"RRA*",0,,"O_wr_data","curr_dr"
 "RRA*",0,,"next_t","curr_t_p1 "
 ,,,,
 "RRA*",1,,"O_addr","curr_ad"
@@ -242,37 +240,37 @@
 "RRA*",1,,"next_t",0
 ,,,,
 "ROR",-1,,"O_addr","curr_ad"
-"ROR",-1,,"next_rmw","I_rd_data"
+"ROR",-1,,"next_dr","I_rd_data"
 "ROR",-1,,"next_t","curr_t_p1 "
 ,,,,
 "ROR",0,,"O_addr","curr_ad"
 "ROR",0,,"O_rdwr",0
-"ROR",0,,"O_wr_data","curr_rmw"
+"ROR",0,,"O_wr_data","curr_dr"
 "ROR",0,,"I_alu_ctl","control_ror"
-"ROR",0,,"I_alu_lhs","curr_rmw"
-"ROR",0,,"next_rmw","O_alu_result"
+"ROR",0,,"I_alu_lhs","curr_dr"
+"ROR",0,,"next_dr","O_alu_result"
 "ROR",0,,"next_t","curr_t_p1 "
 ,,,,
 "ROR",1,,"O_addr","curr_ad"
 "ROR",1,,"O_rdwr",0
-"ROR",1,,"O_wr_data","curr_rmw"
+"ROR",1,,"O_wr_data","curr_dr"
 "ROR",1,,"next_t",0
 ,,,,
 "ROL",-1,,"O_addr","curr_ad"
-"ROL",-1,,"next_rmw","I_rd_data"
+"ROL",-1,,"next_dr","I_rd_data"
 "ROL",-1,,"next_t","curr_t_p1 "
 ,,,,
 "ROL",0,,"O_addr","curr_ad"
 "ROL",0,,"O_rdwr",0
-"ROL",0,,"O_wr_data","curr_rmw"
+"ROL",0,,"O_wr_data","curr_dr"
 "ROL",0,,"I_alu_ctl","control_rol"
-"ROL",0,,"I_alu_lhs","curr_rmw"
-"ROL",0,,"next_rmw","O_alu_result"
+"ROL",0,,"I_alu_lhs","curr_dr"
+"ROL",0,,"next_dr","O_alu_result"
 "ROL",0,,"next_t","curr_t_p1 "
 ,,,,
 "ROL",1,,"O_addr","curr_ad"
 "ROL",1,,"O_rdwr",0
-"ROL",1,,"O_wr_data","curr_rmw"
+"ROL",1,,"O_wr_data","curr_dr"
 "ROL",1,,"next_t",0
 ,,,,
 "BIT",-1,,"next_t",0
@@ -313,21 +311,21 @@
 "ISB*",-1,,"O_addr","curr_ad"
 "ISB*",-1,,"I_alu_ctl","control_inc"
 "ISB*",-1,,"I_alu_lhs","I_rd_data"
-"ISB*",-1,,"next_rmw","O_alu_result"
+"ISB*",-1,,"next_dr","O_alu_result"
 "ISB*",-1,,"next_t","curr_t_p1 "
 ,,,,
 "ISB*",0,,"O_addr","curr_ad"
 "ISB*",0,,"O_rdwr",0
-"ISB*",0,,"O_wr_data","curr_rmw"
+"ISB*",0,,"O_wr_data","curr_dr"
 "ISB*",0,,"I_alu_ctl","control_sbc"
 "ISB*",0,,"I_alu_lhs","curr_a"
-"ISB*",0,,"I_alu_rhs","curr_rmw"
+"ISB*",0,,"I_alu_rhs","curr_dr"
 "ISB*",0,,"next_a","O_alu_result"
 "ISB*",0,,"next_t","curr_t_p1 "
 ,,,,
 "ISB*",1,,"O_addr","curr_ad"
 "ISB*",1,,"O_rdwr",0
-"ISB*",1,,"O_wr_data","curr_rmw"
+"ISB*",1,,"O_wr_data","curr_dr"
 "ISB*",1,,"next_t",0
 ,,,,
 "CMP",-1,,"next_t",0
@@ -338,20 +336,20 @@
 "DCM*",-1,,"O_addr","curr_ad"
 "DCM*",-1,,"I_alu_ctl","control_dec"
 "DCM*",-1,,"I_alu_lhs","I_rd_data"
-"DCM*",-1,,"next_rmw","O_alu_result"
+"DCM*",-1,,"next_dr","O_alu_result"
 "DCM*",-1,,"next_t","curr_t_p1 "
 ,,,,
 "DCM*",0,,"O_addr","curr_ad"
 "DCM*",0,,"O_rdwr",0
-"DCM*",0,,"O_wr_data","curr_rmw"
+"DCM*",0,,"O_wr_data","curr_dr"
 "DCM*",0,,"I_alu_ctl","control_cmp"
 "DCM*",0,,"I_alu_lhs","curr_a"
-"DCM*",0,,"I_alu_rhs","curr_rmw"
+"DCM*",0,,"I_alu_rhs","curr_dr"
 "DCM*",0,,"next_t","curr_t_p1 "
 ,,,,
 "DCM*",1,,"O_addr","curr_ad"
 "DCM*",1,,"O_rdwr",0
-"DCM*",1,,"O_wr_data","curr_rmw"
+"DCM*",1,,"O_wr_data","curr_dr"
 "DCM*",1,,"next_t",0
 ,,,,
 "CPX",-1,,"next_t",0
@@ -375,37 +373,37 @@
 "INY",-1,,"next_y","O_alu_result"
 ,,,,
 "INC",-1,,"O_addr","curr_ad"
-"INC",-1,,"next_rmw","I_rd_data"
+"INC",-1,,"next_dr","I_rd_data"
 "INC",-1,,"next_t","curr_t_p1 "
 ,,,,
 "INC",0,,"O_addr","curr_ad"
 "INC",0,,"O_rdwr",0
-"INC",0,,"O_wr_data","curr_rmw"
+"INC",0,,"O_wr_data","curr_dr"
 "INC",0,,"I_alu_ctl","control_inc"
-"INC",0,,"I_alu_lhs","curr_rmw"
-"INC",0,,"next_rmw","O_alu_result"
+"INC",0,,"I_alu_lhs","curr_dr"
+"INC",0,,"next_dr","O_alu_result"
 "INC",0,,"next_t","curr_t_p1 "
 ,,,,
 "INC",1,,"O_addr","curr_ad"
 "INC",1,,"O_rdwr",0
-"INC",1,,"O_wr_data","curr_rmw"
+"INC",1,,"O_wr_data","curr_dr"
 "INC",1,,"next_t",0
 ,,,,
 "DEC",-1,,"O_addr","curr_ad"
-"DEC",-1,,"next_rmw","I_rd_data"
+"DEC",-1,,"next_dr","I_rd_data"
 "DEC",-1,,"next_t","curr_t_p1 "
 ,,,,
 "DEC",0,,"O_addr","curr_ad"
 "DEC",0,,"O_rdwr",0
-"DEC",0,,"O_wr_data","curr_rmw"
+"DEC",0,,"O_wr_data","curr_dr"
 "DEC",0,,"I_alu_ctl","control_dec"
-"DEC",0,,"I_alu_lhs","curr_rmw"
-"DEC",0,,"next_rmw","O_alu_result"
+"DEC",0,,"I_alu_lhs","curr_dr"
+"DEC",0,,"next_dr","O_alu_result"
 "DEC",0,,"next_t","curr_t_p1 "
 ,,,,
 "DEC",1,,"O_addr","curr_ad"
 "DEC",1,,"O_rdwr",0
-"DEC",1,,"O_wr_data","curr_rmw"
+"DEC",1,,"O_wr_data","curr_dr"
 "DEC",1,,"next_t",0
 ,,,,
 "DEX",-1,,"next_t",0

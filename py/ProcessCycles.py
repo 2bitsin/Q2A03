@@ -53,8 +53,6 @@ class ProcessCycles:
         'cycles'      :cycles,
         '_hexcode'    :('$%02X' % code)
       })
-      if code == 0xBC:
-        print("What!")
 
     print("Instructions assembed %d/%d" % (instructions_assembled, 256))    
     return full_table
@@ -72,28 +70,44 @@ class ProcessCycles:
 
   def flatten(self, table, cycle0):
     flat_table = {}
+    indexes = {}
+    last_index = 0
     for item in table:
       opcode      = item['opcode']
       addressing  = Utils.strip_name (item['addressing'])
       operation   = Utils.strip_name (item['operation'])
       q_cycles    = item['cycles']
+
       for cycle_index, q_actions in q_cycles.items():
         for target, q_values in q_actions.items():
           for condition, value in q_values.items():
             flat_condition = (opcode, cycle_index, condition)
             flat_action = (target, value)
+
             if flat_action not in flat_table:
               flat_table[flat_action] = set()
+              indexes[flat_action] = last_index
+              last_index = last_index + 1
+
             flat_table[flat_action].add(flat_condition)
     for action in cycle0[0]:
       flat_condition = (None, 0, action ['condition'])
       flat_action = (action['target'], action['value'])
+
       if flat_action not in flat_table:
         flat_table[flat_action] = set()
-      flat_table[flat_action].add (flat_condition)
-    return flat_table
+        indexes[flat_action] = last_index
+        last_index = last_index + 1
 
-  def write_out(self, writer, flat_table):
+      flat_table[flat_action].add (flat_condition)
+    return flat_table, indexes, last_index
+
+  def write_out_decoder(self, writer, flat_table, indexes, last_index):
+    writer.write_line('module core_decoder(I_ir, I_t, O_control);')
+    writer.indent()
+    writer.write_line('input wire[7:0] I_ir;')
+    writer.write_line('input wire[3:0] I_t;')
+    writer.write_line('output wire[%u:0] O_control;' % (last_index - 1))
     action_info = []
     for action, q_conditions in flat_table.items():        
       pre_cond = {}
@@ -104,37 +118,37 @@ class ProcessCycles:
           pre_cond[cycle_index].append(opcode)
       full_cond = []
       for cycle_index, opcodes in pre_cond.items():
-        partial_cond = ['(curr_t == 4\'d%d)' % (cycle_index)]
-
+        partial_cond = ['(I_t == 4\'d%d)' % (cycle_index)]
         if len(opcodes) > 1:
-
-          partial_cond.append('(%s)' % ('|'.join ('(curr_ir == %s)' % (x) for x in Utils.arr_int8_to_hex(opcodes))))
-
+          partial_cond.append('(%s)' % ('|'.join ('(I_ir == %s)' % (x) for x in Utils.arr_int8_to_hex(opcodes))))
         elif len(opcodes) == 1:
-          partial_cond.append('(curr_ir == %s)' % (Utils.int8_to_hex(opcodes[0]))) 
-
+          partial_cond.append('(I_ir == %s)' % (Utils.int8_to_hex(opcodes[0]))) 
         full_cond.append('(%s)' % ('&'.join(partial_cond)))
-      writer.write_line('if (%s)' % ('|\n    '.join(full_cond)))
-      writer.indent()
-      writer.write_line('%s = %s;' % action)
-      writer.unindent()
+      writer.write_line('assign O_control[%3u] = (%s);' % (indexes[action], (('|\n' + ' '*25).join(full_cond))))
       writer.write_line('')
-      action_info.append("%s = %s" % action)
+    writer.unindent()
+    writer.write_line('endmodule') 
+    
     self.dump_flat_table(flat_table)    
     for item in sorted(action_info):
-      print(item)
-    print ("\nDone")
+      print(item)    
     return 
 
-  def main(self):
-    writer = SvWriter ('ver/cycles.svi')
-    writer.indent ()
+  def write_out_control(self, writer, indexes, last_index):
+    for action, index in indexes.items(): 
+      writer.write_line ('if (G_control[%3u]) %s = %s;' % (index, action[0], action[1]))
+    return
+
+
+  def main(self):    
     isa_data = IsaParsed ('data/ISA-am-op.csv').isa_table 
     am_data = CyclesParsed ('data/ISA-am-cycles.csv').table    
     op_data = CyclesParsed ('data/ISA-op-cycles.csv').table
     cycle_table = self.prepare (isa_data, am_data, op_data)
-    flat_table = self.flatten(cycle_table, am_data['*'])
-    self.write_out(writer, flat_table)
+    flat_table, indexes, last_index = self.flatten(cycle_table, am_data['*'])      
+    self.write_out_decoder(SvWriter ('ver/core_decoder.sv'), flat_table, indexes, last_index)
+    self.write_out_control(SvWriter ('ver/core_control.svi'), indexes, last_index)
+    print("Done")
     return 0
 
 main = ProcessCycles()
