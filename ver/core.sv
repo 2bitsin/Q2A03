@@ -1,6 +1,6 @@
 module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdwr, I_ready, O_sync, O_phy2);
 
-  import core_alu_control::*;
+  import core_alu_signals::*;
 
   localparam C_bit = 0 ;
   localparam Z_bit = 1 ;
@@ -85,7 +85,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
 /* Decoder logic */
 
-  wire[100:0] G_control;
+  wire[94:0] G_control;
 
   core_decoder inst_core_decoder 
                ( .I_ir      (curr_ir),
@@ -105,14 +105,18 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 /* Addressing logic */
 
   bit[7:0]      I_addr_lhs    ;
-  bit[7:0]      I_addr_rhs    ;
-  bit           I_addr_carry  ;
+  bit[7:0]      I_addr_rhs    ;  
+  bit           I_addr_carry  ;  
 
   wire[7:0]     O_addr_lhs_p1 = I_addr_lhs + 1; 
   wire[8:0]     O_addr_full   = 9'(I_addr_lhs) + 9'(I_addr_rhs) + 9'(I_addr_carry);
   wire[7:0]     O_addr_sum    = O_addr_full[7:0];
   wire          O_addr_carry  = O_addr_full[8];
 
+  always @(posedge I_clock) 
+    if (edge_fall) 
+      I_addr_carry <= O_addr_carry;
+  
 
 /* Registers */
  
@@ -122,7 +126,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   register      reg_x     (I_clock, I_reset, edge_fall, next_x,     curr_x    );
   register      reg_y     (I_clock, I_reset, edge_fall, next_y,     curr_y    );
   register      reg_s     (I_clock, I_reset, edge_fall, next_s,     curr_s    );
-  register      reg_rmw   (I_clock, I_reset, edge_fall, next_dr,    curr_dr   );
+  register      reg_dr    (I_clock, I_reset, edge_fall, next_dr,    curr_dr   );
   register#(16) reg_pc    (I_clock, I_reset, edge_fall, next_pc,    curr_pc   );
   register#(16) reg_ad    (I_clock, I_reset, edge_fall, next_ad,    curr_ad   );
   register#(16) reg_ba    (I_clock, I_reset, edge_fall, next_ba,    curr_ba   );
@@ -189,13 +193,12 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       I_alu_lhs      = 0;
       I_alu_rhs      = 0;
       I_alu_overflow = 0;
-      I_alu_carry    = 0;
+
       I_alu_sign     = 0;
       I_alu_zero     = 0;  
 
       I_addr_lhs     = 0; 
       I_addr_rhs     = 0; 
-      I_addr_carry   = 0;
 
       vec_addr       = 4'hE;
 
@@ -248,7 +251,6 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
       I_addr_lhs     = 0; 
       I_addr_rhs     = 0; 
-      I_addr_carry   = 0;
 
       next_dr        = curr_dr;
       next_pc        = curr_pc;

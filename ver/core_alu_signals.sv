@@ -1,4 +1,4 @@
-  package core_alu_control;
+  package core_alu_signals;
     parameter control_inv_O_carry  = 0; 
     parameter control_flags_rhs    = 1;
     parameter control_result_sign  = 2;
