@@ -26,7 +26,7 @@ module core_irq(I_clock, I_enable, I_reset, I_nmi, I_irq, I_irq_mask, O_force_br
   wire          raise_irq     ;  
 
   assign        O_force_brk   = irq_p | res_p | nmi_p;
-  assign        O_irq_mask    = 0; //irq_p | res_p | I_irq_mask;
+  assign        O_irq_mask    = irq_p | res_p | I_irq_mask;
   assign        O_vec_addr_lo = {12'hFFF, vec_addr};
   assign        O_vec_addr_hi = {12'hFFF, vec_addr + 4'd1};
   assign        raise_irq     = ~I_irq & ~I_irq_mask;
