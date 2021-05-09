@@ -4,7 +4,7 @@
 #include <svdpi.h>
 #include "nestest.cpp"
 
-#define TEST_INTERRUPTS 0 
+#define TEST_INTERRUPTS 1
 
 static double $time = 0;
 
@@ -128,8 +128,7 @@ int main(int argc, char** argv)
         }
       }
     #else
-        const auto pc = (pch * 0x100 + pcl);
-        std::printf("PC=%04X A=%02X X=%02X Y=%02X S=%02X P=%02X CYC=%d\n", pc, a, x, y, s, p, cycles);
+      std::printf("PC=%04X A=%02X X=%02X Y=%02X S=%02X P=%02X CYC=%d\n", pc, a, x, y, s, p, cycles);
     #endif
     }
     if (!last_phy2 && tb.O_phy2)

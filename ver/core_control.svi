@@ -31,7 +31,7 @@ else if (G_control[ 35]) O_wr_data = O_alu_result;
 else if (G_control[ 56]) next_s = curr_s_p1;
 else if (G_control[ 80]) next_s = curr_x;
 
-     if (G_control[  6]) next_p[I_bit] = curr_p[I_bit] | irq_p | res_p;
+     if (G_control[  6]) next_p[I_bit] = force_irq_mask;
 else if (G_control[ 65]) next_p[I_bit] = 0;
 else if (G_control[ 71]) next_p[I_bit] = 1;
 
@@ -48,7 +48,7 @@ else if (G_control[ 45]) next_ad[15:8] = O_addr_sum;
 else if (G_control[ 15]) next_pc = curr_pc_p1;
 else if (G_control[ 36]) next_pc = curr_pc;
 else if (G_control[ 46]) next_pc = curr_ad;
-else if (G_control[ 93]) next_pc = force_brk ? curr_pc : curr_pc_p1;
+else if (G_control[ 93]) next_pc = ~force_brk ? curr_pc_p1 : curr_pc;
 
      if (G_control[ 16]) next_ba[15:8] = 0;
 else if (G_control[ 69]) next_ba[15:8] = I_rd_data;
@@ -120,4 +120,4 @@ else if (G_control[ 59]) next_p[C_bit] = 1;
      if (G_control[ 89]) next_p[D_bit] = 0;
 else if (G_control[ 92]) next_p[D_bit] = 1;
 
-     if (G_control[ 94]) next_ir = force_brk ? 8'h00 : I_rd_data;
+     if (G_control[ 94]) next_ir = ~force_brk ? I_rd_data : 8'h00;

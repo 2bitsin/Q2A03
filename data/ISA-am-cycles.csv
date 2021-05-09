@@ -1,7 +1,7 @@
 "Addressing Mode","Cycle ","Condition","Target","Assign"
 "*",0,,"O_addr ","curr_pc"
-"*",0,,"next_pc","force_brk ? curr_pc : curr_pc_p1"
-"*",0,,"next_ir","force_brk ? 8'h00 : I_rd_data"
+"*",0,,"next_pc","~force_brk ? curr_pc_p1 : curr_pc"
+"*",0,,"next_ir","~force_brk ? I_rd_data : 8'h00 "
 "*",0,,"next_t","curr_t_p1 "
 ,,,,
 "Implied",1,,"O_addr ","curr_pc"

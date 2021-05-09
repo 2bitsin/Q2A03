@@ -2,7 +2,6 @@ from IsaParsed    import IsaParsed
 from SvWriter     import SvWriter
 from CyclesParsed import CyclesParsed
 from Utils        import Utils
-import sympy 
 import re
 
 class ProcessCycles:

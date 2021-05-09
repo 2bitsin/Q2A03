@@ -525,7 +525,7 @@
 "BRK",0,,"O_wr_data","curr_pc[15:8]"
 "BRK",0,,"next_s","curr_s_m1"
 "BRK",0,,"next_t","curr_t_p1 "
-"BRK",0,,"next_p[I_bit]","curr_p[I_bit] | irq_p | res_p"
+"BRK",0,,"next_p[I_bit]","force_irq_mask"
 ,,,,
 "BRK",1,,"O_addr","curr_sp"
 "BRK",1,,"O_rdwr",0

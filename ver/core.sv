@@ -87,7 +87,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
   wire[94:0] G_control;
 
-  core_decoder inst_core_decoder 
+  core_decoder inst_decoder 
                ( .I_ir      (curr_ir),
                  .I_t       (curr_t),
                  .O_control (G_control));
@@ -100,7 +100,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire[7:0]     curr_s_p1     = curr_s  +  8'd1;
   wire[7:0]     curr_s_m1     = curr_s  -  8'd1;
   wire[3:0]     curr_t_p1     = curr_t  +  4'd1;
-  wire[7:0]     curr_p_wr     = {curr_p[7:6], 1'b1, is_soft_brk, curr_p[3:0]};
+  wire[7:0]     curr_p_wr     = {curr_p[7:6], 1'b1, ~force_brk, curr_p[3:0]};
 
 /* Addressing logic */
 
@@ -116,7 +116,6 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   always @(posedge I_clock) 
     if (edge_fall) 
       I_addr_carry <= O_addr_carry;
-  
 
 /* Registers */
  
@@ -150,38 +149,36 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire          O_alu_zero;
   
   core_alu      inst_alu  
-                ( .I_control  (I_alu_ctl), 
-                  .I_mask_p   (I_alu_mask_p),
-                  .I_lhs      (I_alu_lhs), 
-                  .I_rhs      (I_alu_rhs),                   
-                  .I_carry    (I_alu_carry), 
-                  .I_overflow (I_alu_overflow), 
-                  .I_sign     (I_alu_sign), 
-                  .I_zero     (I_alu_zero), 
-                  .O_result   (O_alu_result), 
-                  .O_carry    (O_alu_carry), 
-                  .O_overflow (O_alu_overflow), 
-                  .O_sign     (O_alu_sign), 
-                  .O_zero     (O_alu_zero)); 
+                ( .I_control     (I_alu_ctl), 
+                  .I_mask_p      (I_alu_mask_p),
+                  .I_lhs         (I_alu_lhs), 
+                  .I_rhs         (I_alu_rhs),                   
+                  .I_carry       (I_alu_carry), 
+                  .I_overflow    (I_alu_overflow), 
+                  .I_sign        (I_alu_sign), 
+                  .I_zero        (I_alu_zero), 
+                  .O_result      (O_alu_result), 
+                  .O_carry       (O_alu_carry), 
+                  .O_overflow    (O_alu_overflow), 
+                  .O_sign        (O_alu_sign), 
+                  .O_zero        (O_alu_zero)); 
     
-/* Interrupt handling */
-  
-  reg4_type     vec_addr      ;  
-  wire[15:0]    vec_addr_lo   = {12'hFFF, vec_addr};
-  wire[15:0]    vec_addr_hi   = {12'hFFF, vec_addr + 4'd1};
-    
-  bit           irq_p         ;
-  bit           res_p         ;  
-  bit           nmi_p         ;
+  wire          force_brk;
+  wire          force_irq_mask;
+  wire[15:0]    vec_addr_lo;
+  wire[15:0]    vec_addr_hi;
 
-  bit           last_nmi      ;
-
-  wire          force_brk     = irq_p | res_p | nmi_p;
-  wire          is_soft_brk   = ~force_brk;
-
-  bit           raise_nmi     ;
-  bit           raise_res     ;
-  wire          raise_irq     = ~I_irq & ~curr_p[I_bit];
+  core_irq      inst_irq
+                ( .I_clock       (I_clock),
+                  .I_enable      (sync_rise),
+                  .I_reset       (I_reset),
+                  .I_nmi         (I_nmi),
+                  .I_irq         (I_irq),
+                  .I_irq_mask    (curr_p[I_bit]),
+                  .O_force_brk   (force_brk),
+                  .O_irq_mask    (force_irq_mask),
+                  .O_vec_addr_lo (vec_addr_lo),
+                  .O_vec_addr_hi (vec_addr_hi));
 
   always @* 
   begin          
@@ -199,8 +196,6 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
       I_addr_lhs     = 0; 
       I_addr_rhs     = 0; 
-
-      vec_addr       = 4'hE;
 
       O_addr         = 0;
       O_rdwr         = 1;
@@ -220,12 +215,6 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
     end else
     begin    
-
-      vec_addr = 4'hE;
-      if (nmi_p) 
-        vec_addr = 4'hA;
-      else if (res_p) 
-        vec_addr = 4'hC;
 
       I_alu_ctl      = control_nop;
       I_alu_mask_p   = 1;
@@ -279,18 +268,8 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       tick       <= 0;
       last_phy2  <= 0;
 
-      /* Reset interrupt logic */
-      last_nmi   <= 0;
-
-      res_p      <= 0;
-      nmi_p      <= 0;
-      irq_p      <= 0;
-      
-      raise_nmi  <= 0;
-      raise_res  <= 1; // Rairse reset 
-
     end  
-    else if (I_ready) 
+    else
     begin
 
       /* Timing generation */
@@ -298,32 +277,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       if (tick >= 11)
         tick <= 4'b0;
       last_phy2 <= O_phy2;
-
-      /* NMI edge detecton */
-      last_nmi <= I_nmi;
-      if (last_nmi & ~I_nmi)
-        raise_nmi <= 1;      
-
-      /* Interrupt logic */
       last_sync <= O_sync;
-      if (sync_rise)
-      begin        
-          /* Interrupt request latched */
-
-          if (raise_res) 
-            res_p <= raise_res;
-          if (raise_nmi) 
-            nmi_p <= raise_nmi;
-          irq_p <= raise_irq;
-          
-          raise_res <= 0;
-          raise_nmi <= 0;
-
-          /* Finished servicing interrupt */
-          if (res_p) res_p <= 0; else
-          if (nmi_p) nmi_p <= 0; else
-          if (irq_p) irq_p <= 0;         
-      end 
 
     `ifdef VERILATOR
       if (edge_fall)
