@@ -126,11 +126,7 @@ class ProcessCycles:
       writer.write_line('assign O_control[%3u] = (%s);' % (indexes[action], (('|\n' + ' '*25).join(full_cond))))
       writer.write_line('')
     writer.unindent()
-    writer.write_line('endmodule') 
-    
-    self.dump_flat_table(flat_table)    
-    for item in sorted(action_info):
-      print(item)    
+    writer.write_line('endmodule')     
     return 
 
   def write_out_control(self, writer, indexes, last_index):
@@ -159,7 +155,8 @@ class ProcessCycles:
     am_data = CyclesParsed ('data/ISA-am-cycles.csv').table    
     op_data = CyclesParsed ('data/ISA-op-cycles.csv').table
     cycle_table = self.prepare (isa_data, am_data, op_data)
-    flat_table, indexes, last_index = self.flatten(cycle_table, am_data['*'])      
+    flat_table, indexes, last_index = self.flatten(cycle_table, am_data['*'])    
+    self.dump_flat_table(flat_table)
     self.write_out_decoder(SvWriter ('ver/core_decoder.sv'), flat_table, indexes, last_index)
     self.write_out_control(SvWriter ('ver/core_control.svi'), indexes, last_index)
     print("Done")

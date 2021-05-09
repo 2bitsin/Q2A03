@@ -189,8 +189,9 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       I_alu_mask_p   = 1;
       I_alu_lhs      = 0;
       I_alu_rhs      = 0;
-      I_alu_overflow = 0;
 
+      I_alu_overflow = 0;
+      I_alu_carry    = 0;
       I_alu_sign     = 0;
       I_alu_zero     = 0;  
 
@@ -230,7 +231,9 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_p[C_bit]  = O_alu_carry;
       next_p[N_bit]  = O_alu_sign;
       next_p[Z_bit]  = O_alu_zero;
-      
+
+      next_p[B_bit]  = curr_p[B_bit];
+      next_p[X_bit]  = 1'b1;
       next_p[D_bit]  = curr_p[D_bit];
       next_p[I_bit]  = curr_p[I_bit];
 

@@ -15,7 +15,6 @@
     parameter control_select_b2    = 11;  
 
     parameter control_result_zero  = 12;
-
     
     typedef enum logic[12:0]
     {

@@ -4,7 +4,7 @@
 #include <svdpi.h>
 #include "nestest.cpp"
 
-#define TEST_INTERRUPTS 1
+#define TEST_INTERRUPTS 0
 
 static double $time = 0;
 
