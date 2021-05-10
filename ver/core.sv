@@ -85,12 +85,12 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
 /* Decoder logic */
 
-  wire[94:0] G_control;
+  wire[94:0]    G_control;
 
-  core_decoder inst_decoder 
-               ( .I_ir      (curr_ir),
-                 .I_t       (curr_t),
-                 .O_control (G_control));
+  core_decoder  inst_decoder 
+                ( .I_ir      (curr_ir),
+                  .I_t       (curr_t),
+                  .O_control (G_control));
 
 /* Misc derivatives */
 

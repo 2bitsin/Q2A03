@@ -1,1 +1,6 @@
-
+"target","reset","default"
+"O_addr","curr_pc","curr_pc"
+"I_alu_ctl","control_nop","control_nop"
+"I_alu_lhs",0,0
+"I_alu_rhs",0,0
+"I_alu_carry",0,0

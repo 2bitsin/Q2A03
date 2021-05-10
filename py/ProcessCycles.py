@@ -1,7 +1,6 @@
-from IsaParsed    import IsaParsed
-from SvWriter     import SvWriter
-from CyclesParsed import CyclesParsed
-from Utils        import Utils
+from SvWriter       import SvWriter
+from Utils          import Utils
+from pysat.solvers  import Glucose3
 import re
 
 class ProcessCycles:
@@ -101,12 +100,16 @@ class ProcessCycles:
       flat_table[flat_action].add (flat_condition)
     return flat_table, indexes, last_index
 
+  def optimize_opcodes(self, codes):
+    return list (('(I_ir == %s)' % (x)) for x in Utils.arr_int8_to_hex(codes))
+
   def write_out_decoder(self, writer, flat_table, indexes, last_index):
     writer.write_line('module core_decoder(I_ir, I_t, O_control);')
     writer.indent()
     writer.write_line('input wire[7:0] I_ir;')
     writer.write_line('input wire[3:0] I_t;')
     writer.write_line('output wire[%u:0] O_control;' % (last_index - 1))
+    writer.write_line('')
     action_info = []
     for action, q_conditions in flat_table.items():        
       pre_cond = {}
@@ -115,13 +118,16 @@ class ProcessCycles:
           pre_cond[cycle_index] = []
         if opcode is not None:
           pre_cond[cycle_index].append(opcode)
+      for cycle_index in pre_cond:
+        pre_cond[cycle_index] = self.optimize_opcodes(pre_cond[cycle_index])
       full_cond = []
       for cycle_index, opcodes in pre_cond.items():
         partial_cond = ['(I_t == 4\'d%d)' % (cycle_index)]
         if len(opcodes) > 1:
-          partial_cond.append('(%s)' % ('|'.join ('(I_ir == %s)' % (x) for x in Utils.arr_int8_to_hex(opcodes))))
+          partial_cond.append('(%s)' % ('|'.join (opcodes)))
         elif len(opcodes) == 1:
-          partial_cond.append('(I_ir == %s)' % (Utils.int8_to_hex(opcodes[0]))) 
+          partial_cond.append('(%s)' % (opcodes[0])) 
+
         full_cond.append('(%s)' % ('&'.join(partial_cond)))
       writer.write_line('assign O_control[%3u] = (%s);' % (indexes[action], (('|\n' + ' '*25).join(full_cond))))
       writer.write_line('')
@@ -151,9 +157,9 @@ class ProcessCycles:
 
 
   def main(self):    
-    isa_data = IsaParsed ('data/ISA-am-op.csv').isa_table 
-    am_data = CyclesParsed ('data/ISA-am-cycles.csv').table    
-    op_data = CyclesParsed ('data/ISA-op-cycles.csv').table
+    isa_data, _, _ = Utils.parse_isa ('data/ISA-am-op.csv')
+    am_data = Utils.parse_cycles ('data/ISA-am-cycles.csv')    
+    op_data = Utils.parse_cycles ('data/ISA-op-cycles.csv')
     cycle_table = self.prepare (isa_data, am_data, op_data)
     flat_table, indexes, last_index = self.flatten(cycle_table, am_data['*'])    
     self.dump_flat_table(flat_table)
