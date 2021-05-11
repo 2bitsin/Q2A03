@@ -106,9 +106,9 @@ class ProcessCycles:
     if len(all_codes) < 1:
       return None
     invert = False
-    if (len(all_codes) > 128):
-      invert = True
-      all_codes = set(range(0, 256)) - set(all_codes)
+    # if (len(all_codes) > 128):
+    #   invert = True
+    #   all_codes = set(range(0, 256)) - set(all_codes)
 
     result = subprocess.Popen("/mnt/c/Users/alex/Desktop/projects/QMsolver/Bin/Release/x64/QMsolver.exe", 
       stdin=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -120,7 +120,7 @@ class ProcessCycles:
     all_codes = list(line.decode('utf-8').strip() for line in result.stdout.readlines())
 
     all_codes = '|'.join( ('(I_ir ==? 8\'b%s)' % (x.strip())) for x in all_codes)
-    return ('(%s)' if not invert else '(~(%s))') % (all_codes)
+    return ('(%s)' if not invert else '(~(%s))') % (all_codes)    
 
   def write_out_decoder(self, writer, flat_table, indexes, last_index):
     writer.write_line('module core_decoder(I_ir, I_t, O_control);')
