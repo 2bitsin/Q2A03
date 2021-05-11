@@ -1,3 +1,4 @@
+from itertools import cycle
 from os import system
 import subprocess
 from SvWriter import SvWriter
@@ -8,6 +9,7 @@ import re
 class ProcessCycles:
 
   def __init__(self):
+    self.opcode_set_cache = dict()
     return
     
   def prepare(self, isa, ams, ops):  
@@ -104,50 +106,67 @@ class ProcessCycles:
 
   def optimize_opcodes(self, all_codes):
     if len(all_codes) < 1:
-      return None
-    invert = False
-    # if (len(all_codes) > 128):
-    #   invert = True
-    #   all_codes = set(range(0, 256)) - set(all_codes)
-
-    result = subprocess.Popen("/mnt/c/Users/alex/Desktop/projects/QMsolver/Bin/Release/x64/QMsolver.exe", 
-      stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+      return []
+    all_codes = sorted(all_codes)
+    set_key = ', '.join (("%02X" % x) for x in all_codes)
+    if set_key in self.opcode_set_cache:
+      return self.opcode_set_cache[set_key]
+    print("Optimizing opcode set : %s" % (set_key))
+    result = subprocess.Popen("/mnt/c/Users/alex/Desktop/projects/QMsolver/Bin/Release/x64/QMsolver.exe", stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     in_codes = list('0x%02X' % (x) for x in all_codes)
     result.stdin.write(bytes('\n'.join(in_codes), encoding='utf8'))
     result.stdin.close()
-    result.wait()
-    all_codes = list('8\'h%02X' % x for x in all_codes)
-    all_codes = list(line.decode('utf-8').strip() for line in result.stdout.readlines())
-
-    all_codes = '|'.join( ('(I_ir ==? 8\'b%s)' % (x.strip())) for x in all_codes)
-    return ('(%s)' if not invert else '(~(%s))') % (all_codes)    
+    result.wait()    
+    optimized_set = list(sorted(line.decode('utf-8').strip() for line in result.stdout.readlines()))          
+    self.opcode_set_cache[set_key] = optimized_set
+    return optimized_set
+    
 
   def write_out_decoder(self, writer, flat_table, indexes, last_index):
+
+    rel_action_conds = {}
+    partial_code_cache = {}
+    
+    for action, q_conditions in flat_table.items():          
+      rel_cycle_opcode = {}
+      for opcode, cycle_index, condition in q_conditions:
+        if cycle_index not in rel_cycle_opcode:
+          rel_cycle_opcode[cycle_index] = []
+        if opcode is not None:
+          rel_cycle_opcode[cycle_index].append(opcode)  
+      for cycle_index, opcodes in rel_cycle_opcode.items():
+        rel_cycle_opcode[cycle_index] = self.optimize_opcodes(opcodes)    
+      for cycle_index, q_opcodes in rel_cycle_opcode.items():
+        partial_code_indexes = []
+        for partial_code in q_opcodes:
+          if partial_code not in partial_code_cache:
+            partial_code_cache[partial_code] = len(partial_code_cache)          
+          partial_code_indexes.append(partial_code_cache[partial_code])        
+        rel_cycle_opcode[cycle_index] = partial_code_indexes
+      rel_action_conds[action] = rel_cycle_opcode
+
     writer.write_line('module core_decoder(I_ir, I_t, O_control);')
     writer.indent()
     writer.write_line('input wire[7:0] I_ir;')
     writer.write_line('input wire[3:0] I_t;')
     writer.write_line('output wire[%u:0] O_control;' % (last_index - 1))
     writer.write_line('')
-    action_info = []
-    for action, q_conditions in flat_table.items():        
-      pre_cond = {}
-      for opcode, cycle_index, condition in q_conditions:
-        if cycle_index not in pre_cond:
-          pre_cond[cycle_index] = []
-        if opcode is not None:
-          pre_cond[cycle_index].append(opcode)
-      for cycle_index in pre_cond:
-        pre_cond[cycle_index] = self.optimize_opcodes(pre_cond[cycle_index])
-      full_cond = []
-      for cycle_index, opcodes in pre_cond.items():
-        partial_cond = ['(I_t == 4\'d%d)' % (cycle_index)]
-        if opcodes is not None:
-          partial_cond.append(opcodes)
-
-        full_cond.append('(%s)' % ('&'.join(partial_cond)))
-      writer.write_line('assign O_control[%3u] = (%s);' % (indexes[action], (('|\n' + ' '*25).join(full_cond))))
-      writer.write_line('')
+    for partial_code, index in partial_code_cache.items():
+      writer.write_line('wire w%03u = (I_ir ==? 8\'b%s);' % (index, partial_code))
+    writer.write_line('')
+    for action, q_cycle_code_indexes in rel_action_conds.items():      
+      full_condition = []
+      control_index = indexes[action]
+      for cycle_index, q_code_indexes in q_cycle_code_indexes.items():        
+        condition_with_cycle = ['(I_t == 4\'d%u)' % (cycle_index)]
+        if len (q_code_indexes) > 0:
+          partial_condition = []
+          for code_index in q_code_indexes:
+            partial_condition.append('w%03u' % (code_index)) 
+          condition_with_cycle.append ( '(%s)' % ('|'.join(partial_condition)))
+        full_condition.append('(%s)' % ('&'.join(condition_with_cycle)))        
+      writer.write_line ('assign O_control[%3u] = (%s);' % (control_index,  ('\n' + ' '*24  + '|').join(full_condition)))
+      writer.write_line ('')
     writer.unindent()
     writer.write_line('endmodule')     
     return 

@@ -117,3 +117,28 @@ Total HSSI TX PCSs  0
 Total HSSI PMA TX Serializers  0
 Total PLLs  1 / 4 ( 25 % )
 Total DLLs  0 / 4 ( 0 % )
+
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+
+Flow Status  Successful - Tue May 11 12:56:28 2021
+Quartus Prime Version  20.1.1 Build 720 11/11/2020 SJ Lite Edition
+Revision Name  FPGame
+Top-level Entity Name  top
+Family  Cyclone V
+Device  5CEFA2F23I7
+Timing Models  Final
+Logic utilization (in ALMs)  713 / 9,430 ( 8 % )
+Total registers  224
+Total pins  111 / 224 ( 50 % )
+Total virtual pins  0
+Total block memory bits  524,288 / 1,802,240 ( 29 % )
+Total DSP Blocks  0 / 25 ( 0 % )
+Total HSSI RX PCSs  0
+Total HSSI PMA RX Deserializers  0
+Total HSSI TX PCSs  0
+Total HSSI PMA TX Serializers  0
+Total PLLs  1 / 4 ( 25 % )
+Total DLLs  0 / 4 ( 0 % )
