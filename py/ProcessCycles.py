@@ -1,6 +1,6 @@
-from SvWriter       import SvWriter
-from Utils          import Utils
-from pysat.solvers  import Glucose3
+from SvWriter import SvWriter
+from Utils    import Utils
+from sympy    import *
 import re
 
 class ProcessCycles:
@@ -100,8 +100,15 @@ class ProcessCycles:
       flat_table[flat_action].add (flat_condition)
     return flat_table, indexes, last_index
 
-  def optimize_opcodes(self, codes):
-    return list (('(I_ir == %s)' % (x)) for x in Utils.arr_int8_to_hex(codes))
+  def optimize_opcodes(self, all_codes):
+    if len(all_codes) < 1:
+      return None
+    invert = False
+    if (len(all_codes) > 128):
+      invert = True
+      all_codes = set(range(0, 256)) - set(all_codes)
+    all_codes = '|'.join( ('(I_ir == %s)' % (x)) for x in Utils.arr_int8_to_hex(all_codes))
+    return ('(%s)' if not invert else '(~(%s))') % (all_codes)
 
   def write_out_decoder(self, writer, flat_table, indexes, last_index):
     writer.write_line('module core_decoder(I_ir, I_t, O_control);')
@@ -123,10 +130,8 @@ class ProcessCycles:
       full_cond = []
       for cycle_index, opcodes in pre_cond.items():
         partial_cond = ['(I_t == 4\'d%d)' % (cycle_index)]
-        if len(opcodes) > 1:
-          partial_cond.append('(%s)' % ('|'.join (opcodes)))
-        elif len(opcodes) == 1:
-          partial_cond.append('(%s)' % (opcodes[0])) 
+        if opcodes is not None:
+          partial_cond.append(opcodes)
 
         full_cond.append('(%s)' % ('&'.join(partial_cond)))
       writer.write_line('assign O_control[%3u] = (%s);' % (indexes[action], (('|\n' + ' '*25).join(full_cond))))
