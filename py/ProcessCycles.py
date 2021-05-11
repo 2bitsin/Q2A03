@@ -1,3 +1,5 @@
+from os import system
+import subprocess
 from SvWriter import SvWriter
 from Utils    import Utils
 from sympy    import *
@@ -107,7 +109,17 @@ class ProcessCycles:
     if (len(all_codes) > 128):
       invert = True
       all_codes = set(range(0, 256)) - set(all_codes)
-    all_codes = '|'.join( ('(I_ir == %s)' % (x)) for x in Utils.arr_int8_to_hex(all_codes))
+
+    result = subprocess.Popen("/mnt/c/Users/alex/Desktop/projects/QMsolver/Bin/Release/x64/QMsolver.exe", 
+      stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    in_codes = list('0x%02X' % (x) for x in all_codes)
+    result.stdin.write(bytes('\n'.join(in_codes), encoding='utf8'))
+    result.stdin.close()
+    result.wait()
+    all_codes = list('8\'h%02X' % x for x in all_codes)
+    all_codes = list(line.decode('utf-8').strip() for line in result.stdout.readlines())
+
+    all_codes = '|'.join( ('(I_ir ==? 8\'b%s)' % (x.strip())) for x in all_codes)
     return ('(%s)' if not invert else '(~(%s))') % (all_codes)
 
   def write_out_decoder(self, writer, flat_table, indexes, last_index):

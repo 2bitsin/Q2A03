@@ -4,376 +4,376 @@ module core_decoder(I_ir, I_t, O_control);
 	input wire[3:0] I_t;
 	output wire[94:0] O_control;
 	
-	assign O_control[  0] = (((I_t == 4'd2)&((I_ir == 8'h5F)|(I_ir == 8'h8F)|(I_ir == 8'h4E)|(I_ir == 8'h59)|(I_ir == 8'h3D)|(I_ir == 8'hFE)|(I_ir == 8'hEE)|(I_ir == 8'h2C)|(I_ir == 8'hED)|(I_ir == 8'hDD)|(I_ir == 8'h79)|(I_ir == 8'hDC)|(I_ir == 8'h8D)|(I_ir == 8'h2F)|(I_ir == 8'h7C)|(I_ir == 8'h1E)|(I_ir == 8'hDF)|(I_ir == 8'hFF)|(I_ir == 8'h4F)|(I_ir == 8'hCC)|(I_ir == 8'hDE)|(I_ir == 8'hCE)|(I_ir == 8'h19)|(I_ir == 8'h8E)|(I_ir == 8'h99)|(I_ir == 8'h3E)|(I_ir == 8'h2E)|(I_ir == 8'h7E)|(I_ir == 8'h6E)|(I_ir == 8'hCD)|(I_ir == 8'h39)|(I_ir == 8'h2D)|(I_ir == 8'hBE)|(I_ir == 8'h1C)|(I_ir == 8'h7D)|(I_ir == 8'hF9)|(I_ir == 8'hBD)|(I_ir == 8'hAD)|(I_ir == 8'h6C)|(I_ir == 8'hAC)|(I_ir == 8'h1D)|(I_ir == 8'h5D)|(I_ir == 8'h3F)|(I_ir == 8'h7F)|(I_ir == 8'h0C)|(I_ir == 8'h4C)|(I_ir == 8'h1F)|(I_ir == 8'hFC)|(I_ir == 8'h6F)|(I_ir == 8'hBC)|(I_ir == 8'h5E)|(I_ir == 8'h0E)|(I_ir == 8'hDB)|(I_ir == 8'hCF)|(I_ir == 8'hFB)|(I_ir == 8'h5B)|(I_ir == 8'hFD)|(I_ir == 8'h6D)|(I_ir == 8'hEC)|(I_ir == 8'h5C)|(I_ir == 8'hD9)|(I_ir == 8'h0D)|(I_ir == 8'h4D)|(I_ir == 8'hAE)|(I_ir == 8'hB9)|(I_ir == 8'h9D)|(I_ir == 8'h8C)|(I_ir == 8'hEF)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h3C)|(I_ir == 8'hBF)|(I_ir == 8'hAF)|(I_ir == 8'h1B)|(I_ir == 8'h0F)))|
-	                         ((I_t == 4'd1)&(~((I_ir == 8'h02)|(I_ir == 8'h82)|(I_ir == 8'h0B)|(I_ir == 8'h8B)|(I_ir == 8'h12)|(I_ir == 8'h92)|(I_ir == 8'h93)|(I_ir == 8'h9B)|(I_ir == 8'h9C)|(I_ir == 8'h9E)|(I_ir == 8'h9F)|(I_ir == 8'h22)|(I_ir == 8'h2B)|(I_ir == 8'h32)|(I_ir == 8'hB2)|(I_ir == 8'hBB)|(I_ir == 8'h42)|(I_ir == 8'h4B)|(I_ir == 8'h52)|(I_ir == 8'hD2)|(I_ir == 8'h62)|(I_ir == 8'h6B)|(I_ir == 8'h72)|(I_ir == 8'hF2))))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h60)|(I_ir == 8'h20)))|
+	assign O_control[  0] = (((I_t == 4'd2)&((I_ir ==? 8'b?1??11??)|(I_ir ==? 8'b0???11??)|(I_ir ==? 8'b???11?01)|(I_ir ==? 8'b1??011??)|(I_ir ==? 8'b0??11??1)|(I_ir ==? 8'b1?1?11??)|(I_ir ==? 8'b11?11?11)))|
+	                         ((I_t == 4'd1)&(~((I_ir ==? 8'b???10010)|(I_ir ==? 8'b0??00010)|(I_ir ==? 8'b0??01011)|(I_ir ==? 8'b1001?011)|(I_ir ==? 8'b1001111?)|(I_ir ==? 8'b100?0010)|(I_ir ==? 8'b100?1011)|(I_ir ==? 8'b10?11011)|(I_ir ==? 8'b100111?0))))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b0?100000)))|
 	                         ((I_t == 4'd0)));
 	
-	assign O_control[  1] = (((I_t == 4'd2)&((I_ir == 8'h43)|(I_ir == 8'h8F)|(I_ir == 8'h83)|(I_ir == 8'h4E)|(I_ir == 8'hC3)|(I_ir == 8'hB7)|(I_ir == 8'h21)|(I_ir == 8'hFE)|(I_ir == 8'hE7)|(I_ir == 8'h71)|(I_ir == 8'hD6)|(I_ir == 8'hB1)|(I_ir == 8'h95)|(I_ir == 8'hF6)|(I_ir == 8'h11)|(I_ir == 8'h61)|(I_ir == 8'h51)|(I_ir == 8'hEE)|(I_ir == 8'h35)|(I_ir == 8'h96)|(I_ir == 8'h2C)|(I_ir == 8'h00)|(I_ir == 8'h40)|(I_ir == 8'hED)|(I_ir == 8'h01)|(I_ir == 8'h74)|(I_ir == 8'h68)|(I_ir == 8'h73)|(I_ir == 8'h57)|(I_ir == 8'h8D)|(I_ir == 8'h46)|(I_ir == 8'h2F)|(I_ir == 8'h13)|(I_ir == 8'h37)|(I_ir == 8'hD4)|(I_ir == 8'h1E)|(I_ir == 8'h60)|(I_ir == 8'h47)|(I_ir == 8'h4F)|(I_ir == 8'hCC)|(I_ir == 8'hDE)|(I_ir == 8'hCE)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'hF7)|(I_ir == 8'h27)|(I_ir == 8'h16)|(I_ir == 8'h8E)|(I_ir == 8'h99)|(I_ir == 8'h3E)|(I_ir == 8'h2E)|(I_ir == 8'h7E)|(I_ir == 8'h6E)|(I_ir == 8'hE6)|(I_ir == 8'hCD)|(I_ir == 8'h2D)|(I_ir == 8'hF1)|(I_ir == 8'hAD)|(I_ir == 8'hA1)|(I_ir == 8'h91)|(I_ir == 8'h6C)|(I_ir == 8'hAC)|(I_ir == 8'hB5)|(I_ir == 8'hD5)|(I_ir == 8'h41)|(I_ir == 8'hF3)|(I_ir == 8'h0C)|(I_ir == 8'h14)|(I_ir == 8'h75)|(I_ir == 8'hB3)|(I_ir == 8'h6F)|(I_ir == 8'h63)|(I_ir == 8'h53)|(I_ir == 8'h5E)|(I_ir == 8'h03)|(I_ir == 8'hD7)|(I_ir == 8'hC7)|(I_ir == 8'h33)|(I_ir == 8'h0E)|(I_ir == 8'hC6)|(I_ir == 8'hCF)|(I_ir == 8'h77)|(I_ir == 8'h67)|(I_ir == 8'h26)|(I_ir == 8'h66)|(I_ir == 8'h56)|(I_ir == 8'h31)|(I_ir == 8'h15)|(I_ir == 8'h55)|(I_ir == 8'hB6)|(I_ir == 8'h06)|(I_ir == 8'h6D)|(I_ir == 8'hEC)|(I_ir == 8'hC1)|(I_ir == 8'h0D)|(I_ir == 8'hE1)|(I_ir == 8'h4D)|(I_ir == 8'hAE)|(I_ir == 8'h34)|(I_ir == 8'h28)|(I_ir == 8'hF5)|(I_ir == 8'h9D)|(I_ir == 8'h81)|(I_ir == 8'h23)|(I_ir == 8'h17)|(I_ir == 8'hF4)|(I_ir == 8'h8C)|(I_ir == 8'hD1)|(I_ir == 8'hEF)|(I_ir == 8'hE3)|(I_ir == 8'h97)|(I_ir == 8'hB4)|(I_ir == 8'h20)|(I_ir == 8'h07)|(I_ir == 8'hAF)|(I_ir == 8'hA3)|(I_ir == 8'h0F)|(I_ir == 8'h54)|(I_ir == 8'h94)|(I_ir == 8'hD3)))|
-	                         ((I_t == 4'd1)&(~((I_ir == 8'h02)|(I_ir == 8'h09)|(I_ir == 8'h0A)|(I_ir == 8'h0B)|(I_ir == 8'h10)|(I_ir == 8'h12)|(I_ir == 8'h18)|(I_ir == 8'h1A)|(I_ir == 8'h22)|(I_ir == 8'h29)|(I_ir == 8'h2A)|(I_ir == 8'h2B)|(I_ir == 8'h30)|(I_ir == 8'h32)|(I_ir == 8'h38)|(I_ir == 8'h3A)|(I_ir == 8'h42)|(I_ir == 8'h49)|(I_ir == 8'h4A)|(I_ir == 8'h4B)|(I_ir == 8'h50)|(I_ir == 8'h52)|(I_ir == 8'h58)|(I_ir == 8'h5A)|(I_ir == 8'h62)|(I_ir == 8'h69)|(I_ir == 8'h6A)|(I_ir == 8'h6B)|(I_ir == 8'h70)|(I_ir == 8'h72)|(I_ir == 8'h78)|(I_ir == 8'h7A)|(I_ir == 8'h80)|(I_ir == 8'h82)|(I_ir == 8'h88)|(I_ir == 8'h89)|(I_ir == 8'h8A)|(I_ir == 8'h8B)|(I_ir == 8'h90)|(I_ir == 8'h92)|(I_ir == 8'h93)|(I_ir == 8'h98)|(I_ir == 8'h9A)|(I_ir == 8'h9B)|(I_ir == 8'h9C)|(I_ir == 8'h9E)|(I_ir == 8'h9F)|(I_ir == 8'hA0)|(I_ir == 8'hA2)|(I_ir == 8'hA8)|(I_ir == 8'hA9)|(I_ir == 8'hAA)|(I_ir == 8'hAB)|(I_ir == 8'hB0)|(I_ir == 8'hB2)|(I_ir == 8'hB8)|(I_ir == 8'hBA)|(I_ir == 8'hBB)|(I_ir == 8'hC0)|(I_ir == 8'hC2)|(I_ir == 8'hC8)|(I_ir == 8'hC9)|(I_ir == 8'hCA)|(I_ir == 8'hCB)|(I_ir == 8'hD0)|(I_ir == 8'hD2)|(I_ir == 8'hD8)|(I_ir == 8'hDA)|(I_ir == 8'hE0)|(I_ir == 8'hE2)|(I_ir == 8'hE8)|(I_ir == 8'hE9)|(I_ir == 8'hEA)|(I_ir == 8'hEB)|(I_ir == 8'hF0)|(I_ir == 8'hF2)|(I_ir == 8'hF8)|(I_ir == 8'hFA))))|
-	                         ((I_t == 4'd3)&((I_ir == 8'hC7)|(I_ir == 8'h0E)|(I_ir == 8'hC6)|(I_ir == 8'h5E)|(I_ir == 8'hFB)|(I_ir == 8'h67)|(I_ir == 8'h5B)|(I_ir == 8'h66)|(I_ir == 8'h56)|(I_ir == 8'hDB)|(I_ir == 8'hD9)|(I_ir == 8'hBE)|(I_ir == 8'h26)|(I_ir == 8'hB9)|(I_ir == 8'h06)|(I_ir == 8'hFD)|(I_ir == 8'hE1)|(I_ir == 8'h3C)|(I_ir == 8'h9D)|(I_ir == 8'h81)|(I_ir == 8'h5C)|(I_ir == 8'hC1)|(I_ir == 8'h7B)|(I_ir == 8'h6F)|(I_ir == 8'h23)|(I_ir == 8'h17)|(I_ir == 8'h07)|(I_ir == 8'hBF)|(I_ir == 8'hA3)|(I_ir == 8'hEF)|(I_ir == 8'hE3)|(I_ir == 8'h3B)|(I_ir == 8'h5F)|(I_ir == 8'hDE)|(I_ir == 8'h83)|(I_ir == 8'h1B)|(I_ir == 8'h0F)|(I_ir == 8'h7E)|(I_ir == 8'hE7)|(I_ir == 8'h4F)|(I_ir == 8'h43)|(I_ir == 8'h61)|(I_ir == 8'h4E)|(I_ir == 8'h3E)|(I_ir == 8'h19)|(I_ir == 8'h59)|(I_ir == 8'h79)|(I_ir == 8'hF6)|(I_ir == 8'h3D)|(I_ir == 8'h21)|(I_ir == 8'hFE)|(I_ir == 8'hD6)|(I_ir == 8'h01)|(I_ir == 8'hEE)|(I_ir == 8'h00)|(I_ir == 8'h40)|(I_ir == 8'hDD)|(I_ir == 8'hDC)|(I_ir == 8'h37)|(I_ir == 8'h63)|(I_ir == 8'h7C)|(I_ir == 8'h57)|(I_ir == 8'h60)|(I_ir == 8'hFF)|(I_ir == 8'h46)|(I_ir == 8'h2F)|(I_ir == 8'h76)|(I_ir == 8'h1E)|(I_ir == 8'hDF)|(I_ir == 8'hCF)|(I_ir == 8'h47)|(I_ir == 8'hC3)|(I_ir == 8'hCE)|(I_ir == 8'h36)|(I_ir == 8'hF7)|(I_ir == 8'h99)|(I_ir == 8'h27)|(I_ir == 8'hBD)|(I_ir == 8'h6E)|(I_ir == 8'hE6)|(I_ir == 8'h16)|(I_ir == 8'h5D)|(I_ir == 8'h7D)|(I_ir == 8'h2E)|(I_ir == 8'hA1)|(I_ir == 8'h91)|(I_ir == 8'h39)|(I_ir == 8'h1D)|(I_ir == 8'h41)|(I_ir == 8'h1C)|(I_ir == 8'hF9)|(I_ir == 8'h7F)|(I_ir == 8'h6C)|(I_ir == 8'hD7)|(I_ir == 8'h3F)|(I_ir == 8'h20)|(I_ir == 8'h77)|(I_ir == 8'h1F)|(I_ir == 8'hBC)|(I_ir == 8'h03)|(I_ir == 8'hFC)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hD7)|(I_ir == 8'h37)|(I_ir == 8'h60)|(I_ir == 8'hFF)|(I_ir == 8'h5B)|(I_ir == 8'h4F)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'h3E)|(I_ir == 8'hDF)|(I_ir == 8'hCF)|(I_ir == 8'hC3)|(I_ir == 8'h16)|(I_ir == 8'hCE)|(I_ir == 8'hF7)|(I_ir == 8'hA1)|(I_ir == 8'h2E)|(I_ir == 8'h6E)|(I_ir == 8'hF1)|(I_ir == 8'h11)|(I_ir == 8'h41)|(I_ir == 8'h91)|(I_ir == 8'h3F)|(I_ir == 8'h7F)|(I_ir == 8'h63)|(I_ir == 8'hB3)|(I_ir == 8'hA3)|(I_ir == 8'h1F)|(I_ir == 8'hF3)|(I_ir == 8'h03)|(I_ir == 8'h1E)|(I_ir == 8'h0E)|(I_ir == 8'h53)|(I_ir == 8'h77)|(I_ir == 8'h5E)|(I_ir == 8'hE3)|(I_ir == 8'h33)|(I_ir == 8'h31)|(I_ir == 8'hFB)|(I_ir == 8'h56)|(I_ir == 8'h17)|(I_ir == 8'hE1)|(I_ir == 8'hD1)|(I_ir == 8'h20)|(I_ir == 8'h81)|(I_ir == 8'hC1)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h6F)|(I_ir == 8'h5F)|(I_ir == 8'h43)|(I_ir == 8'h1B)|(I_ir == 8'hEF)|(I_ir == 8'h0F)|(I_ir == 8'hD3)|(I_ir == 8'hDE)|(I_ir == 8'hDB)|(I_ir == 8'h83)|(I_ir == 8'hD6)|(I_ir == 8'h4E)|(I_ir == 8'h7E)|(I_ir == 8'hF6)|(I_ir == 8'h21)|(I_ir == 8'h61)|(I_ir == 8'h71)|(I_ir == 8'hB1)|(I_ir == 8'h01)|(I_ir == 8'hEE)|(I_ir == 8'hFE)|(I_ir == 8'h51)|(I_ir == 8'h40)|(I_ir == 8'h2F)|(I_ir == 8'h23)|(I_ir == 8'h13)|(I_ir == 8'h00)|(I_ir == 8'h73)|(I_ir == 8'h57)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'hF3)|(I_ir == 8'h63)|(I_ir == 8'h53)|(I_ir == 8'hE3)|(I_ir == 8'h33)|(I_ir == 8'h03)|(I_ir == 8'h23)|(I_ir == 8'h43)|(I_ir == 8'hD3)|(I_ir == 8'h73)|(I_ir == 8'h13)|(I_ir == 8'hC3)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'hD3)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h5F)|(I_ir == 8'h43)|(I_ir == 8'hDE)|(I_ir == 8'h1B)|(I_ir == 8'hFE)|(I_ir == 8'h73)|(I_ir == 8'hFF)|(I_ir == 8'h23)|(I_ir == 8'h13)|(I_ir == 8'h1E)|(I_ir == 8'h63)|(I_ir == 8'hDF)|(I_ir == 8'h7E)|(I_ir == 8'hC3)|(I_ir == 8'h5B)|(I_ir == 8'h3E)|(I_ir == 8'h00)|(I_ir == 8'hE3)|(I_ir == 8'hF3)|(I_ir == 8'h3F)|(I_ir == 8'h7F)|(I_ir == 8'hFB)|(I_ir == 8'h1F)|(I_ir == 8'h03)|(I_ir == 8'hDB)|(I_ir == 8'h53)|(I_ir == 8'h5E)|(I_ir == 8'h33)))|
+	assign O_control[  1] = (((I_t == 4'd2)&((I_ir ==? 8'b???101??)|(I_ir ==? 8'b??1?00?1)|(I_ir ==? 8'b?1?0?11?)|(I_ir ==? 8'b?0?011??)|(I_ir ==? 8'b?1??00?1)|(I_ir ==? 8'b0????110)|(I_ir ==? 8'b0??0000?)|(I_ir ==? 8'b0???0?11)|(I_ir ==? 8'b?1?011?1)|(I_ir ==? 8'b?0??0001)|(I_ir ==? 8'b0?101?00)|(I_ir ==? 8'b?1???110)|(I_ir ==? 8'b11?011??)|(I_ir ==? 8'b1001??01)|(I_ir ==? 8'b?0?000?1)))|
+	                         ((I_t == 4'd1)&(~((I_ir ==? 8'b?????010)|(I_ir ==? 8'b1????0?0)|(I_ir ==? 8'b???010?1)|(I_ir ==? 8'b???1?0?0)|(I_ir ==? 8'b10011?1?)|(I_ir ==? 8'b101?101?)|(I_ir ==? 8'b1001?01?)|(I_ir ==? 8'b10011??0))))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b0????11?)|(I_ir ==? 8'b???000?1)|(I_ir ==? 8'b?1???11?)|(I_ir ==? 8'b???11?01)|(I_ir ==? 8'b??1111??)|(I_ir ==? 8'b0??0000?)|(I_ir ==? 8'b0??11?11)|(I_ir ==? 8'b?1?111??)|(I_ir ==? 8'b?1?11?11)|(I_ir ==? 8'b100?0001)|(I_ir ==? 8'b0??111??)|(I_ir ==? 8'b011?11?0)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b????0001)|(I_ir ==? 8'b?1??111?)|(I_ir ==? 8'b0??1??11)|(I_ir ==? 8'b???000?1)|(I_ir ==? 8'b?1?1?11?)|(I_ir ==? 8'b0???111?)|(I_ir ==? 8'b0??0000?)|(I_ir ==? 8'b11?1?011)|(I_ir ==? 8'b0??1?11?)|(I_ir ==? 8'b101?00?1)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b?1??0011)|(I_ir ==? 8'b0???0011)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b00000000)|(I_ir ==? 8'b?1??0011)|(I_ir ==? 8'b0??11?11)|(I_ir ==? 8'b?1?1111?)|(I_ir ==? 8'b00??0011)|(I_ir ==? 8'b?1?1?011)|(I_ir ==? 8'b00?1111?)))|
 	                         ((I_t == 4'd0)));
 	
-	assign O_control[  2] = (((I_t == 4'd3)&((I_ir == 8'h28)|(I_ir == 8'h00)|(I_ir == 8'h40)|(I_ir == 8'h60)|(I_ir == 8'h20)|(I_ir == 8'h68)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h20)|(I_ir == 8'h68)|(I_ir == 8'h00)|(I_ir == 8'h40)|(I_ir == 8'h60)|(I_ir == 8'h28)|(I_ir == 8'h08)|(I_ir == 8'h48)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h20)|(I_ir == 8'h00)|(I_ir == 8'h40)|(I_ir == 8'h60)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h40))));
-	
-	assign O_control[  3] = (((I_t == 4'd3)&((I_ir == 8'h8C)|(I_ir == 8'h27)|(I_ir == 8'hC7)|(I_ir == 8'h94)|(I_ir == 8'hE6)|(I_ir == 8'hC6)|(I_ir == 8'h07)|(I_ir == 8'h8D)|(I_ir == 8'h67)|(I_ir == 8'h96)|(I_ir == 8'h00)|(I_ir == 8'h66)|(I_ir == 8'h97)|(I_ir == 8'h26)|(I_ir == 8'hE7)|(I_ir == 8'h46)|(I_ir == 8'h06)|(I_ir == 8'h8F)|(I_ir == 8'h95)|(I_ir == 8'h20)|(I_ir == 8'h47)|(I_ir == 8'h8E)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'hFE)|(I_ir == 8'hFF)|(I_ir == 8'hDE)|(I_ir == 8'hF3)|(I_ir == 8'hDF)|(I_ir == 8'hC3)|(I_ir == 8'h63)|(I_ir == 8'h53)|(I_ir == 8'h23)|(I_ir == 8'h5E)|(I_ir == 8'hE3)|(I_ir == 8'h33)|(I_ir == 8'h3E)|(I_ir == 8'h7E)|(I_ir == 8'hFB)|(I_ir == 8'h03)|(I_ir == 8'h73)|(I_ir == 8'hDB)|(I_ir == 8'h43)|(I_ir == 8'h13)|(I_ir == 8'h1E)|(I_ir == 8'hD3)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hE7)|(I_ir == 8'h46)|(I_ir == 8'hD7)|(I_ir == 8'h37)|(I_ir == 8'hD6)|(I_ir == 8'h4E)|(I_ir == 8'hF6)|(I_ir == 8'hC6)|(I_ir == 8'h9D)|(I_ir == 8'h17)|(I_ir == 8'h4F)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'h0E)|(I_ir == 8'hCF)|(I_ir == 8'h20)|(I_ir == 8'hEE)|(I_ir == 8'h16)|(I_ir == 8'h77)|(I_ir == 8'hCE)|(I_ir == 8'hF7)|(I_ir == 8'h26)|(I_ir == 8'h99)|(I_ir == 8'h66)|(I_ir == 8'hC7)|(I_ir == 8'h2E)|(I_ir == 8'h6E)|(I_ir == 8'hE6)|(I_ir == 8'h6F)|(I_ir == 8'h2F)|(I_ir == 8'h06)|(I_ir == 8'h00)|(I_ir == 8'hEF)|(I_ir == 8'h0F)|(I_ir == 8'h56)|(I_ir == 8'h57)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h3E)|(I_ir == 8'h0E)|(I_ir == 8'hDB)|(I_ir == 8'h6E)|(I_ir == 8'hCF)|(I_ir == 8'h1F)|(I_ir == 8'h83)|(I_ir == 8'h5E)|(I_ir == 8'hEF)|(I_ir == 8'h2E)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h5F)|(I_ir == 8'h91)|(I_ir == 8'hFF)|(I_ir == 8'hDE)|(I_ir == 8'h4E)|(I_ir == 8'h1B)|(I_ir == 8'h1E)|(I_ir == 8'h56)|(I_ir == 8'hDF)|(I_ir == 8'hF6)|(I_ir == 8'h81)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'hF7)|(I_ir == 8'hD6)|(I_ir == 8'hD7)|(I_ir == 8'h3F)|(I_ir == 8'h7F)|(I_ir == 8'h7E)|(I_ir == 8'h16)|(I_ir == 8'h5B)|(I_ir == 8'hFE)|(I_ir == 8'hEE)|(I_ir == 8'hFB)|(I_ir == 8'hCE)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'hE3)|(I_ir == 8'hD3)|(I_ir == 8'hF3)|(I_ir == 8'hC3)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h87)|(I_ir == 8'h00)|(I_ir == 8'h85)|(I_ir == 8'h86)|(I_ir == 8'h84)|(I_ir == 8'h08)|(I_ir == 8'h48)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hCB))));
-	
-	assign O_control[  4] = (((I_t == 4'd2)&((I_ir == 8'h00)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h20))));
-	
-	assign O_control[  5] = (((I_t == 4'd2)&((I_ir == 8'h00)|(I_ir == 8'h08)|(I_ir == 8'h48)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h00)|(I_ir == 8'h20)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h20)|(I_ir == 8'h00))));
-	
-	assign O_control[  6] = (((I_t == 4'd2)&((I_ir == 8'h00))));
-	
-	assign O_control[  7] = (((I_t == 4'd3)&((I_ir == 8'h00)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h20))));
-	
-	assign O_control[  8] = (((I_t == 4'd2)&((I_ir == 8'h08)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h00))));
-	
-	assign O_control[  9] = (((I_t == 4'd5)&((I_ir == 8'h00))));
-	
-	assign O_control[ 10] = (((I_t == 4'd1)&((I_ir == 8'hD1)|(I_ir == 8'hD7)|(I_ir == 8'hC7)|(I_ir == 8'hF5)|(I_ir == 8'h34)|(I_ir == 8'h95)|(I_ir == 8'h85)|(I_ir == 8'hC5)|(I_ir == 8'h86)|(I_ir == 8'h14)|(I_ir == 8'h65)|(I_ir == 8'hC6)|(I_ir == 8'h17)|(I_ir == 8'h11)|(I_ir == 8'h53)|(I_ir == 8'hB4)|(I_ir == 8'hCD)|(I_ir == 8'h20)|(I_ir == 8'hEE)|(I_ir == 8'h77)|(I_ir == 8'h67)|(I_ir == 8'h8E)|(I_ir == 8'h84)|(I_ir == 8'hCE)|(I_ir == 8'h0F)|(I_ir == 8'h2C)|(I_ir == 8'h35)|(I_ir == 8'hED)|(I_ir == 8'h2E)|(I_ir == 8'h66)|(I_ir == 8'h54)|(I_ir == 8'h73)|(I_ir == 8'h33)|(I_ir == 8'h0E)|(I_ir == 8'h57)|(I_ir == 8'h94)|(I_ir == 8'h25)|(I_ir == 8'h6E)|(I_ir == 8'hCF)|(I_ir == 8'hE6)|(I_ir == 8'h2D)|(I_ir == 8'h55)|(I_ir == 8'hB6)|(I_ir == 8'h8D)|(I_ir == 8'h07)|(I_ir == 8'hAC)|(I_ir == 8'h2F)|(I_ir == 8'h06)|(I_ir == 8'hE4)|(I_ir == 8'hF1)|(I_ir == 8'hD5)|(I_ir == 8'h26)|(I_ir == 8'h37)|(I_ir == 8'h4E)|(I_ir == 8'h05)|(I_ir == 8'hA5)|(I_ir == 8'hEF)|(I_ir == 8'hD3)|(I_ir == 8'h24)|(I_ir == 8'h6D)|(I_ir == 8'h31)|(I_ir == 8'h4C)|(I_ir == 8'hB7)|(I_ir == 8'hC4)|(I_ir == 8'h15)|(I_ir == 8'h91)|(I_ir == 8'h97)|(I_ir == 8'h87)|(I_ir == 8'h75)|(I_ir == 8'hB5)|(I_ir == 8'hCC)|(I_ir == 8'h13)|(I_ir == 8'hA6)|(I_ir == 8'hD4)|(I_ir == 8'h76)|(I_ir == 8'h4D)|(I_ir == 8'h74)|(I_ir == 8'h64)|(I_ir == 8'h71)|(I_ir == 8'hAE)|(I_ir == 8'hA4)|(I_ir == 8'h0C)|(I_ir == 8'h27)|(I_ir == 8'hB1)|(I_ir == 8'hAF)|(I_ir == 8'h44)|(I_ir == 8'hF6)|(I_ir == 8'h47)|(I_ir == 8'hEC)|(I_ir == 8'h56)|(I_ir == 8'h6F)|(I_ir == 8'hA7)|(I_ir == 8'hAD)|(I_ir == 8'hE7)|(I_ir == 8'h16)|(I_ir == 8'hF4)|(I_ir == 8'h46)|(I_ir == 8'hE5)|(I_ir == 8'h36)|(I_ir == 8'h51)|(I_ir == 8'h0D)|(I_ir == 8'h4F)|(I_ir == 8'h45)|(I_ir == 8'h8F)|(I_ir == 8'h96)|(I_ir == 8'hF7)|(I_ir == 8'h8C)|(I_ir == 8'hB3)|(I_ir == 8'h04)|(I_ir == 8'hD6)|(I_ir == 8'hF3)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h01)|(I_ir == 8'h23)|(I_ir == 8'hA3)|(I_ir == 8'hE3)|(I_ir == 8'hA1)|(I_ir == 8'h83)|(I_ir == 8'h41)|(I_ir == 8'h63)|(I_ir == 8'h6C)|(I_ir == 8'h43)|(I_ir == 8'h61)|(I_ir == 8'hE1)|(I_ir == 8'hC3)|(I_ir == 8'h21)|(I_ir == 8'h81)|(I_ir == 8'hC1)|(I_ir == 8'h03)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h00))));
-	
-	assign O_control[ 11] = (((I_t == 4'd6)&((I_ir == 8'h00))));
-	
-	assign O_control[ 12] = (((I_t == 4'd2)&((I_ir == 8'h5F)|(I_ir == 8'h8F)|(I_ir == 8'h8D)|(I_ir == 8'hAC)|(I_ir == 8'h2F)|(I_ir == 8'h1D)|(I_ir == 8'h5D)|(I_ir == 8'hFD)|(I_ir == 8'h4E)|(I_ir == 8'h3F)|(I_ir == 8'h7C)|(I_ir == 8'h1E)|(I_ir == 8'h7F)|(I_ir == 8'h0C)|(I_ir == 8'h6D)|(I_ir == 8'h4C)|(I_ir == 8'h59)|(I_ir == 8'hDF)|(I_ir == 8'hEC)|(I_ir == 8'h3D)|(I_ir == 8'hFF)|(I_ir == 8'hFE)|(I_ir == 8'h4F)|(I_ir == 8'hCC)|(I_ir == 8'h5C)|(I_ir == 8'hD9)|(I_ir == 8'hDE)|(I_ir == 8'hCE)|(I_ir == 8'h1F)|(I_ir == 8'h0D)|(I_ir == 8'hFC)|(I_ir == 8'h4D)|(I_ir == 8'hAE)|(I_ir == 8'h19)|(I_ir == 8'h6F)|(I_ir == 8'hB9)|(I_ir == 8'h9D)|(I_ir == 8'h8E)|(I_ir == 8'hBC)|(I_ir == 8'hEE)|(I_ir == 8'h5E)|(I_ir == 8'h8C)|(I_ir == 8'h99)|(I_ir == 8'h2C)|(I_ir == 8'hEF)|(I_ir == 8'hED)|(I_ir == 8'h3E)|(I_ir == 8'hDD)|(I_ir == 8'h2E)|(I_ir == 8'h3B)|(I_ir == 8'h7E)|(I_ir == 8'h6E)|(I_ir == 8'h7B)|(I_ir == 8'h79)|(I_ir == 8'h0E)|(I_ir == 8'h3C)|(I_ir == 8'hDB)|(I_ir == 8'hCD)|(I_ir == 8'hCF)|(I_ir == 8'h39)|(I_ir == 8'h2D)|(I_ir == 8'hFB)|(I_ir == 8'h5B)|(I_ir == 8'hBE)|(I_ir == 8'hBF)|(I_ir == 8'hAF)|(I_ir == 8'h1B)|(I_ir == 8'h0F)|(I_ir == 8'h1C)|(I_ir == 8'h7D)|(I_ir == 8'hF9)|(I_ir == 8'hBD)|(I_ir == 8'hAD)|(I_ir == 8'hDC)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h71)|(I_ir == 8'hD1)|(I_ir == 8'h33)|(I_ir == 8'h53)|(I_ir == 8'h11)|(I_ir == 8'hF1)|(I_ir == 8'hD3)|(I_ir == 8'h91)|(I_ir == 8'h73)|(I_ir == 8'h31)|(I_ir == 8'h13)|(I_ir == 8'hB3)|(I_ir == 8'hF3)|(I_ir == 8'hB1)|(I_ir == 8'h51)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h83)|(I_ir == 8'h63)|(I_ir == 8'h21)|(I_ir == 8'h61)|(I_ir == 8'hA3)|(I_ir == 8'h03)|(I_ir == 8'hE1)|(I_ir == 8'h01)|(I_ir == 8'hC3)|(I_ir == 8'h81)|(I_ir == 8'hC1)|(I_ir == 8'hE3)|(I_ir == 8'hA1)|(I_ir == 8'h6C)|(I_ir == 8'h43)|(I_ir == 8'h23)|(I_ir == 8'h41)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h00)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h20))));
-	
-	assign O_control[ 13] = (((I_t == 4'd5)&((I_ir == 8'h20)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h00)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h4C)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h6C))));
-	
-	assign O_control[ 14] = (((I_t == 4'd5)&((I_ir == 8'h0F)|(I_ir == 8'h57)|(I_ir == 8'h01)|(I_ir == 8'h0E)|(I_ir == 8'hA1)|(I_ir == 8'h6E)|(I_ir == 8'hCF)|(I_ir == 8'h83)|(I_ir == 8'hF1)|(I_ir == 8'h60)|(I_ir == 8'h40)|(I_ir == 8'hEF)|(I_ir == 8'h2E)|(I_ir == 8'h31)|(I_ir == 8'h91)|(I_ir == 8'h2F)|(I_ir == 8'h41)|(I_ir == 8'h4E)|(I_ir == 8'hE1)|(I_ir == 8'h56)|(I_ir == 8'hF6)|(I_ir == 8'h81)|(I_ir == 8'hC1)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'h71)|(I_ir == 8'hF7)|(I_ir == 8'h37)|(I_ir == 8'hD6)|(I_ir == 8'hD1)|(I_ir == 8'hD7)|(I_ir == 8'h6F)|(I_ir == 8'hB1)|(I_ir == 8'h20)|(I_ir == 8'h16)|(I_ir == 8'h21)|(I_ir == 8'h11)|(I_ir == 8'h17)|(I_ir == 8'h61)|(I_ir == 8'h51)|(I_ir == 8'h4F)|(I_ir == 8'hEE)|(I_ir == 8'h77)|(I_ir == 8'hB3)|(I_ir == 8'hCE)|(I_ir == 8'hA3)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h8C)|(I_ir == 8'hED)|(I_ir == 8'h70)|(I_ir == 8'h34)|(I_ir == 8'h94)|(I_ir == 8'h50)|(I_ir == 8'hF5)|(I_ir == 8'hB6)|(I_ir == 8'h8D)|(I_ir == 8'hF4)|(I_ir == 8'h35)|(I_ir == 8'h10)|(I_ir == 8'h96)|(I_ir == 8'hAF)|(I_ir == 8'h97)|(I_ir == 8'h75)|(I_ir == 8'h2D)|(I_ir == 8'hCC)|(I_ir == 8'hB0)|(I_ir == 8'hCD)|(I_ir == 8'h68)|(I_ir == 8'hAC)|(I_ir == 8'h90)|(I_ir == 8'h74)|(I_ir == 8'h28)|(I_ir == 8'hAE)|(I_ir == 8'hD5)|(I_ir == 8'hB7)|(I_ir == 8'hAD)|(I_ir == 8'h15)|(I_ir == 8'hB4)|(I_ir == 8'h55)|(I_ir == 8'hB5)|(I_ir == 8'h8F)|(I_ir == 8'hF0)|(I_ir == 8'hD4)|(I_ir == 8'h4D)|(I_ir == 8'h0C)|(I_ir == 8'h6D)|(I_ir == 8'h95)|(I_ir == 8'h30)|(I_ir == 8'hEC)|(I_ir == 8'h14)|(I_ir == 8'hD0)|(I_ir == 8'h8E)|(I_ir == 8'h0D)|(I_ir == 8'h2C)|(I_ir == 8'h54)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h18)|(I_ir == 8'h5A)|(I_ir == 8'h88)|(I_ir == 8'hC0)|(I_ir == 8'h49)|(I_ir == 8'hA0)|(I_ir == 8'hA2)|(I_ir == 8'hC9)|(I_ir == 8'hFA)|(I_ir == 8'h4A)|(I_ir == 8'hAB)|(I_ir == 8'hB8)|(I_ir == 8'h09)|(I_ir == 8'hEB)|(I_ir == 8'h1A)|(I_ir == 8'hF8)|(I_ir == 8'h69)|(I_ir == 8'hA9)|(I_ir == 8'h9A)|(I_ir == 8'hCA)|(I_ir == 8'hDA)|(I_ir == 8'h38)|(I_ir == 8'hC8)|(I_ir == 8'h6A)|(I_ir == 8'hCB)|(I_ir == 8'h58)|(I_ir == 8'h98)|(I_ir == 8'h89)|(I_ir == 8'hEA)|(I_ir == 8'hE0)|(I_ir == 8'h3A)|(I_ir == 8'h7A)|(I_ir == 8'hC2)|(I_ir == 8'h2A)|(I_ir == 8'h80)|(I_ir == 8'hE9)|(I_ir == 8'hBA)|(I_ir == 8'h0A)|(I_ir == 8'hAA)|(I_ir == 8'hE2)|(I_ir == 8'hD8)|(I_ir == 8'hE8)|(I_ir == 8'h29)|(I_ir == 8'h78)|(I_ir == 8'hA8)|(I_ir == 8'h8A)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'hFE)|(I_ir == 8'hFF)|(I_ir == 8'hDE)|(I_ir == 8'h1F)|(I_ir == 8'h3F)|(I_ir == 8'hDF)|(I_ir == 8'h5E)|(I_ir == 8'h3E)|(I_ir == 8'h7E)|(I_ir == 8'hFB)|(I_ir == 8'h5B)|(I_ir == 8'h00)|(I_ir == 8'h1B)|(I_ir == 8'h3B)|(I_ir == 8'hDB)|(I_ir == 8'h7B)|(I_ir == 8'h5F)|(I_ir == 8'h1E)|(I_ir == 8'h7F)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hE7)|(I_ir == 8'hD9)|(I_ir == 8'h39)|(I_ir == 8'h46)|(I_ir == 8'hFD)|(I_ir == 8'hBE)|(I_ir == 8'h27)|(I_ir == 8'hF9)|(I_ir == 8'hB9)|(I_ir == 8'hC6)|(I_ir == 8'h9D)|(I_ir == 8'h59)|(I_ir == 8'h3D)|(I_ir == 8'h5C)|(I_ir == 8'hFC)|(I_ir == 8'h19)|(I_ir == 8'h79)|(I_ir == 8'hDC)|(I_ir == 8'h3C)|(I_ir == 8'h07)|(I_ir == 8'hBC)|(I_ir == 8'hBF)|(I_ir == 8'h26)|(I_ir == 8'h99)|(I_ir == 8'h66)|(I_ir == 8'h7D)|(I_ir == 8'hC7)|(I_ir == 8'hBD)|(I_ir == 8'hE6)|(I_ir == 8'h6C)|(I_ir == 8'h06)|(I_ir == 8'h1D)|(I_ir == 8'h5D)|(I_ir == 8'h67)|(I_ir == 8'h7C)|(I_ir == 8'h1C)|(I_ir == 8'hDD)|(I_ir == 8'h47)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'h33)|(I_ir == 8'hE3)|(I_ir == 8'hD3)|(I_ir == 8'h73)|(I_ir == 8'h63)|(I_ir == 8'h43)|(I_ir == 8'h13)|(I_ir == 8'hF3)|(I_ir == 8'hC3)|(I_ir == 8'h03)|(I_ir == 8'h53)|(I_ir == 8'h23)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h04)|(I_ir == 8'h44)|(I_ir == 8'hA5)|(I_ir == 8'h4C)|(I_ir == 8'hC4)|(I_ir == 8'h87)|(I_ir == 8'h45)|(I_ir == 8'hA6)|(I_ir == 8'h64)|(I_ir == 8'hA4)|(I_ir == 8'h25)|(I_ir == 8'h65)|(I_ir == 8'hA7)|(I_ir == 8'hC5)|(I_ir == 8'h48)|(I_ir == 8'hE5)|(I_ir == 8'hE4)|(I_ir == 8'h05)|(I_ir == 8'h85)|(I_ir == 8'h86)|(I_ir == 8'h84)|(I_ir == 8'h24)|(I_ir == 8'h08))));
-	
-	assign O_control[ 15] = (((I_t == 4'd1)&(~((I_ir == 8'h00)|(I_ir == 8'h02)|(I_ir == 8'h82)|(I_ir == 8'h08)|(I_ir == 8'h88)|(I_ir == 8'h0A)|(I_ir == 8'h0B)|(I_ir == 8'h8A)|(I_ir == 8'h8B)|(I_ir == 8'h12)|(I_ir == 8'h92)|(I_ir == 8'h93)|(I_ir == 8'h18)|(I_ir == 8'h98)|(I_ir == 8'h1A)|(I_ir == 8'h9A)|(I_ir == 8'h9B)|(I_ir == 8'h9C)|(I_ir == 8'h9E)|(I_ir == 8'h9F)|(I_ir == 8'h22)|(I_ir == 8'h28)|(I_ir == 8'hA8)|(I_ir == 8'h2A)|(I_ir == 8'h2B)|(I_ir == 8'hAA)|(I_ir == 8'h32)|(I_ir == 8'hB2)|(I_ir == 8'h38)|(I_ir == 8'hB8)|(I_ir == 8'h3A)|(I_ir == 8'hBA)|(I_ir == 8'hBB)|(I_ir == 8'h40)|(I_ir == 8'h42)|(I_ir == 8'h48)|(I_ir == 8'hC8)|(I_ir == 8'h4A)|(I_ir == 8'h4B)|(I_ir == 8'hCA)|(I_ir == 8'h52)|(I_ir == 8'hD2)|(I_ir == 8'h58)|(I_ir == 8'hD8)|(I_ir == 8'h5A)|(I_ir == 8'hDA)|(I_ir == 8'h60)|(I_ir == 8'hF8)|(I_ir == 8'h62)|(I_ir == 8'h68)|(I_ir == 8'hE8)|(I_ir == 8'h6A)|(I_ir == 8'h6B)|(I_ir == 8'hEA)|(I_ir == 8'hFA)|(I_ir == 8'h72)|(I_ir == 8'hF2)|(I_ir == 8'h78)|(I_ir == 8'h7A))))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h5F)|(I_ir == 8'h6C)|(I_ir == 8'h8F)|(I_ir == 8'h8D)|(I_ir == 8'hAC)|(I_ir == 8'h2F)|(I_ir == 8'h1D)|(I_ir == 8'h5D)|(I_ir == 8'h4E)|(I_ir == 8'h3F)|(I_ir == 8'h7C)|(I_ir == 8'h1E)|(I_ir == 8'h7F)|(I_ir == 8'h0C)|(I_ir == 8'h6D)|(I_ir == 8'h59)|(I_ir == 8'hDF)|(I_ir == 8'h3D)|(I_ir == 8'hEC)|(I_ir == 8'hFF)|(I_ir == 8'hFE)|(I_ir == 8'h4F)|(I_ir == 8'hCC)|(I_ir == 8'h5C)|(I_ir == 8'hD9)|(I_ir == 8'hCE)|(I_ir == 8'hDE)|(I_ir == 8'h1F)|(I_ir == 8'h0D)|(I_ir == 8'hFC)|(I_ir == 8'h4D)|(I_ir == 8'hAE)|(I_ir == 8'h19)|(I_ir == 8'h6F)|(I_ir == 8'hB9)|(I_ir == 8'h9D)|(I_ir == 8'h8E)|(I_ir == 8'hBC)|(I_ir == 8'h5E)|(I_ir == 8'hEE)|(I_ir == 8'h8C)|(I_ir == 8'h99)|(I_ir == 8'h2C)|(I_ir == 8'hEF)|(I_ir == 8'hED)|(I_ir == 8'h3E)|(I_ir == 8'h2E)|(I_ir == 8'hDD)|(I_ir == 8'h3B)|(I_ir == 8'h7E)|(I_ir == 8'h6E)|(I_ir == 8'h7B)|(I_ir == 8'h79)|(I_ir == 8'h0E)|(I_ir == 8'h3C)|(I_ir == 8'hDB)|(I_ir == 8'hCD)|(I_ir == 8'hCF)|(I_ir == 8'h39)|(I_ir == 8'h2D)|(I_ir == 8'hFD)|(I_ir == 8'hFB)|(I_ir == 8'h5B)|(I_ir == 8'hBE)|(I_ir == 8'hAF)|(I_ir == 8'hBF)|(I_ir == 8'h1B)|(I_ir == 8'h0F)|(I_ir == 8'h1C)|(I_ir == 8'h7D)|(I_ir == 8'hF9)|(I_ir == 8'hBD)|(I_ir == 8'hAD)|(I_ir == 8'hDC)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h60))));
-	
-	assign O_control[ 16] = (((I_t == 4'd1)&((I_ir == 8'hA1)|(I_ir == 8'h01)|(I_ir == 8'hC1)|(I_ir == 8'h43)|(I_ir == 8'h03)|(I_ir == 8'h63)|(I_ir == 8'h23)|(I_ir == 8'hE1)|(I_ir == 8'h41)|(I_ir == 8'h83)|(I_ir == 8'hC3)|(I_ir == 8'h61)|(I_ir == 8'hA3)|(I_ir == 8'h21)|(I_ir == 8'hE3)|(I_ir == 8'h81))));
-	
-	assign O_control[ 17] = (((I_t == 4'd1)&((I_ir == 8'hDD)|(I_ir == 8'h7C)|(I_ir == 8'h3F)|(I_ir == 8'h19)|(I_ir == 8'h1B)|(I_ir == 8'h7D)|(I_ir == 8'h99)|(I_ir == 8'hF9)|(I_ir == 8'h3E)|(I_ir == 8'hDF)|(I_ir == 8'hBD)|(I_ir == 8'h7E)|(I_ir == 8'h3B)|(I_ir == 8'hA1)|(I_ir == 8'h7F)|(I_ir == 8'h01)|(I_ir == 8'h59)|(I_ir == 8'h79)|(I_ir == 8'hDB)|(I_ir == 8'h63)|(I_ir == 8'hB9)|(I_ir == 8'h3D)|(I_ir == 8'hC3)|(I_ir == 8'h9D)|(I_ir == 8'h7B)|(I_ir == 8'hDC)|(I_ir == 8'h21)|(I_ir == 8'h3C)|(I_ir == 8'hFF)|(I_ir == 8'h81)|(I_ir == 8'h5F)|(I_ir == 8'hDE)|(I_ir == 8'h6C)|(I_ir == 8'hC1)|(I_ir == 8'h43)|(I_ir == 8'hFE)|(I_ir == 8'h1D)|(I_ir == 8'h23)|(I_ir == 8'hFB)|(I_ir == 8'h83)|(I_ir == 8'hD9)|(I_ir == 8'h61)|(I_ir == 8'hBC)|(I_ir == 8'h5B)|(I_ir == 8'h39)|(I_ir == 8'hFC)|(I_ir == 8'h1F)|(I_ir == 8'h5C)|(I_ir == 8'hFD)|(I_ir == 8'h5D)|(I_ir == 8'hBE)|(I_ir == 8'h03)|(I_ir == 8'hE1)|(I_ir == 8'hBF)|(I_ir == 8'h41)|(I_ir == 8'h1C)|(I_ir == 8'h5E)|(I_ir == 8'hA3)|(I_ir == 8'hE3)|(I_ir == 8'h1E)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h11)|(I_ir == 8'h51)|(I_ir == 8'hB3)|(I_ir == 8'h13)|(I_ir == 8'hF1)|(I_ir == 8'hF3)|(I_ir == 8'h71)|(I_ir == 8'hD1)|(I_ir == 8'h33)|(I_ir == 8'hB1)|(I_ir == 8'h73)|(I_ir == 8'h91)|(I_ir == 8'hD3)|(I_ir == 8'h31)|(I_ir == 8'h53))));
-	
-	assign O_control[ 18] = (((I_t == 4'd2)&((I_ir == 8'h81)|(I_ir == 8'h23)|(I_ir == 8'h43)|(I_ir == 8'h83)|(I_ir == 8'h61)|(I_ir == 8'hC1)|(I_ir == 8'hE1)|(I_ir == 8'h41)|(I_ir == 8'hA3)|(I_ir == 8'h03)|(I_ir == 8'hE3)|(I_ir == 8'hC3)|(I_ir == 8'hA1)|(I_ir == 8'h01)|(I_ir == 8'h63)|(I_ir == 8'h21)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'hE1)|(I_ir == 8'h41)|(I_ir == 8'hA3)|(I_ir == 8'h01)|(I_ir == 8'h63)|(I_ir == 8'hE3)|(I_ir == 8'hC3)|(I_ir == 8'hA1)|(I_ir == 8'h21)|(I_ir == 8'h23)|(I_ir == 8'h6C)|(I_ir == 8'h43)|(I_ir == 8'h81)|(I_ir == 8'h61)|(I_ir == 8'hC1)|(I_ir == 8'h83)|(I_ir == 8'h03)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h6C)|(I_ir == 8'h43)|(I_ir == 8'h21)|(I_ir == 8'h81)|(I_ir == 8'h61)|(I_ir == 8'hC1)|(I_ir == 8'h23)|(I_ir == 8'h83)|(I_ir == 8'h41)|(I_ir == 8'hA3)|(I_ir == 8'h03)|(I_ir == 8'hE1)|(I_ir == 8'hE3)|(I_ir == 8'hA1)|(I_ir == 8'h01)|(I_ir == 8'h63)|(I_ir == 8'hC3))));
-	
-	assign O_control[ 19] = (((I_t == 4'd2)&((I_ir == 8'h5F)|(I_ir == 8'h43)|(I_ir == 8'h83)|(I_ir == 8'h1D)|(I_ir == 8'h5D)|(I_ir == 8'h41)|(I_ir == 8'hFD)|(I_ir == 8'h3F)|(I_ir == 8'h7C)|(I_ir == 8'h1E)|(I_ir == 8'h7F)|(I_ir == 8'hC3)|(I_ir == 8'h59)|(I_ir == 8'hDF)|(I_ir == 8'h3D)|(I_ir == 8'h21)|(I_ir == 8'hFF)|(I_ir == 8'hFE)|(I_ir == 8'h5C)|(I_ir == 8'hD9)|(I_ir == 8'hC1)|(I_ir == 8'hDE)|(I_ir == 8'h1F)|(I_ir == 8'hE1)|(I_ir == 8'hFC)|(I_ir == 8'h19)|(I_ir == 8'h63)|(I_ir == 8'hB9)|(I_ir == 8'h9D)|(I_ir == 8'h81)|(I_ir == 8'h23)|(I_ir == 8'h61)|(I_ir == 8'hBC)|(I_ir == 8'h5E)|(I_ir == 8'h99)|(I_ir == 8'h03)|(I_ir == 8'h3E)|(I_ir == 8'hDD)|(I_ir == 8'hE3)|(I_ir == 8'h3B)|(I_ir == 8'h7E)|(I_ir == 8'h01)|(I_ir == 8'h7B)|(I_ir == 8'h79)|(I_ir == 8'hDB)|(I_ir == 8'h3C)|(I_ir == 8'h39)|(I_ir == 8'hFB)|(I_ir == 8'h5B)|(I_ir == 8'hBE)|(I_ir == 8'hBF)|(I_ir == 8'h1B)|(I_ir == 8'hA3)|(I_ir == 8'h1C)|(I_ir == 8'h7D)|(I_ir == 8'hF9)|(I_ir == 8'hBD)|(I_ir == 8'hA1)|(I_ir == 8'hDC)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h71)|(I_ir == 8'h01)|(I_ir == 8'hD1)|(I_ir == 8'h33)|(I_ir == 8'h53)|(I_ir == 8'h23)|(I_ir == 8'h11)|(I_ir == 8'hF1)|(I_ir == 8'hA3)|(I_ir == 8'hE3)|(I_ir == 8'hD3)|(I_ir == 8'hA1)|(I_ir == 8'h91)|(I_ir == 8'h83)|(I_ir == 8'h41)|(I_ir == 8'h73)|(I_ir == 8'h63)|(I_ir == 8'h31)|(I_ir == 8'h6C)|(I_ir == 8'h43)|(I_ir == 8'h61)|(I_ir == 8'h13)|(I_ir == 8'hB3)|(I_ir == 8'hF3)|(I_ir == 8'hE1)|(I_ir == 8'hB1)|(I_ir == 8'hC3)|(I_ir == 8'h21)|(I_ir == 8'h81)|(I_ir == 8'hC1)|(I_ir == 8'h51)|(I_ir == 8'h03))));
-	
-	assign O_control[ 20] = (((I_t == 4'd2)&((I_ir == 8'hFF)|(I_ir == 8'h75)|(I_ir == 8'h16)|(I_ir == 8'h5F)|(I_ir == 8'h81)|(I_ir == 8'h55)|(I_ir == 8'hB4)|(I_ir == 8'h23)|(I_ir == 8'hFE)|(I_ir == 8'h43)|(I_ir == 8'h17)|(I_ir == 8'h5C)|(I_ir == 8'h77)|(I_ir == 8'h83)|(I_ir == 8'h61)|(I_ir == 8'hBC)|(I_ir == 8'hB5)|(I_ir == 8'hC1)|(I_ir == 8'h74)|(I_ir == 8'hF4)|(I_ir == 8'h5E)|(I_ir == 8'hDE)|(I_ir == 8'h1D)|(I_ir == 8'h35)|(I_ir == 8'h1F)|(I_ir == 8'h36)|(I_ir == 8'h5D)|(I_ir == 8'hD5)|(I_ir == 8'h76)|(I_ir == 8'hE1)|(I_ir == 8'h41)|(I_ir == 8'hFC)|(I_ir == 8'h37)|(I_ir == 8'hFD)|(I_ir == 8'hD4)|(I_ir == 8'hA3)|(I_ir == 8'h03)|(I_ir == 8'hF7)|(I_ir == 8'hD7)|(I_ir == 8'h1C)|(I_ir == 8'hD6)|(I_ir == 8'h3F)|(I_ir == 8'h7C)|(I_ir == 8'h56)|(I_ir == 8'h34)|(I_ir == 8'h7D)|(I_ir == 8'h1E)|(I_ir == 8'h54)|(I_ir == 8'h7F)|(I_ir == 8'h3E)|(I_ir == 8'h95)|(I_ir == 8'hDD)|(I_ir == 8'hE3)|(I_ir == 8'hBD)|(I_ir == 8'h15)|(I_ir == 8'h57)|(I_ir == 8'h94)|(I_ir == 8'h7E)|(I_ir == 8'hC3)|(I_ir == 8'hF6)|(I_ir == 8'hA1)|(I_ir == 8'h01)|(I_ir == 8'hF5)|(I_ir == 8'hDF)|(I_ir == 8'h63)|(I_ir == 8'h3D)|(I_ir == 8'h14)|(I_ir == 8'h9D)|(I_ir == 8'hDC)|(I_ir == 8'h21)|(I_ir == 8'h3C))));
-	
-	assign O_control[ 21] = (((I_t == 4'd2)&((I_ir == 8'h81)|(I_ir == 8'hA1)|(I_ir == 8'h01)|(I_ir == 8'h23)|(I_ir == 8'hA3)|(I_ir == 8'hC3)|(I_ir == 8'h43)|(I_ir == 8'h63)|(I_ir == 8'hE1)|(I_ir == 8'h41)|(I_ir == 8'h83)|(I_ir == 8'hE3)|(I_ir == 8'h61)|(I_ir == 8'hC1)|(I_ir == 8'h21)|(I_ir == 8'h03))));
-	
-	assign O_control[ 22] = (((I_t == 4'd3)&((I_ir == 8'hE1)|(I_ir == 8'h63)|(I_ir == 8'h41)|(I_ir == 8'h83)|(I_ir == 8'h23)|(I_ir == 8'h6C)|(I_ir == 8'hA1)|(I_ir == 8'h43)|(I_ir == 8'h03)|(I_ir == 8'hA3)|(I_ir == 8'hE3)|(I_ir == 8'h81)|(I_ir == 8'hC3)|(I_ir == 8'h01)|(I_ir == 8'h61)|(I_ir == 8'hC1)|(I_ir == 8'h21))));
-	
-	assign O_control[ 23] = (((I_t == 4'd3)&(~((I_ir == 8'h00)|(I_ir == 8'h01)|(I_ir == 8'h02)|(I_ir == 8'h03)|(I_ir == 8'h04)|(I_ir == 8'h05)|(I_ir == 8'h08)|(I_ir == 8'h09)|(I_ir == 8'h0A)|(I_ir == 8'h0B)|(I_ir == 8'h12)|(I_ir == 8'h18)|(I_ir == 8'h1A)|(I_ir == 8'h20)|(I_ir == 8'h21)|(I_ir == 8'h22)|(I_ir == 8'h23)|(I_ir == 8'h24)|(I_ir == 8'h25)|(I_ir == 8'h28)|(I_ir == 8'h29)|(I_ir == 8'h2A)|(I_ir == 8'h2B)|(I_ir == 8'h32)|(I_ir == 8'h38)|(I_ir == 8'h3A)|(I_ir == 8'h40)|(I_ir == 8'h41)|(I_ir == 8'h42)|(I_ir == 8'h43)|(I_ir == 8'h44)|(I_ir == 8'h45)|(I_ir == 8'h48)|(I_ir == 8'h49)|(I_ir == 8'h4A)|(I_ir == 8'h4B)|(I_ir == 8'h4C)|(I_ir == 8'h52)|(I_ir == 8'h58)|(I_ir == 8'h5A)|(I_ir == 8'h60)|(I_ir == 8'h61)|(I_ir == 8'h62)|(I_ir == 8'h63)|(I_ir == 8'h64)|(I_ir == 8'h65)|(I_ir == 8'h68)|(I_ir == 8'h69)|(I_ir == 8'h6A)|(I_ir == 8'h6B)|(I_ir == 8'h6C)|(I_ir == 8'h72)|(I_ir == 8'h78)|(I_ir == 8'h7A)|(I_ir == 8'h80)|(I_ir == 8'h81)|(I_ir == 8'h82)|(I_ir == 8'h83)|(I_ir == 8'h84)|(I_ir == 8'h85)|(I_ir == 8'h86)|(I_ir == 8'h87)|(I_ir == 8'h88)|(I_ir == 8'h89)|(I_ir == 8'h8A)|(I_ir == 8'h8B)|(I_ir == 8'h92)|(I_ir == 8'h93)|(I_ir == 8'h98)|(I_ir == 8'h9A)|(I_ir == 8'h9B)|(I_ir == 8'h9C)|(I_ir == 8'h9E)|(I_ir == 8'h9F)|(I_ir == 8'hA0)|(I_ir == 8'hA1)|(I_ir == 8'hA2)|(I_ir == 8'hA3)|(I_ir == 8'hA4)|(I_ir == 8'hA5)|(I_ir == 8'hA6)|(I_ir == 8'hA7)|(I_ir == 8'hA8)|(I_ir == 8'hA9)|(I_ir == 8'hAA)|(I_ir == 8'hAB)|(I_ir == 8'hB2)|(I_ir == 8'hB8)|(I_ir == 8'hBA)|(I_ir == 8'hBB)|(I_ir == 8'hC0)|(I_ir == 8'hC1)|(I_ir == 8'hC2)|(I_ir == 8'hC3)|(I_ir == 8'hC4)|(I_ir == 8'hC5)|(I_ir == 8'hC8)|(I_ir == 8'hC9)|(I_ir == 8'hCA)|(I_ir == 8'hCB)|(I_ir == 8'hD2)|(I_ir == 8'hD8)|(I_ir == 8'hDA)|(I_ir == 8'hE0)|(I_ir == 8'hE1)|(I_ir == 8'hE2)|(I_ir == 8'hE3)|(I_ir == 8'hE4)|(I_ir == 8'hE5)|(I_ir == 8'hE8)|(I_ir == 8'hE9)|(I_ir == 8'hEA)|(I_ir == 8'hEB)|(I_ir == 8'hF2)|(I_ir == 8'hF8)|(I_ir == 8'hFA))))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h57)|(I_ir == 8'h83)|(I_ir == 8'hEF)|(I_ir == 8'hD3)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h5F)|(I_ir == 8'h43)|(I_ir == 8'hDE)|(I_ir == 8'h4E)|(I_ir == 8'h1B)|(I_ir == 8'hF6)|(I_ir == 8'h71)|(I_ir == 8'hD6)|(I_ir == 8'hB1)|(I_ir == 8'h21)|(I_ir == 8'h11)|(I_ir == 8'h61)|(I_ir == 8'h51)|(I_ir == 8'hFE)|(I_ir == 8'hEE)|(I_ir == 8'h01)|(I_ir == 8'h73)|(I_ir == 8'hFF)|(I_ir == 8'h2F)|(I_ir == 8'h23)|(I_ir == 8'h13)|(I_ir == 8'h1E)|(I_ir == 8'h63)|(I_ir == 8'hDF)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'hF7)|(I_ir == 8'h37)|(I_ir == 8'h7E)|(I_ir == 8'h16)|(I_ir == 8'hC3)|(I_ir == 8'h5B)|(I_ir == 8'h4F)|(I_ir == 8'hCE)|(I_ir == 8'h3E)|(I_ir == 8'hA1)|(I_ir == 8'h6E)|(I_ir == 8'hF1)|(I_ir == 8'h2E)|(I_ir == 8'h91)|(I_ir == 8'h41)|(I_ir == 8'hE3)|(I_ir == 8'hF3)|(I_ir == 8'hD7)|(I_ir == 8'h3F)|(I_ir == 8'h7F)|(I_ir == 8'h6F)|(I_ir == 8'hFB)|(I_ir == 8'h77)|(I_ir == 8'hB3)|(I_ir == 8'hA3)|(I_ir == 8'h1F)|(I_ir == 8'h0F)|(I_ir == 8'h03)|(I_ir == 8'h0E)|(I_ir == 8'hDB)|(I_ir == 8'h53)|(I_ir == 8'hCF)|(I_ir == 8'h5E)|(I_ir == 8'h33)|(I_ir == 8'h31)|(I_ir == 8'hE1)|(I_ir == 8'h56)|(I_ir == 8'h81)|(I_ir == 8'hC1)|(I_ir == 8'hD1)|(I_ir == 8'h17)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h46)|(I_ir == 8'hD7)|(I_ir == 8'h37)|(I_ir == 8'h27)|(I_ir == 8'hC6)|(I_ir == 8'hFF)|(I_ir == 8'h5B)|(I_ir == 8'h4F)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'h3E)|(I_ir == 8'hDF)|(I_ir == 8'hCF)|(I_ir == 8'h16)|(I_ir == 8'hCE)|(I_ir == 8'hF7)|(I_ir == 8'h99)|(I_ir == 8'h7D)|(I_ir == 8'hBD)|(I_ir == 8'h2E)|(I_ir == 8'h6E)|(I_ir == 8'hE6)|(I_ir == 8'h1D)|(I_ir == 8'hF1)|(I_ir == 8'h11)|(I_ir == 8'h5D)|(I_ir == 8'h1C)|(I_ir == 8'h91)|(I_ir == 8'hF9)|(I_ir == 8'h3F)|(I_ir == 8'h7F)|(I_ir == 8'hB3)|(I_ir == 8'h1F)|(I_ir == 8'hF3)|(I_ir == 8'hFC)|(I_ir == 8'h1E)|(I_ir == 8'h0E)|(I_ir == 8'h53)|(I_ir == 8'h77)|(I_ir == 8'hBC)|(I_ir == 8'h5E)|(I_ir == 8'h26)|(I_ir == 8'h66)|(I_ir == 8'hC7)|(I_ir == 8'h33)|(I_ir == 8'h31)|(I_ir == 8'h06)|(I_ir == 8'hFB)|(I_ir == 8'h67)|(I_ir == 8'h56)|(I_ir == 8'hD9)|(I_ir == 8'h39)|(I_ir == 8'hFD)|(I_ir == 8'hBE)|(I_ir == 8'hB9)|(I_ir == 8'h9D)|(I_ir == 8'h17)|(I_ir == 8'h5C)|(I_ir == 8'hD1)|(I_ir == 8'hDC)|(I_ir == 8'h3C)|(I_ir == 8'h07)|(I_ir == 8'hBF)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h6F)|(I_ir == 8'h5F)|(I_ir == 8'h1B)|(I_ir == 8'hEF)|(I_ir == 8'h0F)|(I_ir == 8'hD3)|(I_ir == 8'hDE)|(I_ir == 8'hE7)|(I_ir == 8'hDB)|(I_ir == 8'hD6)|(I_ir == 8'h4E)|(I_ir == 8'h7E)|(I_ir == 8'hF6)|(I_ir == 8'h59)|(I_ir == 8'h3D)|(I_ir == 8'h71)|(I_ir == 8'hB1)|(I_ir == 8'h19)|(I_ir == 8'h79)|(I_ir == 8'hFE)|(I_ir == 8'hEE)|(I_ir == 8'h51)|(I_ir == 8'h2F)|(I_ir == 8'h13)|(I_ir == 8'h7C)|(I_ir == 8'hDD)|(I_ir == 8'h73)|(I_ir == 8'h57)|(I_ir == 8'h47)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h1F)|(I_ir == 8'hF3)|(I_ir == 8'h3F)|(I_ir == 8'h63)|(I_ir == 8'h53)|(I_ir == 8'h5E)|(I_ir == 8'hE3)|(I_ir == 8'h33)|(I_ir == 8'hFB)|(I_ir == 8'h5B)|(I_ir == 8'h03)|(I_ir == 8'hDB)|(I_ir == 8'hFE)|(I_ir == 8'h23)|(I_ir == 8'h1B)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h5F)|(I_ir == 8'h43)|(I_ir == 8'hD3)|(I_ir == 8'hDE)|(I_ir == 8'h73)|(I_ir == 8'h13)|(I_ir == 8'h1E)|(I_ir == 8'hFF)|(I_ir == 8'hDF)|(I_ir == 8'hC3)|(I_ir == 8'h3E)|(I_ir == 8'h7E)|(I_ir == 8'h7F)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hB7)|(I_ir == 8'hE7)|(I_ir == 8'hA6)|(I_ir == 8'h71)|(I_ir == 8'hD6)|(I_ir == 8'hB1)|(I_ir == 8'h95)|(I_ir == 8'hF6)|(I_ir == 8'hA7)|(I_ir == 8'hC5)|(I_ir == 8'h11)|(I_ir == 8'hE5)|(I_ir == 8'h51)|(I_ir == 8'h35)|(I_ir == 8'h96)|(I_ir == 8'h10)|(I_ir == 8'h50)|(I_ir == 8'h85)|(I_ir == 8'h84)|(I_ir == 8'h74)|(I_ir == 8'h73)|(I_ir == 8'h57)|(I_ir == 8'h24)|(I_ir == 8'h46)|(I_ir == 8'h13)|(I_ir == 8'hF0)|(I_ir == 8'h37)|(I_ir == 8'hD4)|(I_ir == 8'h47)|(I_ir == 8'h87)|(I_ir == 8'hB0)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'hF7)|(I_ir == 8'h27)|(I_ir == 8'h25)|(I_ir == 8'h65)|(I_ir == 8'h16)|(I_ir == 8'h05)|(I_ir == 8'hE6)|(I_ir == 8'hF1)|(I_ir == 8'h91)|(I_ir == 8'hB5)|(I_ir == 8'h90)|(I_ir == 8'hD5)|(I_ir == 8'hF3)|(I_ir == 8'hC4)|(I_ir == 8'h30)|(I_ir == 8'h14)|(I_ir == 8'h75)|(I_ir == 8'hB3)|(I_ir == 8'h64)|(I_ir == 8'hA4)|(I_ir == 8'h53)|(I_ir == 8'hD7)|(I_ir == 8'hC7)|(I_ir == 8'h33)|(I_ir == 8'h86)|(I_ir == 8'hC6)|(I_ir == 8'h77)|(I_ir == 8'h67)|(I_ir == 8'h26)|(I_ir == 8'h66)|(I_ir == 8'h56)|(I_ir == 8'h31)|(I_ir == 8'h15)|(I_ir == 8'h55)|(I_ir == 8'hB6)|(I_ir == 8'h06)|(I_ir == 8'h04)|(I_ir == 8'h44)|(I_ir == 8'hA5)|(I_ir == 8'h45)|(I_ir == 8'h34)|(I_ir == 8'hD0)|(I_ir == 8'hF5)|(I_ir == 8'h17)|(I_ir == 8'hF4)|(I_ir == 8'hE4)|(I_ir == 8'h70)|(I_ir == 8'hD1)|(I_ir == 8'h97)|(I_ir == 8'hB4)|(I_ir == 8'h07)|(I_ir == 8'h54)|(I_ir == 8'h94)|(I_ir == 8'hD3)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'h73)|(I_ir == 8'h63)|(I_ir == 8'h13)|(I_ir == 8'hC3)|(I_ir == 8'hF3)|(I_ir == 8'h03)|(I_ir == 8'h53)|(I_ir == 8'h33)|(I_ir == 8'h23)|(I_ir == 8'hD3)|(I_ir == 8'hE3)|(I_ir == 8'h43))));
-	
-	assign O_control[ 24] = (((I_t == 4'd5)&((I_ir == 8'h0F)|(I_ir == 8'h01)|(I_ir == 8'h17)|(I_ir == 8'h11)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h1F)|(I_ir == 8'h1B)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'h13)|(I_ir == 8'h03)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h19)|(I_ir == 8'h07)|(I_ir == 8'h1D)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h09)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h0D)|(I_ir == 8'h15)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h05))));
-	
-	assign O_control[ 25] = (((I_t == 4'd5)&((I_ir == 8'h0F)|(I_ir == 8'h57)|(I_ir == 8'h01)|(I_ir == 8'hDB)|(I_ir == 8'h83)|(I_ir == 8'hF1)|(I_ir == 8'h31)|(I_ir == 8'h91)|(I_ir == 8'hFF)|(I_ir == 8'h2F)|(I_ir == 8'h41)|(I_ir == 8'hE1)|(I_ir == 8'hDF)|(I_ir == 8'h81)|(I_ir == 8'hC1)|(I_ir == 8'h71)|(I_ir == 8'h37)|(I_ir == 8'hD1)|(I_ir == 8'h6F)|(I_ir == 8'h21)|(I_ir == 8'h17)|(I_ir == 8'h11)|(I_ir == 8'h61)|(I_ir == 8'h51)|(I_ir == 8'h4F)|(I_ir == 8'hFB)|(I_ir == 8'h77)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'hED)|(I_ir == 8'hC7)|(I_ir == 8'hF5)|(I_ir == 8'h8D)|(I_ir == 8'h35)|(I_ir == 8'h97)|(I_ir == 8'h75)|(I_ir == 8'h2D)|(I_ir == 8'hCD)|(I_ir == 8'hD5)|(I_ir == 8'h15)|(I_ir == 8'hE7)|(I_ir == 8'h55)|(I_ir == 8'h8F)|(I_ir == 8'h4D)|(I_ir == 8'h6D)|(I_ir == 8'h95)|(I_ir == 8'h0D)|(I_ir == 8'h2C)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hD9)|(I_ir == 8'h39)|(I_ir == 8'hFD)|(I_ir == 8'hD7)|(I_ir == 8'h27)|(I_ir == 8'hF9)|(I_ir == 8'h9D)|(I_ir == 8'h59)|(I_ir == 8'h3D)|(I_ir == 8'h19)|(I_ir == 8'h79)|(I_ir == 8'hCF)|(I_ir == 8'h07)|(I_ir == 8'hF7)|(I_ir == 8'h99)|(I_ir == 8'h7D)|(I_ir == 8'h1D)|(I_ir == 8'h67)|(I_ir == 8'h5D)|(I_ir == 8'hEF)|(I_ir == 8'hDD)|(I_ir == 8'h47)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'h33)|(I_ir == 8'h73)|(I_ir == 8'h63)|(I_ir == 8'h43)|(I_ir == 8'h13)|(I_ir == 8'h03)|(I_ir == 8'h53)|(I_ir == 8'h23)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h1F)|(I_ir == 8'hF3)|(I_ir == 8'h3F)|(I_ir == 8'hC3)|(I_ir == 8'hE3)|(I_ir == 8'h5B)|(I_ir == 8'h1B)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h5F)|(I_ir == 8'h7F)|(I_ir == 8'hD3)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h49)|(I_ir == 8'hC9)|(I_ir == 8'h4A)|(I_ir == 8'h09)|(I_ir == 8'hEB)|(I_ir == 8'h69)|(I_ir == 8'h6A)|(I_ir == 8'hCB)|(I_ir == 8'h2A)|(I_ir == 8'hE9)|(I_ir == 8'h0A)|(I_ir == 8'hAA)|(I_ir == 8'h29)|(I_ir == 8'hA8)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h87)|(I_ir == 8'h45)|(I_ir == 8'h25)|(I_ir == 8'h65)|(I_ir == 8'hC5)|(I_ir == 8'hE5)|(I_ir == 8'h05)|(I_ir == 8'h85)|(I_ir == 8'h24)|(I_ir == 8'h48))));
+	assign O_control[  2] = (((I_t == 4'd3)&((I_ir ==? 8'b0??00000)|(I_ir ==? 8'b0?101000)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b0??0?000)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b0??00000)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b01000000))));
+	
+	assign O_control[  3] = (((I_t == 4'd3)&((I_ir ==? 8'b0??0011?)|(I_ir ==? 8'b100101??)|(I_ir ==? 8'b?1?0011?)|(I_ir ==? 8'b100011??)|(I_ir ==? 8'b00?00000)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b?1??0011)|(I_ir ==? 8'b00??0011)|(I_ir ==? 8'b0??11110)|(I_ir ==? 8'b11?1111?)|(I_ir ==? 8'b11?1?011)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b?1??0110)|(I_ir ==? 8'b?1?0111?)|(I_ir ==? 8'b0??1011?)|(I_ir ==? 8'b00?0?110)|(I_ir ==? 8'b11??011?)|(I_ir ==? 8'b00?00000)|(I_ir ==? 8'b0??01111)|(I_ir ==? 8'b10011?01)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b?1?1?110)|(I_ir ==? 8'b0??11?11)|(I_ir ==? 8'b11??111?)|(I_ir ==? 8'b0???1110)|(I_ir ==? 8'b00?10110)|(I_ir ==? 8'b11?1?11?)|(I_ir ==? 8'b?1?11?11)|(I_ir ==? 8'b100000?1)|(I_ir ==? 8'b100?0001)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b11??0011)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b100001??)|(I_ir ==? 8'b0?001000)|(I_ir ==? 8'b00000000)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b11001011))));
+	
+	assign O_control[  4] = (((I_t == 4'd2)&((I_ir ==? 8'b00000000)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b00100000))));
+	
+	assign O_control[  5] = (((I_t == 4'd2)&((I_ir ==? 8'b0?001000)|(I_ir ==? 8'b0000?000)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b00?00000)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b00?00000))));
+	
+	assign O_control[  6] = (((I_t == 4'd2)&((I_ir ==? 8'b00000000))));
+	
+	assign O_control[  7] = (((I_t == 4'd3)&((I_ir ==? 8'b00000000)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b00100000))));
+	
+	assign O_control[  8] = (((I_t == 4'd2)&((I_ir ==? 8'b00001000)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b00000000))));
+	
+	assign O_control[  9] = (((I_t == 4'd5)&((I_ir ==? 8'b00000000))));
+	
+	assign O_control[ 10] = (((I_t == 4'd1)&((I_ir ==? 8'b????01??)|(I_ir ==? 8'b???0?1?1)|(I_ir ==? 8'b1??011??)|(I_ir ==? 8'b??110??1)|(I_ir ==? 8'b0?00?1??)|(I_ir ==? 8'b0??10??1)|(I_ir ==? 8'b001011??)|(I_ir ==? 8'b11010??1)|(I_ir ==? 8'b?110?11?)|(I_ir ==? 8'b00100?00)|(I_ir ==? 8'b?0?10001)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b01101100)|(I_ir ==? 8'b???000?1)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b00000000))));
+	
+	assign O_control[ 11] = (((I_t == 4'd6)&((I_ir ==? 8'b00000000))));
+	
+	assign O_control[ 12] = (((I_t == 4'd2)&((I_ir ==? 8'b0?0?11??)|(I_ir ==? 8'b??1?111?)|(I_ir ==? 8'b???11?01)|(I_ir ==? 8'b1??011??)|(I_ir ==? 8'b?1?11?11)|(I_ir ==? 8'b?1?111??)|(I_ir ==? 8'b?01?11??)|(I_ir ==? 8'b00?11??1)|(I_ir ==? 8'b0?1?11?1)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b???10001)|(I_ir ==? 8'b0??100?1)|(I_ir ==? 8'b?1?100?1)|(I_ir ==? 8'b101100?1)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b01101100)|(I_ir ==? 8'b???000?1)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b00000000)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b00100000))));
+	
+	assign O_control[ 13] = (((I_t == 4'd5)&((I_ir ==? 8'b00100000)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b00000000)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b01001100)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b01101100))));
+	
+	assign O_control[ 14] = (((I_t == 4'd5)&((I_ir ==? 8'b????0001)|(I_ir ==? 8'b?1?1011?)|(I_ir ==? 8'b?1?0111?)|(I_ir ==? 8'b0??1011?)|(I_ir ==? 8'b0??0111?)|(I_ir ==? 8'b10?000?1)|(I_ir ==? 8'b01?0000?)|(I_ir ==? 8'b101?00?1)|(I_ir ==? 8'b0010000?)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b???10?00)|(I_ir ==? 8'b1??0110?)|(I_ir ==? 8'b???1010?)|(I_ir ==? 8'b00?0110?)|(I_ir ==? 8'b10?011??)|(I_ir ==? 8'b10?101??)|(I_ir ==? 8'b???01101)|(I_ir ==? 8'b0?101000)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b????1010)|(I_ir ==? 8'b???01001)|(I_ir ==? 8'b1???10?0)|(I_ir ==? 8'b???110?0)|(I_ir ==? 8'b11?0?0?0)|(I_ir ==? 8'b1?1010?1)|(I_ir ==? 8'b1010?0?0)|(I_ir ==? 8'b11?010??)|(I_ir ==? 8'b10?0?000)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b00000000)|(I_ir ==? 8'b0??11?11)|(I_ir ==? 8'b?1?1111?)|(I_ir ==? 8'b?1?11?11)|(I_ir ==? 8'b00?1111?)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b???11?01)|(I_ir ==? 8'b?1?0011?)|(I_ir ==? 8'b00?0011?)|(I_ir ==? 8'b0??1110?)|(I_ir ==? 8'b101111??)|(I_ir ==? 8'b11?1110?)|(I_ir ==? 8'b011?1100)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b?1??0011)|(I_ir ==? 8'b0???0011)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b???0010?)|(I_ir ==? 8'b10?001??)|(I_ir ==? 8'b0?001000)|(I_ir ==? 8'b0100?100))));
+	
+	assign O_control[ 15] = (((I_t == 4'd1)&(~((I_ir ==? 8'b????10?0)|(I_ir ==? 8'b???1?010)|(I_ir ==? 8'b01?0?0?0)|(I_ir ==? 8'b0??0101?)|(I_ir ==? 8'b10011?1?)|(I_ir ==? 8'b0000?0?0)|(I_ir ==? 8'b10011??0)|(I_ir ==? 8'b?00??010)|(I_ir ==? 8'b00???010)|(I_ir ==? 8'b100?101?)|(I_ir ==? 8'b1001?01?)|(I_ir ==? 8'b10?1101?))))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b??1?11??)|(I_ir ==? 8'b0??11??1)|(I_ir ==? 8'b110?11??)|(I_ir ==? 8'b?0?011??)|(I_ir ==? 8'b???11?01)|(I_ir ==? 8'b0?0?111?)|(I_ir ==? 8'b0?0111??)|(I_ir ==? 8'b11?11?11)|(I_ir ==? 8'b01??11?1)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b01100000))));
+	
+	assign O_control[ 16] = (((I_t == 4'd1)&((I_ir ==? 8'b???000?1))));
+	
+	assign O_control[ 17] = (((I_t == 4'd1)&((I_ir ==? 8'b???11?01)|(I_ir ==? 8'b???000?1)|(I_ir ==? 8'b0??111??)|(I_ir ==? 8'b?1?11??1)|(I_ir ==? 8'b??1111??)|(I_ir ==? 8'b00?11??1)|(I_ir ==? 8'b?1?111??)|(I_ir ==? 8'b011?1100)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b???10001)|(I_ir ==? 8'b0??100?1)|(I_ir ==? 8'b?1?100?1)|(I_ir ==? 8'b101100?1))));
+	
+	assign O_control[ 18] = (((I_t == 4'd2)&((I_ir ==? 8'b???000?1)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b01101100)|(I_ir ==? 8'b???000?1)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b01101100)|(I_ir ==? 8'b???000?1))));
+	
+	assign O_control[ 19] = (((I_t == 4'd2)&((I_ir ==? 8'b???11?01)|(I_ir ==? 8'b???000?1)|(I_ir ==? 8'b0??111??)|(I_ir ==? 8'b?1?11??1)|(I_ir ==? 8'b??1111??)|(I_ir ==? 8'b00?11??1)|(I_ir ==? 8'b?1?111??)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b01101100)|(I_ir ==? 8'b????0001)|(I_ir ==? 8'b0???00?1)|(I_ir ==? 8'b11??00?1)|(I_ir ==? 8'b101?00?1)|(I_ir ==? 8'b???000?1))));
+	
+	assign O_control[ 20] = (((I_t == 4'd2)&((I_ir ==? 8'b?1?1?1??)|(I_ir ==? 8'b???000?1)|(I_ir ==? 8'b0??1?1??)|(I_ir ==? 8'b???1010?)|(I_ir ==? 8'b1?11110?)|(I_ir ==? 8'b1??1?101))));
+	
+	assign O_control[ 21] = (((I_t == 4'd2)&((I_ir ==? 8'b???000?1))));
+	
+	assign O_control[ 22] = (((I_t == 4'd3)&((I_ir ==? 8'b01101100)|(I_ir ==? 8'b???000?1))));
+	
+	assign O_control[ 23] = (((I_t == 4'd3)&(~((I_ir ==? 8'b???0?0??)|(I_ir ==? 8'b????10?0)|(I_ir ==? 8'b???00?0?)|(I_ir ==? 8'b???1?010)|(I_ir ==? 8'b10?00???)|(I_ir ==? 8'b10011?1?)|(I_ir ==? 8'b01?0??00)|(I_ir ==? 8'b100??01?)|(I_ir ==? 8'b10?1101?)|(I_ir ==? 8'b10011??0))))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b????0001)|(I_ir ==? 8'b?1?1??11)|(I_ir ==? 8'b0???111?)|(I_ir ==? 8'b???000?1)|(I_ir ==? 8'b?1?1?11?)|(I_ir ==? 8'b0??1??11)|(I_ir ==? 8'b?1??111?)|(I_ir ==? 8'b0??1?11?)|(I_ir ==? 8'b??1100?1)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b0????11?)|(I_ir ==? 8'b?1???11?)|(I_ir ==? 8'b???1?001)|(I_ir ==? 8'b??1111??)|(I_ir ==? 8'b?1?1??11)|(I_ir ==? 8'b?1?111??)|(I_ir ==? 8'b0??1??11)|(I_ir ==? 8'b000111??)|(I_ir ==? 8'b??110011)|(I_ir ==? 8'b???11?01)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b?1?1?011)|(I_ir ==? 8'b0??1111?)|(I_ir ==? 8'b0???0011)|(I_ir ==? 8'b?1?1111?)|(I_ir ==? 8'b00?11011)|(I_ir ==? 8'b11??0011)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b????01??)|(I_ir ==? 8'b???10?0?)|(I_ir ==? 8'b?1?10?11)|(I_ir ==? 8'b?0110?11)|(I_ir ==? 8'b0?010?11)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b?1??0011)|(I_ir ==? 8'b0???0011))));
+	
+	assign O_control[ 24] = (((I_t == 4'd5)&((I_ir ==? 8'b00010111)|(I_ir ==? 8'b00001111)|(I_ir ==? 8'b000?0001)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b00011?11)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b000?0011)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b00000111)|(I_ir ==? 8'b00011?01)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b00001001)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b00010101)|(I_ir ==? 8'b00001101)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b00000101))));
+	
+	assign O_control[ 25] = (((I_t == 4'd5)&((I_ir ==? 8'b??0?0001)|(I_ir ==? 8'b?11?0001)|(I_ir ==? 8'b0??10111)|(I_ir ==? 8'b0??01111)|(I_ir ==? 8'b11?11?11)|(I_ir ==? 8'b001?0001)|(I_ir ==? 8'b100000?1)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b?1?01101)|(I_ir ==? 8'b??010101)|(I_ir ==? 8'b00?01101)|(I_ir ==? 8'b?1?10101)|(I_ir ==? 8'b100011?1)|(I_ir ==? 8'b11?00111)|(I_ir ==? 8'b0010110?)|(I_ir ==? 8'b0??10101)|(I_ir ==? 8'b100101?1)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b??011?01)|(I_ir ==? 8'b0??00111)|(I_ir ==? 8'b?1?11?01)|(I_ir ==? 8'b00111?01)|(I_ir ==? 8'b11?01111)|(I_ir ==? 8'b11?10111)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b0???0011)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b0??11?11)|(I_ir ==? 8'b11??0011)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b0??01001)|(I_ir ==? 8'b11?010?1)|(I_ir ==? 8'b0??01010)|(I_ir ==? 8'b101010?0)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b01001000)|(I_ir ==? 8'b0??00101)|(I_ir ==? 8'b11?00101)|(I_ir ==? 8'b100001?1)|(I_ir ==? 8'b0010010?))));
 	
-	assign O_control[ 26] = (((I_t == 4'd5)&((I_ir == 8'h0F)|(I_ir == 8'h57)|(I_ir == 8'h01)|(I_ir == 8'hA1)|(I_ir == 8'hF1)|(I_ir == 8'h31)|(I_ir == 8'h2F)|(I_ir == 8'h41)|(I_ir == 8'hE1)|(I_ir == 8'hC1)|(I_ir == 8'h71)|(I_ir == 8'h37)|(I_ir == 8'hD1)|(I_ir == 8'h6F)|(I_ir == 8'hB1)|(I_ir == 8'h21)|(I_ir == 8'h17)|(I_ir == 8'h11)|(I_ir == 8'h61)|(I_ir == 8'h51)|(I_ir == 8'h4F)|(I_ir == 8'h77)|(I_ir == 8'hB3)|(I_ir == 8'hA3)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'hED)|(I_ir == 8'hF5)|(I_ir == 8'hB6)|(I_ir == 8'h35)|(I_ir == 8'hAF)|(I_ir == 8'h75)|(I_ir == 8'h2D)|(I_ir == 8'hCC)|(I_ir == 8'hCD)|(I_ir == 8'h68)|(I_ir == 8'hAC)|(I_ir == 8'hAE)|(I_ir == 8'hD5)|(I_ir == 8'hB7)|(I_ir == 8'hAD)|(I_ir == 8'h15)|(I_ir == 8'hB4)|(I_ir == 8'h55)|(I_ir == 8'hB5)|(I_ir == 8'h4D)|(I_ir == 8'h6D)|(I_ir == 8'hEC)|(I_ir == 8'h0D)|(I_ir == 8'h2C)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hD9)|(I_ir == 8'h39)|(I_ir == 8'hFD)|(I_ir == 8'hBE)|(I_ir == 8'h27)|(I_ir == 8'hF9)|(I_ir == 8'hB9)|(I_ir == 8'h59)|(I_ir == 8'h3D)|(I_ir == 8'h19)|(I_ir == 8'h79)|(I_ir == 8'h07)|(I_ir == 8'hBC)|(I_ir == 8'hBF)|(I_ir == 8'h7D)|(I_ir == 8'hBD)|(I_ir == 8'h1D)|(I_ir == 8'h67)|(I_ir == 8'h5D)|(I_ir == 8'hDD)|(I_ir == 8'h47)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'h33)|(I_ir == 8'h73)|(I_ir == 8'h63)|(I_ir == 8'h43)|(I_ir == 8'h13)|(I_ir == 8'h03)|(I_ir == 8'h53)|(I_ir == 8'h23)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hC0)|(I_ir == 8'h49)|(I_ir == 8'hA0)|(I_ir == 8'hA2)|(I_ir == 8'hC9)|(I_ir == 8'hAB)|(I_ir == 8'h09)|(I_ir == 8'hEB)|(I_ir == 8'h69)|(I_ir == 8'hA9)|(I_ir == 8'hE0)|(I_ir == 8'hE9)|(I_ir == 8'h29)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h1F)|(I_ir == 8'h3F)|(I_ir == 8'h5B)|(I_ir == 8'h1B)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h5F)|(I_ir == 8'h7F)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hA5)|(I_ir == 8'hC4)|(I_ir == 8'h45)|(I_ir == 8'hA6)|(I_ir == 8'hA4)|(I_ir == 8'h25)|(I_ir == 8'h65)|(I_ir == 8'hA7)|(I_ir == 8'hC5)|(I_ir == 8'hE5)|(I_ir == 8'hE4)|(I_ir == 8'h05)|(I_ir == 8'h24))));
+	assign O_control[ 26] = (((I_t == 4'd5)&((I_ir ==? 8'b?1??0001)|(I_ir ==? 8'b??1?0001)|(I_ir ==? 8'b0??10111)|(I_ir ==? 8'b0??01111)|(I_ir ==? 8'b000?0001)|(I_ir ==? 8'b101?00?1)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b01101000)|(I_ir ==? 8'b?1?10101)|(I_ir ==? 8'b0??01101)|(I_ir ==? 8'b11?0110?)|(I_ir ==? 8'b101101??)|(I_ir ==? 8'b101011??)|(I_ir ==? 8'b00?10101)|(I_ir ==? 8'b0010110?)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b0??11?01)|(I_ir ==? 8'b0??00111)|(I_ir ==? 8'b?1?11?01)|(I_ir ==? 8'b101111??)|(I_ir ==? 8'b1?111?01)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b0???0011)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b?1?01001)|(I_ir ==? 8'b1?1010?1)|(I_ir ==? 8'b0??01001)|(I_ir ==? 8'b1?100000)|(I_ir ==? 8'b11?00000)|(I_ir ==? 8'b101000?0)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b0??11?11)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b?1?00101)|(I_ir ==? 8'b?010010?)|(I_ir ==? 8'b11?0010?)|(I_ir ==? 8'b101001??)|(I_ir ==? 8'b0??00101))));
 	
-	assign O_control[ 27] = (((I_t == 4'd5)&((I_ir == 8'h0F)|(I_ir == 8'h57)|(I_ir == 8'h01)|(I_ir == 8'hA1)|(I_ir == 8'hF1)|(I_ir == 8'h31)|(I_ir == 8'hFF)|(I_ir == 8'h2F)|(I_ir == 8'h41)|(I_ir == 8'hE1)|(I_ir == 8'h71)|(I_ir == 8'h37)|(I_ir == 8'h6F)|(I_ir == 8'hB1)|(I_ir == 8'h21)|(I_ir == 8'h17)|(I_ir == 8'h11)|(I_ir == 8'h61)|(I_ir == 8'h51)|(I_ir == 8'h4F)|(I_ir == 8'hFB)|(I_ir == 8'h77)|(I_ir == 8'hB3)|(I_ir == 8'hA3)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'hED)|(I_ir == 8'hF5)|(I_ir == 8'h35)|(I_ir == 8'hAF)|(I_ir == 8'h75)|(I_ir == 8'h2D)|(I_ir == 8'h68)|(I_ir == 8'hB7)|(I_ir == 8'hAD)|(I_ir == 8'h15)|(I_ir == 8'hE7)|(I_ir == 8'h55)|(I_ir == 8'hB5)|(I_ir == 8'h4D)|(I_ir == 8'h6D)|(I_ir == 8'h0D)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h39)|(I_ir == 8'hFD)|(I_ir == 8'h27)|(I_ir == 8'hF9)|(I_ir == 8'hB9)|(I_ir == 8'h59)|(I_ir == 8'h3D)|(I_ir == 8'h19)|(I_ir == 8'h79)|(I_ir == 8'h07)|(I_ir == 8'hBF)|(I_ir == 8'hF7)|(I_ir == 8'h7D)|(I_ir == 8'hBD)|(I_ir == 8'h1D)|(I_ir == 8'h67)|(I_ir == 8'h5D)|(I_ir == 8'hEF)|(I_ir == 8'h47)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'h33)|(I_ir == 8'h73)|(I_ir == 8'h63)|(I_ir == 8'h43)|(I_ir == 8'h13)|(I_ir == 8'h03)|(I_ir == 8'h53)|(I_ir == 8'h23)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h1F)|(I_ir == 8'hF3)|(I_ir == 8'h3F)|(I_ir == 8'hE3)|(I_ir == 8'h5B)|(I_ir == 8'h1B)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h5F)|(I_ir == 8'h7F)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h49)|(I_ir == 8'h4A)|(I_ir == 8'hAB)|(I_ir == 8'h09)|(I_ir == 8'hEB)|(I_ir == 8'h69)|(I_ir == 8'hA9)|(I_ir == 8'h6A)|(I_ir == 8'h98)|(I_ir == 8'h2A)|(I_ir == 8'hE9)|(I_ir == 8'h0A)|(I_ir == 8'h29)|(I_ir == 8'h8A)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hA5)|(I_ir == 8'h45)|(I_ir == 8'h25)|(I_ir == 8'h65)|(I_ir == 8'hA7)|(I_ir == 8'hE5)|(I_ir == 8'h05))));
+	assign O_control[ 27] = (((I_t == 4'd5)&((I_ir ==? 8'b0???0001)|(I_ir ==? 8'b??1?0001)|(I_ir ==? 8'b0??10111)|(I_ir ==? 8'b0??01111)|(I_ir ==? 8'b101?00?1)|(I_ir ==? 8'b11111?11)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b01101000)|(I_ir ==? 8'b11100111)|(I_ir ==? 8'b0??01101)|(I_ir ==? 8'b0??10101)|(I_ir ==? 8'b1?101101)|(I_ir ==? 8'b??110101)|(I_ir ==? 8'b101011?1)|(I_ir ==? 8'b101101?1)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b11101111)|(I_ir ==? 8'b11110111)|(I_ir ==? 8'b0??11?01)|(I_ir ==? 8'b0??00111)|(I_ir ==? 8'b??111?01)|(I_ir ==? 8'b101111?1)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b0???0011)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b0??11?11)|(I_ir ==? 8'b111?0011)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b10011000)|(I_ir ==? 8'b0??01001)|(I_ir ==? 8'b1?1010?1)|(I_ir ==? 8'b0??01010)|(I_ir ==? 8'b?0001010)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b0??00101)|(I_ir ==? 8'b1?100101)|(I_ir ==? 8'b101001?1))));
 	
-	assign O_control[ 28] = (((I_t == 4'd3)&((I_ir == 8'h06)|(I_ir == 8'h0F)|(I_ir == 8'h17)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h06)|(I_ir == 8'h1B)|(I_ir == 8'h0E)|(I_ir == 8'h16)|(I_ir == 8'h1F)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h07)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h03)|(I_ir == 8'h16)|(I_ir == 8'h13)|(I_ir == 8'h0E)|(I_ir == 8'h1E)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h0A)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h1E))));
+	assign O_control[ 28] = (((I_t == 4'd3)&((I_ir ==? 8'b00000110)|(I_ir ==? 8'b00010111)|(I_ir ==? 8'b00001111)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b000?0110)|(I_ir ==? 8'b00011?11)|(I_ir ==? 8'b0000?110)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b00000111)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b000?0011)|(I_ir ==? 8'b000?1110)|(I_ir ==? 8'b0001?110)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b00001010)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b00011110))));
 	
-	assign O_control[ 29] = (((I_t == 4'd3)&((I_ir == 8'h0F)|(I_ir == 8'hF7)|(I_ir == 8'hD7)|(I_ir == 8'h37)|(I_ir == 8'hEF)|(I_ir == 8'h57)|(I_ir == 8'hCF)|(I_ir == 8'h6F)|(I_ir == 8'h4F)|(I_ir == 8'h17)|(I_ir == 8'h77)|(I_ir == 8'h2F)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h03)|(I_ir == 8'hF3)|(I_ir == 8'hE3)|(I_ir == 8'h73)|(I_ir == 8'h33)|(I_ir == 8'h63)|(I_ir == 8'hD3)|(I_ir == 8'h53)|(I_ir == 8'hC3)|(I_ir == 8'h43)|(I_ir == 8'h23)|(I_ir == 8'h13)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h5F)|(I_ir == 8'hFF)|(I_ir == 8'h5B)|(I_ir == 8'hDB)|(I_ir == 8'hFB)|(I_ir == 8'h1F)|(I_ir == 8'h1B)|(I_ir == 8'h3F)|(I_ir == 8'h7F)|(I_ir == 8'hDF)|(I_ir == 8'h3B)|(I_ir == 8'h7B)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hE7)|(I_ir == 8'h67)|(I_ir == 8'h07)|(I_ir == 8'hC7)|(I_ir == 8'h27)|(I_ir == 8'h47))));
+	assign O_control[ 29] = (((I_t == 4'd3)&((I_ir ==? 8'b?1?10111)|(I_ir ==? 8'b?1?01111)|(I_ir ==? 8'b00?10111)|(I_ir ==? 8'b0??01111)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b?1??0011)|(I_ir ==? 8'b0???0011)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b?1?11?11)|(I_ir ==? 8'b0??11?11)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b0??00111)|(I_ir ==? 8'b11?00111))));
 	
-	assign O_control[ 30] = (((I_t == 4'd3)&((I_ir == 8'h0F)|(I_ir == 8'hF7)|(I_ir == 8'h26)|(I_ir == 8'h37)|(I_ir == 8'hD7)|(I_ir == 8'hEF)|(I_ir == 8'h57)|(I_ir == 8'h66)|(I_ir == 8'hCF)|(I_ir == 8'hE6)|(I_ir == 8'h6F)|(I_ir == 8'h4F)|(I_ir == 8'hC6)|(I_ir == 8'h17)|(I_ir == 8'h77)|(I_ir == 8'h2F)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h03)|(I_ir == 8'hF3)|(I_ir == 8'hE3)|(I_ir == 8'h73)|(I_ir == 8'h3E)|(I_ir == 8'h33)|(I_ir == 8'h63)|(I_ir == 8'hD3)|(I_ir == 8'h7E)|(I_ir == 8'h53)|(I_ir == 8'hC3)|(I_ir == 8'h43)|(I_ir == 8'hDE)|(I_ir == 8'hFE)|(I_ir == 8'h23)|(I_ir == 8'h13)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h5F)|(I_ir == 8'hEE)|(I_ir == 8'hFF)|(I_ir == 8'h5B)|(I_ir == 8'hDB)|(I_ir == 8'hCE)|(I_ir == 8'hFB)|(I_ir == 8'h1F)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'hD6)|(I_ir == 8'h1B)|(I_ir == 8'h3F)|(I_ir == 8'hF6)|(I_ir == 8'h7F)|(I_ir == 8'h2E)|(I_ir == 8'hDF)|(I_ir == 8'h3B)|(I_ir == 8'h6E)|(I_ir == 8'h7B)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hE7)|(I_ir == 8'h67)|(I_ir == 8'h07)|(I_ir == 8'hC7)|(I_ir == 8'h27)|(I_ir == 8'h47))));
+	assign O_control[ 30] = (((I_t == 4'd3)&((I_ir ==? 8'b0??10111)|(I_ir ==? 8'b?1?01111)|(I_ir ==? 8'b11?10111)|(I_ir ==? 8'b0??01111)|(I_ir ==? 8'b?1100110)|(I_ir ==? 8'b11?00110)|(I_ir ==? 8'b0?100110)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b?1??0011)|(I_ir ==? 8'b0???0011)|(I_ir ==? 8'b?1111110)|(I_ir ==? 8'b11?11110)|(I_ir ==? 8'b0?111110)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b?1?11?11)|(I_ir ==? 8'b0??11?11)|(I_ir ==? 8'b?1110110)|(I_ir ==? 8'b?1101110)|(I_ir ==? 8'b11?10110)|(I_ir ==? 8'b0?110110)|(I_ir ==? 8'b11?01110)|(I_ir ==? 8'b0?101110)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b0??00111)|(I_ir ==? 8'b11?00111))));
 	
-	assign O_control[ 31] = (((I_t == 4'd3)&((I_ir == 8'h27)|(I_ir == 8'hC7)|(I_ir == 8'hE6)|(I_ir == 8'hC6)|(I_ir == 8'h07)|(I_ir == 8'h67)|(I_ir == 8'h66)|(I_ir == 8'h26)|(I_ir == 8'hE7)|(I_ir == 8'h47)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'hFE)|(I_ir == 8'hFF)|(I_ir == 8'hDE)|(I_ir == 8'hF3)|(I_ir == 8'hDF)|(I_ir == 8'hC3)|(I_ir == 8'h63)|(I_ir == 8'h53)|(I_ir == 8'h23)|(I_ir == 8'hE3)|(I_ir == 8'h33)|(I_ir == 8'h3E)|(I_ir == 8'h7E)|(I_ir == 8'hFB)|(I_ir == 8'h03)|(I_ir == 8'h73)|(I_ir == 8'hDB)|(I_ir == 8'h43)|(I_ir == 8'h13)|(I_ir == 8'hD3)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hE7)|(I_ir == 8'hD7)|(I_ir == 8'h37)|(I_ir == 8'hD6)|(I_ir == 8'hF6)|(I_ir == 8'hC6)|(I_ir == 8'h17)|(I_ir == 8'h4F)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'hCF)|(I_ir == 8'hEE)|(I_ir == 8'h77)|(I_ir == 8'hCE)|(I_ir == 8'hF7)|(I_ir == 8'h26)|(I_ir == 8'h66)|(I_ir == 8'hC7)|(I_ir == 8'h2E)|(I_ir == 8'h6E)|(I_ir == 8'hE6)|(I_ir == 8'h6F)|(I_ir == 8'h2F)|(I_ir == 8'hEF)|(I_ir == 8'h0F)|(I_ir == 8'h57)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h3E)|(I_ir == 8'hDB)|(I_ir == 8'h6E)|(I_ir == 8'hCF)|(I_ir == 8'hEF)|(I_ir == 8'h2E)|(I_ir == 8'h3B)|(I_ir == 8'h7B)|(I_ir == 8'h5F)|(I_ir == 8'hFF)|(I_ir == 8'hDE)|(I_ir == 8'h1B)|(I_ir == 8'hDF)|(I_ir == 8'hF6)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'hF7)|(I_ir == 8'hD6)|(I_ir == 8'hD7)|(I_ir == 8'h3F)|(I_ir == 8'h7F)|(I_ir == 8'h7E)|(I_ir == 8'h5B)|(I_ir == 8'hFE)|(I_ir == 8'hEE)|(I_ir == 8'hFB)|(I_ir == 8'hCE)|(I_ir == 8'h1F)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'hE3)|(I_ir == 8'hD3)|(I_ir == 8'hF3)|(I_ir == 8'hC3))));
+	assign O_control[ 31] = (((I_t == 4'd3)&((I_ir ==? 8'b?1?00111)|(I_ir ==? 8'b0?10011?)|(I_ir ==? 8'b11?0011?)|(I_ir ==? 8'b00000111)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b?1??0011)|(I_ir ==? 8'b00??0011)|(I_ir ==? 8'b11?11?11)|(I_ir ==? 8'b11?1111?)|(I_ir ==? 8'b0?111110)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b11?0?11?)|(I_ir ==? 8'b0?10111?)|(I_ir ==? 8'b11?1011?)|(I_ir ==? 8'b0?11011?)|(I_ir ==? 8'b0?001111)|(I_ir ==? 8'b0??10111)|(I_ir ==? 8'b0?1?0110)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b?1?11?11)|(I_ir ==? 8'b11?1?11?)|(I_ir ==? 8'b0??11?11)|(I_ir ==? 8'b11??111?)|(I_ir ==? 8'b0?1?1110)|(I_ir ==? 8'b0?11?110)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b11??0011))));
 	
-	assign O_control[ 32] = (((I_t == 4'd1)&((I_ir == 8'hD1)|(I_ir == 8'hD7)|(I_ir == 8'hC7)|(I_ir == 8'hF5)|(I_ir == 8'h34)|(I_ir == 8'h95)|(I_ir == 8'h85)|(I_ir == 8'hC5)|(I_ir == 8'h86)|(I_ir == 8'h14)|(I_ir == 8'h65)|(I_ir == 8'hC6)|(I_ir == 8'h17)|(I_ir == 8'h11)|(I_ir == 8'h53)|(I_ir == 8'hB4)|(I_ir == 8'h77)|(I_ir == 8'h67)|(I_ir == 8'h84)|(I_ir == 8'h35)|(I_ir == 8'h66)|(I_ir == 8'h54)|(I_ir == 8'h73)|(I_ir == 8'h33)|(I_ir == 8'h57)|(I_ir == 8'h94)|(I_ir == 8'h25)|(I_ir == 8'hE6)|(I_ir == 8'h55)|(I_ir == 8'hB6)|(I_ir == 8'h07)|(I_ir == 8'h06)|(I_ir == 8'hE4)|(I_ir == 8'hF1)|(I_ir == 8'hD5)|(I_ir == 8'h26)|(I_ir == 8'h37)|(I_ir == 8'h05)|(I_ir == 8'hA5)|(I_ir == 8'hD3)|(I_ir == 8'h24)|(I_ir == 8'h31)|(I_ir == 8'hB7)|(I_ir == 8'hC4)|(I_ir == 8'h15)|(I_ir == 8'h91)|(I_ir == 8'h97)|(I_ir == 8'h87)|(I_ir == 8'h75)|(I_ir == 8'hB5)|(I_ir == 8'h13)|(I_ir == 8'hA6)|(I_ir == 8'hD4)|(I_ir == 8'h76)|(I_ir == 8'h74)|(I_ir == 8'h64)|(I_ir == 8'h71)|(I_ir == 8'hA4)|(I_ir == 8'hB1)|(I_ir == 8'h27)|(I_ir == 8'h44)|(I_ir == 8'hF6)|(I_ir == 8'h47)|(I_ir == 8'h56)|(I_ir == 8'hA7)|(I_ir == 8'hE7)|(I_ir == 8'h16)|(I_ir == 8'hF4)|(I_ir == 8'h46)|(I_ir == 8'hE5)|(I_ir == 8'h36)|(I_ir == 8'h51)|(I_ir == 8'h45)|(I_ir == 8'h96)|(I_ir == 8'hF7)|(I_ir == 8'hB3)|(I_ir == 8'h04)|(I_ir == 8'hD6)|(I_ir == 8'hF3))));
+	assign O_control[ 32] = (((I_t == 4'd1)&((I_ir ==? 8'b????01??)|(I_ir ==? 8'b??110??1)|(I_ir ==? 8'b?1010??1)|(I_ir ==? 8'b00?10??1)|(I_ir ==? 8'b1??10001))));
 	
-	assign O_control[ 33] = (((I_t == 4'd3)&((I_ir == 8'h76)|(I_ir == 8'hD6)|(I_ir == 8'h2E)|(I_ir == 8'h0E)|(I_ir == 8'h56)|(I_ir == 8'hF6)|(I_ir == 8'h6E)|(I_ir == 8'h16)|(I_ir == 8'hEE)|(I_ir == 8'hCE)|(I_ir == 8'h36)|(I_ir == 8'h4E)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hDE)|(I_ir == 8'hFE)|(I_ir == 8'h5E)|(I_ir == 8'h3E)|(I_ir == 8'h7E)|(I_ir == 8'h1E)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h46)|(I_ir == 8'h06)|(I_ir == 8'h26)|(I_ir == 8'h66)|(I_ir == 8'hE6)|(I_ir == 8'hC6))));
+	assign O_control[ 33] = (((I_t == 4'd3)&((I_ir ==? 8'b?1?10110)|(I_ir ==? 8'b?1?01110)|(I_ir ==? 8'b00?10110)|(I_ir ==? 8'b0??01110)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b0??11110)|(I_ir ==? 8'b11?11110)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b0??00110)|(I_ir ==? 8'b11?00110))));
 	
-	assign O_control[ 34] = (((I_t == 4'd5)&((I_ir == 8'h4E)|(I_ir == 8'h1E)|(I_ir == 8'h3E)|(I_ir == 8'h56)|(I_ir == 8'h0E)|(I_ir == 8'h7E)|(I_ir == 8'h16)|(I_ir == 8'hDE)|(I_ir == 8'hFE)|(I_ir == 8'h5E)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h26)|(I_ir == 8'h66)|(I_ir == 8'hE6)|(I_ir == 8'hC6)|(I_ir == 8'h46)|(I_ir == 8'h06)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hEE)|(I_ir == 8'h16)|(I_ir == 8'h06)|(I_ir == 8'hCE)|(I_ir == 8'h46)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'hD6)|(I_ir == 8'h4E)|(I_ir == 8'hF6)|(I_ir == 8'h56)|(I_ir == 8'h2E)|(I_ir == 8'h0E)|(I_ir == 8'h6E)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h5E)|(I_ir == 8'h1E))));
+	assign O_control[ 34] = (((I_t == 4'd5)&((I_ir ==? 8'b?1?11110)|(I_ir ==? 8'b0?0?1110)|(I_ir ==? 8'b0?01?110)|(I_ir ==? 8'b00111110)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b0??00110)|(I_ir ==? 8'b11?00110)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b0??10110)|(I_ir ==? 8'b?1?01110)|(I_ir ==? 8'b0?00?110)|(I_ir ==? 8'b11?10110)|(I_ir ==? 8'b0??01110)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b0?011110))));
 	
-	assign O_control[ 35] = (((I_t == 4'd5)&((I_ir == 8'h4E)|(I_ir == 8'h1E)|(I_ir == 8'h56)|(I_ir == 8'h0E)|(I_ir == 8'h16)|(I_ir == 8'h91)|(I_ir == 8'h81)|(I_ir == 8'h83)|(I_ir == 8'h5E)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h8C)|(I_ir == 8'h96)|(I_ir == 8'h94)|(I_ir == 8'h95)|(I_ir == 8'h97)|(I_ir == 8'h8D)|(I_ir == 8'h46)|(I_ir == 8'h8E)|(I_ir == 8'h06)|(I_ir == 8'h8F)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h16)|(I_ir == 8'h06)|(I_ir == 8'h46)|(I_ir == 8'h99)|(I_ir == 8'h4E)|(I_ir == 8'h56)|(I_ir == 8'h0E)|(I_ir == 8'h9D)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h84)|(I_ir == 8'h85)|(I_ir == 8'h86)|(I_ir == 8'h87)|(I_ir == 8'h48)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h5E)|(I_ir == 8'h1E)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hCB))));
+	assign O_control[ 35] = (((I_t == 4'd5)&((I_ir ==? 8'b0?0?1110)|(I_ir ==? 8'b0?01?110)|(I_ir ==? 8'b100000?1)|(I_ir ==? 8'b100?0001)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b100011??)|(I_ir ==? 8'b100101??)|(I_ir ==? 8'b0?000110)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b0?0?0110)|(I_ir ==? 8'b0?001110)|(I_ir ==? 8'b10011?01)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b01001000)|(I_ir ==? 8'b100001??)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b0?011110)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b11001011))));
 	
-	assign O_control[ 36] = (((I_t == 4'd3)&((I_ir == 8'h0F)|(I_ir == 8'hAE)|(I_ir == 8'h8C)|(I_ir == 8'hED)|(I_ir == 8'h4D)|(I_ir == 8'hAF)|(I_ir == 8'hEF)|(I_ir == 8'h2E)|(I_ir == 8'h0C)|(I_ir == 8'h6D)|(I_ir == 8'h0E)|(I_ir == 8'hCF)|(I_ir == 8'hEC)|(I_ir == 8'h6E)|(I_ir == 8'hAD)|(I_ir == 8'h6F)|(I_ir == 8'h4F)|(I_ir == 8'h2D)|(I_ir == 8'hCC)|(I_ir == 8'h8D)|(I_ir == 8'h8E)|(I_ir == 8'h2F)|(I_ir == 8'hCD)|(I_ir == 8'hEE)|(I_ir == 8'hCE)|(I_ir == 8'hAC)|(I_ir == 8'h8F)|(I_ir == 8'h2C)|(I_ir == 8'h0D)|(I_ir == 8'h4E))));
+	assign O_control[ 36] = (((I_t == 4'd3)&((I_ir ==? 8'b1??011??)|(I_ir ==? 8'b00?011??)|(I_ir ==? 8'b?1?011?1)|(I_ir ==? 8'b???0111?))));
 	
-	assign O_control[ 37] = (((I_t == 4'd1)&((I_ir == 8'h10))));
+	assign O_control[ 37] = (((I_t == 4'd1)&((I_ir ==? 8'b00010000))));
 	
-	assign O_control[ 38] = (((I_t == 4'd1)&((I_ir == 8'h70)|(I_ir == 8'h30)|(I_ir == 8'h50)|(I_ir == 8'h10)|(I_ir == 8'hB0)|(I_ir == 8'hD0)|(I_ir == 8'h90)|(I_ir == 8'hF0))));
+	assign O_control[ 38] = (((I_t == 4'd1)&((I_ir ==? 8'b???10000))));
 	
-	assign O_control[ 39] = (((I_t == 4'd1)&((I_ir == 8'h70)|(I_ir == 8'h30)|(I_ir == 8'h50)|(I_ir == 8'h10)|(I_ir == 8'hB0)|(I_ir == 8'hD0)|(I_ir == 8'h90)|(I_ir == 8'hF0))));
+	assign O_control[ 39] = (((I_t == 4'd1)&((I_ir ==? 8'b???10000))));
 	
-	assign O_control[ 40] = (((I_t == 4'd2)&((I_ir == 8'h5F)|(I_ir == 8'h55)|(I_ir == 8'hB6)|(I_ir == 8'hB5)|(I_ir == 8'h1D)|(I_ir == 8'h5D)|(I_ir == 8'hD5)|(I_ir == 8'h37)|(I_ir == 8'hFD)|(I_ir == 8'hD4)|(I_ir == 8'h3F)|(I_ir == 8'h7C)|(I_ir == 8'h1E)|(I_ir == 8'h7F)|(I_ir == 8'hB7)|(I_ir == 8'h59)|(I_ir == 8'hDF)|(I_ir == 8'h3D)|(I_ir == 8'h14)|(I_ir == 8'hFF)|(I_ir == 8'h75)|(I_ir == 8'hFE)|(I_ir == 8'h5C)|(I_ir == 8'hD9)|(I_ir == 8'hDE)|(I_ir == 8'h1F)|(I_ir == 8'h36)|(I_ir == 8'h76)|(I_ir == 8'hFC)|(I_ir == 8'hF7)|(I_ir == 8'hD6)|(I_ir == 8'h34)|(I_ir == 8'h95)|(I_ir == 8'hF6)|(I_ir == 8'h19)|(I_ir == 8'hF5)|(I_ir == 8'hB9)|(I_ir == 8'h9D)|(I_ir == 8'h16)|(I_ir == 8'h17)|(I_ir == 8'hBC)|(I_ir == 8'hF4)|(I_ir == 8'h5E)|(I_ir == 8'h35)|(I_ir == 8'h96)|(I_ir == 8'h99)|(I_ir == 8'hD7)|(I_ir == 8'h3E)|(I_ir == 8'hDD)|(I_ir == 8'h3B)|(I_ir == 8'h7E)|(I_ir == 8'h97)|(I_ir == 8'h7B)|(I_ir == 8'h79)|(I_ir == 8'h3C)|(I_ir == 8'hDB)|(I_ir == 8'hB4)|(I_ir == 8'h39)|(I_ir == 8'hFB)|(I_ir == 8'h77)|(I_ir == 8'h5B)|(I_ir == 8'h74)|(I_ir == 8'hBE)|(I_ir == 8'hBF)|(I_ir == 8'h1B)|(I_ir == 8'h1C)|(I_ir == 8'h56)|(I_ir == 8'h7D)|(I_ir == 8'h54)|(I_ir == 8'hF9)|(I_ir == 8'hBD)|(I_ir == 8'h57)|(I_ir == 8'h94)|(I_ir == 8'hDC)|(I_ir == 8'h15)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h71)|(I_ir == 8'hD1)|(I_ir == 8'h33)|(I_ir == 8'h53)|(I_ir == 8'h11)|(I_ir == 8'hF1)|(I_ir == 8'hD3)|(I_ir == 8'h91)|(I_ir == 8'h73)|(I_ir == 8'h31)|(I_ir == 8'h13)|(I_ir == 8'hB3)|(I_ir == 8'hF3)|(I_ir == 8'hB1)|(I_ir == 8'h51)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h50)|(I_ir == 8'hD0)|(I_ir == 8'h10)|(I_ir == 8'h70)|(I_ir == 8'h90)|(I_ir == 8'h30)|(I_ir == 8'hB0)|(I_ir == 8'hF0))));
+	assign O_control[ 40] = (((I_t == 4'd2)&((I_ir ==? 8'b?1?1?1??)|(I_ir ==? 8'b0??1?1??)|(I_ir ==? 8'b???11?01)|(I_ir ==? 8'b???101??)|(I_ir ==? 8'b0??11??1)|(I_ir ==? 8'b1?11?1??)|(I_ir ==? 8'b11?11?11)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b???10001)|(I_ir ==? 8'b0??100?1)|(I_ir ==? 8'b?1?100?1)|(I_ir ==? 8'b101100?1)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b???10000))));
 	
-	assign O_control[ 41] = (((I_t == 4'd1)&((I_ir == 8'h70)|(I_ir == 8'h30)|(I_ir == 8'h50)|(I_ir == 8'h10)|(I_ir == 8'hB0)|(I_ir == 8'hD0)|(I_ir == 8'h90)|(I_ir == 8'hF0))));
-	
-	assign O_control[ 42] = (((I_t == 4'd1)&((I_ir == 8'h70)|(I_ir == 8'h30)|(I_ir == 8'h50)|(I_ir == 8'h10)|(I_ir == 8'hB0)|(I_ir == 8'hD0)|(I_ir == 8'h90)|(I_ir == 8'hF0))));
+	assign O_control[ 41] = (((I_t == 4'd1)&((I_ir ==? 8'b???10000))));
+	
+	assign O_control[ 42] = (((I_t == 4'd1)&((I_ir ==? 8'b???10000))));
 	
-	assign O_control[ 43] = (((I_t == 4'd3)&((I_ir == 8'h3E)|(I_ir == 8'hBE)|(I_ir == 8'h7D)|(I_ir == 8'hBF)|(I_ir == 8'h1C)|(I_ir == 8'h99)|(I_ir == 8'h3F)|(I_ir == 8'h1E)|(I_ir == 8'hF9)|(I_ir == 8'hDD)|(I_ir == 8'h7E)|(I_ir == 8'hBD)|(I_ir == 8'h7C)|(I_ir == 8'h3B)|(I_ir == 8'h19)|(I_ir == 8'h7F)|(I_ir == 8'h59)|(I_ir == 8'h79)|(I_ir == 8'hB9)|(I_ir == 8'hDF)|(I_ir == 8'h5F)|(I_ir == 8'h3D)|(I_ir == 8'h7B)|(I_ir == 8'h3C)|(I_ir == 8'hDB)|(I_ir == 8'h39)|(I_ir == 8'h9D)|(I_ir == 8'hDE)|(I_ir == 8'hFE)|(I_ir == 8'hDC)|(I_ir == 8'h1D)|(I_ir == 8'hFF)|(I_ir == 8'h5C)|(I_ir == 8'hD9)|(I_ir == 8'h5E)|(I_ir == 8'h1F)|(I_ir == 8'hFB)|(I_ir == 8'h5D)|(I_ir == 8'hBC)|(I_ir == 8'h5B)|(I_ir == 8'hFC)|(I_ir == 8'h1B)|(I_ir == 8'hFD)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h53)|(I_ir == 8'h13)|(I_ir == 8'h11)|(I_ir == 8'h51)|(I_ir == 8'hF1)|(I_ir == 8'hB3)|(I_ir == 8'hF3)|(I_ir == 8'hD1)|(I_ir == 8'h71)|(I_ir == 8'hD3)|(I_ir == 8'hB1)|(I_ir == 8'h33)|(I_ir == 8'h73)|(I_ir == 8'h31)|(I_ir == 8'h91)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hB0)|(I_ir == 8'h90)|(I_ir == 8'hF0)|(I_ir == 8'h70)|(I_ir == 8'h10)|(I_ir == 8'h50)|(I_ir == 8'hD0)|(I_ir == 8'h30))));
+	assign O_control[ 43] = (((I_t == 4'd3)&((I_ir ==? 8'b???11?01)|(I_ir ==? 8'b0??111??)|(I_ir ==? 8'b?1?11??1)|(I_ir ==? 8'b??1111??)|(I_ir ==? 8'b00?11??1)|(I_ir ==? 8'b?1?111??)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b???10001)|(I_ir ==? 8'b0??100?1)|(I_ir ==? 8'b?1?100?1)|(I_ir ==? 8'b101100?1)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b???10000))));
 	
-	assign O_control[ 44] = (((I_t == 4'd2)&((I_ir == 8'h10)|(I_ir == 8'hD0)|(I_ir == 8'h30)|(I_ir == 8'h50)|(I_ir == 8'hF0)|(I_ir == 8'hB0)|(I_ir == 8'h70)|(I_ir == 8'h90))));
+	assign O_control[ 44] = (((I_t == 4'd2)&((I_ir ==? 8'b???10000))));
 	
-	assign O_control[ 45] = (((I_t == 4'd3)&((I_ir == 8'h3E)|(I_ir == 8'hBE)|(I_ir == 8'h7D)|(I_ir == 8'hBF)|(I_ir == 8'h1C)|(I_ir == 8'h99)|(I_ir == 8'h3F)|(I_ir == 8'h1E)|(I_ir == 8'hF9)|(I_ir == 8'hDD)|(I_ir == 8'h7E)|(I_ir == 8'hBD)|(I_ir == 8'h7C)|(I_ir == 8'h3B)|(I_ir == 8'h19)|(I_ir == 8'h7F)|(I_ir == 8'h59)|(I_ir == 8'h79)|(I_ir == 8'hB9)|(I_ir == 8'hDF)|(I_ir == 8'h5F)|(I_ir == 8'h3D)|(I_ir == 8'h7B)|(I_ir == 8'h3C)|(I_ir == 8'hDB)|(I_ir == 8'h39)|(I_ir == 8'h9D)|(I_ir == 8'hDE)|(I_ir == 8'hFE)|(I_ir == 8'hDC)|(I_ir == 8'h1D)|(I_ir == 8'hFF)|(I_ir == 8'h5C)|(I_ir == 8'hD9)|(I_ir == 8'h5E)|(I_ir == 8'h1F)|(I_ir == 8'hFB)|(I_ir == 8'h5D)|(I_ir == 8'hBC)|(I_ir == 8'h5B)|(I_ir == 8'hFC)|(I_ir == 8'h1B)|(I_ir == 8'hFD)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h53)|(I_ir == 8'h13)|(I_ir == 8'h11)|(I_ir == 8'h51)|(I_ir == 8'hF1)|(I_ir == 8'hB3)|(I_ir == 8'hF3)|(I_ir == 8'hD1)|(I_ir == 8'h71)|(I_ir == 8'hD3)|(I_ir == 8'hB1)|(I_ir == 8'h33)|(I_ir == 8'h73)|(I_ir == 8'h31)|(I_ir == 8'h91)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hB0)|(I_ir == 8'h90)|(I_ir == 8'hF0)|(I_ir == 8'h70)|(I_ir == 8'h10)|(I_ir == 8'h50)|(I_ir == 8'hD0)|(I_ir == 8'h30))));
+	assign O_control[ 45] = (((I_t == 4'd3)&((I_ir ==? 8'b???11?01)|(I_ir ==? 8'b0??111??)|(I_ir ==? 8'b?1?11??1)|(I_ir ==? 8'b??1111??)|(I_ir ==? 8'b00?11??1)|(I_ir ==? 8'b?1?111??)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b???10001)|(I_ir ==? 8'b0??100?1)|(I_ir ==? 8'b?1?100?1)|(I_ir ==? 8'b101100?1)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b???10000))));
 	
-	assign O_control[ 46] = (((I_t == 4'd3)&((I_ir == 8'h50)|(I_ir == 8'h10)|(I_ir == 8'h70)|(I_ir == 8'h30)|(I_ir == 8'h90)|(I_ir == 8'hF0)|(I_ir == 8'hB0)|(I_ir == 8'hD0)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h10)|(I_ir == 8'hD0)|(I_ir == 8'h30)|(I_ir == 8'h50)|(I_ir == 8'hF0)|(I_ir == 8'hB0)|(I_ir == 8'h70)|(I_ir == 8'h90))));
+	assign O_control[ 46] = (((I_t == 4'd3)&((I_ir ==? 8'b???10000)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b???10000))));
 	
-	assign O_control[ 47] = (((I_t == 4'd2)&((I_ir == 8'h10)|(I_ir == 8'hD0)|(I_ir == 8'h30)|(I_ir == 8'h50)|(I_ir == 8'hF0)|(I_ir == 8'hB0)|(I_ir == 8'h70)|(I_ir == 8'h90))));
+	assign O_control[ 47] = (((I_t == 4'd2)&((I_ir ==? 8'b???10000))));
 	
-	assign O_control[ 48] = (((I_t == 4'd2)&((I_ir == 8'h75)|(I_ir == 8'h16)|(I_ir == 8'hB4)|(I_ir == 8'h55)|(I_ir == 8'h11)|(I_ir == 8'h17)|(I_ir == 8'hB6)|(I_ir == 8'h77)|(I_ir == 8'h51)|(I_ir == 8'hB5)|(I_ir == 8'h74)|(I_ir == 8'hF4)|(I_ir == 8'hB3)|(I_ir == 8'h35)|(I_ir == 8'h13)|(I_ir == 8'h36)|(I_ir == 8'h96)|(I_ir == 8'hD5)|(I_ir == 8'h76)|(I_ir == 8'h37)|(I_ir == 8'hF1)|(I_ir == 8'hD4)|(I_ir == 8'hF3)|(I_ir == 8'h71)|(I_ir == 8'hF7)|(I_ir == 8'hD1)|(I_ir == 8'hD7)|(I_ir == 8'hD6)|(I_ir == 8'hB1)|(I_ir == 8'h33)|(I_ir == 8'h56)|(I_ir == 8'h34)|(I_ir == 8'h95)|(I_ir == 8'h54)|(I_ir == 8'h73)|(I_ir == 8'h57)|(I_ir == 8'h94)|(I_ir == 8'h97)|(I_ir == 8'hF6)|(I_ir == 8'hB7)|(I_ir == 8'h91)|(I_ir == 8'hF5)|(I_ir == 8'hD3)|(I_ir == 8'h53)|(I_ir == 8'h31)|(I_ir == 8'h14)|(I_ir == 8'h15))));
+	assign O_control[ 48] = (((I_t == 4'd2)&((I_ir ==? 8'b???101??)|(I_ir ==? 8'b???10?01)|(I_ir ==? 8'b??110??1)|(I_ir ==? 8'b0??10??1)|(I_ir ==? 8'b11?10??1))));
 	
-	assign O_control[ 49] = (((I_t == 4'd2)&((I_ir == 8'h71)|(I_ir == 8'hB3)|(I_ir == 8'h13)|(I_ir == 8'hD1)|(I_ir == 8'h91)|(I_ir == 8'hB1)|(I_ir == 8'h33)|(I_ir == 8'hD3)|(I_ir == 8'hF3)|(I_ir == 8'h11)|(I_ir == 8'h53)|(I_ir == 8'h31)|(I_ir == 8'h73)|(I_ir == 8'h51)|(I_ir == 8'hF1))));
+	assign O_control[ 49] = (((I_t == 4'd2)&((I_ir ==? 8'b???10001)|(I_ir ==? 8'b0??100?1)|(I_ir ==? 8'b?1?100?1)|(I_ir ==? 8'b101100?1))));
 	
-	assign O_control[ 50] = (((I_t == 4'd3)&((I_ir == 8'h71)|(I_ir == 8'h73)|(I_ir == 8'hD1)|(I_ir == 8'hD3)|(I_ir == 8'hB1)|(I_ir == 8'h33)|(I_ir == 8'h53)|(I_ir == 8'h31)|(I_ir == 8'h91)|(I_ir == 8'h11)|(I_ir == 8'h13)|(I_ir == 8'hF1)|(I_ir == 8'h51)|(I_ir == 8'hF3)|(I_ir == 8'hB3)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h39)|(I_ir == 8'hB6)|(I_ir == 8'hFB)|(I_ir == 8'hD9)|(I_ir == 8'h5B)|(I_ir == 8'hBE)|(I_ir == 8'h96)|(I_ir == 8'hBF)|(I_ir == 8'h99)|(I_ir == 8'h1B)|(I_ir == 8'hF9)|(I_ir == 8'h97)|(I_ir == 8'h3B)|(I_ir == 8'hB7)|(I_ir == 8'h19)|(I_ir == 8'h7B)|(I_ir == 8'h59)|(I_ir == 8'h79)|(I_ir == 8'hB9)|(I_ir == 8'hDB))));
+	assign O_control[ 50] = (((I_t == 4'd3)&((I_ir ==? 8'b???10001)|(I_ir ==? 8'b0??100?1)|(I_ir ==? 8'b?1?100?1)|(I_ir ==? 8'b101100?1)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b???11001)|(I_ir ==? 8'b0??110?1)|(I_ir ==? 8'b10?1011?)|(I_ir ==? 8'b?1?110?1)|(I_ir ==? 8'b1011?11?))));
 	
-	assign O_control[ 51] = (((I_t == 4'd2)&((I_ir == 8'hFF)|(I_ir == 8'h5F)|(I_ir == 8'h39)|(I_ir == 8'h5C)|(I_ir == 8'hFB)|(I_ir == 8'hD9)|(I_ir == 8'hBC)|(I_ir == 8'h5B)|(I_ir == 8'h1D)|(I_ir == 8'h1F)|(I_ir == 8'hBE)|(I_ir == 8'h5D)|(I_ir == 8'hFC)|(I_ir == 8'hBF)|(I_ir == 8'h1B)|(I_ir == 8'hFD)|(I_ir == 8'h1C)|(I_ir == 8'h3F)|(I_ir == 8'h7C)|(I_ir == 8'h7D)|(I_ir == 8'h7F)|(I_ir == 8'hF9)|(I_ir == 8'hDD)|(I_ir == 8'hBD)|(I_ir == 8'h3B)|(I_ir == 8'hDB)|(I_ir == 8'h19)|(I_ir == 8'h7B)|(I_ir == 8'h59)|(I_ir == 8'hDF)|(I_ir == 8'h79)|(I_ir == 8'hB9)|(I_ir == 8'h3D)|(I_ir == 8'hDC)|(I_ir == 8'h3C)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h71)|(I_ir == 8'h73)|(I_ir == 8'hD1)|(I_ir == 8'hD3)|(I_ir == 8'hB1)|(I_ir == 8'h33)|(I_ir == 8'h53)|(I_ir == 8'h31)|(I_ir == 8'h11)|(I_ir == 8'h13)|(I_ir == 8'hF1)|(I_ir == 8'h51)|(I_ir == 8'hF3)|(I_ir == 8'hB3))));
+	assign O_control[ 51] = (((I_t == 4'd2)&((I_ir ==? 8'b?1?11??1)|(I_ir ==? 8'b00?11??1)|(I_ir ==? 8'b??11110?)|(I_ir ==? 8'b?101110?)|(I_ir ==? 8'b101111??)|(I_ir ==? 8'b1?111?01)|(I_ir ==? 8'b0?01110?)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b?1?100?1)|(I_ir ==? 8'b??1100?1)|(I_ir ==? 8'b0??100?1))));
 	
-	assign O_control[ 52] = (((I_t == 4'd1)&((I_ir == 8'h18))));
+	assign O_control[ 52] = (((I_t == 4'd1)&((I_ir ==? 8'b00011000))));
 	
-	assign O_control[ 53] = (((I_t == 4'd4)&((I_ir == 8'h3D)|(I_ir == 8'h39)|(I_ir == 8'h27)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h37)|(I_ir == 8'h31)|(I_ir == 8'h21)|(I_ir == 8'h2F)|(I_ir == 8'h83)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'h33)|(I_ir == 8'h23)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h97)|(I_ir == 8'h2D)|(I_ir == 8'h35)|(I_ir == 8'h8F)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h29)|(I_ir == 8'hCB)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h3F)|(I_ir == 8'h3B)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h25)|(I_ir == 8'h87))));
+	assign O_control[ 53] = (((I_t == 4'd4)&((I_ir ==? 8'b00100111)|(I_ir ==? 8'b00111?01)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b00110111)|(I_ir ==? 8'b00101111)|(I_ir ==? 8'b10000011)|(I_ir ==? 8'b001?0001)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b001?0011)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b00110101)|(I_ir ==? 8'b00101101)|(I_ir ==? 8'b10010111)|(I_ir ==? 8'b10001111)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b00101001)|(I_ir ==? 8'b11001011)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b00111?11)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b00100101)|(I_ir ==? 8'b10000111))));
 	
-	assign O_control[ 54] = (((I_t == 4'd4)&((I_ir == 8'h36)|(I_ir == 8'h3F)|(I_ir == 8'h2E)|(I_ir == 8'h3B)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h33)|(I_ir == 8'h23)|(I_ir == 8'h3E)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h26)|(I_ir == 8'h37)|(I_ir == 8'h2F)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h27)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h2A))));
+	assign O_control[ 54] = (((I_t == 4'd4)&((I_ir ==? 8'b00110110)|(I_ir ==? 8'b00101110)|(I_ir ==? 8'b00111?11)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b00111110)|(I_ir ==? 8'b001?0011)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b00100110)|(I_ir ==? 8'b00110111)|(I_ir ==? 8'b00101111)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b00100111)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b00101010))));
 	
-	assign O_control[ 55] = (((I_t == 4'd2)&((I_ir == 8'h24)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h2C))));
+	assign O_control[ 55] = (((I_t == 4'd2)&((I_ir ==? 8'b00100100)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b00101100))));
 	
-	assign O_control[ 56] = (((I_t == 4'd2)&((I_ir == 8'h68)|(I_ir == 8'h40)|(I_ir == 8'h60)|(I_ir == 8'h28)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h40)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h60)|(I_ir == 8'h40))));
+	assign O_control[ 56] = (((I_t == 4'd2)&((I_ir ==? 8'b0?101000)|(I_ir ==? 8'b01?00000)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b01000000)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b01?00000))));
 	
-	assign O_control[ 57] = (((I_t == 4'd3)&((I_ir == 8'h28)|(I_ir == 8'h40))));
+	assign O_control[ 57] = (((I_t == 4'd3)&((I_ir ==? 8'b01000000)|(I_ir ==? 8'b00101000))));
 	
-	assign O_control[ 58] = (((I_t == 4'd1)&((I_ir == 8'h30))));
+	assign O_control[ 58] = (((I_t == 4'd1)&((I_ir ==? 8'b00110000))));
 	
-	assign O_control[ 59] = (((I_t == 4'd1)&((I_ir == 8'h38))));
+	assign O_control[ 59] = (((I_t == 4'd1)&((I_ir ==? 8'b00111000))));
 	
-	assign O_control[ 60] = (((I_t == 4'd4)&((I_ir == 8'h40)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h60))));
+	assign O_control[ 60] = (((I_t == 4'd4)&((I_ir ==? 8'b01000000)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b01100000))));
 	
-	assign O_control[ 61] = (((I_t == 4'd5)&((I_ir == 8'h40)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h60))));
+	assign O_control[ 61] = (((I_t == 4'd5)&((I_ir ==? 8'b01000000)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b01100000))));
 	
-	assign O_control[ 62] = (((I_t == 4'd5)&((I_ir == 8'h51)|(I_ir == 8'h4F)|(I_ir == 8'h41)|(I_ir == 8'h57)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h49)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h59)|(I_ir == 8'h5D)|(I_ir == 8'h47)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h4D)|(I_ir == 8'h55)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'h43)|(I_ir == 8'h53)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h45)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h5B)|(I_ir == 8'h5F))));
+	assign O_control[ 62] = (((I_t == 4'd5)&((I_ir ==? 8'b01010111)|(I_ir ==? 8'b01001111)|(I_ir ==? 8'b010?0001)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b01001001)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b01000111)|(I_ir ==? 8'b01011?01)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b01010101)|(I_ir ==? 8'b01001101)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b010?0011)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b01000101)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b01011?11))));
 	
-	assign O_control[ 63] = (((I_t == 4'd3)&((I_ir == 8'h57)|(I_ir == 8'h4F)|(I_ir == 8'h46)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h4E)|(I_ir == 8'h56)|(I_ir == 8'h53)|(I_ir == 8'h43)|(I_ir == 8'h5E)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h56)|(I_ir == 8'h5F)|(I_ir == 8'h46)|(I_ir == 8'h4E)|(I_ir == 8'h5B)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h47)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h4A)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h5E))));
+	assign O_control[ 63] = (((I_t == 4'd3)&((I_ir ==? 8'b01000110)|(I_ir ==? 8'b01010111)|(I_ir ==? 8'b01001111)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b010?0011)|(I_ir ==? 8'b010?1110)|(I_ir ==? 8'b0101?110)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b010?0110)|(I_ir ==? 8'b01011?11)|(I_ir ==? 8'b0100?110)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b01000111)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b01001010)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b01011110))));
 	
-	assign O_control[ 64] = (((I_t == 4'd1)&((I_ir == 8'h50))));
+	assign O_control[ 64] = (((I_t == 4'd1)&((I_ir ==? 8'b01010000))));
 	
-	assign O_control[ 65] = (((I_t == 4'd1)&((I_ir == 8'h58))));
+	assign O_control[ 65] = (((I_t == 4'd1)&((I_ir ==? 8'b01011000))));
 	
-	assign O_control[ 66] = (((I_t == 4'd3)&((I_ir == 8'h6D)|(I_ir == 8'h75)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h71)|(I_ir == 8'h77)|(I_ir == 8'h6F)|(I_ir == 8'h61)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h65)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h67)|(I_ir == 8'h79)|(I_ir == 8'h7D)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'h7F)|(I_ir == 8'h7B)))|
-	                         ((I_t == 4'd7)&((I_ir == 8'h73)|(I_ir == 8'h63)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h69))));
+	assign O_control[ 66] = (((I_t == 4'd3)&((I_ir ==? 8'b01110101)|(I_ir ==? 8'b01101101)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b01110111)|(I_ir ==? 8'b01101111)|(I_ir ==? 8'b011?0001)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b01100101)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b01100111)|(I_ir ==? 8'b01111?01)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b01111?11)))|
+	                         ((I_t == 4'd7)&((I_ir ==? 8'b011?0011)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b01101001))));
 	
-	assign O_control[ 67] = (((I_t == 4'd3)&((I_ir == 8'h66)|(I_ir == 8'h6F)|(I_ir == 8'h77)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'h76)|(I_ir == 8'h7F)|(I_ir == 8'h6E)|(I_ir == 8'h7B)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h6A)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h63)|(I_ir == 8'h7E)|(I_ir == 8'h73)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h67))));
+	assign O_control[ 67] = (((I_t == 4'd3)&((I_ir ==? 8'b01100110)|(I_ir ==? 8'b01110111)|(I_ir ==? 8'b01101111)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b01110110)|(I_ir ==? 8'b01101110)|(I_ir ==? 8'b01111?11)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b01101010)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b01111110)|(I_ir ==? 8'b011?0011)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b01100111))));
 	
-	assign O_control[ 68] = (((I_t == 4'd3)&((I_ir == 8'hAE)|(I_ir == 8'hAF)|(I_ir == 8'hB7)|(I_ir == 8'hAD)|(I_ir == 8'hB4)|(I_ir == 8'hB6)|(I_ir == 8'hB5)|(I_ir == 8'hAC)|(I_ir == 8'h68)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hA6)|(I_ir == 8'hA4)|(I_ir == 8'hA5)|(I_ir == 8'hA7)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hAB)|(I_ir == 8'hA9)|(I_ir == 8'hA0)|(I_ir == 8'hA2)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hBC)|(I_ir == 8'hBF)|(I_ir == 8'hBE)|(I_ir == 8'hBD)|(I_ir == 8'hB9)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'hB1)|(I_ir == 8'hA1)|(I_ir == 8'hB3)|(I_ir == 8'hA3))));
+	assign O_control[ 68] = (((I_t == 4'd3)&((I_ir ==? 8'b01101000)|(I_ir ==? 8'b101101??)|(I_ir ==? 8'b101011??)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b101001??)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b101000?0)|(I_ir ==? 8'b101010?1)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b101111??)|(I_ir ==? 8'b10111?01)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b101?00?1))));
 	
-	assign O_control[ 69] = (((I_t == 4'd2)&((I_ir == 8'h6C))));
+	assign O_control[ 69] = (((I_t == 4'd2)&((I_ir ==? 8'b01101100))));
 	
-	assign O_control[ 70] = (((I_t == 4'd1)&((I_ir == 8'h70))));
+	assign O_control[ 70] = (((I_t == 4'd1)&((I_ir ==? 8'b01110000))));
 	
-	assign O_control[ 71] = (((I_t == 4'd1)&((I_ir == 8'h78))));
+	assign O_control[ 71] = (((I_t == 4'd1)&((I_ir ==? 8'b01111000))));
 	
-	assign O_control[ 72] = (((I_t == 4'd3)&((I_ir == 8'h8F)|(I_ir == 8'h97)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h83)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hCB)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h87))));
+	assign O_control[ 72] = (((I_t == 4'd3)&((I_ir ==? 8'b10010111)|(I_ir ==? 8'b10001111)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b10000011)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b11001011)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b10000111))));
 	
-	assign O_control[ 73] = (((I_t == 4'd3)&((I_ir == 8'h8F)|(I_ir == 8'h97)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'h83)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hCB)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'h87))));
+	assign O_control[ 73] = (((I_t == 4'd3)&((I_ir ==? 8'b10010111)|(I_ir ==? 8'b10001111)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b10000011)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b11001011)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b10000111))));
 	
-	assign O_control[ 74] = (((I_t == 4'd3)&((I_ir == 8'h8C)|(I_ir == 8'h94)|(I_ir == 8'hCC)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hC0)|(I_ir == 8'hC8)|(I_ir == 8'h88)|(I_ir == 8'h98)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hC4)|(I_ir == 8'h84))));
+	assign O_control[ 74] = (((I_t == 4'd3)&((I_ir ==? 8'b10010100)|(I_ir ==? 8'b1?001100)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b1?001000)|(I_ir ==? 8'b1100?000)|(I_ir ==? 8'b100?1000)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b1?000100))));
 	
-	assign O_control[ 75] = (((I_t == 4'd2)&((I_ir == 8'hE4)|(I_ir == 8'h86)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'h96)|(I_ir == 8'hEC)|(I_ir == 8'h8E)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hE8)|(I_ir == 8'h8A)|(I_ir == 8'hCA)|(I_ir == 8'hE0))));
+	assign O_control[ 75] = (((I_t == 4'd2)&((I_ir ==? 8'b10000110)|(I_ir ==? 8'b11100100)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b10010110)|(I_ir ==? 8'b10001110)|(I_ir ==? 8'b11101100)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b1?001010)|(I_ir ==? 8'b1110?000))));
 	
-	assign O_control[ 76] = (((I_t == 4'd5)&((I_ir == 8'hDE)|(I_ir == 8'hC3)|(I_ir == 8'hD3)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hC7)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hCE)|(I_ir == 8'hD6)|(I_ir == 8'hDF)|(I_ir == 8'hDB)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'hD7)|(I_ir == 8'hCF)|(I_ir == 8'hC6)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'h88)|(I_ir == 8'hCA))));
+	assign O_control[ 76] = (((I_t == 4'd5)&((I_ir ==? 8'b11011110)|(I_ir ==? 8'b110?0011)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b11000111)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b11010110)|(I_ir ==? 8'b11001110)|(I_ir ==? 8'b11011?11)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b11000110)|(I_ir ==? 8'b11010111)|(I_ir ==? 8'b11001111)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b10001000)|(I_ir ==? 8'b11001010))));
 	
-	assign O_control[ 77] = (((I_t == 4'd2)&((I_ir == 8'hA4)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hA8)|(I_ir == 8'hC8)|(I_ir == 8'hA0)|(I_ir == 8'h88)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'hAC)|(I_ir == 8'hB4)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hBC))));
+	assign O_control[ 77] = (((I_t == 4'd2)&((I_ir ==? 8'b10100100)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b1?001000)|(I_ir ==? 8'b1010?000)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b10110100)|(I_ir ==? 8'b10101100)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b10111100))));
 	
-	assign O_control[ 78] = (((I_t == 4'd1)&((I_ir == 8'hA8)|(I_ir == 8'h8A)|(I_ir == 8'hAA)|(I_ir == 8'hBA)|(I_ir == 8'h98))));
+	assign O_control[ 78] = (((I_t == 4'd1)&((I_ir ==? 8'b10011000)|(I_ir ==? 8'b101?1010)|(I_ir ==? 8'b10?01010)|(I_ir ==? 8'b101010?0))));
 	
-	assign O_control[ 79] = (((I_t == 4'd1)&((I_ir == 8'h90))));
+	assign O_control[ 79] = (((I_t == 4'd1)&((I_ir ==? 8'b10010000))));
 	
-	assign O_control[ 80] = (((I_t == 4'd1)&((I_ir == 8'h9A))));
+	assign O_control[ 80] = (((I_t == 4'd1)&((I_ir ==? 8'b10011010))));
 	
-	assign O_control[ 81] = (((I_t == 4'd1)&((I_ir == 8'hBA)|(I_ir == 8'hE8)|(I_ir == 8'hA2)|(I_ir == 8'hCA)|(I_ir == 8'hAA)|(I_ir == 8'hAB)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'hAE)|(I_ir == 8'hAF)|(I_ir == 8'hB6)|(I_ir == 8'hB7)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hBE)|(I_ir == 8'hBF)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hA7)|(I_ir == 8'hA6)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'hB3)|(I_ir == 8'hA3))));
+	assign O_control[ 81] = (((I_t == 4'd1)&((I_ir ==? 8'b11001010)|(I_ir ==? 8'b11101000)|(I_ir ==? 8'b101?1010)|(I_ir ==? 8'b1010?010)|(I_ir ==? 8'b1010101?)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b1011011?)|(I_ir ==? 8'b1010111?)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b1011111?)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b1010011?)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b101?0011))));
 	
-	assign O_control[ 82] = (((I_t == 4'd1)&((I_ir == 8'hB0))));
+	assign O_control[ 82] = (((I_t == 4'd1)&((I_ir ==? 8'b10110000))));
 	
-	assign O_control[ 83] = (((I_t == 4'd1)&((I_ir == 8'hB8))));
+	assign O_control[ 83] = (((I_t == 4'd1)&((I_ir ==? 8'b10111000))));
 	
-	assign O_control[ 84] = (((I_t == 4'd1)&((I_ir == 8'hBA))));
+	assign O_control[ 84] = (((I_t == 4'd1)&((I_ir ==? 8'b10111010))));
 	
-	assign O_control[ 85] = (((I_t == 4'd2)&((I_ir == 8'hC5)|(I_ir == 8'hE4)|(I_ir == 8'hC4)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'hD5)|(I_ir == 8'hC7)|(I_ir == 8'hEC)|(I_ir == 8'hCC)|(I_ir == 8'hCD)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hD9)|(I_ir == 8'hD7)|(I_ir == 8'hDD)|(I_ir == 8'hCF)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hE0)|(I_ir == 8'hC0)|(I_ir == 8'hC9)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'hD1)|(I_ir == 8'hDF)|(I_ir == 8'hDB)|(I_ir == 8'hC1)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'hD3)|(I_ir == 8'hC3))));
+	assign O_control[ 85] = (((I_t == 4'd2)&((I_ir ==? 8'b11?00100)|(I_ir ==? 8'b1100010?)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b11000111)|(I_ir ==? 8'b11010101)|(I_ir ==? 8'b11?01100)|(I_ir ==? 8'b1100110?)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b11010111)|(I_ir ==? 8'b11001111)|(I_ir ==? 8'b11011?01)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b11001001)|(I_ir ==? 8'b11?00000)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b110?0001)|(I_ir ==? 8'b11011?11)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b110?0011))));
 	
-	assign O_control[ 86] = (((I_t == 4'd3)&((I_ir == 8'hE7)|(I_ir == 8'hC7)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hD7)|(I_ir == 8'hF7)|(I_ir == 8'hCF)|(I_ir == 8'hEF)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'hDB)|(I_ir == 8'hFB)|(I_ir == 8'hDF)|(I_ir == 8'hFF)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'hF3)|(I_ir == 8'hD3)|(I_ir == 8'hE3)|(I_ir == 8'hC3))));
+	assign O_control[ 86] = (((I_t == 4'd3)&((I_ir ==? 8'b11?00111)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b11?10111)|(I_ir ==? 8'b11?01111)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b11?11?11)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b11??0011))));
 	
-	assign O_control[ 87] = (((I_t == 4'd4)&((I_ir == 8'hF6)|(I_ir == 8'hFB)|(I_ir == 8'hEE)|(I_ir == 8'hFF)))|
-	                         ((I_t == 4'd3)&((I_ir == 8'hF7)|(I_ir == 8'hEF)|(I_ir == 8'hE6)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'hFE)|(I_ir == 8'hF3)|(I_ir == 8'hE3)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hC8)|(I_ir == 8'hE8)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hE7))));
+	assign O_control[ 87] = (((I_t == 4'd4)&((I_ir ==? 8'b11110110)|(I_ir ==? 8'b11101110)|(I_ir ==? 8'b11111?11)))|
+	                         ((I_t == 4'd3)&((I_ir ==? 8'b11100110)|(I_ir ==? 8'b11110111)|(I_ir ==? 8'b11101111)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b11111110)|(I_ir ==? 8'b111?0011)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b11?01000)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b11100111))));
 	
-	assign O_control[ 88] = (((I_t == 4'd1)&((I_ir == 8'hD0))));
+	assign O_control[ 88] = (((I_t == 4'd1)&((I_ir ==? 8'b11010000))));
 	
-	assign O_control[ 89] = (((I_t == 4'd1)&((I_ir == 8'hD8))));
+	assign O_control[ 89] = (((I_t == 4'd1)&((I_ir ==? 8'b11011000))));
 	
-	assign O_control[ 90] = (((I_t == 4'd3)&((I_ir == 8'hE7)|(I_ir == 8'hED)|(I_ir == 8'hF5)))|
-	                         ((I_t == 4'd5)&((I_ir == 8'hF1)|(I_ir == 8'hE1)|(I_ir == 8'hFB)|(I_ir == 8'hFF)))|
-	                         ((I_t == 4'd6)&((I_ir == 8'hF3)|(I_ir == 8'hE3)))|
-	                         ((I_t == 4'd4)&((I_ir == 8'hF7)|(I_ir == 8'hFD)|(I_ir == 8'hEF)|(I_ir == 8'hF9)))|
-	                         ((I_t == 4'd1)&((I_ir == 8'hEB)|(I_ir == 8'hE9)))|
-	                         ((I_t == 4'd2)&((I_ir == 8'hE5))));
+	assign O_control[ 90] = (((I_t == 4'd3)&((I_ir ==? 8'b11100111)|(I_ir ==? 8'b11110101)|(I_ir ==? 8'b11101101)))|
+	                         ((I_t == 4'd5)&((I_ir ==? 8'b111?0001)|(I_ir ==? 8'b11111?11)))|
+	                         ((I_t == 4'd6)&((I_ir ==? 8'b111?0011)))|
+	                         ((I_t == 4'd4)&((I_ir ==? 8'b11110111)|(I_ir ==? 8'b11101111)|(I_ir ==? 8'b11111?01)))|
+	                         ((I_t == 4'd1)&((I_ir ==? 8'b111010?1)))|
+	                         ((I_t == 4'd2)&((I_ir ==? 8'b11100101))));
 	
-	assign O_control[ 91] = (((I_t == 4'd1)&((I_ir == 8'hF0))));
+	assign O_control[ 91] = (((I_t == 4'd1)&((I_ir ==? 8'b11110000))));
 	
-	assign O_control[ 92] = (((I_t == 4'd1)&((I_ir == 8'hF8))));
+	assign O_control[ 92] = (((I_t == 4'd1)&((I_ir ==? 8'b11111000))));
 	
 	assign O_control[ 93] = (((I_t == 4'd0)));
 	
