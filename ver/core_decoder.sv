@@ -458,380 +458,417 @@ module core_decoder(I_ir, I_t, O_control);
 	wire w451 = (I_ir ==? 8'b11100101);
 	wire w452 = (I_ir ==? 8'b11110000);
 	wire w453 = (I_ir ==? 8'b11111000);
-	
-	assign O_control[  0] = (((I_t == 4'd2)&(w000|w001|w002|w003|w004|w005|w006))
-	                        |((I_t == 4'd1)&(w007|w008|w009|w010|w011|w012|w013|w014|w015|w016|w017|w018|w019|w020|w021|w022))
-	                        |((I_t == 4'd5)&(w023))
-	                        |((I_t == 4'd0)));
-	
-	assign O_control[  1] = (((I_t == 4'd2)&(w024|w025|w026|w027|w028|w029|w030|w031|w032|w033|w034|w035|w036|w037|w038))
-	                        |((I_t == 4'd1)&(w039|w007|w009|w040|w041|w042|w043|w016|w044|w045|w020))
-	                        |((I_t == 4'd3)&(w046|w025|w047|w048|w049|w050|w041|w051|w052|w043|w053|w006))
-	                        |((I_t == 4'd4)&(w025|w054|w055|w056|w057|w058|w059|w060|w053|w061))
-	                        |((I_t == 4'd6)&(w062|w063))
-	                        |((I_t == 4'd5)&(w064|w065|w066|w048|w067|w068|w063))
-	                        |((I_t == 4'd0)));
-	
-	assign O_control[  2] = (((I_t == 4'd3)&(w069|w070))
-	                        |((I_t == 4'd2)&(w071))
-	                        |((I_t == 4'd4)&(w070))
-	                        |((I_t == 4'd5)&(w072)));
-	
-	assign O_control[  3] = (((I_t == 4'd3)&(w073|w074|w075|w076|w077))
-	                        |((I_t == 4'd6)&(w066|w078|w079|w058|w063))
-	                        |((I_t == 4'd4)&(w073|w080|w081|w082|w083|w084|w085|w086))
-	                        |((I_t == 4'd5)&(w087|w048|w088|w089|w050|w090|w091|w051|w092))
-	                        |((I_t == 4'd7)&(w093))
-	                        |((I_t == 4'd2)&(w064|w094|w095))
-	                        |((I_t == 4'd1)&(w096)));
-	
-	assign O_control[  4] = (((I_t == 4'd2)&(w064))
-	                        |((I_t == 4'd3)&(w097)));
-	
-	assign O_control[  5] = (((I_t == 4'd2)&(w098|w094))
-	                        |((I_t == 4'd3)&(w073))
-	                        |((I_t == 4'd4)&(w073)));
-	
-	assign O_control[  6] = (((I_t == 4'd2)&(w064)));
-	
-	assign O_control[  7] = (((I_t == 4'd3)&(w064))
-	                        |((I_t == 4'd4)&(w097)));
-	
-	assign O_control[  8] = (((I_t == 4'd2)&(w099))
-	                        |((I_t == 4'd4)&(w064)));
-	
-	assign O_control[  9] = (((I_t == 4'd5)&(w064)));
-	
-	assign O_control[ 10] = (((I_t == 4'd1)&(w100|w101|w102|w103|w104|w004|w105|w106|w107|w108|w020))
-	                        |((I_t == 4'd3)&(w109|w053))
-	                        |((I_t == 4'd5)&(w064)));
-	
-	assign O_control[ 11] = (((I_t == 4'd6)&(w064)));
-	
-	assign O_control[ 12] = (((I_t == 4'd2)&(w110|w111|w112|w004|w113|w041|w051|w114|w006))
-	                        |((I_t == 4'd3)&(w115|w116|w117|w118))
-	                        |((I_t == 4'd4)&(w109|w053))
-	                        |((I_t == 4'd6)&(w064))
-	                        |((I_t == 4'd5)&(w097)));
-	
-	assign O_control[ 13] = (((I_t == 4'd5)&(w097))
-	                        |((I_t == 4'd6)&(w064))
-	                        |((I_t == 4'd2)&(w119))
-	                        |((I_t == 4'd4)&(w109)));
-	
-	assign O_control[ 14] = (((I_t == 4'd5)&(w120|w121|w122|w082|w057|w123|w085|w124|w061))
-	                        |((I_t == 4'd3)&(w125|w069|w126|w127|w128|w129|w130|w131))
-	                        |((I_t == 4'd1)&(w132|w133|w134|w135|w136|w137|w138|w139|w140))
-	                        |((I_t == 4'd6)&(w064|w065|w048|w067|w051))
-	                        |((I_t == 4'd4)&(w141|w142|w143|w144|w145|w077|w006))
-	                        |((I_t == 4'd7)&(w062|w063))
-	                        |((I_t == 4'd2)&(w146|w094|w147|w148)));
-	
-	assign O_control[ 15] = (((I_t == 4'd1)&(w007|w009|w149|w010|w150|w151|w014|w152|w153|w154|w041|w042|w043|w016|w155|w020|w156))
-	                        |((I_t == 4'd2)&(w157|w158|w159|w000|w160|w002|w031|w161|w006))
-	                        |((I_t == 4'd5)&(w162)));
-	
-	assign O_control[ 16] = (((I_t == 4'd1)&(w053)));
-	
-	assign O_control[ 17] = (((I_t == 4'd1)&(w110|w142|w047|w041|w163|w043|w053|w006))
-	                        |((I_t == 4'd2)&(w115|w116|w117|w118)));
-	
-	assign O_control[ 18] = (((I_t == 4'd2)&(w053))
-	                        |((I_t == 4'd3)&(w109|w053))
-	                        |((I_t == 4'd4)&(w109|w053)));
-	
-	assign O_control[ 19] = (((I_t == 4'd2)&(w110|w047|w041|w163|w043|w053|w006))
-	                        |((I_t == 4'd3)&(w109|w164|w057|w165|w053|w061)));
-	
-	assign O_control[ 20] = (((I_t == 4'd2)&(w166|w167|w168|w169|w053|w130)));
-	
-	assign O_control[ 21] = (((I_t == 4'd2)&(w053)));
-	
-	assign O_control[ 22] = (((I_t == 4'd3)&(w109|w053)));
-	
-	assign O_control[ 23] = (((I_t == 4'd3)&(w170|w047|w007|w171|w172|w173|w031|w042|w052|w174|w175|w176|w177))
-	                        |((I_t == 4'd5)&(w054|w055|w056|w059|w178|w060|w179|w053|w061))
-	                        |((I_t == 4'd4)&(w180|w055|w049|w041|w178|w052|w181|w043|w006|w176))
-	                        |((I_t == 4'd6)&(w182|w183|w062|w093|w067|w068))
-	                        |((I_t == 4'd2)&(w184|w185|w186|w175|w020))
-	                        |((I_t == 4'd7)&(w062|w063)));
-	
-	assign O_control[ 24] = (((I_t == 4'd5)&(w187|w188|w189))
-	                        |((I_t == 4'd6)&(w190))
-	                        |((I_t == 4'd7)&(w191))
-	                        |((I_t == 4'd4)&(w192|w193))
-	                        |((I_t == 4'd1)&(w194))
-	                        |((I_t == 4'd3)&(w195|w196))
-	                        |((I_t == 4'd2)&(w197)));
-	
-	assign O_control[ 25] = (((I_t == 4'd5)&(w198|w081|w199|w089|w002|w200|w201))
-	                        |((I_t == 4'd3)&(w202|w203|w204|w205|w206|w207|w208|w209|w210))
-	                        |((I_t == 4'd4)&(w211|w212|w213|w214|w215|w216))
-	                        |((I_t == 4'd7)&(w062))
-	                        |((I_t == 4'd6)&(w048|w093))
-	                        |((I_t == 4'd1)&(w217|w218|w219|w220))
-	                        |((I_t == 4'd2)&(w221|w222|w223|w224|w225)));
-	
-	assign O_control[ 26] = (((I_t == 4'd5)&(w189|w081|w199|w057|w226|w227))
-	                        |((I_t == 4'd3)&(w202|w228|w229|w230|w231|w232|w233|w209))
-	                        |((I_t == 4'd4)&(w212|w234|w144|w235|w215))
-	                        |((I_t == 4'd7)&(w062))
-	                        |((I_t == 4'd1)&(w217|w236|w237|w238|w136|w239))
-	                        |((I_t == 4'd6)&(w048))
-	                        |((I_t == 4'd2)&(w223|w240|w241|w242|w243)));
-	
-	assign O_control[ 27] = (((I_t == 4'd5)&(w081|w199|w244|w057|w245|w227))
-	                        |((I_t == 4'd3)&(w229|w230|w204|w246|w247|w248|w249|w250))
-	                        |((I_t == 4'd4)&(w212|w234|w251|w252|w253|w254))
-	                        |((I_t == 4'd7)&(w062))
-	                        |((I_t == 4'd6)&(w048|w255))
-	                        |((I_t == 4'd1)&(w217|w218|w256|w136|w257))
-	                        |((I_t == 4'd2)&(w223|w258|w259)));
-	
-	assign O_control[ 28] = (((I_t == 4'd3)&(w260|w187|w188))
-	                        |((I_t == 4'd4)&(w261|w190|w262))
-	                        |((I_t == 4'd2)&(w192))
-	                        |((I_t == 4'd5)&(w263|w191|w264))
-	                        |((I_t == 4'd1)&(w265))
-	                        |((I_t == 4'd6)&(w266)));
-	
-	assign O_control[ 29] = (((I_t == 4'd3)&(w267|w081|w268|w269))
-	                        |((I_t == 4'd5)&(w062|w063))
-	                        |((I_t == 4'd4)&(w048|w051))
-	                        |((I_t == 4'd2)&(w212|w207)));
-	
-	assign O_control[ 30] = (((I_t == 4'd3)&(w270|w081|w199|w271|w214|w272|w268))
-	                        |((I_t == 4'd5)&(w273|w062|w274|w275|w063))
-	                        |((I_t == 4'd4)&(w276|w277|w048|w278|w279|w280|w281|w051))
-	                        |((I_t == 4'd2)&(w212|w207)));
-	
-	assign O_control[ 31] = (((I_t == 4'd3)&(w192|w282|w283|w284))
-	                        |((I_t == 4'd6)&(w066|w273|w079|w002|w063))
-	                        |((I_t == 4'd4)&(w285|w286|w287|w288|w199|w289|w290))
-	                        |((I_t == 4'd5)&(w291|w292|w048|w090|w091|w051))
-	                        |((I_t == 4'd7)&(w093)));
-	
-	assign O_control[ 32] = (((I_t == 4'd1)&(w293|w294|w295|w107|w020)));
-	
-	assign O_control[ 33] = (((I_t == 4'd3)&(w087|w296|w297|w298))
-	                        |((I_t == 4'd4)&(w078|w274))
-	                        |((I_t == 4'd2)&(w299|w271)));
-	
-	assign O_control[ 34] = (((I_t == 4'd5)&(w300|w301|w302|w303))
-	                        |((I_t == 4'd3)&(w299|w271))
-	                        |((I_t == 4'd4)&(w304|w296|w305|w279|w297))
-	                        |((I_t == 4'd6)&(w306)));
-	
-	assign O_control[ 35] = (((I_t == 4'd5)&(w301|w302|w089|w050))
-	                        |((I_t == 4'd3)&(w307|w075|w076))
-	                        |((I_t == 4'd4)&(w308|w309|w083))
-	                        |((I_t == 4'd2)&(w222|w095))
-	                        |((I_t == 4'd6)&(w306))
-	                        |((I_t == 4'd1)&(w096)));
-	
-	assign O_control[ 36] = (((I_t == 4'd3)&(w310|w004|w033|w017)));
-	
-	assign O_control[ 37] = (((I_t == 4'd1)&(w311)));
-	
-	assign O_control[ 38] = (((I_t == 4'd1)&(w312)));
-	
-	assign O_control[ 39] = (((I_t == 4'd1)&(w312)));
-	
-	assign O_control[ 40] = (((I_t == 4'd2)&(w000|w166|w002|w313|w169|w038|w006))
-	                        |((I_t == 4'd3)&(w115|w116|w117|w118))
-	                        |((I_t == 4'd1)&(w312)));
-	
-	assign O_control[ 41] = (((I_t == 4'd1)&(w312)));
-	
-	assign O_control[ 42] = (((I_t == 4'd1)&(w312)));
-	
-	assign O_control[ 43] = (((I_t == 4'd3)&(w110|w047|w041|w163|w043|w006))
-	                        |((I_t == 4'd4)&(w115|w116|w117|w118))
-	                        |((I_t == 4'd2)&(w312)));
-	
-	assign O_control[ 44] = (((I_t == 4'd2)&(w312)));
-	
-	assign O_control[ 45] = (((I_t == 4'd3)&(w110|w047|w041|w163|w043|w006))
-	                        |((I_t == 4'd4)&(w115|w116|w117|w118))
-	                        |((I_t == 4'd2)&(w312)));
-	
-	assign O_control[ 46] = (((I_t == 4'd3)&(w312))
-	                        |((I_t == 4'd2)&(w312)));
-	
-	assign O_control[ 47] = (((I_t == 4'd2)&(w312)));
-	
-	assign O_control[ 48] = (((I_t == 4'd2)&(w103|w314|w107|w038|w315)));
-	
-	assign O_control[ 49] = (((I_t == 4'd2)&(w115|w116|w117|w118)));
-	
-	assign O_control[ 50] = (((I_t == 4'd3)&(w115|w116|w117|w118))
-	                        |((I_t == 4'd2)&(w316|w317|w318|w319|w320)));
-	
-	assign O_control[ 51] = (((I_t == 4'd2)&(w110|w321|w144|w235|w322|w163|w323))
-	                        |((I_t == 4'd3)&(w115|w117|w179)));
-	
-	assign O_control[ 52] = (((I_t == 4'd1)&(w324)));
-	
-	assign O_control[ 53] = (((I_t == 4'd4)&(w325|w211))
-	                        |((I_t == 4'd5)&(w326|w327|w198|w328))
-	                        |((I_t == 4'd7)&(w329))
-	                        |((I_t == 4'd3)&(w330|w331|w332|w333))
-	                        |((I_t == 4'd1)&(w334|w096))
-	                        |((I_t == 4'd6)&(w335))
-	                        |((I_t == 4'd2)&(w336|w337)));
-	
-	assign O_control[ 54] = (((I_t == 4'd4)&(w338|w339|w335))
-	                        |((I_t == 4'd5)&(w300|w329))
-	                        |((I_t == 4'd3)&(w340|w326|w327))
-	                        |((I_t == 4'd2)&(w325))
-	                        |((I_t == 4'd1)&(w341)));
-	
-	assign O_control[ 55] = (((I_t == 4'd2)&(w342))
-	                        |((I_t == 4'd3)&(w343)));
-	
-	assign O_control[ 56] = (((I_t == 4'd2)&(w344|w069))
-	                        |((I_t == 4'd4)&(w072))
-	                        |((I_t == 4'd3)&(w344)));
-	
-	assign O_control[ 57] = (((I_t == 4'd3)&(w345|w072)));
-	
-	assign O_control[ 58] = (((I_t == 4'd1)&(w346)));
-	
-	assign O_control[ 59] = (((I_t == 4'd1)&(w347)));
-	
-	assign O_control[ 60] = (((I_t == 4'd4)&(w072))
-	                        |((I_t == 4'd3)&(w162)));
-	
-	assign O_control[ 61] = (((I_t == 4'd5)&(w072))
-	                        |((I_t == 4'd4)&(w162)));
-	
-	assign O_control[ 62] = (((I_t == 4'd5)&(w348|w349|w350))
-	                        |((I_t == 4'd1)&(w351))
-	                        |((I_t == 4'd4)&(w352|w353))
-	                        |((I_t == 4'd3)&(w354|w355))
-	                        |((I_t == 4'd7)&(w356))
-	                        |((I_t == 4'd2)&(w357))
-	                        |((I_t == 4'd6)&(w358)));
-	
-	assign O_control[ 63] = (((I_t == 4'd3)&(w359|w348|w349))
-	                        |((I_t == 4'd5)&(w360|w356|w361))
-	                        |((I_t == 4'd4)&(w362|w358|w363))
-	                        |((I_t == 4'd2)&(w352))
-	                        |((I_t == 4'd1)&(w364))
-	                        |((I_t == 4'd6)&(w365)));
-	
-	assign O_control[ 64] = (((I_t == 4'd1)&(w366)));
-	
-	assign O_control[ 65] = (((I_t == 4'd1)&(w367)));
-	
-	assign O_control[ 66] = (((I_t == 4'd3)&(w368|w369))
-	                        |((I_t == 4'd5)&(w370|w371|w372))
-	                        |((I_t == 4'd2)&(w373))
-	                        |((I_t == 4'd4)&(w374|w375))
-	                        |((I_t == 4'd6)&(w376))
-	                        |((I_t == 4'd7)&(w377))
-	                        |((I_t == 4'd1)&(w378)));
-	
-	assign O_control[ 67] = (((I_t == 4'd3)&(w379|w370|w371))
-	                        |((I_t == 4'd4)&(w380|w381|w376))
-	                        |((I_t == 4'd1)&(w382))
-	                        |((I_t == 4'd5)&(w383|w377))
-	                        |((I_t == 4'd2)&(w374)));
-	
-	assign O_control[ 68] = (((I_t == 4'd3)&(w229|w231|w232))
-	                        |((I_t == 4'd2)&(w240))
-	                        |((I_t == 4'd1)&(w236|w149))
-	                        |((I_t == 4'd4)&(w144|w384))
-	                        |((I_t == 4'd5)&(w057)));
-	
-	assign O_control[ 69] = (((I_t == 4'd2)&(w109)));
-	
-	assign O_control[ 70] = (((I_t == 4'd1)&(w385)));
-	
-	assign O_control[ 71] = (((I_t == 4'd1)&(w386)));
-	
-	assign O_control[ 72] = (((I_t == 4'd3)&(w332|w333))
-	                        |((I_t == 4'd5)&(w328))
-	                        |((I_t == 4'd1)&(w096))
-	                        |((I_t == 4'd2)&(w337)));
-	
-	assign O_control[ 73] = (((I_t == 4'd3)&(w332|w333))
-	                        |((I_t == 4'd5)&(w328))
-	                        |((I_t == 4'd1)&(w096))
-	                        |((I_t == 4'd2)&(w337)));
-	
-	assign O_control[ 74] = (((I_t == 4'd3)&(w387|w388))
-	                        |((I_t == 4'd1)&(w389|w390|w391))
-	                        |((I_t == 4'd2)&(w392)));
-	
-	assign O_control[ 75] = (((I_t == 4'd2)&(w393|w394))
-	                        |((I_t == 4'd3)&(w395|w396|w397))
-	                        |((I_t == 4'd1)&(w398|w399)));
-	
-	assign O_control[ 76] = (((I_t == 4'd5)&(w400|w401))
-	                        |((I_t == 4'd2)&(w402))
-	                        |((I_t == 4'd4)&(w403|w404|w405))
-	                        |((I_t == 4'd3)&(w406|w407|w408))
-	                        |((I_t == 4'd1)&(w409|w410)));
-	
-	assign O_control[ 77] = (((I_t == 4'd2)&(w411))
-	                        |((I_t == 4'd1)&(w412|w391))
-	                        |((I_t == 4'd3)&(w413|w414))
-	                        |((I_t == 4'd4)&(w415)));
-	
-	assign O_control[ 78] = (((I_t == 4'd1)&(w256|w219|w416|w417)));
-	
-	assign O_control[ 79] = (((I_t == 4'd1)&(w418)));
-	
-	assign O_control[ 80] = (((I_t == 4'd1)&(w419)));
-	
-	assign O_control[ 81] = (((I_t == 4'd1)&(w420|w421|w416|w410|w422))
-	                        |((I_t == 4'd3)&(w423|w424))
-	                        |((I_t == 4'd4)&(w425))
-	                        |((I_t == 4'd2)&(w426))
-	                        |((I_t == 4'd5)&(w427)));
-	
-	assign O_control[ 82] = (((I_t == 4'd1)&(w428)));
-	
-	assign O_control[ 83] = (((I_t == 4'd1)&(w429)));
-	
-	assign O_control[ 84] = (((I_t == 4'd1)&(w430)));
-	
-	assign O_control[ 85] = (((I_t == 4'd2)&(w431|w432))
-	                        |((I_t == 4'd3)&(w402|w433|w434|w435))
-	                        |((I_t == 4'd4)&(w407|w408|w436))
-	                        |((I_t == 4'd1)&(w437|w237))
-	                        |((I_t == 4'd5)&(w405|w438))
-	                        |((I_t == 4'd6)&(w401)));
-	
-	assign O_control[ 86] = (((I_t == 4'd3)&(w207))
-	                        |((I_t == 4'd4)&(w213|w214))
-	                        |((I_t == 4'd5)&(w002))
-	                        |((I_t == 4'd6)&(w093)));
-	
-	assign O_control[ 87] = (((I_t == 4'd4)&(w439|w440|w245))
-	                        |((I_t == 4'd3)&(w441|w252|w253))
-	                        |((I_t == 4'd5)&(w442|w255))
-	                        |((I_t == 4'd1)&(w443))
-	                        |((I_t == 4'd2)&(w248)));
-	
-	assign O_control[ 88] = (((I_t == 4'd1)&(w444)));
-	
-	assign O_control[ 89] = (((I_t == 4'd1)&(w445)));
-	
-	assign O_control[ 90] = (((I_t == 4'd3)&(w248|w446|w447))
-	                        |((I_t == 4'd5)&(w245|w448))
-	                        |((I_t == 4'd6)&(w255))
-	                        |((I_t == 4'd4)&(w252|w253|w449))
-	                        |((I_t == 4'd1)&(w450))
-	                        |((I_t == 4'd2)&(w451)));
-	
-	assign O_control[ 91] = (((I_t == 4'd1)&(w452)));
-	
-	assign O_control[ 92] = (((I_t == 4'd1)&(w453)));
-	
-	assign O_control[ 93] = (((I_t == 4'd0)));
-	
-	assign O_control[ 94] = (((I_t == 4'd0)));
-	
+	wire t0 = (I_t == 4'd0);
+	wire t1 = (I_t == 4'd1);
+	wire t2 = (I_t == 4'd2);
+	wire t3 = (I_t == 4'd3);
+	wire t4 = (I_t == 4'd4);
+	wire t5 = (I_t == 4'd5);
+	wire t6 = (I_t == 4'd6);
+	wire t7 = (I_t == 4'd7);
+	
+	wire x000 = w000|w001|w002|w003|w004|w005|w006;
+	wire x001 = w007|w008|w009|w010|w011|w012|w013|w014|w015|w016|w017|w018|w019|w020|w021|w022;
+	wire x002 = w023;
+	wire x003 = w024|w025|w026|w027|w028|w029|w030|w031|w032|w033|w034|w035|w036|w037|w038;
+	wire x004 = w039|w007|w009|w040|w041|w042|w043|w016|w044|w045|w020;
+	wire x005 = w046|w025|w047|w048|w049|w050|w041|w051|w052|w043|w053|w006;
+	wire x006 = w025|w054|w055|w056|w057|w058|w059|w060|w053|w061;
+	wire x007 = w062|w063;
+	wire x008 = w064|w065|w066|w048|w067|w068|w063;
+	wire x009 = w069|w070;
+	wire x010 = w071;
+	wire x011 = w070;
+	wire x012 = w072;
+	wire x013 = w073|w074|w075|w076|w077;
+	wire x014 = w066|w078|w079|w058|w063;
+	wire x015 = w073|w080|w081|w082|w083|w084|w085|w086;
+	wire x016 = w087|w048|w088|w089|w050|w090|w091|w051|w092;
+	wire x017 = w093;
+	wire x018 = w064|w094|w095;
+	wire x019 = w096;
+	wire x020 = w064;
+	wire x021 = w097;
+	wire x022 = w098|w094;
+	wire x023 = w073;
+	wire x024 = w099;
+	wire x025 = w100|w101|w102|w103|w104|w004|w105|w106|w107|w108|w020;
+	wire x026 = w109|w053;
+	wire x027 = w110|w111|w112|w004|w113|w041|w051|w114|w006;
+	wire x028 = w115|w116|w117|w118;
+	wire x029 = w119;
+	wire x030 = w109;
+	wire x031 = w120|w121|w122|w082|w057|w123|w085|w124|w061;
+	wire x032 = w125|w069|w126|w127|w128|w129|w130|w131;
+	wire x033 = w132|w133|w134|w135|w136|w137|w138|w139|w140;
+	wire x034 = w064|w065|w048|w067|w051;
+	wire x035 = w141|w142|w143|w144|w145|w077|w006;
+	wire x036 = w146|w094|w147|w148;
+	wire x037 = w007|w009|w149|w010|w150|w151|w014|w152|w153|w154|w041|w042|w043|w016|w155|w020|w156;
+	wire x038 = w157|w158|w159|w000|w160|w002|w031|w161|w006;
+	wire x039 = w162;
+	wire x040 = w053;
+	wire x041 = w110|w142|w047|w041|w163|w043|w053|w006;
+	wire x042 = w110|w047|w041|w163|w043|w053|w006;
+	wire x043 = w109|w164|w057|w165|w053|w061;
+	wire x044 = w166|w167|w168|w169|w053|w130;
+	wire x045 = w170|w047|w007|w171|w172|w173|w031|w042|w052|w174|w175|w176|w177;
+	wire x046 = w054|w055|w056|w059|w178|w060|w179|w053|w061;
+	wire x047 = w180|w055|w049|w041|w178|w052|w181|w043|w006|w176;
+	wire x048 = w182|w183|w062|w093|w067|w068;
+	wire x049 = w184|w185|w186|w175|w020;
+	wire x050 = w187|w188|w189;
+	wire x051 = w190;
+	wire x052 = w191;
+	wire x053 = w192|w193;
+	wire x054 = w194;
+	wire x055 = w195|w196;
+	wire x056 = w197;
+	wire x057 = w198|w081|w199|w089|w002|w200|w201;
+	wire x058 = w202|w203|w204|w205|w206|w207|w208|w209|w210;
+	wire x059 = w211|w212|w213|w214|w215|w216;
+	wire x060 = w062;
+	wire x061 = w048|w093;
+	wire x062 = w217|w218|w219|w220;
+	wire x063 = w221|w222|w223|w224|w225;
+	wire x064 = w189|w081|w199|w057|w226|w227;
+	wire x065 = w202|w228|w229|w230|w231|w232|w233|w209;
+	wire x066 = w212|w234|w144|w235|w215;
+	wire x067 = w217|w236|w237|w238|w136|w239;
+	wire x068 = w048;
+	wire x069 = w223|w240|w241|w242|w243;
+	wire x070 = w081|w199|w244|w057|w245|w227;
+	wire x071 = w229|w230|w204|w246|w247|w248|w249|w250;
+	wire x072 = w212|w234|w251|w252|w253|w254;
+	wire x073 = w048|w255;
+	wire x074 = w217|w218|w256|w136|w257;
+	wire x075 = w223|w258|w259;
+	wire x076 = w260|w187|w188;
+	wire x077 = w261|w190|w262;
+	wire x078 = w192;
+	wire x079 = w263|w191|w264;
+	wire x080 = w265;
+	wire x081 = w266;
+	wire x082 = w267|w081|w268|w269;
+	wire x083 = w048|w051;
+	wire x084 = w212|w207;
+	wire x085 = w270|w081|w199|w271|w214|w272|w268;
+	wire x086 = w273|w062|w274|w275|w063;
+	wire x087 = w276|w277|w048|w278|w279|w280|w281|w051;
+	wire x088 = w192|w282|w283|w284;
+	wire x089 = w066|w273|w079|w002|w063;
+	wire x090 = w285|w286|w287|w288|w199|w289|w290;
+	wire x091 = w291|w292|w048|w090|w091|w051;
+	wire x092 = w293|w294|w295|w107|w020;
+	wire x093 = w087|w296|w297|w298;
+	wire x094 = w078|w274;
+	wire x095 = w299|w271;
+	wire x096 = w300|w301|w302|w303;
+	wire x097 = w304|w296|w305|w279|w297;
+	wire x098 = w306;
+	wire x099 = w301|w302|w089|w050;
+	wire x100 = w307|w075|w076;
+	wire x101 = w308|w309|w083;
+	wire x102 = w222|w095;
+	wire x103 = w310|w004|w033|w017;
+	wire x104 = w311;
+	wire x105 = w312;
+	wire x106 = w000|w166|w002|w313|w169|w038|w006;
+	wire x107 = w110|w047|w041|w163|w043|w006;
+	wire x108 = w103|w314|w107|w038|w315;
+	wire x109 = w316|w317|w318|w319|w320;
+	wire x110 = w110|w321|w144|w235|w322|w163|w323;
+	wire x111 = w115|w117|w179;
+	wire x112 = w324;
+	wire x113 = w325|w211;
+	wire x114 = w326|w327|w198|w328;
+	wire x115 = w329;
+	wire x116 = w330|w331|w332|w333;
+	wire x117 = w334|w096;
+	wire x118 = w335;
+	wire x119 = w336|w337;
+	wire x120 = w338|w339|w335;
+	wire x121 = w300|w329;
+	wire x122 = w340|w326|w327;
+	wire x123 = w325;
+	wire x124 = w341;
+	wire x125 = w342;
+	wire x126 = w343;
+	wire x127 = w344|w069;
+	wire x128 = w344;
+	wire x129 = w345|w072;
+	wire x130 = w346;
+	wire x131 = w347;
+	wire x132 = w348|w349|w350;
+	wire x133 = w351;
+	wire x134 = w352|w353;
+	wire x135 = w354|w355;
+	wire x136 = w356;
+	wire x137 = w357;
+	wire x138 = w358;
+	wire x139 = w359|w348|w349;
+	wire x140 = w360|w356|w361;
+	wire x141 = w362|w358|w363;
+	wire x142 = w352;
+	wire x143 = w364;
+	wire x144 = w365;
+	wire x145 = w366;
+	wire x146 = w367;
+	wire x147 = w368|w369;
+	wire x148 = w370|w371|w372;
+	wire x149 = w373;
+	wire x150 = w374|w375;
+	wire x151 = w376;
+	wire x152 = w377;
+	wire x153 = w378;
+	wire x154 = w379|w370|w371;
+	wire x155 = w380|w381|w376;
+	wire x156 = w382;
+	wire x157 = w383|w377;
+	wire x158 = w374;
+	wire x159 = w229|w231|w232;
+	wire x160 = w240;
+	wire x161 = w236|w149;
+	wire x162 = w144|w384;
+	wire x163 = w057;
+	wire x164 = w385;
+	wire x165 = w386;
+	wire x166 = w332|w333;
+	wire x167 = w328;
+	wire x168 = w337;
+	wire x169 = w387|w388;
+	wire x170 = w389|w390|w391;
+	wire x171 = w392;
+	wire x172 = w393|w394;
+	wire x173 = w395|w396|w397;
+	wire x174 = w398|w399;
+	wire x175 = w400|w401;
+	wire x176 = w402;
+	wire x177 = w403|w404|w405;
+	wire x178 = w406|w407|w408;
+	wire x179 = w409|w410;
+	wire x180 = w411;
+	wire x181 = w412|w391;
+	wire x182 = w413|w414;
+	wire x183 = w415;
+	wire x184 = w256|w219|w416|w417;
+	wire x185 = w418;
+	wire x186 = w419;
+	wire x187 = w420|w421|w416|w410|w422;
+	wire x188 = w423|w424;
+	wire x189 = w425;
+	wire x190 = w426;
+	wire x191 = w427;
+	wire x192 = w428;
+	wire x193 = w429;
+	wire x194 = w430;
+	wire x195 = w431|w432;
+	wire x196 = w402|w433|w434|w435;
+	wire x197 = w407|w408|w436;
+	wire x198 = w437|w237;
+	wire x199 = w405|w438;
+	wire x200 = w401;
+	wire x201 = w207;
+	wire x202 = w213|w214;
+	wire x203 = w002;
+	wire x204 = w439|w440|w245;
+	wire x205 = w441|w252|w253;
+	wire x206 = w442|w255;
+	wire x207 = w443;
+	wire x208 = w248;
+	wire x209 = w444;
+	wire x210 = w445;
+	wire x211 = w248|w446|w447;
+	wire x212 = w245|w448;
+	wire x213 = w255;
+	wire x214 = w252|w253|w449;
+	wire x215 = w450;
+	wire x216 = w451;
+	wire x217 = w452;
+	wire x218 = w453;
+	
+	wire y000 = (t0)|(t1 & x001)|(t2 & x000)|(t5 & x002);
+	wire y001 = (t0)|(t1 & x004)|(t2 & x003)|(t3 & x005)|(t4 & x006)|(t5 & x008)|(t6 & x007);
+	wire y002 = (t2 & x010)|(t3 & x009)|(t4 & x011)|(t5 & x012);
+	wire y003 = (t1 & x019)|(t2 & x018)|(t3 & x013)|(t4 & x015)|(t5 & x016)|(t6 & x014)|(t7 & x017);
+	wire y004 = (t2 & x020)|(t3 & x021);
+	wire y005 = (t2 & x022)|(t3 & x023)|(t4 & x023);
+	wire y006 = (t2 & x020);
+	wire y007 = (t3 & x020)|(t4 & x021);
+	wire y008 = (t2 & x024)|(t4 & x020);
+	wire y009 = (t5 & x020);
+	wire y010 = (t1 & x025)|(t3 & x026)|(t5 & x020);
+	wire y011 = (t6 & x020);
+	wire y012 = (t2 & x027)|(t3 & x028)|(t4 & x026)|(t5 & x021)|(t6 & x020);
+	wire y013 = (t2 & x029)|(t4 & x030)|(t5 & x021)|(t6 & x020);
+	wire y014 = (t1 & x033)|(t2 & x036)|(t3 & x032)|(t4 & x035)|(t5 & x031)|(t6 & x034)|(t7 & x007);
+	wire y015 = (t1 & x037)|(t2 & x038)|(t5 & x039);
+	wire y016 = (t1 & x040);
+	wire y017 = (t1 & x041)|(t2 & x028);
+	wire y018 = (t2 & x040)|(t3 & x026)|(t4 & x026);
+	wire y019 = (t2 & x042)|(t3 & x043);
+	wire y020 = (t2 & x044);
+	wire y021 = (t2 & x040);
+	wire y022 = (t3 & x026);
+	wire y023 = (t2 & x049)|(t3 & x045)|(t4 & x047)|(t5 & x046)|(t6 & x048)|(t7 & x007);
+	wire y024 = (t1 & x054)|(t2 & x056)|(t3 & x055)|(t4 & x053)|(t5 & x050)|(t6 & x051)|(t7 & x052);
+	wire y025 = (t1 & x062)|(t2 & x063)|(t3 & x058)|(t4 & x059)|(t5 & x057)|(t6 & x061)|(t7 & x060);
+	wire y026 = (t1 & x067)|(t2 & x069)|(t3 & x065)|(t4 & x066)|(t5 & x064)|(t6 & x068)|(t7 & x060);
+	wire y027 = (t1 & x074)|(t2 & x075)|(t3 & x071)|(t4 & x072)|(t5 & x070)|(t6 & x073)|(t7 & x060);
+	wire y028 = (t1 & x080)|(t2 & x078)|(t3 & x076)|(t4 & x077)|(t5 & x079)|(t6 & x081);
+	wire y029 = (t2 & x084)|(t3 & x082)|(t4 & x083)|(t5 & x007);
+	wire y030 = (t2 & x084)|(t3 & x085)|(t4 & x087)|(t5 & x086);
+	wire y031 = (t3 & x088)|(t4 & x090)|(t5 & x091)|(t6 & x089)|(t7 & x017);
+	wire y032 = (t1 & x092);
+	wire y033 = (t2 & x095)|(t3 & x093)|(t4 & x094);
+	wire y034 = (t3 & x095)|(t4 & x097)|(t5 & x096)|(t6 & x098);
+	wire y035 = (t1 & x019)|(t2 & x102)|(t3 & x100)|(t4 & x101)|(t5 & x099)|(t6 & x098);
+	wire y036 = (t3 & x103);
+	wire y037 = (t1 & x104);
+	wire y038 = (t1 & x105);
+	wire y040 = (t1 & x105)|(t2 & x106)|(t3 & x028);
+	wire y043 = (t2 & x105)|(t3 & x107)|(t4 & x028);
+	wire y044 = (t2 & x105);
+	wire y046 = (t2 & x105)|(t3 & x105);
+	wire y048 = (t2 & x108);
+	wire y049 = (t2 & x028);
+	wire y050 = (t2 & x109)|(t3 & x028);
+	wire y051 = (t2 & x110)|(t3 & x111);
+	wire y052 = (t1 & x112);
+	wire y053 = (t1 & x117)|(t2 & x119)|(t3 & x116)|(t4 & x113)|(t5 & x114)|(t6 & x118)|(t7 & x115);
+	wire y054 = (t1 & x124)|(t2 & x123)|(t3 & x122)|(t4 & x120)|(t5 & x121);
+	wire y055 = (t2 & x125)|(t3 & x126);
+	wire y056 = (t2 & x127)|(t3 & x128)|(t4 & x012);
+	wire y057 = (t3 & x129);
+	wire y058 = (t1 & x130);
+	wire y059 = (t1 & x131);
+	wire y060 = (t3 & x039)|(t4 & x012);
+	wire y061 = (t4 & x039)|(t5 & x012);
+	wire y062 = (t1 & x133)|(t2 & x137)|(t3 & x135)|(t4 & x134)|(t5 & x132)|(t6 & x138)|(t7 & x136);
+	wire y063 = (t1 & x143)|(t2 & x142)|(t3 & x139)|(t4 & x141)|(t5 & x140)|(t6 & x144);
+	wire y064 = (t1 & x145);
+	wire y065 = (t1 & x146);
+	wire y066 = (t1 & x153)|(t2 & x149)|(t3 & x147)|(t4 & x150)|(t5 & x148)|(t6 & x151)|(t7 & x152);
+	wire y067 = (t1 & x156)|(t2 & x158)|(t3 & x154)|(t4 & x155)|(t5 & x157);
+	wire y068 = (t1 & x161)|(t2 & x160)|(t3 & x159)|(t4 & x162)|(t5 & x163);
+	wire y069 = (t2 & x030);
+	wire y070 = (t1 & x164);
+	wire y071 = (t1 & x165);
+	wire y072 = (t1 & x019)|(t2 & x168)|(t3 & x166)|(t5 & x167);
+	wire y074 = (t1 & x170)|(t2 & x171)|(t3 & x169);
+	wire y075 = (t1 & x174)|(t2 & x172)|(t3 & x173);
+	wire y076 = (t1 & x179)|(t2 & x176)|(t3 & x178)|(t4 & x177)|(t5 & x175);
+	wire y077 = (t1 & x181)|(t2 & x180)|(t3 & x182)|(t4 & x183);
+	wire y078 = (t1 & x184);
+	wire y079 = (t1 & x185);
+	wire y080 = (t1 & x186);
+	wire y081 = (t1 & x187)|(t2 & x190)|(t3 & x188)|(t4 & x189)|(t5 & x191);
+	wire y082 = (t1 & x192);
+	wire y083 = (t1 & x193);
+	wire y084 = (t1 & x194);
+	wire y085 = (t1 & x198)|(t2 & x195)|(t3 & x196)|(t4 & x197)|(t5 & x199)|(t6 & x200);
+	wire y086 = (t3 & x201)|(t4 & x202)|(t5 & x203)|(t6 & x017);
+	wire y087 = (t1 & x207)|(t2 & x208)|(t3 & x205)|(t4 & x204)|(t5 & x206);
+	wire y088 = (t1 & x209);
+	wire y089 = (t1 & x210);
+	wire y090 = (t1 & x215)|(t2 & x216)|(t3 & x211)|(t4 & x214)|(t5 & x212)|(t6 & x213);
+	wire y091 = (t1 & x217);
+	wire y092 = (t1 & x218);
+	wire y093 = (t0);
+	
+	assign O_control[  0] = y000;
+	assign O_control[  1] = y001;
+	assign O_control[  2] = y002;
+	assign O_control[  3] = y003;
+	assign O_control[  4] = y004;
+	assign O_control[  5] = y005;
+	assign O_control[  6] = y006;
+	assign O_control[  7] = y007;
+	assign O_control[  8] = y008;
+	assign O_control[  9] = y009;
+	assign O_control[ 10] = y010;
+	assign O_control[ 11] = y011;
+	assign O_control[ 12] = y012;
+	assign O_control[ 13] = y013;
+	assign O_control[ 14] = y014;
+	assign O_control[ 15] = y015;
+	assign O_control[ 16] = y016;
+	assign O_control[ 17] = y017;
+	assign O_control[ 18] = y018;
+	assign O_control[ 19] = y019;
+	assign O_control[ 20] = y020;
+	assign O_control[ 21] = y021;
+	assign O_control[ 22] = y022;
+	assign O_control[ 23] = y023;
+	assign O_control[ 24] = y024;
+	assign O_control[ 25] = y025;
+	assign O_control[ 26] = y026;
+	assign O_control[ 27] = y027;
+	assign O_control[ 28] = y028;
+	assign O_control[ 29] = y029;
+	assign O_control[ 30] = y030;
+	assign O_control[ 31] = y031;
+	assign O_control[ 32] = y032;
+	assign O_control[ 33] = y033;
+	assign O_control[ 34] = y034;
+	assign O_control[ 35] = y035;
+	assign O_control[ 36] = y036;
+	assign O_control[ 37] = y037;
+	assign O_control[ 38] = y038;
+	assign O_control[ 39] = y038;
+	assign O_control[ 40] = y040;
+	assign O_control[ 41] = y038;
+	assign O_control[ 42] = y038;
+	assign O_control[ 43] = y043;
+	assign O_control[ 44] = y044;
+	assign O_control[ 45] = y043;
+	assign O_control[ 46] = y046;
+	assign O_control[ 47] = y044;
+	assign O_control[ 48] = y048;
+	assign O_control[ 49] = y049;
+	assign O_control[ 50] = y050;
+	assign O_control[ 51] = y051;
+	assign O_control[ 52] = y052;
+	assign O_control[ 53] = y053;
+	assign O_control[ 54] = y054;
+	assign O_control[ 55] = y055;
+	assign O_control[ 56] = y056;
+	assign O_control[ 57] = y057;
+	assign O_control[ 58] = y058;
+	assign O_control[ 59] = y059;
+	assign O_control[ 60] = y060;
+	assign O_control[ 61] = y061;
+	assign O_control[ 62] = y062;
+	assign O_control[ 63] = y063;
+	assign O_control[ 64] = y064;
+	assign O_control[ 65] = y065;
+	assign O_control[ 66] = y066;
+	assign O_control[ 67] = y067;
+	assign O_control[ 68] = y068;
+	assign O_control[ 69] = y069;
+	assign O_control[ 70] = y070;
+	assign O_control[ 71] = y071;
+	assign O_control[ 72] = y072;
+	assign O_control[ 73] = y072;
+	assign O_control[ 74] = y074;
+	assign O_control[ 75] = y075;
+	assign O_control[ 76] = y076;
+	assign O_control[ 77] = y077;
+	assign O_control[ 78] = y078;
+	assign O_control[ 79] = y079;
+	assign O_control[ 80] = y080;
+	assign O_control[ 81] = y081;
+	assign O_control[ 82] = y082;
+	assign O_control[ 83] = y083;
+	assign O_control[ 84] = y084;
+	assign O_control[ 85] = y085;
+	assign O_control[ 86] = y086;
+	assign O_control[ 87] = y087;
+	assign O_control[ 88] = y088;
+	assign O_control[ 89] = y089;
+	assign O_control[ 90] = y090;
+	assign O_control[ 91] = y091;
+	assign O_control[ 92] = y092;
+	assign O_control[ 93] = y093;
+	assign O_control[ 94] = y093;
 endmodule

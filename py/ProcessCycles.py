@@ -1,5 +1,5 @@
 from itertools import cycle
-from os import system
+from os import system, write
 import subprocess
 from SvWriter import SvWriter
 from Utils    import Utils
@@ -126,7 +126,7 @@ class ProcessCycles:
 
     rel_action_conds = {}
     partial_code_cache = {}
-    
+    index_set_cache = {}
     for action, q_conditions in flat_table.items():          
       rel_cycle_opcode = {}
       for opcode, cycle_index, condition in q_conditions:
@@ -141,8 +141,12 @@ class ProcessCycles:
         for partial_code in q_opcodes:
           if partial_code not in partial_code_cache:
             partial_code_cache[partial_code] = len(partial_code_cache)          
-          partial_code_indexes.append(partial_code_cache[partial_code])        
-        rel_cycle_opcode[cycle_index] = partial_code_indexes
+          partial_code_indexes.append(partial_code_cache[partial_code])
+        index_set_cache_key = '|'.join ('%x' % x for x in partial_code_indexes)        
+        if len(q_opcodes) > 0:          
+          if index_set_cache_key not in index_set_cache:
+            index_set_cache[index_set_cache_key] = (len(index_set_cache), partial_code_indexes)
+        rel_cycle_opcode[cycle_index] = index_set_cache_key
       rel_action_conds[action] = rel_cycle_opcode
 
     writer.write_line('module core_decoder(I_ir, I_t, O_control);')
@@ -153,20 +157,40 @@ class ProcessCycles:
     writer.write_line('')
     for partial_code, index in partial_code_cache.items():
       writer.write_line('wire w%03u = (I_ir ==? 8\'b%s);' % (index, partial_code))
+    for t in range(0, 8):
+      writer.write_line('wire t%u = (I_t == 4\'d%u);' % (t, t))
+    
     writer.write_line('')
+    for cache_key, net_id_and_list in index_set_cache.items():
+      net_id, net_list = net_id_and_list
+      net_list = '|'.join('w%03u' % x for x in net_list)
+      writer.write_line('wire x%03u = %s;' % (net_id, net_list))
+
+    writer.write_line('')
+    full_cond_cache = {}
+    control_index_map = {}
     for action, q_cycle_code_indexes in rel_action_conds.items():      
-      full_condition = []
       control_index = indexes[action]
-      for cycle_index, q_code_indexes in q_cycle_code_indexes.items():        
-        condition_with_cycle = ['(I_t == 4\'d%u)' % (cycle_index)]
-        if len (q_code_indexes) > 0:
-          partial_condition = []
-          for code_index in q_code_indexes:
-            partial_condition.append('w%03u' % (code_index)) 
-          condition_with_cycle.append ( '(%s)' % ('|'.join(partial_condition)))
-        full_condition.append('(%s)' % ('&'.join(condition_with_cycle)))        
-      writer.write_line ('assign O_control[%3u] = (%s);' % (control_index,  ('\n' + ' '*24  + '|').join(full_condition)))
-      writer.write_line ('')
+      full_condition = []
+      for cycle_index, index_set_cache_key in q_cycle_code_indexes.items():                
+        partial_condition = ['t%u' % (cycle_index)]
+        if index_set_cache_key in index_set_cache:
+          net_id, net_list = index_set_cache[index_set_cache_key]
+          partial_condition.append ('x%03u' % net_id)
+        partial_condition = '(%s)' % (' & '.join(partial_condition))
+        full_condition.append(partial_condition)
+      full_condition = ('|').join(sorted(full_condition))
+      if full_condition not in full_cond_cache:
+        full_cond_cache[full_condition] = control_index
+        writer.write_line('wire y%03u = %s;' % (control_index, full_condition))
+        control_index_map[control_index] = control_index
+      else:
+        control_index_map[control_index] = full_cond_cache[full_condition]
+        
+    writer.write_line('')
+    for target, source in control_index_map.items():
+      writer.write_line('assign O_control[%3u] = y%03u;' % (target, source))    
+
     writer.unindent()
     writer.write_line('endmodule')     
     return 
