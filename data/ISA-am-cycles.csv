@@ -17,7 +17,6 @@
 "Absolute",2,,"next_t","curr_t_p1 "
 ,,,,
 "Absolute",3,,"O_addr","curr_ad"
-"Absolute",3,,"next_pc","curr_pc"
 "Absolute",3,,"next_t","curr_t_p1 "
 ,,,,
 "Absolute*",1,,"next_pc","curr_pc_p1"
