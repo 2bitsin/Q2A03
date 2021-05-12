@@ -233,7 +233,9 @@ class ProcessCycles:
           continue
         is_first = True      
         for rhs, index in rhs_index.items():
-          combo = (index, lhs, rhs)          
+          combo = (index, lhs, rhs)
+          if def_table[lhs][0] == rhs:
+            print("Warning duplicate default value %s = %s!" % (lhs, rhs))
           if is_first:               
             writer.write_line ('     if (G_control[%3u]) %s = %s;' % combo)
           else:

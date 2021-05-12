@@ -1,22 +1,17 @@
 "Addressing Mode","Cycle ","Condition","Target","Assign"
-"*",0,,"O_addr ","curr_pc"
 "*",0,,"next_pc","~force_brk ? curr_pc_p1 : curr_pc"
 "*",0,,"next_ir","~force_brk ? I_rd_data : 8'h00 "
 "*",0,,"next_t","curr_t_p1 "
 ,,,,
-"Implied",1,,"O_addr ","curr_pc"
 "Implied",1," ","next_t","curr_t_p1 "
 ,,,,
-"Immediate",1,,"O_addr ","curr_pc"
 "Immediate",1,,"next_pc","curr_pc_p1"
 "Immediate",1,,"next_t","curr_t_p1 "
 ,,,,
-"Absolute",1,,"O_addr ","curr_pc"
 "Absolute",1,,"next_pc","curr_pc_p1"
 "Absolute",1,,"next_ad[7:0]","I_rd_data"
 "Absolute",1,,"next_t","curr_t_p1 "
 ,,,,
-"Absolute",2,,"O_addr","curr_pc"
 "Absolute",2,,"next_pc","curr_pc_p1"
 "Absolute",2,,"next_ad[15:8]","I_rd_data"
 "Absolute",2,,"next_t","curr_t_p1 "
@@ -25,17 +20,14 @@
 "Absolute",3,,"next_pc","curr_pc"
 "Absolute",3,,"next_t","curr_t_p1 "
 ,,,,
-"Absolute*",1,,"O_addr ","curr_pc"
 "Absolute*",1,,"next_pc","curr_pc_p1"
 "Absolute*",1,,"next_ad[7:0]","I_rd_data"
 "Absolute*",1,,"next_t","curr_t_p1 "
 ,,,,
-"Absolute*",2,,"O_addr","curr_pc"
 "Absolute*",2,,"next_pc","curr_pc_p1"
 "Absolute*",2,,"next_ad[15:8]","I_rd_data"
 "Absolute*",2,,"next_t","curr_t_p1 "
 ,,,,
-"Zero Page",1,,"O_addr","curr_pc"
 "Zero Page",1,,"next_pc","curr_pc_p1"
 "Zero Page",1,,"next_ad[15:8]",0
 "Zero Page",1,,"next_ad[7:0]","I_rd_data"
@@ -44,12 +36,10 @@
 "Zero Page",2,,"O_addr","curr_ad"
 "Zero Page",2,,"next_t","curr_t_p1 "
 ,,,,
-"(Indirect)",1,,"O_addr","curr_pc"
 "(Indirect)",1,,"next_pc","curr_pc_p1"
 "(Indirect)",1,,"next_ba[7:0]","I_rd_data"
 "(Indirect)",1,,"next_t","curr_t_p1"
 ,,,,
-"(Indirect)",2,,"O_addr","curr_pc"
 "(Indirect)",2,,"next_pc","curr_pc_p1"
 "(Indirect)",2,,"next_ba[15:8]","I_rd_data"
 "(Indirect)",2,,"next_t","curr_t_p1"
@@ -64,12 +54,10 @@
 "(Indirect)",4,,"next_ad[15:8]","I_rd_data"
 "(Indirect)",4,,"next_t","curr_t_p1"
 ,,,,
-"Absolute, X",1,,"O_addr","curr_pc"
 "Absolute, X",1,,"next_pc","curr_pc_p1"
 "Absolute, X",1,,"next_ba[7:0]","I_rd_data"
 "Absolute, X",1,,"next_t","curr_t_p1"
 ,,,,
-"Absolute, X",2,,"O_addr","curr_pc"
 "Absolute, X",2,,"next_pc","curr_pc_p1"
 "Absolute, X",2,,"I_addr_lhs","curr_ba[7:0]"
 "Absolute, X",2,,"I_addr_rhs","curr_x"
@@ -85,12 +73,10 @@
 "Absolute, X",4,,"O_addr","curr_ad"
 "Absolute, X",4,,"next_t","curr_t_p1 "
 ,,,,
-"Absolute, Y",1,,"O_addr","curr_pc"
 "Absolute, Y",1,,"next_pc","curr_pc_p1"
 "Absolute, Y",1,,"next_ba[7:0]","I_rd_data"
 "Absolute, Y",1,,"next_t","curr_t_p1"
 ,,,,
-"Absolute, Y",2,,"O_addr","curr_pc"
 "Absolute, Y",2,,"next_pc","curr_pc_p1"
 "Absolute, Y",2,,"I_addr_lhs","curr_ba[7:0]"
 "Absolute, Y",2,,"I_addr_rhs","curr_y"
@@ -106,12 +92,10 @@
 "Absolute, Y",4,,"O_addr","curr_ad"
 "Absolute, Y",4,,"next_t","curr_t_p1 "
 ,,,,
-"Absolute, X*",1,,"O_addr","curr_pc"
 "Absolute, X*",1,,"next_pc","curr_pc_p1"
 "Absolute, X*",1,,"next_ba[7:0]","I_rd_data"
 "Absolute, X*",1,,"next_t","curr_t_p1"
 ,,,,
-"Absolute, X*",2,,"O_addr","curr_pc"
 "Absolute, X*",2,,"next_pc","curr_pc_p1"
 "Absolute, X*",2,,"I_addr_lhs","curr_ba[7:0]"
 "Absolute, X*",2,,"I_addr_rhs","curr_x"
@@ -127,12 +111,10 @@
 "Absolute, X*",4,,"O_addr","curr_ad"
 "Absolute, X*",4,,"next_t","curr_t_p1 "
 ,,,,
-"Absolute, Y*",1,,"O_addr","curr_pc"
 "Absolute, Y*",1,,"next_pc","curr_pc_p1"
 "Absolute, Y*",1,,"next_ba[7:0]","I_rd_data"
 "Absolute, Y*",1,,"next_t","curr_t_p1"
 ,,,,
-"Absolute, Y*",2,,"O_addr","curr_pc"
 "Absolute, Y*",2,,"next_pc","curr_pc_p1"
 "Absolute, Y*",2,,"I_addr_lhs","curr_ba[7:0]"
 "Absolute, Y*",2,,"I_addr_rhs","curr_y"
@@ -148,7 +130,6 @@
 "Absolute, Y*",4,,"O_addr","curr_ad"
 "Absolute, Y*",4,,"next_t","curr_t_p1 "
 ,,,,
-"Relative",1,,"O_addr","curr_pc"
 "Relative",1,,"next_t",0
 "Relative",1,,"next_pc","curr_pc_p1"
 "Relative",1,,"I_addr_lhs","curr_pc_p1[7:0]"
@@ -168,7 +149,6 @@
 "Relative",3,,"next_pc","curr_ad"
 "Relative",3,,"next_t",0
 ,,,,
-"Zero Page, X",1,,"O_addr","curr_pc"
 "Zero Page, X",1,,"next_ad[7:0]","I_rd_data"
 "Zero Page, X",1,,"next_ad[15:8]",0
 "Zero Page, X",1,,"next_pc","curr_pc_p1"
@@ -183,7 +163,6 @@
 "Zero Page, X",3,,"O_addr","curr_ad"
 "Zero Page, X",3,,"next_t","curr_t_p1 "
 ,,,,
-"Zero Page, Y",1,,"O_addr","curr_pc"
 "Zero Page, Y",1,,"next_ad[7:0]","I_rd_data"
 "Zero Page, Y",1,,"next_ad[15:8]",0
 "Zero Page, Y",1,,"next_pc","curr_pc_p1"
@@ -198,7 +177,6 @@
 "Zero Page, Y",3,,"O_addr","curr_ad"
 "Zero Page, Y",3,,"next_t","curr_t_p1 "
 ,,,,
-"(Indirect, X)",1,,"O_addr","curr_pc"
 "(Indirect, X)",1,,"next_pc","curr_pc_p1"
 "(Indirect, X)",1,,"next_ba[15:8]",0
 "(Indirect, X)",1,,"next_ba[7:0]","I_rd_data"
@@ -223,7 +201,6 @@
 "(Indirect, X)",5,,"O_addr","curr_ad"
 "(Indirect, X)",5,,"next_t","curr_t_p1 "
 ,,,,
-"(Indirect), Y",1,,"O_addr","curr_pc"
 "(Indirect), Y",1,,"next_ad[7:0]","I_rd_data"
 "(Indirect), Y",1,,"next_ad[15:8]",0
 "(Indirect), Y",1,,"next_pc","curr_pc_p1"
@@ -250,7 +227,6 @@
 "(Indirect), Y",5,,"O_addr","curr_ad"
 "(Indirect), Y",5,,"next_t","curr_t_p1 "
 ,,,,
-"(Indirect), Y*",1,,"O_addr","curr_pc"
 "(Indirect), Y*",1,,"next_ad[7:0]","I_rd_data"
 "(Indirect), Y*",1,,"next_ad[15:8]",0
 "(Indirect), Y*",1,,"next_pc","curr_pc_p1"
