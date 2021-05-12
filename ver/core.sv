@@ -180,8 +180,11 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
                   .O_vec_addr_lo (vec_addr_lo),
                   .O_vec_addr_hi (vec_addr_hi));
 
+/*
   always @* 
   begin          
+
+    
     if (~I_reset)
     begin      
       
@@ -255,9 +258,12 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_y         = curr_y;
       next_s         = curr_s;
         
-      `include "core_control.svi"
+      
     end    
-  end
+  end 
+  */
+
+  `include "core_control.svi"
   
   always @(posedge I_clock, negedge I_reset)
   begin

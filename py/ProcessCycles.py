@@ -157,6 +157,8 @@ class ProcessCycles:
     writer.write_line('')
     for partial_code, index in partial_code_cache.items():
       writer.write_line('wire w%03u = (I_ir ==? 8\'b%s);' % (index, partial_code))
+
+    writer.write_line('')
     for t in range(0, 8):
       writer.write_line('wire t%u = (I_t == 4\'d%u);' % (t, t))
     
@@ -186,7 +188,7 @@ class ProcessCycles:
         control_index_map[control_index] = control_index
       else:
         control_index_map[control_index] = full_cond_cache[full_condition]
-        
+
     writer.write_line('')
     for target, source in control_index_map.items():
       writer.write_line('assign O_control[%3u] = y%03u;' % (target, source))    
@@ -195,24 +197,70 @@ class ProcessCycles:
     writer.write_line('endmodule')     
     return 
 
-  def write_out_control(self, writer, indexes, last_index):
+  def write_out_control(self, writer, indexes, last_index, def_table):
     map_target = {}
+    target_group = {}
+    group_target = {}
     for action, index in indexes.items(): 
       lhs, rhs = action
+      if lhs not in def_table:
+        raise RuntimeError("Error, no default for %s !" % lhs)        
+      defval, reset, group = def_table[lhs]
       if lhs not in map_target:
         map_target[lhs] = {}
       map_target[lhs][rhs] = index
+      target_group[lhs] = group
+      if group not in group_target:
+        group_target[group] = set()
+      group_target[group].add(lhs)
 
+    for target, other in def_table.items():
+      defval, reset, group = other
+      if group not in group_target:
+        group_target[group] = set()
+      group_target[group].add(target)
+
+    for group, targets in group_target.items():
+      writer.write_line("always @*")
+      writer.begin()
+      for lhs in targets:
+        rhs, reset, group = def_table[lhs]
+        if len(rhs) > 0:
+          writer.write_line('%s = %s;' % (lhs, rhs))
+      writer.write_line('')
+      for lhs, rhs_index in map_target.items():
+        if def_table[lhs][2] != group:
+          continue
+        is_first = True      
+        for rhs, index in rhs_index.items():
+          combo = (index, lhs, rhs)          
+          if is_first:               
+            writer.write_line ('     if (G_control[%3u]) %s = %s;' % combo)
+          else:
+            writer.write_line ('else if (G_control[%3u]) %s = %s;' % combo)          
+          is_first = False
+        writer.write_line('')
+      writer.end()
+      writer.write_line('')
+
+    """
     for lhs, rhs_index in map_target.items():
-      is_first = True
-      for rhs, index  in rhs_index.items():
+      is_first = True      
+      if lhs not in def_table:
+        raise RuntimeError("Error, no default for %s !" % lhs)        
+      writer.write_line ('always @*')
+      writer.begin()
+      for rhs, index  in rhs_index.items():        
         combo = (index, lhs, rhs)
         if is_first:               
           writer.write_line ('     if (G_control[%3u]) %s = %s;' % combo)
         else:
           writer.write_line ('else if (G_control[%3u]) %s = %s;' % combo)
         is_first = False
+      writer.write_line ('else %s = %s;' % (lhs, def_table[lhs][0]))
+      writer.end()
       writer.write_line('')
+    """
     return
 
 
@@ -220,11 +268,12 @@ class ProcessCycles:
     isa_data, _, _ = Utils.parse_isa ('data/ISA-am-op.csv')
     am_data = Utils.parse_cycles ('data/ISA-am-cycles.csv')    
     op_data = Utils.parse_cycles ('data/ISA-op-cycles.csv')
+    def_table = Utils.parse_defaults('data/ISA-defaults.csv')
     cycle_table = self.prepare (isa_data, am_data, op_data)
     flat_table, indexes, last_index = self.flatten(cycle_table, am_data['*'])    
     self.dump_flat_table(flat_table)
     self.write_out_decoder(SvWriter ('ver/core_decoder.sv'), flat_table, indexes, last_index)
-    self.write_out_control(SvWriter ('ver/core_control.svi'), indexes, last_index)
+    self.write_out_control(SvWriter ('ver/core_control.svi'), indexes, last_index, def_table)
     print("Done")
     return 0
 

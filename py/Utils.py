@@ -67,3 +67,18 @@ class Utils:
       op_table[row[2]].append(row[0])
       
     return (isa_table, op_table, am_table)
+
+  @staticmethod
+  def parse_defaults(file_name):    
+    def_table = {}
+    with open(file_name, 'r') as csvfile:
+      tmp_table = list(csv.reader(csvfile, delimiter=',', quotechar='"'))[1:]
+      for r in tmp_table:
+        target = r[0].strip() 
+        defval = r[1].strip() 
+        reset  = r[2].strip()
+        group  = r[3].strip()
+        def_table[target] = (defval, reset, group)
+    return def_table
+
+

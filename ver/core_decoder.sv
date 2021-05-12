@@ -458,6 +458,7 @@ module core_decoder(I_ir, I_t, O_control);
 	wire w451 = (I_ir ==? 8'b11100101);
 	wire w452 = (I_ir ==? 8'b11110000);
 	wire w453 = (I_ir ==? 8'b11111000);
+	
 	wire t0 = (I_t == 4'd0);
 	wire t1 = (I_t == 4'd1);
 	wire t2 = (I_t == 4'd2);
