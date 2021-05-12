@@ -65,7 +65,7 @@ module video (
 	bit[7:0]		buf_index;
 	bit[7:0]		buf_tiles;
 
-	wire[15:0]  pat_color			= active_h ^ active_v;
+	wire[7:0]  	pat_color			= 8'h00;
 	wire[7:0]		dot_color 		= 8'hFF;
 
 	assign 			O_vid_red 		= buf_tiles[7] ? dot_color : {pat_color[7:5], 5'h0};

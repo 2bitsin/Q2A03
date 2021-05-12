@@ -245,24 +245,6 @@ class ProcessCycles:
       writer.end()
       writer.write_line('')
 
-    """
-    for lhs, rhs_index in map_target.items():
-      is_first = True      
-      if lhs not in def_table:
-        raise RuntimeError("Error, no default for %s !" % lhs)        
-      writer.write_line ('always @*')
-      writer.begin()
-      for rhs, index  in rhs_index.items():        
-        combo = (index, lhs, rhs)
-        if is_first:               
-          writer.write_line ('     if (G_control[%3u]) %s = %s;' % combo)
-        else:
-          writer.write_line ('else if (G_control[%3u]) %s = %s;' % combo)
-        is_first = False
-      writer.write_line ('else %s = %s;' % (lhs, def_table[lhs][0]))
-      writer.end()
-      writer.write_line('')
-    """
     return
 
 
@@ -275,7 +257,7 @@ class ProcessCycles:
     flat_table, indexes, last_index = self.flatten(cycle_table, am_data['*'])    
     self.dump_flat_table(flat_table)
     self.write_out_decoder(SvWriter ('ver/core_decoder.sv'), flat_table, indexes, last_index)
-    self.write_out_control(SvWriter ('ver/core_control.svi'), indexes, last_index, def_table)
+    self.write_out_control(SvWriter ('ver/core_control.svh'), indexes, last_index, def_table)
     print("Done")
     return 0
 
