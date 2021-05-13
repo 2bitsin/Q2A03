@@ -1,35 +1,67 @@
 .org $c000
 .segment "CODE"
-G_screen = $4840 
-init:
-  lda #'H'
-  sta G_screen + 0
-  lda #'e'
-  sta G_screen + 1
-  lda #'l'
-  sta G_screen + 2
-  lda #'l'
-  sta G_screen + 3
-  lda #'o'
-  sta G_screen + 4
-  lda #' '
-  sta G_screen + 5
-  lda #'W'
-  sta G_screen + 6
-  lda #'o'
-  sta G_screen + 7
-  lda #'r'
-  sta G_screen + 8
-  lda #'l'
-  sta G_screen + 9
-  lda #'d'
-  sta G_screen + 10
-  lda #'!'
-  sta G_screen + 11
 
-  .byte $f2
+G_screen = $49C8 
+G_screen2 = $49B0 
+
+Main:
+  ldx #$00
+  txs 
+@again:
+  ldx #$00  
+@forever:
+  lda hello_string,x
+  sta G_screen2,x
+  beq @again  
+  inx
+  jmp @forever
+
+  
+Interrupt_nmi:
+  pha
+  txa
+  pha
+  tya
+  pha
+  ldx frame_count
+  txa 
+  inx
+  stx frame_count
+  ldx #$00
+  and #$08
+  bne @clear
+@print:
+  lda hello_string,x
+  beq @exit
+  sta G_screen, x
+  inx   
+  jmp @print
+@clear:
+  lda hello_erase,x
+  beq @exit
+  sta G_screen, x
+  inx
+  jmp @clear
+@exit:
+  pla
+  tay
+  pla
+  tax
+  pla
+  rti
+
+.segment "RODATA"
+
+frame_count:
+  .byte 0
+
+hello_string:
+  .byte "Hello World!", 0
+
+hello_erase:
+  .byte "            ", 0
 
 .segment "VECTORS"  
-.addr init
-.addr init
-.addr init
+  .addr Interrupt_nmi
+  .addr Main
+  .addr Main

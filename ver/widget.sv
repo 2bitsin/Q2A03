@@ -10,31 +10,31 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   output wire[7:0]  O_vid_red;
   output wire[7:0]  O_vid_green;
   output wire[7:0]  O_vid_blue;
-		
-	wire[7:0]					W_data0;
-	wire[15:0]				W_addr0;
-	wire							W_clock0;  
+    
+  wire[7:0]         W_data0;
+  wire[15:0]        W_addr0;
+  wire              W_clock0;  
 
   wire[7:0]         W_wr_data1;
   wire[7:0]         W_rd_data1;
   wire              W_rdwr1;
   wire[15:0]        W_addr1;
   wire              W_phy2;
-	
+  
   video inst_video (
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
-	  .O_vid_clock  (O_vid_clock),
-	  .O_vid_blank  (O_vid_blank),
-	  .O_vid_hsync  (O_vid_hsync),
-	  .O_vid_vsync  (O_vid_vsync),
-	  .O_vid_red    (O_vid_red),
-	  .O_vid_green  (O_vid_green),
-	  .O_vid_blue   (O_vid_blue),
+    .O_vid_clock  (O_vid_clock),
+    .O_vid_blank  (O_vid_blank),
+    .O_vid_hsync  (O_vid_hsync),
+    .O_vid_vsync  (O_vid_vsync),
+    .O_vid_red    (O_vid_red),
+    .O_vid_green  (O_vid_green),
+    .O_vid_blue   (O_vid_blue),
     .O_mem_addr   (W_addr0),
     .O_mem_clock  (W_clock0),
     .I_mem_data   (W_data0));
-	
+  
   core inst_core (
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
@@ -48,17 +48,16 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_sync       (),
     .O_phy2       (W_phy2)
   );
-	
+  
     
   dpmem #(
     .P_data_bits  (8), 
-    .P_addr_bits  (16),		
+    .P_addr_bits  (16),    
+
     .P_init_bin0  ("assets/8x8.mem"),
     .P_init_beg0  (16'h4000),
     .P_init_end0  (16'h47ff),
-    .P_init_bin1  ("assets/vid.mem"),
-    .P_init_beg1  (16'h4800),
-    .P_init_end1  (16'h4BFF),
+    
     .P_init_bin2  ("assets/test.mem"),
     .P_init_beg2  (16'hC000),
     .P_init_end2  (16'hFFFF))     
@@ -69,7 +68,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .I_wren0      (0),
     .I_data0      (0),
     .O_data0      (W_data0),
-		
+    
   //.I_clock1     (),
   //.I_addr1      (),
   //.I_rden1      (),
@@ -82,9 +81,9 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .I_rden1      (W_rdwr1 & W_phy2),
     .I_wren1      ((~W_rdwr1) & W_phy2),
     .I_data1      (W_wr_data1),
-    .O_data1      (W_rd_data1)		
-	);
-	
+    .O_data1      (W_rd_data1)    
+  );
+  
 
   initial begin
   `ifdef VERILATOR

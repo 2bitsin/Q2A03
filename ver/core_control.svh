@@ -63,26 +63,27 @@ end
 always @*
 begin
   next_p[N_bit] = O_alu_sign;
-  next_p[V_bit] = O_alu_overflow;
   next_p[Z_bit] = O_alu_zero;
-  next_p[I_bit] = curr_p[I_bit];
-  next_p[C_bit] = O_alu_carry;
-  next_p[D_bit] = curr_p[D_bit];
-  next_p[X_bit] = 1'b1;
   next_p[B_bit] = curr_p[B_bit];
-  
+  next_p[X_bit] = 1'b1;
+  next_p[V_bit] = O_alu_overflow;
+  next_p[C_bit] = O_alu_carry;
+  next_p[I_bit] = curr_p[I_bit];
+  next_p[D_bit] = curr_p[D_bit];
+
+
   if (G_control[ 55]) 
     next_p = I_rd_data;
-  else begin    
+  else begin
          if (G_control[  5]) next_p[I_bit] = force_irq_mask;
     else if (G_control[ 63]) next_p[I_bit] = 0;
     else if (G_control[ 69]) next_p[I_bit] = 1;
-  
+    
          if (G_control[ 50]) next_p[C_bit] = 0;
-    else if (G_control[ 57]) next_p[C_bit] = 1;  
-  
+    else if (G_control[ 57]) next_p[C_bit] = 1;
+    
          if (G_control[ 81]) next_p[V_bit] = 0;
-  
+    
          if (G_control[ 87]) next_p[D_bit] = 0;
     else if (G_control[ 90]) next_p[D_bit] = 1;
   end
@@ -118,7 +119,7 @@ begin
   else if (G_control[ 14]) next_pc = curr_pc_p1;
   else if (G_control[ 44]) next_pc = curr_ad;
   else if (G_control[ 91]) next_pc = ~force_brk ? curr_pc_p1 : curr_pc;
-  else begin    
+  else begin
     if (G_control[ 58]) next_pc[7:0] = I_rd_data;
     if (G_control[ 59]) next_pc[15:8] = I_rd_data;
   end
@@ -281,17 +282,5 @@ end
 always @*
 begin
   I_alu_zero = curr_p[Z_bit];
-  
-end
-
-always @*
-begin
-  next_ad = curr_ad;
-  
-end
-
-always @*
-begin
-  next_ba = curr_ba;
   
 end

@@ -21,8 +21,6 @@
 "next_dr ","curr_dr",0,"next_dr "
 "next_pc ","curr_pc",0,"next_pc "
 "next_ir ","curr_ir",0,"next_ir "
-"next_ad","curr_ad",0,"next_ad"
-"next_ba","curr_ba",0,"next_ba"
 "next_t","curr_t",0,"next_t"
 "next_a  ","curr_a",0,"next_a  "
 "next_x  ","curr_x",0,"next_x  "

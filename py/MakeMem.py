@@ -15,7 +15,6 @@ def make_mem_xb(in_file_path, out_file_path):
         output_hex.write('\n')
       
 
-make_mem_xb('data/8x8.bin', 'assets/8x8.mem')
-make_mem_xb('data/8x16.bin', 'assets/8x16.mem')
-make_mem_xb('data/vid.bin', 'assets/vid.mem')
-make_mem_xb('asm/test.bin', 'assets/test.mem')
+make_mem_xb('assets/8x8.bin',   'assets/8x8.mem')
+make_mem_xb('assets/8x16.bin',  'assets/8x16.mem')
+make_mem_xb('asm/test.bin',     'assets/test.mem')
