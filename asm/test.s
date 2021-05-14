@@ -1,8 +1,8 @@
 .org $c000
 .segment "CODE"
 
-G_screen = $49C8 
-G_screen2 = $49B0 
+G_screen  = $60C8 
+G_screen2 = $60A8 
 
 Main:
   ldx #$00

@@ -12,12 +12,15 @@ def make_mem_xb(in_file_path, out_file_path):
       if address % 32 == 31:
         output_hex.write('\n')
 
-def parse_ines(in_file_path):
-  file_size = os.stat(in_file_path).st_size
-  with open(in_file_path, mode='rb') as input_bin:    
-    header = input_bin.read(16)
-    print(header[0:3])
+make_mem_xb('assets/binaries/8x8.bin',   
+            'assets/mems/8x8.mem')
+            
+make_mem_xb('assets/binaries/8x16.bin',  
+            'assets/mems/8x16.mem')
 
-make_mem_xb('assets/8x8.bin',   'assets/8x8.mem')
-make_mem_xb('assets/8x16.bin',  'assets/8x16.mem')
-make_mem_xb('asm/test.bin',     'assets/test.mem')
+make_mem_xb('assets/binaries/vid.bin',   
+            'assets/mems/vid.mem')
+
+make_mem_xb('asm/test.bin',              
+            'assets/mems/test.mem')
+

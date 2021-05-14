@@ -5,22 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Generate Cycles",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/py/ProcessCycles.py",
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "name": "Generate Mem",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/py/MakeMem.py",
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}"      
-    },
-    {
       "name": "Launch",
       "type": "cppdbg",
       "request": "launch",
@@ -46,6 +30,30 @@
           "ignoreFailures": true
         }
       ]
-    }
+    },
+    {
+      "name": "Process iNES",
+      "type": "python",      
+      "request": "launch",
+      "program": "${workspaceFolder}/py/ProcessInes.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    }/*,
+    {
+      "name": "Generate Cycles",
+      "type": "python",      
+      "request": "launch",
+      "program": "${workspaceFolder}/py/ProcessCycles.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Generate Mem",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/py/MakeMem.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"      
+    }*/
   ]
 }

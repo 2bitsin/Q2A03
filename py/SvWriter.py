@@ -28,12 +28,18 @@ class SvWriter:
     self.tabs = self.tabs - 1
 
   def begin(self):
-    self.write_line('begin')
-    self.indent()
+    self.begin_with('begin')
 
   def end(self):
+    self.end_with('end')
+
+  def begin_with(self, line):
+    self.write_line(line)
+    self.indent()
+
+  def end_with(self, line):
     self.unindent()
-    self.write_line('end')
+    self.write_line(line)
   
   def case(self, of_value):
     self.write_line('case(%s)'%(of_value))

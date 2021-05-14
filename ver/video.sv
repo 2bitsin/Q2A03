@@ -41,8 +41,8 @@ module video (
   localparam G_blank_v      = G_front_v + O_sync_v + G_back_v;  
   localparam G_ticks_h      = G_active_h + G_blank_h;
   localparam G_ticks_v      = G_active_v + G_blank_v;    
-  localparam G_tiles_base   = 16'h4000;  
-  localparam G_index_base   = 16'h4800;  
+  localparam G_tiles_base   = 16'h5800;  
+  localparam G_index_base   = 16'h6000;  
   
   bit[1:0]    clk_tick      ;
   bit         clk_last      ;
@@ -55,7 +55,7 @@ module video (
   assign       O_mem_clock   = I_clock;
 
   wire[15:0]   active_h      = counter_h - G_blank_h;
-  wire[15:0]   active_v      = counter_v - G_blank_v;
+  wire[15:0]   active_v      = counter_v - G_blank_v - 16'(8*2);
   wire[15:0]   prefetch_h    = (counter_h + G_prefetch_h - G_blank_h);  
 
   /////////////////////////////////////////////////////////////////
