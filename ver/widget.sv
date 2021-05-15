@@ -11,16 +11,10 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   output wire[7:0]  O_vid_green;
   output wire[7:0]  O_vid_blue;
     
-  wire[7:0]         W_data0;
-  wire[15:0]        W_addr0;
-  wire              W_clock0;  
-
-  wire[7:0]         W_wr_data1;
-  wire[7:0]         W_rd_data1;
-  wire              W_rdwr1;
-  wire[15:0]        W_addr1;
-  wire              W_phy2;
-  
+  wire[15:0]        W_video_addr;
+  wire              W_video_rden;  
+  wire[7:0]         W_video_data;
+    
   video inst_video (
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
@@ -31,55 +25,92 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_vid_red    (O_vid_red),
     .O_vid_green  (O_vid_green),
     .O_vid_blue   (O_vid_blue),
-    .O_mem_addr   (W_addr0),
-    .O_mem_clock  (W_clock0),
-    .I_mem_data   (W_data0));
-  
+    .O_mem_addr   (W_video_addr),
+    .O_mem_rden   (W_video_rden),
+    .I_mem_data   (W_video_data));
+      
+
+
+  wire        W_core_phy2     ;
+  wire        W_core_rdwr     ;
+  wire        W_core_rden     = W_core_phy2 & W_core_rdwr;
+  wire        W_core_wren     = W_core_phy2 & ~W_core_rdwr;
+  wire[15:0]  W_core_addr     ;
+  wire[7:0]   W_core_wr_data  ;
+
+
+  wire        W_mem_cs        = ~W_core_addr[15];
+  wire[7:0]   W_mem_O_data    ;
+
+  wire        W_car_cs        =  W_core_addr[15];
+  wire[7:0]   W_car_O_data    ;
+
+  wire[7:0]   W_core_rd_data  = ~W_core_addr[15] 
+                                ? W_mem_O_data 
+                                : W_car_O_data ;
+  dpmem #(
+    .P_data_bits  (8), 
+    .P_addr_bits  (15),    
+
+    .P_init_bin0  ("assets/mems/8x8.mem"),
+    .P_init_beg0  (15'h5800),
+    .P_init_end0  (15'h5fff),
+
+    .P_init_bin1  ("assets/mems/vid.mem"),
+    .P_init_beg1  (15'h6000),
+    .P_init_end1  (15'h63ff))    
+
+  inst_memory (
+    .I_clock1     (I_sys_clock),
+    .I_clock0     (I_sys_clock),
+        
+    .I_addr0      (W_core_addr[14:0]),
+    .I_rden0      (W_core_rden & W_mem_cs),
+    .I_wren0      (W_core_wren & W_mem_cs),
+    .I_data0      (W_core_wr_data),
+    .O_data0      (W_mem_O_data),
+
+    .I_addr1      (W_video_addr[14:0]),
+    .I_rden1      (W_video_rden),
+    .O_data1      (W_video_data),
+    .I_wren1      (0),
+    .I_data1      (0));
+
+  test_cart_01_basics inst_cart(
+    .I_clock      (I_sys_clock), 
+    .I_reset      (I_sys_reset), 
+    .I_phy2       (W_core_phy2), 
+
+    .I_prg_addr   (W_core_addr), 
+    .I_prg_rden   (W_core_rden & W_car_cs), 
+    .I_prg_wren   (W_core_wren & W_car_cs), 
+    .I_prg_data   (W_core_wr_data), 
+    .O_prg_data   (W_car_O_data),
+
+    .I_chr_addr   (14'h0000), 
+    .I_chr_wren   (1'd0), 
+    .I_chr_rden   (1'd0), 
+    .I_chr_data   (8'h00), 
+    .O_chr_data   (), 
+
+    .O_ciram_ce   (), 
+    .O_ciram_a10  (), 
+    .O_irq        ()
+  );
+    
   core inst_core (
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
-    .I_irq        (0),
-    .I_nmi        (O_vid_vsync),
+    .I_irq        (1),
+    .I_nmi        (1),
     .I_ready      (1),
-    .I_rd_data    (W_rd_data1),
-    .O_wr_data    (W_wr_data1),
-    .O_rdwr       (W_rdwr1),
-    .O_addr       (W_addr1),
-    .O_sync       (),
-    .O_phy2       (W_phy2)
+    .O_rdwr       (W_core_rdwr),
+    .O_addr       (W_core_addr),
+    .O_phy2       (W_core_phy2),
+    .O_wr_data    (W_core_wr_data),
+    .I_rd_data    (W_core_rd_data),
+    .O_sync       ()
   );
-      
-  dpmem #(
-    .P_data_bits  (8), 
-    .P_addr_bits  (16),    
-
-    .P_init_bin0  ("assets/mems/8x8.mem"),
-    .P_init_beg0  (16'h5800),
-    .P_init_end0  (16'h5fff),
-
-    .P_init_bin1  ("assets/mems/vid.mem"),
-    .P_init_beg1  (16'h6000),
-    .P_init_end1  (16'h63ff),
-    
-    .P_init_bin2  ("assets/mems/test.mem"),
-    .P_init_beg2  (16'hC000),
-    .P_init_end2  (16'hFFFF))
-
-  inst_memory (
-    .I_clock0     (W_clock0),
-    .I_addr0      (W_addr0),
-    .I_rden0      (1),
-    .I_wren0      (0),
-    .I_data0      (0),
-    .O_data0      (W_data0),  
-        
-    .I_clock1     (I_sys_clock),
-    .I_addr1      (W_addr1),
-    .I_rden1      (W_rdwr1 & W_phy2),
-    .I_wren1      ((~W_rdwr1) & W_phy2),
-    .I_data1      (W_wr_data1),
-    .O_data1      (W_rd_data1));
-  
 
   initial begin
   `ifdef VERILATOR
@@ -87,6 +118,5 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     $dumpvars(999, inst_video);    
   `endif
   end    
-
 
 endmodule

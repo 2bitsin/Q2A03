@@ -22,6 +22,7 @@ void image_write(unsigned index, const T_type (&data) [Y_size][X_size])
 {
   using namespace png;  
   char name_buffer [2048];
+  std::printf("Writting frame %05u ...\n", index);
   std::sprintf(name_buffer, "./trace/img/%05u.png", index);
   image<rgb_pixel> _writer (X_size, Y_size);
   for (auto y = 0; y < Y_size; ++y)

@@ -9,7 +9,7 @@ module video (
   O_vid_red, 
   O_vid_green, 
   O_vid_blue,
-  O_mem_clock,
+  O_mem_rden,
   O_mem_addr,
   I_mem_data);
 
@@ -24,9 +24,9 @@ module video (
   output  wire[7:0]   O_vid_green ;
   output  wire[7:0]   O_vid_blue ;
 
-  output  wire        O_mem_clock;
   output  bit[15:0]   O_mem_addr;
   input   wire[7:0]   I_mem_data;
+  output  bit         O_mem_rden;
   
   localparam G_active_h     = 16'd256;
   localparam G_active_v     = 16'd240;
@@ -51,8 +51,6 @@ module video (
 
   assign       O_vid_blank   = (counter_v >= G_blank_v) && (counter_h >= G_blank_h);  
   assign       O_vid_clock   = clk_tick[1];
-
-  assign       O_mem_clock   = I_clock;
 
   wire[15:0]   active_h      = counter_h - G_blank_h;
   wire[15:0]   active_v      = counter_v - G_blank_v - 16'(8*2);
@@ -94,10 +92,25 @@ module video (
         buf_tiles <= buf_tiles << 1;
 
         case (prefetch_h & 7)
-          1: O_mem_addr <= G_index_base + {3'd0, prefetch_h[15:3]} + {active_v[13:3], 5'd0};
-          3: buf_index  <= I_mem_data;
-          5: O_mem_addr <= G_tiles_base + {5'd0, buf_index, active_v[2:0]};
-          7: buf_tiles  <= I_mem_data;
+          1: begin  
+            O_mem_addr <= G_index_base + {3'd0, prefetch_h[15:3]} + {active_v[13:3], 5'd0};
+            O_mem_rden <= 1;
+          end
+
+          3: begin 
+            buf_index  <= I_mem_data;
+            O_mem_rden <= 0;
+          end
+
+          5: begin
+            O_mem_addr <= G_tiles_base + {5'd0, buf_index, active_v[2:0]};
+            O_mem_rden <= 1;
+          end
+          
+          7: begin
+            buf_tiles  <= I_mem_data;
+            O_mem_rden <= 0;
+          end
         endcase
         
         if (counter_h != G_ticks_h - 16'd1) 
