@@ -2,6 +2,7 @@ from InesData import InesData
 from SvWriter import SvWriter
 import os
 import math
+import re
 
 class ProcessInes:
 
@@ -86,7 +87,7 @@ class ProcessInes:
     return
 
   def build_cart(self, in_file, out_file):
-
+    print('Transforming %s => %s ...' % (in_file, out_file))
     name    = os.path.split (os.path.splitext(out_file)[0])[-1]    
     ines    = InesData(in_file)
     writer  = SvWriter(out_file)
@@ -96,12 +97,9 @@ class ProcessInes:
     self.write_logic(writer, ines)
     self.write_epilogue(writer)
 
-main = ProcessInes()
-main.build_cart('assets/instr_test_v5/rom_singles/01-basics.nes', 
-                'ver/test_cart_01_basics.sv')
+for filename in os.listdir('assets/instr_test_v5/rom_singles/'):
+  main = ProcessInes()
+  name, _ = os.path.splitext(filename)
+  name = re.sub(r"[^\w]+", '_', name)  
+  main.build_cart('assets/instr_test_v5/rom_singles/%s' % (filename), 'ver/tests/test_%s.sv' % (name))
 
-#main.build_cart('assets/instr_test_v5/rom_singles/02-implied.nes', 
-#                'ver/test_cart_02_implied.sv')
-
-#main.build_cart('assets/instr_test_v5/rom_singles/03-immediate.nes', 
-#                'ver/test_cart_03_immediate.sv')

@@ -1,4 +1,4 @@
-CFLAGS = -std=c++20 -O3 
+CFLAGS = -std=c++20 -O3 -flto
 #CFLAGS = -std=c++20 -g -O0 
 #VFLAGS = 
 VFLAGS = --trace
@@ -32,7 +32,7 @@ out/lib/verilated_dpi.o: $(VLTPAT)/verilated_dpi.cpp
 	g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
 
 out/ver/libwidget.a out/ver/Vwidget.h: $(VFILES) $(VHEADERS) $(PACKS)
-	verilator --cc -Mdir out/ver -y ver --top-module widget $(VPACKS) $(VFILES) -CFLAGS "$(CFLAGS)" $(VFLAGS)
+	verilator --cc -Mdir out/ver -y ver -y ver/tests --top-module widget $(VPACKS) $(VFILES) -CFLAGS "$(CFLAGS)" $(VFLAGS)
 	$(MAKE) -C out/ver -f Vwidget.mk
 	mv out/ver/Vwidget__ALL.a out/ver/libwidget.a 
 

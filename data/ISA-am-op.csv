@@ -129,7 +129,7 @@
 "0x7F","Absolute, X","RRA*",
 "0x80","Immediate","NOP*",
 "0x81","(Indirect, X)","STA",
-"0x82","Immediate","HLT*",
+"0x82","Immediate","NOP*",
 "0x83","(Indirect, X)","AXS*",
 "0x84","Zero Page","STY",
 "0x85","Zero Page","STA",

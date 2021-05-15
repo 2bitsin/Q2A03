@@ -76,7 +76,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .I_wren1      (0),
     .I_data1      (0));
 
-  test_cart_01_basics inst_cart(
+  test_03_immediate inst_cart(
     .I_clock      (I_sys_clock), 
     .I_reset      (I_sys_reset), 
     .I_phy2       (W_core_phy2), 
