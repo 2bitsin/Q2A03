@@ -72,6 +72,8 @@ module core_alu (I_control, I_mask_p, I_lhs, I_rhs, I_carry, I_overflow, I_sign,
         O_carry = ~carry;
       else if (I_control[control_set_carry])
         O_carry = carry;
+      else if (I_control[control_carry_sign])
+        O_carry = O_result[7];
 
       if (I_control[control_result_zero])
         O_zero = ~|O_result;

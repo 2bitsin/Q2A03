@@ -20,28 +20,28 @@
     parameter control_select_ror   = 15 ;
 
     parameter control_result_zero  = 16;
+    parameter control_carry_sign   = 17;    
     
-    typedef enum logic[16:0]
+    typedef enum logic[17:0]
     {
-      control_nop    = 17'b0_0000_0000_0000_0000,
-      control_txl    = 17'b1_0000_0000_0010_0100,
-      control_txr    = 17'b1_0000_0010_0010_0100,
-      control_adc    = 17'b1_0000_0100_1010_0100,
-      control_sbc    = 17'b1_0000_0100_1011_0101,
-      control_inc    = 17'b1_0000_0101_0100_1100,
-      control_dec    = 17'b1_0000_0101_0101_0100,
-      control_cmp    = 17'b1_0000_0100_0111_1101,
-      control_bit    = 17'b1_0000_1000_0000_0010,
-      control_and    = 17'b1_0000_1000_0000_0100,
-      control_or     = 17'b1_0001_0000_0000_0100,
-      control_xor    = 17'b1_0010_0000_0000_0100,
-      control_rol    = 17'b1_0100_0000_0010_0100,
-      control_ror    = 17'b1_1000_0000_0010_0100,
-      control_asl    = 17'b1_0100_0000_0110_0100,
-      control_lsr    = 17'b1_1000_0000_0110_0100
-
+      control_nop    = 18'b00_0000_0000_0000_0000,
+      control_txl    = 18'b01_0000_0000_0010_0100,
+      control_txr    = 18'b01_0000_0010_0010_0100,
+      control_adc    = 18'b01_0000_0100_1010_0100,
+      control_sbc    = 18'b01_0000_0100_1011_0101,
+      control_inc    = 18'b01_0000_0101_0100_1100,
+      control_dec    = 18'b01_0000_0101_0101_0100,
+      control_cmp    = 18'b01_0000_0100_0111_1101,
+      control_bit    = 18'b01_0000_1000_0000_0010,
+      control_and    = 18'b01_0000_1000_0000_0100,
+      control_anc    = 18'b11_0000_1000_0000_0100,      
+      control_or     = 18'b01_0001_0000_0000_0100,
+      control_xor    = 18'b01_0010_0000_0000_0100,
+      control_rol    = 18'b01_0100_0000_0010_0100,
+      control_ror    = 18'b01_1000_0000_0010_0100,
+      control_asl    = 18'b01_0100_0000_0110_0100,
+      control_lsr    = 18'b01_1000_0000_0110_0100
     } control_type;
-
   endpackage
   
   

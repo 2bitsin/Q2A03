@@ -74,7 +74,7 @@ int main(int argc, char** argv)
   uint8_t buff[240][256][3];
 
   widget.I_sys_reset = 1;
-  for(auto i = 0; i < 42'884'160; ++i) 
+  for(auto i = 0; i < 2*42'884'160; ++i) 
   {
     widget.I_sys_clock ^= 1;
     widget.eval();

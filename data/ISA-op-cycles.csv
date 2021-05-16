@@ -45,6 +45,12 @@
 "AXS*",-1,,"O_wr_data","O_alu_result"
 "AXS*",-1,,"next_t",0
 ,,,,
+"ANC*",-1,,"next_t",0
+"ANC*",-1,,"I_alu_ctl","control_anc"
+"ANC*",-1,,"I_alu_lhs","curr_a"
+"ANC*",-1,,"I_alu_rhs","I_rd_data"
+"ANC*",-1,,"next_a","O_alu_result"
+,,,,
 "NOP",-1,,"next_t",0
 ,,,,
 "SEC",-1,,"next_p[C_bit]",1

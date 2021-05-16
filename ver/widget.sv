@@ -115,7 +115,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   initial begin
   `ifdef VERILATOR
     $dumpfile("trace/widget.vcd");
-    $dumpvars(999, inst_video);    
+    $dumpvars(999, inst_core);    
   `endif
   end    
 
