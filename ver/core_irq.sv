@@ -1,7 +1,7 @@
-module core_irq(I_clock, I_enable, I_reset, I_nmi, I_irq, I_irq_mask, O_force_brk, O_vec_addr_lo, O_vec_addr_hi, O_irq_mask);
+module core_irq(I_clock, I_sync, I_reset, I_nmi, I_irq, I_irq_mask, O_force_brk, O_vec_addr_lo, O_vec_addr_hi, O_irq_mask);
 
   input   wire       I_clock       ;
-  input   wire       I_enable      ;  
+  input   wire       I_sync        ;  
   input   wire       I_reset       ;
   input   wire       I_nmi         ;
   input   wire       I_irq         ; 
@@ -69,7 +69,7 @@ module core_irq(I_clock, I_enable, I_reset, I_nmi, I_irq, I_irq_mask, O_force_br
       raise_nmi <= 1;      
 
     /* Interrupt drive logic */
-    if (I_enable)
+    if (I_sync)
     begin        
 
       /* Interrupt request latched */

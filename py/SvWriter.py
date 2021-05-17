@@ -33,13 +33,15 @@ class SvWriter:
   def end(self):
     self.end_with('end')
 
-  def begin_with(self, line):
+  def begin_with(self, line = None):
     self.write_line(line)
-    self.indent()
+    if line is not None:
+      self.indent()
 
-  def end_with(self, line):
+  def end_with(self, line = None):
     self.unindent()
-    self.write_line(line)
+    if line is not None:
+      self.write_line(line)
   
   def case(self, of_value):
     self.write_line('case(%s)'%(of_value))

@@ -9,9 +9,16 @@ module video (
   O_vid_red, 
   O_vid_green, 
   O_vid_blue,
-  O_mem_rden,
-  O_mem_addr,
-  I_mem_data);
+
+  I_host_addr,
+  I_host_wren,
+  I_host_data,
+  O_host_data,
+
+  O_cart_addr,  
+  O_cart_wren,
+  I_cart_data,
+  O_cart_data);
 
   input   wire        I_clock ;
   input   wire        I_reset ;
@@ -24,9 +31,16 @@ module video (
   output  wire[7:0]   O_vid_green ;
   output  wire[7:0]   O_vid_blue ;
 
-  output  bit[15:0]   O_mem_addr;
-  input   wire[7:0]   I_mem_data;
-  output  bit         O_mem_rden;
+  input   wire[2:0]   I_host_addr ;
+  input   wire        I_host_wren ;
+  input   wire[7:0]   I_host_data ;
+  output  bit[7:0]    O_host_data ;
+
+  output  bit[13:0]   O_cart_addr ;  
+  output  bit         O_cart_wren ;
+  input   wire[7:0]   I_cart_data ;
+  output  bit[7:0]    O_cart_data ;
+  
   
   localparam G_active_h     = 16'd256;
   localparam G_active_v     = 16'd240;
@@ -41,8 +55,6 @@ module video (
   localparam G_blank_v      = G_front_v + O_sync_v + G_back_v;  
   localparam G_ticks_h      = G_active_h + G_blank_h;
   localparam G_ticks_v      = G_active_v + G_blank_v;    
-  localparam G_tiles_base   = 16'h5800;  
-  localparam G_index_base   = 16'h6000;  
   
   bit[1:0]    clk_tick      ;
   bit         clk_last      ;
@@ -53,7 +65,7 @@ module video (
   assign       O_vid_clock   = clk_tick[1];
 
   wire[15:0]   active_h      = counter_h - G_blank_h;
-  wire[15:0]   active_v      = counter_v - G_blank_v - 16'(8*2);
+  wire[15:0]   active_v      = counter_v - G_blank_v;
   wire[15:0]   prefetch_h    = (counter_h + G_prefetch_h - G_blank_h);  
 
   /////////////////////////////////////////////////////////////////
@@ -89,40 +101,7 @@ module video (
       
       if (~clk_last && O_vid_clock)
       begin
-        buf_tiles <= buf_tiles << 1;
 
-        case (prefetch_h & 7)
-          1: begin  
-            O_mem_addr <= G_index_base + {3'd0, prefetch_h[15:3]} + {active_v[13:3], 5'd0};
-            O_mem_rden <= 1;
-          end
-
-          3: begin 
-            buf_index  <= I_mem_data;
-            O_mem_rden <= 0;
-          end
-
-          5: begin
-            O_mem_addr <= G_tiles_base + {5'd0, buf_index, active_v[2:0]};
-            O_mem_rden <= 1;
-          end
-          
-          7: begin
-            buf_tiles  <= I_mem_data;
-            O_mem_rden <= 0;
-          end
-        endcase
-        
-        if (counter_h != G_ticks_h - 16'd1) 
-          counter_h <= counter_h + 16'd1;        
-        else begin
-          counter_h <= 16'd0;
-          if (counter_v != G_ticks_v - 16'd1) 
-            counter_v <= counter_v + 16'd1;
-          else 
-            counter_v <= 16'd0;
-        end          
-          
         O_vid_hsync <= (counter_h < G_front_h) || (counter_h >= (G_blank_h - G_back_h));
         O_vid_vsync <= (counter_v < G_front_v) || (counter_v >= (G_blank_v - G_back_v));
       end

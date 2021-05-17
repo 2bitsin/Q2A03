@@ -12,14 +12,12 @@ class ProcessInes:
     ('I_phy2',      'wire',       'input' ),
 
     ('I_prg_addr',  'wire[15:0]', 'input' ),
-    ('I_prg_wren',  'wire',       'input' ),
-    ('I_prg_rden',  'wire',       'input' ),
+    ('I_prg_wren',  'wire',       'input' ),    
     ('I_prg_data',  'wire[7:0]',  'input' ),
     ('O_prg_data',  'logic[7:0]', 'output'), 
 
     ('I_chr_addr',  'wire[13:0]', 'input' ),
-    ('I_chr_wren',  'wire',       'input' ),
-    ('I_chr_rden',  'wire',       'input' ),
+    ('I_chr_wren',  'wire',       'input' ),    
     ('I_chr_data',  'wire[7:0]',  'input' ),
     ('O_chr_data',  'logic[7:0]', 'output'),
     
@@ -64,24 +62,18 @@ class ProcessInes:
     writer.write_line('always @(posedge I_clock)')
     writer.begin()
 
-    if ines.prg_size > 0:
-      writer.begin_with('if (I_prg_rden)')
-      writer.write_line('O_prg_data <= prg_bits[%u\' (I_prg_addr)];' % (math.log2 (ines.prg_size)))
-      writer.end_with('')
-
+    if ines.prg_size > 0:      
       writer.begin_with('if (I_prg_wren)')
       writer.write_line('prg_bits[%u\' (I_prg_addr)] <= I_prg_data;' % (math.log2 (ines.prg_size)))
-      writer.end_with('')
-
-    if ines.chr_size > 0:
-      writer.begin_with('if (I_chr_rden)')
-      writer.write_line('O_chr_data <= chr_bits[%u\' (I_chr_addr)];' % (math.log2 (ines.chr_size)))
-      writer.end_with('')
-
+      writer.end_with()
+      writer.write_line('O_prg_data <= prg_bits[%u\' (I_prg_addr)];' % (math.log2 (ines.prg_size)))
+      writer.write_line('')
+      
+    if ines.chr_size > 0:      
       writer.begin_with('if (I_chr_wren)')
       writer.write_line('chr_bits[%u\' (I_chr_addr)] <= I_chr_data;' % (math.log2 (ines.chr_size)))
-      writer.end_with('')
-
+      writer.end_with()
+      writer.write_line('O_chr_data <= chr_bits[%u\' (I_chr_addr)];' % (math.log2 (ines.chr_size)))            
     writer.end()
 
     return
@@ -91,7 +83,9 @@ class ProcessInes:
     name    = os.path.split (os.path.splitext(out_file)[0])[-1]    
     ines    = InesData(in_file)
     writer  = SvWriter(out_file)
-
+    assert (ines.mapper_id == 0)
+    assert (ines.prg_size <= 0x8000)
+    assert (ines.chr_size <= 0x2000)
     self.write_prologue(writer, name)
     self.write_initial(writer, ines)
     self.write_logic(writer, ines)
@@ -102,4 +96,10 @@ for filename in os.listdir('assets/instr_test_v5/rom_singles/'):
   name, _ = os.path.splitext(filename)
   name = re.sub(r"[^\w]+", '_', name)  
   main.build_cart('assets/instr_test_v5/rom_singles/%s' % (filename), 'ver/tests/test_%s.sv' % (name))
+
+for filename in os.listdir('assets/games/'):
+  main = ProcessInes()
+  name, _ = os.path.splitext(filename)
+  name = re.sub(r"[^\w]+", '_', name)  
+  main.build_cart('assets/games/%s' % (filename), 'ver/games/%s.sv' % (name))
 

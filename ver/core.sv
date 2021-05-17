@@ -86,14 +86,12 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 /* Decoder logic */
 
   wire[93:0]    G_control;
-
   core_decoder  inst_decoder 
                 ( .I_ir      (curr_ir),
                   .I_t       (curr_t),
                   .O_control (G_control));
 
 /* Misc derivatives */
-
 
   wire[15:0]    curr_pc_p1    = curr_pc + 16'd1;
   wire[15:0]    curr_sp       = {8'h01, curr_s};
@@ -131,7 +129,7 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   register#(16) reg_ba    (I_clock, I_reset, edge_fall, next_ba,    curr_ba   );
   register      reg_p     (I_clock, I_reset, edge_fall, {next_p[7:6], 2'b10, next_p[3:0]}, curr_p);
 
-/* Arithmetic / Logic operations */
+/* Arithmetic / Logic controller */
 
   control_type  I_alu_ctl;
   bit[7:0]      I_alu_lhs;
@@ -141,13 +139,11 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   bit           I_alu_overflow;
   bit           I_alu_sign; 
   bit           I_alu_zero;
-
   wire[7:0]     O_alu_result;
   wire          O_alu_carry;  
   wire          O_alu_overflow;
   wire          O_alu_sign;
-  wire          O_alu_zero;
-  
+  wire          O_alu_zero;  
   core_alu      inst_alu  
                 ( .I_control     (I_alu_ctl), 
                   .I_mask_p      (I_alu_mask_p),
@@ -163,14 +159,15 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
                   .O_sign        (O_alu_sign), 
                   .O_zero        (O_alu_zero)); 
     
+/* Interrupt controller */
+
   wire          force_brk;
   wire          force_irq_mask;
   wire[15:0]    vec_addr_lo;
   wire[15:0]    vec_addr_hi;
-
   core_irq      inst_irq
                 ( .I_clock       (I_clock),
-                  .I_enable      (sync_rise),
+                  .I_sync        (sync_rise),
                   .I_reset       (I_reset),
                   .I_nmi         (I_nmi),
                   .I_irq         (I_irq),
@@ -215,12 +212,12 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   
 `ifdef VERILATOR
   task read_state;
-    output reg8_type a;
-    output reg8_type x;
-    output reg8_type y; 
-    output reg8_type s; 
-    output reg8_type p; 
-    output reg8_type ir; 
+    output reg8_type  a;
+    output reg8_type  x;
+    output reg8_type  y; 
+    output reg8_type  s; 
+    output reg8_type  p; 
+    output reg8_type  ir; 
     output reg16_type pc;     
     output reg32_type t;
     begin

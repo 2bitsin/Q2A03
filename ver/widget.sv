@@ -10,94 +10,64 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   output wire[7:0]  O_vid_red;
   output wire[7:0]  O_vid_green;
   output wire[7:0]  O_vid_blue;
-    
-  wire[15:0]        W_video_addr;
-  wire              W_video_rden;  
-  wire[7:0]         W_video_data;
-    
-  video inst_video (
-    .I_clock      (I_sys_clock),
-    .I_reset      (I_sys_reset),
-    .O_vid_clock  (O_vid_clock),
-    .O_vid_blank  (O_vid_blank),
-    .O_vid_hsync  (O_vid_hsync),
-    .O_vid_vsync  (O_vid_vsync),
-    .O_vid_red    (O_vid_red),
-    .O_vid_green  (O_vid_green),
-    .O_vid_blue   (O_vid_blue),
-    .O_mem_addr   (W_video_addr),
-    .O_mem_rden   (W_video_rden),
-    .I_mem_data   (W_video_data));
       
+  /* Host bus signals */
 
-
+  /* Master cpu signals */
   wire        W_core_phy2     ;
   wire        W_core_rdwr     ;
-  wire        W_core_rden     = W_core_phy2 & W_core_rdwr;
   wire        W_core_wren     = W_core_phy2 & ~W_core_rdwr;
   wire[15:0]  W_core_addr     ;
   wire[7:0]   W_core_wr_data  ;
 
+  /* Chip select lines */
+  bit         W_mem_select    ; 
+  bit         W_car_select    ; 
+  bit         W_ppu_select    ;
+  bit         W_apu_select    ;
 
-  wire        W_mem_cs        = ~W_core_addr[15];
+  /* Data return paths */
   wire[7:0]   W_mem_O_data    ;
-
-  wire        W_car_cs        =  W_core_addr[15];
   wire[7:0]   W_car_O_data    ;
+  wire[7:0]   W_ppu_O_data    ;
+  wire[7:0]   W_apu_O_data    ;
 
-  wire[7:0]   W_core_rd_data  = ~W_core_addr[15] 
-                                ? W_mem_O_data 
-                                : W_car_O_data ;
-  dpmem #(
-    .P_data_bits  (8), 
-    .P_addr_bits  (15),    
+  bit[7:0]    W_core_rd_data  ;
 
-    .P_init_bin0  ("assets/mems/8x8.mem"),
-    .P_init_beg0  (15'h5800),
-    .P_init_end0  (15'h5fff),
+  /* Host bus address decoding */
+  always @* begin  
+    W_mem_select = 1'b0;
+    W_car_select = 1'b0;
+    W_ppu_select = 1'b0;
+    W_apu_select = 1'b0;
 
-    .P_init_bin1  ("assets/mems/vid.mem"),
-    .P_init_beg1  (15'h6000),
-    .P_init_end1  (15'h63ff))    
+    unique case (W_core_addr[15:12])
+      4'b0000, 
+      4'b0001: W_mem_select = 1;
+      4'b0010, 
+      4'b0011: W_ppu_select = 1;
+      default: begin
+        if (~|W_core_addr[11:5])
+          W_apu_select = 1;
+        else 
+          W_car_select = 1;
+      end
+    endcase
+  end
 
-  inst_memory (
-    .I_clock1     (I_sys_clock),
-    .I_clock0     (I_sys_clock),
-        
-    .I_addr0      (W_core_addr[14:0]),
-    .I_rden0      (W_core_rden & W_mem_cs),
-    .I_wren0      (W_core_wren & W_mem_cs),
-    .I_data0      (W_core_wr_data),
-    .O_data0      (W_mem_O_data),
+  always @* begin
+    W_core_rd_data = 8'hFF;
+    if (W_mem_select)
+      W_core_rd_data = W_mem_O_data;
+    else if (W_ppu_select)
+      W_core_rd_data = W_ppu_O_data;
+    else if (W_apu_select)
+      W_core_rd_data = W_apu_O_data;
+    else if (W_car_select)
+      W_core_rd_data = W_car_O_data;
+  end
 
-    .I_addr1      (W_video_addr[14:0]),
-    .I_rden1      (W_video_rden),
-    .O_data1      (W_video_data),
-    .I_wren1      (0),
-    .I_data1      (0));
-
-  test_03_immediate inst_cart(
-    .I_clock      (I_sys_clock), 
-    .I_reset      (I_sys_reset), 
-    .I_phy2       (W_core_phy2), 
-
-    .I_prg_addr   (W_core_addr), 
-    .I_prg_rden   (W_core_rden & W_car_cs), 
-    .I_prg_wren   (W_core_wren & W_car_cs), 
-    .I_prg_data   (W_core_wr_data), 
-    .O_prg_data   (W_car_O_data),
-
-    .I_chr_addr   (14'h0000), 
-    .I_chr_wren   (1'd0), 
-    .I_chr_rden   (1'd0), 
-    .I_chr_data   (8'h00), 
-    .O_chr_data   (), 
-
-    .O_ciram_ce   (), 
-    .O_ciram_a10  (), 
-    .O_irq        ()
-  );
-    
+  /* Host cpu and host memory*/    
   core inst_core (
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
@@ -109,7 +79,69 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_phy2       (W_core_phy2),
     .O_wr_data    (W_core_wr_data),
     .I_rd_data    (W_core_rd_data),
-    .O_sync       ()
+    .O_sync       ());
+
+  memory #(.P_addr_bits (11)) inst_core_memory (
+    .I_clock      (I_sys_clock),        
+    .I_addr       (W_core_addr[10:0]),
+    .I_wren       (W_core_wren & W_mem_select),
+    .I_data       (W_core_wr_data),
+    .O_data       (W_mem_O_data));
+
+  /* Video bus signals */
+  wire        W_video_wren;
+  wire[13:0]  W_video_addr;
+  wire[7:0]   W_video_wr_data;
+  bit[7:0]    W_video_rd_data;  
+
+  /* Video and video memory*/        
+  video inst_video (
+    .I_clock      (I_sys_clock),
+    .I_reset      (I_sys_reset),
+    .O_vid_clock  (O_vid_clock),
+    .O_vid_blank  (O_vid_blank),
+    .O_vid_hsync  (O_vid_hsync),
+    .O_vid_vsync  (O_vid_vsync),
+    .O_vid_red    (O_vid_red),
+    .O_vid_green  (O_vid_green),
+    .O_vid_blue   (O_vid_blue),
+    
+    .I_host_addr  (W_core_addr[2:0]),
+    .I_host_data  (W_core_wr_data),
+    .I_host_wren  (W_core_wren),
+    .O_host_data  (W_ppu_O_data),
+    
+    .O_cart_addr  (W_video_addr),
+    .O_cart_wren  (W_video_wren),
+    .O_cart_data  (W_video_wr_data),
+    .I_cart_data  (W_video_rd_data));
+
+  memory #(.P_addr_bits (11)) inst_video_memory (
+    .I_clock      (I_sys_clock),        
+    .I_addr       (),
+    .I_wren       (),
+    .I_data       (),
+    .O_data       ());
+
+  /* Cartridge */
+  balloon_fight inst_cart(
+    .I_clock      (I_sys_clock), 
+    .I_reset      (I_sys_reset), 
+    .I_phy2       (W_core_phy2), 
+
+    .I_prg_addr   (W_core_addr), 
+    .I_prg_wren   (W_core_wren & W_car_select), 
+    .I_prg_data   (W_core_wr_data), 
+    .O_prg_data   (W_car_O_data),
+
+    .I_chr_addr   (14'h0000), 
+    .I_chr_wren   (1'd0),     
+    .I_chr_data   (8'h00), 
+    .O_chr_data   (), 
+
+    .O_ciram_ce   (), 
+    .O_ciram_a10  (), 
+    .O_irq        ()
   );
 
   initial begin

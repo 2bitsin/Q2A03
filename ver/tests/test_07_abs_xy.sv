@@ -1,17 +1,15 @@
 
-module test_07_abs_xy (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_rden, I_prg_data, O_prg_data, I_chr_addr, I_chr_wren, I_chr_rden, I_chr_data, O_chr_data, O_ciram_ce, O_ciram_a10, O_irq);
+module test_07_abs_xy (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_data, O_prg_data, I_chr_addr, I_chr_wren, I_chr_data, O_chr_data, O_ciram_ce, O_ciram_a10, O_irq);
 	
 	input    wire         I_clock     ;
 	input    wire         I_reset     ;
 	input    wire         I_phy2      ;
 	input    wire[15:0]   I_prg_addr  ;
 	input    wire         I_prg_wren  ;
-	input    wire         I_prg_rden  ;
 	input    wire[7:0]    I_prg_data  ;
 	output   logic[7:0]   O_prg_data  ;
 	input    wire[13:0]   I_chr_addr  ;
 	input    wire         I_chr_wren  ;
-	input    wire         I_chr_rden  ;
 	input    wire[7:0]    I_chr_data  ;
 	output   logic[7:0]   O_chr_data  ;
 	output   logic        O_ciram_ce  ;
@@ -2590,17 +2588,12 @@ module test_07_abs_xy (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_r
 	end
 	always @(posedge I_clock)
 	begin
-		if (I_prg_rden)
-			O_prg_data <= prg_bits[15' (I_prg_addr)];
-		
 		if (I_prg_wren)
 			prg_bits[15' (I_prg_addr)] <= I_prg_data;
-		
-		if (I_chr_rden)
-			O_chr_data <= chr_bits[13' (I_chr_addr)];
+		O_prg_data <= prg_bits[15' (I_prg_addr)];
 		
 		if (I_chr_wren)
 			chr_bits[13' (I_chr_addr)] <= I_chr_data;
-		
+		O_chr_data <= chr_bits[13' (I_chr_addr)];
 	end
 endmodule
