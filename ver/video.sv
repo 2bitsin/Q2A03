@@ -14,6 +14,7 @@ module video (
   I_host_wren,
   I_host_data,
   O_host_data,
+  O_host_nmi,
 
   O_cart_addr,  
   O_cart_wren,
@@ -27,14 +28,15 @@ module video (
   output  wire        O_vid_blank ;
   output  bit         O_vid_hsync ;
   output  bit         O_vid_vsync ;
-  output  wire[7:0]   O_vid_red ;
+  output  wire[7:0]   O_vid_red   ;
   output  wire[7:0]   O_vid_green ;
-  output  wire[7:0]   O_vid_blue ;
+  output  wire[7:0]   O_vid_blue  ;
 
   input   wire[2:0]   I_host_addr ;
   input   wire        I_host_wren ;
   input   wire[7:0]   I_host_data ;
   output  bit[7:0]    O_host_data ;
+  output  bit         O_host_nmi  ;
 
   output  bit[13:0]   O_cart_addr ;  
   output  bit         O_cart_wren ;

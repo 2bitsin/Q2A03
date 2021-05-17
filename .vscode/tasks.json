@@ -73,6 +73,19 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "Process iNES",
+      "type": "shell",      
+      "command":"/usr/bin/env /usr/bin/python3 ./py/ProcessInes.py",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }

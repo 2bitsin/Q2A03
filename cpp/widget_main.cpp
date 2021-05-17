@@ -47,6 +47,7 @@ auto time_as_string(const char* fmt = "%Y-%m-%d_%H-%M-%S") -> std::string
 
 int main(int argc, char** argv)
 {
+  auto i = system("rm -rf trace/img/*.png");
   using namespace std::string_literals;
 
   Verilated::commandArgs(argc, argv);
@@ -122,12 +123,8 @@ int main(int argc, char** argv)
     $time += 1;
   }
 
-  {
-    std::ofstream memory_dump ("trace/memory_dump.bin", std::ios::binary);
-    memory_dump.write((const char*)widget.widget__DOT__inst_memory__DOT__bits, sizeof(widget.widget__DOT__inst_memory__DOT__bits));
-  }
   auto cmd = "ffmpeg -r 60 -f image2 -s 1280x1200 -i trace/img/%05d.png -filter:v scale=1536:1440:flags=neighbor -vcodec libx264 -pix_fmt rgb24 trace/"s + time_as_string() + ".avi"s;
   auto res = system(cmd.data());
-  //system("rm -rf trace/img/*.png");
+  
   return 0;
 }

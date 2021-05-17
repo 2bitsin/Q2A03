@@ -5,7 +5,7 @@ VLTPAT = /usr/share/verilator/include
 
 VFILES   = 	ver/widget.sv 					\
 						ver/video.sv 						\
-						ver/dpmem.sv 						\
+						ver/memory.sv 					\
 						ver/register.sv					\
 						ver/core.sv 						\
 						ver/core_irq.sv 				\

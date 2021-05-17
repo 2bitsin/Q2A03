@@ -1,5 +1,5 @@
 
-module test_03_immediate (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_data, O_prg_data, I_chr_addr, I_chr_wren, I_chr_data, O_chr_data, O_ciram_ce, O_ciram_a10, O_irq);
+module test_03_immediate (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_data, O_prg_data, I_chr_addr, I_chr_wren, I_chr_data, O_chr_data, O_ciram_ce, O_ciram_a10, O_ciram_a11, O_irq);
 	
 	input    wire         I_clock     ;
 	input    wire         I_reset     ;
@@ -14,6 +14,7 @@ module test_03_immediate (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_pr
 	output   logic[7:0]   O_chr_data  ;
 	output   logic        O_ciram_ce  ;
 	output   logic        O_ciram_a10 ;
+	output   logic        O_ciram_a11 ;
 	output   logic        O_irq       ;
 	
 	bit[7:0] prg_bits [0:32767];
@@ -2586,6 +2587,12 @@ module test_03_immediate (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_pr
 			8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF, 8'hFF
 		};
 	end
+	
+	assign O_ciram_a10 = I_chr_addr[10];
+	assign O_ciram_a11 = 1'b0;
+	
+	assign O_ciram_ce = 1'1;
+	
 	always @(posedge I_clock)
 	begin
 		if (I_prg_wren)
