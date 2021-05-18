@@ -23,38 +23,28 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   /* Chip select lines */
   bit         W_mem_select    ; 
   bit         W_car_select    ; 
-  bit         W_ppu_select    ;
-  bit         W_apu_select    ;
+  bit         W_ppu_select    ;  
 
   /* Data return paths */
   wire[7:0]   W_mem_O_data    ;
   wire[7:0]   W_car_O_data    ;
   wire[7:0]   W_ppu_O_data    ;
-  wire[7:0]   W_apu_O_data    ;
 
   bit[7:0]    W_core_rd_data  ;
 
   /* Misc signals */
   wire        W_core_nmi      ;
+  wire        W_core_irq      ;
 
   /* Host bus address decoding */
   always @* begin  
     W_mem_select = 1'b0;
-    W_car_select = 1'b0;
     W_ppu_select = 1'b0;
-    W_apu_select = 1'b0;
-
+    W_car_select = 1'b0;
     unique case (W_core_addr[15:12])
-      4'b0000, 
-      4'b0001: W_mem_select = 1;
-      4'b0010, 
-      4'b0011: W_ppu_select = 1;
-      default: begin
-        if (~|W_core_addr[11:5])
-          W_apu_select = 1;
-        else 
-          W_car_select = 1;
-      end
+      4'h0, 4'h1 : W_mem_select = 1'b1; // $0000 - $1FFF : RAM
+      4'h2, 4'h3 : W_ppu_select = 1'b1; // $2000 - $3FFF : PPU
+      default    : W_car_select = 1'b1; // $4000 - $FFFF : CARTRIDGE
     endcase
   end
 
@@ -64,8 +54,6 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
       W_core_rd_data = W_mem_O_data;
     else if (W_ppu_select)
       W_core_rd_data = W_ppu_O_data;
-    else if (W_apu_select)
-      W_core_rd_data = W_apu_O_data;
     else if (W_car_select)
       W_core_rd_data = W_car_O_data;
   end
@@ -74,7 +62,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   core inst_core (
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
-    .I_irq        (1),
+    .I_irq        (W_core_irq),
     .I_nmi        (W_core_nmi),
     .I_ready      (1),
     .O_rdwr       (W_core_rdwr),
@@ -148,10 +136,10 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .I_prg_wren   (W_core_wren & W_car_select), 
     .I_prg_data   (W_core_wr_data), 
     .O_prg_data   (W_car_O_data),
-    .O_irq        (),
+    .O_irq        (W_core_irq),
 
     .I_chr_addr   (W_video_addr), 
-    .I_chr_wren   (W_video_wren),
+    .I_chr_wren   (W_video_wren & ~W_video_mem_select),
     .I_chr_data   (W_video_wr_data), 
     .O_chr_data   (W_cart_chr_O_data), 
 
@@ -162,7 +150,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
 
   initial begin
   `ifdef VERILATOR
-    $dumpfile("trace/widget.vcd");
+    $dumpfile("trace/widget.fst");
     $dumpvars(999, inst_core);    
   `endif
   end    

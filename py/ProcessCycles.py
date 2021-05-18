@@ -256,7 +256,7 @@ class ProcessCycles:
     cycle_table = self.prepare (isa_data, am_data, op_data)
     flat_table, indexes, last_index = self.flatten(cycle_table, am_data['*'])    
     self.dump_flat_table(flat_table)
-    self.write_out_decoder(SvWriter ('ver/core_decoder.sv'), flat_table, indexes, last_index)
+    self.write_out_decoder(SvWriter ('ver/core_decode.sv'), flat_table, indexes, last_index)
     self.write_out_control(SvWriter ('ver/core_control.svh'), indexes, last_index, def_table)
     print("Done")
     return 0

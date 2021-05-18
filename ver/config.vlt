@@ -1,0 +1,2 @@
+`verilator_config
+tracing_on  -file "*.sv" 

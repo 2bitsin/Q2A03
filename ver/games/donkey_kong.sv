@@ -1566,8 +1566,8 @@ module donkey_kong (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_data
 	
 	assign O_ciram_a10 = I_chr_addr[11];
 	assign O_ciram_a11 = 1'b0;
-	
 	assign O_ciram_ce = 1'1;
+	assign O_irq = 1'1;
 	
 	always @(posedge I_clock)
 	begin

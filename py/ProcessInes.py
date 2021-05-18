@@ -14,17 +14,17 @@ class ProcessInes:
     ('I_prg_addr',  'wire[15:0]', 'input' ),
     ('I_prg_wren',  'wire',       'input' ),    
     ('I_prg_data',  'wire[7:0]',  'input' ),
-    ('O_prg_data',  'bit[7:0]',   'output'), 
+    ('O_prg_data',  'logic[7:0]', 'output'), 
 
     ('I_chr_addr',  'wire[13:0]', 'input' ),
     ('I_chr_wren',  'wire',       'input' ),    
     ('I_chr_data',  'wire[7:0]',  'input' ),
-    ('O_chr_data',  'bit[7:0]',   'output'),
+    ('O_chr_data',  'logic[7:0]', 'output'),
     
-    ('O_ciram_ce',  'bit',        'output'),
-    ('O_ciram_a10', 'bit',        'output'),
-    ('O_ciram_a11', 'bit',        'output'),
-    ('O_irq',       'bit',        'output')
+    ('O_ciram_ce',  'logic',      'output'),
+    ('O_ciram_a10', 'logic',      'output'),
+    ('O_ciram_a11', 'logic',      'output'),
+    ('O_irq',       'logic',      'output')
   ]
 
   def write_prologue(self, writer, name):
@@ -72,6 +72,7 @@ class ProcessInes:
       writer.write_line('assign O_ciram_a10 = I_chr_addr[11];')
       writer.write_line('assign O_ciram_a11 = 1\'b0;')
     writer.write_line('assign O_ciram_ce = 1\'1;')
+    writer.write_line('assign O_irq = 1\'1;')
     writer.write_line('')
 
     writer.write_line('always @(posedge I_clock)')

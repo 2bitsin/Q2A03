@@ -24,9 +24,11 @@ int main(int argc, char** argv)
   Verilated::traceEverOn(true);
   Vcore tb;
 
-  auto scope = svGetScopeFromName("TOP.core");
-  if (!scope)
+  auto scope = svGetScopeFromName("TOP.core.inst_executor");
+  if (!scope) {
+    printf ("Can't find context : %s\n", "TOP.core.inst_executor");
     return -1;
+  }
   svSetScope(scope);
 
   int last_sync = 0;

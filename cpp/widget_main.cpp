@@ -62,6 +62,7 @@ int main(int argc, char** argv)
     widget.eval();
     $time += 1;
   }
+  $time += 1;
 
   edge_det O_vid_blank { widget.O_vid_blank } ;
   edge_det O_vid_clock { widget.O_vid_clock } ;
@@ -77,6 +78,8 @@ int main(int argc, char** argv)
   widget.I_sys_reset = 1;
   for(auto i = 0; i < 2*42'884'160; ++i) 
   {
+    if (!(i % 1'000'000))
+      std::printf("%u ticks passed...\n", i);
     widget.I_sys_clock ^= 1;
     widget.eval();
 
