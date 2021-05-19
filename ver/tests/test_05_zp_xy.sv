@@ -2590,8 +2590,8 @@ module test_05_zp_xy (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_da
 	
 	assign O_ciram_a10 = I_chr_addr[10];
 	assign O_ciram_a11 = 1'b0;
-	assign O_ciram_ce = 1'1;
-	assign O_irq = 1'1;
+	assign O_ciram_ce = 1'b1;
+	assign O_irq = 1'b1;
 	
 	always @(posedge I_clock)
 	begin

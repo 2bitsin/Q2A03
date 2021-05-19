@@ -5,8 +5,8 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
 
   output wire       O_vid_clock;
   output wire       O_vid_blank;
-  output wire       O_vid_hsync;
-  output wire       O_vid_vsync;
+  output bit        O_vid_hsync;
+  output bit        O_vid_vsync;
   output wire[7:0]  O_vid_red;
   output wire[7:0]  O_vid_green;
   output wire[7:0]  O_vid_blue;
@@ -94,16 +94,32 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   /* Video data return paths */
   wire[7:0]   W_video_mem_O_data;  
   wire[7:0]   W_cart_chr_O_data;
-  
 
+/* Delaying sync signals by 1 vid_clock, 
+   to compensate for not going trough the DAC */
+
+  wire        W_vid_hsync ;    
+  wire        W_vid_vsync ;
+  wire        W_vid_clock_rise;
+ 
+  always @(posedge I_sys_clock)
+  begin
+    if (W_vid_clock_rise)
+    begin
+      O_vid_vsync <= W_vid_vsync;
+      O_vid_hsync <= W_vid_hsync;
+    end
+  end
+     
   /* Video and video memory*/        
   video inst_video (
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
     .O_vid_clock  (O_vid_clock),
+    .O_vid_rise   (W_vid_clock_rise),
     .O_vid_blank  (O_vid_blank),
-    .O_vid_hsync  (O_vid_hsync),
-    .O_vid_vsync  (O_vid_vsync),
+    .O_vid_hsync  (W_vid_hsync),
+    .O_vid_vsync  (W_vid_vsync),
     .O_vid_red    (O_vid_red),
     .O_vid_green  (O_vid_green),
     .O_vid_blue   (O_vid_blue),

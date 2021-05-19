@@ -71,8 +71,8 @@ class ProcessInes:
     elif ines.mirroring == 0:
       writer.write_line('assign O_ciram_a10 = I_chr_addr[11];')
       writer.write_line('assign O_ciram_a11 = 1\'b0;')
-    writer.write_line('assign O_ciram_ce = 1\'1;')
-    writer.write_line('assign O_irq = 1\'1;')
+    writer.write_line('assign O_ciram_ce = 1\'b1;')
+    writer.write_line('assign O_irq = 1\'b1;')
     writer.write_line('')
 
     writer.write_line('always @(posedge I_clock)')

@@ -3,6 +3,7 @@ module video (
   I_clock, 
   I_reset, 
   O_vid_clock, 
+  O_vid_rise,
   O_vid_blank, 
   O_vid_hsync,
   O_vid_vsync, 
@@ -21,13 +22,16 @@ module video (
   I_cart_data,
   O_cart_data);
 
+/* I/O ports */
+
   input   wire        I_clock ;
   input   wire        I_reset ;
 
   output  wire        O_vid_clock ;
+  output  wire        O_vid_rise  ;
   output  wire        O_vid_blank ;
-  output  bit         O_vid_hsync ;
-  output  bit         O_vid_vsync ;
+  output  wire        O_vid_hsync ;
+  output  wire        O_vid_vsync ;
   output  wire[7:0]   O_vid_red   ;
   output  wire[7:0]   O_vid_green ;
   output  wire[7:0]   O_vid_blue  ;
@@ -43,72 +47,106 @@ module video (
   input   wire[7:0]   I_cart_data ;
   output  bit[7:0]    O_cart_data ;
   
-  
-  localparam G_active_h     = 16'd256;
-  localparam G_active_v     = 16'd240;
-  localparam G_front_h      = 16'd9;
-  localparam O_sync_h       = 16'd51;
-  localparam G_back_h       = 16'd25;
-  localparam G_front_v      = 16'd5;
-  localparam O_sync_v       = 16'd1;
-  localparam G_back_v       = 16'd16;
-  localparam G_prefetch_h   = 16'd8;
-  localparam G_blank_h      = G_front_h + O_sync_h + G_back_h;
-  localparam G_blank_v      = G_front_v + O_sync_v + G_back_v;  
-  localparam G_ticks_h      = G_active_h + G_blank_h;
-  localparam G_ticks_v      = G_active_v + G_blank_v;    
-  
-  bit[1:0]    clk_tick      ;
-  bit         clk_last      ;
-  bit[15:0]   counter_v     ;
-  bit[15:0]   counter_h     ;    
+/* Parameter constants */
 
-  assign       O_vid_blank   = (counter_v >= G_blank_v) && (counter_h >= G_blank_h);  
-  assign       O_vid_clock   = clk_tick[1];
+  localparam  G_active_v     = 16'(240);
+  localparam  G_active_h     = 16'(256);
 
-  wire[15:0]   active_h      = counter_h - G_blank_h;
-  wire[15:0]   active_v      = counter_v - G_blank_v;
-  wire[15:0]   prefetch_h    = (counter_h + G_prefetch_h - G_blank_h);  
+  localparam  G_front_h      = 16'(9  );
+  localparam  G_sync_h       = 16'(51 );
+  localparam  G_back_h       = 16'(25 );
 
-  /////////////////////////////////////////////////////////////////
-  //                                                             //
-  /////////////////////////////////////////////////////////////////
+  localparam  G_front_v      = 16'(5  );
+  localparam  G_sync_v       = 16'(1  );
+  localparam  G_back_v       = 16'(16 );
 
-  bit[7:0]     buf_index;
-  bit[7:0]     buf_tiles;
+  localparam  G_blank_h      = G_front_h + G_sync_h + G_back_h;
+  localparam  G_blank_v      = G_front_v + G_sync_v + G_back_v;  
+  localparam  G_ticks_h      = G_active_h + G_blank_h;
+  localparam  G_ticks_v      = G_active_v + G_blank_v;    
 
-  wire[7:0]    pat_color     = 8' (active_h ^ active_v);
-  wire[7:0]    dot_color     = 8'hFF;
+/* Timing registers and derivatives */   
 
-  assign       O_vid_red     = buf_tiles[7] ? dot_color : {pat_color[7:5], 5'h0};
-  assign       O_vid_green   = buf_tiles[7] ? dot_color : {pat_color[4:3], 6'h0};
-  assign       O_vid_blue    = buf_tiles[7] ? dot_color : {pat_color[2:0], 5'h0};
+  bit[1:0]    clk_tick       ;
+  bit         clk_last       ;
+  assign      O_vid_rise     = ~clk_last && O_vid_clock;
+
+  bit[15:0]   vcounter       ;
+  bit[15:0]   hcounter       ; 
+
+
+  wire[15:0]  W_hcounter     = hcounter - 16'(1);
+  wire[15:0]  W_vcounter     = vcounter;
+
+  bit         W_vblank       ;
+
+  assign      O_vid_hsync    = W_hcounter <  (G_active_h + G_front_h)
+                            || W_hcounter >= (G_active_h + G_front_h + G_sync_h);
+
+  assign      O_vid_vsync    = W_vcounter <  (G_active_v + G_front_v)
+                            || W_vcounter >= (G_active_v + G_front_v + G_sync_v);
+
+  assign      O_vid_blank    = $unsigned(W_vcounter) < $unsigned(G_active_v) &&
+                               $unsigned(W_hcounter) < $unsigned(G_active_h) ;
+
+  assign      O_vid_clock    = clk_tick[1];
+
+
+/* Palette module */
+
+  video_color_tab inst_color_tab(
+    .I_clock  (I_clock),
+    .I_reset  (I_reset),
+    .I_addr   (5'b0),
+    .I_wren   (1'b0),
+    .I_data   (6'b0),
+    .O_data   (), 
+    .I_index  ({W_vcounter[7:6], W_hcounter[7:5]}),
+    .O_red    (O_vid_red),
+    .O_green  (O_vid_green),
+    .O_blue   (O_vid_blue)
+  );
+
 
   always @(posedge I_clock, negedge I_reset)
   begin
+  /* Reset logic */ 
     if (~I_reset) 
     begin
-      counter_v    <= +16'd0;
-      counter_h    <= -16'd1;
-      O_vid_hsync  <= 1'd0;
-      O_vid_vsync  <= 1'd0;
-      clk_last     <= 1'd0;
-      clk_tick     <= 2'd3;
-    end 
-    else
-    begin      
-
-      clk_tick <= clk_tick + 2'd1;
-      clk_last <= O_vid_clock;
-      
-      if (~clk_last && O_vid_clock)
+      clk_last     <=  1'b0;
+      clk_tick     <=  2'b11;
+      vcounter     <=  16'h0000;
+      hcounter     <=  16'hFFFF;
+    end else 
+    begin
+      if (O_vid_rise)
       begin
 
-        O_vid_hsync <= (counter_h < G_front_h) || (counter_h >= (G_blank_h - G_back_h));
-        O_vid_vsync <= (counter_v < G_front_v) || (counter_v >= (G_blank_v - G_back_v));
-      end
+        /* Timing logic */ 
+        if (hcounter != G_ticks_h - 1)
+          hcounter <= hcounter + 16'd1;
+        else begin
+          hcounter <= 16'd0;
+          if (vcounter != G_ticks_v - 1) 
+            vcounter <= vcounter + 16'd1;
+          else 
+            vcounter <= 16'd0;  
+        end
 
-    end  
+        /* Vblank flag logic */
+        if (hcounter == 16'd0)
+        begin
+          if (vcounter == 16'd241)
+            W_vblank <= 1'b1;
+          if (vcounter == 16'd261)
+            W_vblank <= 1'b0;
+        end
+
+      end
+      clk_tick <= clk_tick + 2'd1;
+      clk_last <= O_vid_clock;      
+    end
   end
+
 endmodule
 

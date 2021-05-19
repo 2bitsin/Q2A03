@@ -78,8 +78,8 @@ int main(int argc, char** argv)
   widget.I_sys_reset = 1;
   for(auto i = 0; i < 2*42'884'160; ++i) 
   {
-    if (!(i % 1'000'000))
-      std::printf("%u ticks passed...\n", i);
+    //if (!(i % 1'000'000))
+    //  std::printf("%u ticks passed...\n", i);
     widget.I_sys_clock ^= 1;
     widget.eval();
 
