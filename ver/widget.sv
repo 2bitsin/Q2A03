@@ -102,14 +102,13 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   wire        W_vid_vsync ;
   wire        W_vid_clock_rise;
  
-  always @(posedge I_sys_clock)
-  begin
-    if (W_vid_clock_rise)
+  always @(posedge I_sys_clock) 
+    if (W_vid_clock_rise)   
     begin
       O_vid_vsync <= W_vid_vsync;
       O_vid_hsync <= W_vid_hsync;
     end
-  end
+  
      
   /* Video and video memory*/        
   video inst_video (

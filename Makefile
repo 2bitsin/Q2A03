@@ -1,6 +1,6 @@
 CFLAGS = -std=c++20 -O3 -flto
 #CFLAGS = -std=c++20 -g -O0 
-VFLAGS = --trace-fst
+VFLAGS = #--trace-fst
 VLTPAT = /usr/share/verilator/include
 
 TOP     			= widget
@@ -48,13 +48,13 @@ out/ver/lib$(TOP).a out/ver/V$(TOP).h: $(VFILES) $(VHEADERS) $(PACKS) $(VCONFIG)
 	mv out/ver/V$(TOP)__ALL.a out/ver/lib$(TOP).a 
 
 out/launch: $(LAUNCH_DEPS) out/ver/V$(TOP).h 
-	g++ $(CFLAGS) 													\
-		-Iout/ver 														\
-		-I$(VLTPAT) 													\
-		-I$(VLTPAT)/vltstd 										\
-		-o $@ 																\
-		-Wl,--start-group 										\
-			$(LAUNCH_DEPS)											\
-		-Wl,--end-group 											\
-		-lpng 																\
-    -lz 
+	g++ $(CFLAGS) 			 \
+	  -Iout/ver 				 \
+	  -I$(VLTPAT) 			 \
+	  -I$(VLTPAT)/vltstd \
+	  -o $@ 						 \
+	  -Wl,--start-group  \
+	  $(LAUNCH_DEPS)		 \
+	  -Wl,--end-group 	 \
+	  -lpng 						 \
+	  -lz 
