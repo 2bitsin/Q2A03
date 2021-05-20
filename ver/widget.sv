@@ -104,8 +104,21 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   wire        W_vid_clock_rise;
  
 
-  delay #(.P_length(4)) inst_delay_vsync (I_sys_clock, I_sys_reset, W_vid_clock_rise, W_vid_vsync, O_vid_vsync);
-  delay #(.P_length(4)) inst_delay_hsync (I_sys_clock, I_sys_reset, W_vid_clock_rise, W_vid_hsync, O_vid_hsync);
+  delay #(.P_length(4)) inst_delay_vsync (
+    .I_clock      (I_sys_clock), 
+    .I_reset      (I_sys_reset), 
+    .I_tick       (W_vid_clock_rise),
+    .I_signal     (W_vid_vsync), 
+    .O_signal     (O_vid_vsync)
+  );
+
+  delay #(.P_length(4)) inst_delay_hsync (
+    .I_clock      (I_sys_clock), 
+    .I_reset      (I_sys_reset), 
+    .I_tick       (W_vid_clock_rise), 
+    .I_signal     (W_vid_hsync), 
+    .O_signal     (O_vid_hsync)
+  );
      
   /* Video and video memory*/        
   video inst_video (
@@ -123,7 +136,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .I_host_addr  (W_core_addr[2:0]),
     .I_host_data  (W_core_wr_data),
     .I_host_wren  (W_core_wren),
-    .I_host_wren  (W_core_rden),
+    .I_host_rden  (W_core_rden),
     .O_host_data  (W_ppu_O_data),
     .O_host_nmi   (W_core_nmi),
     
