@@ -1,29 +1,42 @@
 CFLAGS = -std=c++20 -O3 -flto
 #CFLAGS = -std=c++20 -g -O0 
-VFLAGS = #--trace-fst
+VFLAGS = --trace-fst
 VLTPAT = /usr/share/verilator/include
 
 TOP     			= widget
-VFILES  			= ver/widget.sv 					\
-								ver/video.sv 						\
-								ver/memory.sv 					\
-								ver/register.sv					\
-								ver/core.sv 						\
-								ver/core_irq.sv 				\
-								ver/core_alu.sv 				\
-								ver/core_decode.sv 			\
-								ver/core_isexec.sv 			
 					
-VHEADERS 			=	ver/core_control.svh 		
-VPACKS	 			=	ver/core_alu_signals.sv 
 VCONFIG  			= ver/config.vlt
 
-LAUNCH_DEPS 	= cpp/$(TOP)_main.cpp 			\
-								out/lib/verilated.o 			\
-								out/lib/verilated_fst_c.o \
-								out/lib/verilated_dpi.o 	\
-								out/ver/lib$(TOP).a 			\
+VHEADERS 			=	ver/core_control.svh 		
 
+VPACKS	 			=	ver/core_alu_signals.sv 
+
+VFILES  			= ver/widget.sv 					   	\
+								ver/video.sv 						   	\
+								ver/video_timing.sv  		   	\
+								ver/video_color_tab.sv     	\
+								ver/components/memory.sv 	 	\
+								ver/components/register.sv 	\
+								ver/components/count_up.sv 	\
+								ver/components/delay.sv    	\
+								ver/components/compare.sv  	\
+								ver/components/edge_trig.sv	\
+								ver/core.sv 						   	\
+								ver/core_irq.sv 				   	\
+								ver/core_alu.sv 				   	\
+								ver/core_decode.sv 			   	\
+								ver/core_isexec.sv 			
+
+LAUNCH_DEPS 	= cpp/$(TOP)_main.cpp 			 	\
+								out/lib/verilated.o 			 	\
+								out/lib/verilated_fst_c.o  	\
+								out/lib/verilated_dpi.o 	 	\
+								out/ver/lib$(TOP).a 			 	\
+
+MOD_DIRS      = -y ver 									   	\
+								-y ver/tests               	\
+								-y ver/games               	\
+								-y ver/components 
 
 all: out/launch
 
@@ -43,7 +56,7 @@ out/lib/verilated_dpi.o: $(VLTPAT)/verilated_dpi.cpp
 	g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
 
 out/ver/lib$(TOP).a out/ver/V$(TOP).h: $(VFILES) $(VHEADERS) $(PACKS) $(VCONFIG)
-	verilator --cc -Mdir out/ver -y ver -y ver/tests -y ver/games --top-module $(TOP) $(VCONFIG) $(VPACKS) $(VFILES) -CFLAGS "$(CFLAGS)" $(VFLAGS)
+	verilator --cc -Mdir out/ver $(MOD_DIRS) --top-module $(TOP) $(VCONFIG) $(VPACKS) $(VFILES) -CFLAGS "$(CFLAGS)" $(VFLAGS)
 	$(MAKE) -C out/ver -f V$(TOP).mk
 	mv out/ver/V$(TOP)__ALL.a out/ver/lib$(TOP).a 
 

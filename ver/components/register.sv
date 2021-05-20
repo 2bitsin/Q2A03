@@ -17,7 +17,7 @@ module register #(
   always @(posedge I_clock, negedge I_reset) 
   begin    
     if (~I_reset) 
-      bits <= 0;
+      bits <= P_init;
     else if (I_write)
       bits <= I_bits;  
   end

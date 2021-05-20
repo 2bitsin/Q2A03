@@ -57,12 +57,10 @@ int main(int argc, char** argv)
 
   widget.I_sys_clock = 0;
   widget.I_sys_reset = 0;
-  for(auto i = 0; i < 64; ++i) {
+  for(auto i = 0; i < 64; ++i, ++$time) {
     widget.I_sys_clock ^= 1;
     widget.eval();
-    $time += 1;
   }
-  $time += 1;
 
   edge_det O_vid_blank { widget.O_vid_blank } ;
   edge_det O_vid_clock { widget.O_vid_clock } ;
@@ -76,10 +74,11 @@ int main(int argc, char** argv)
   uint8_t buff[240][256][3];
 
   widget.I_sys_reset = 1;
-  for(auto i = 0; i < 2*42'884'160; ++i) 
+  const auto Total_ticks = 2*42'884'160 / 20;
+  for(auto i = 0; i < Total_ticks; ++i, ++$time) 
   {
-    //if (!(i % 1'000'000))
-    //  std::printf("%u ticks passed...\n", i);
+    if (!(i % 4288416))
+      std::printf("%u ticks passed...\n", i);
     widget.I_sys_clock ^= 1;
     widget.eval();
 
@@ -121,9 +120,7 @@ int main(int argc, char** argv)
       }
       ++frame_index;
       buff_y = 0;    
-    }
-
-    $time += 1;
+    }   
   }
 
   auto cmd = "ffmpeg -r 60 -f image2 -s 1280x1200 -i trace/img/%05d.png -filter:v scale=1536:1440:flags=neighbor -vcodec libx264 -pix_fmt rgb24 trace/"s + time_as_string() + ".avi"s;
