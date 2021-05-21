@@ -53,29 +53,44 @@ module video (
 
 /* Decode register address */
 
-  wire[7:0]       W_select_reg     ;
-
-  localparam      reg_ppu_control  = 0;
-  localparam      reg_ppu_mask     = 1;  
-  localparam      reg_ppu_status   = 2;
-  localparam      reg_oam_addr     = 3;  
-  localparam      reg_oam_data     = 4;  
-  localparam      reg_ppu_scroll   = 5;  
-  localparam      reg_ppu_addr     = 6;  
-  localparam      reg_ppu_data     = 7;  
+  wire            W_select_ppu_ctrl ;
+  wire            W_select_ppu_mask ;  
+  wire            W_select_ppu_stat ;
+  wire            W_select_oam_addr ;  
+  wire            W_select_oam_data ;  
+  wire            W_select_ppu_scrl ;  
+  wire            W_select_ppu_addr ;  
+  wire            W_select_ppu_data ;  
 
   decoder #(.P_width(3)) inst_select_reg (
-    I_host_addr[2:0], W_select_reg);
+    I_host_addr[2:0], {
+      W_select_ppu_data,      
+      W_select_ppu_addr,
+      W_select_ppu_scrl,
+      W_select_oam_data,
+      W_select_oam_addr,
+      W_select_ppu_stat,
+      W_select_ppu_mask,
+      W_select_ppu_ctrl 
+    });
     
 /* Read / Write edge edtect */
 
   wire            W_host_rden;
   wire            W_host_wren;
 
-  edge_trig inst_wren_trigger (
-    I_clock, I_reset, I_host_wren, W_host_wren);
-  edge_trig inst_rden_trigger (
-    I_clock, I_reset, I_host_rden, W_host_rden);
+  edge_trig inst_wren_trigger (I_clock, I_reset, I_host_wren, W_host_wren);
+  edge_trig inst_rden_trigger (I_clock, I_reset, I_host_rden, W_host_rden);
+
+  wire[7:0]       W_host_data;
+
+  wire[7:0]       W_ppu_ctrl;
+  wire[7:0]       W_ppu_mask;
+
+  register #(.P_width (8)) inst_host_data (I_clock, I_reset, W_host_wren                    , I_host_data, W_host_data);
+  register #(.P_width (8)) inst_ppu_ctrl  (I_clock, I_reset, W_host_wren & W_select_ppu_ctrl, W_host_data, W_ppu_ctrl);
+  register #(.P_width (8)) inst_ppu_mask  (I_clock, I_reset, W_host_wren & W_select_ppu_mask, W_host_data, W_ppu_mask);
+ 
 
   /* Video timing generator */
 
@@ -97,7 +112,7 @@ module video (
     .I_reset      (I_reset), 
     .I_set        ((W_hcount_zero & W_vcount == 16'd241)), 
     .I_clear      ((W_hcount_zero & W_vcount == 16'd261) 
-                  |(W_host_rden & W_select_reg[reg_ppu_status])), 
+                  |(W_host_rden & W_select_ppu_stat)), 
     .I_gate       (R_nmi_enabled), 
     .O_value      (W_vblank_value),
     .O_not_value  (O_host_nmi));
