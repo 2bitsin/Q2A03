@@ -75,10 +75,15 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
 
   memory #(.P_addr_bits (11)) inst_core_memory (
     .I_clock      (I_sys_clock),        
-    .I_addr       (W_core_addr[10:0]),
-    .I_wren       (W_core_wren & W_mem_select),
-    .I_data       (W_core_wr_data),
-    .O_data       (W_mem_O_data));
+    .I_addr0      (W_core_addr[10:0]),
+    .I_wren0      (W_core_wren & W_mem_select),
+    .I_data0      (W_core_wr_data),
+    .O_data0      (W_mem_O_data),    
+    .I_addr1      (11'b0),
+    .I_wren1      (1'b0),
+    .I_data1      (8'b0),
+    .O_data1      ()
+    );
 
   /* Video bus signals */
   wire        W_video_wren;
@@ -147,10 +152,16 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
                     
   memory #(.P_addr_bits (12)) inst_video_memory (
     .I_clock      (I_sys_clock),        
-    .I_addr       ({W_cart_ciram_a11, W_cart_ciram_a10, W_video_addr[9:0]}),
-    .I_wren       (W_video_wren & W_video_mem_select),
-    .I_data       (W_video_wr_data),
-    .O_data       (W_video_mem_O_data));
+    .I_addr0      ({W_cart_ciram_a11, W_cart_ciram_a10, W_video_addr[9:0]}),
+    .I_wren0      (W_video_wren & W_video_mem_select),
+    .I_data0      (W_video_wr_data),
+    .O_data0      (W_video_mem_O_data),
+    
+    .I_addr1      (12'b0),
+    .I_wren1      (1'b0),
+    .I_data1      (8'b0),
+    .O_data1      ()    
+    );
 
   /* Cartridge */
   balloon_fight inst_cart(

@@ -8,8 +8,10 @@ module decoder (I_packed, O_unpacked);
   genvar i;
 
   generate
-    for (i = 0; i < P_unpacked_width; ++i)
+    for (i = 0; i < P_unpacked_width; ++i) 
+		begin: l0
       assign O_unpacked[i] = I_packed == i;
+		end
   endgenerate
 
 endmodule

@@ -1,4 +1,4 @@
-module video_timing (I_clock, I_reset, O_clock, O_rise, O_not_blank, O_hsync, O_vsync, O_hcount, O_vcount);
+module video_timing (I_clock, I_reset, O_clock, O_rise, O_not_blank, O_hsync, O_vsync, O_hcount, O_vcount, O_not_hblank, O_not_vblank);
 
   input   wire        I_clock       ;
   input   wire        I_reset       ;
@@ -6,7 +6,9 @@ module video_timing (I_clock, I_reset, O_clock, O_rise, O_not_blank, O_hsync, O_
   output  wire        O_rise        ;
   output  wire        O_not_blank   ;
   output  wire        O_hsync       ;
-  output  wire        O_vsync       ;  
+  output  wire        O_vsync       ;
+  output  wire        O_not_hblank  ;  
+  output  wire        O_not_vblank  ;  
   output  wire[15:0]  O_hcount      ;
   output  wire[15:0]  O_vcount      ;
 
@@ -90,16 +92,16 @@ module video_timing (I_clock, I_reset, O_clock, O_rise, O_not_blank, O_hsync, O_
     .I_value         (O_hcount), 
     .I_lower         (16'd1), 
     .I_upper         (16'd1 + G_active_h), 
-    .O_inside        (W_hactive), 
+    .O_inside        (O_not_hblank), 
     .O_outside       ());
 
   compare #(.P_width(16)) inst_compare_active_v (
     .I_value         (O_vcount), 
-    .I_lower         (16'd1), 
-    .I_upper         (16'd1 + G_active_v), 
-    .O_inside        (W_vactive), 
+    .I_lower         (16'd0), 
+    .I_upper         (16'd0 + G_active_v), 
+    .O_inside        (O_not_vblank), 
     .O_outside       ());
 
-  assign O_not_blank = W_hactive & W_vactive;
+  assign O_not_blank = O_not_vblank & O_not_hblank;
                                
 endmodule
