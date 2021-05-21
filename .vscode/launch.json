@@ -38,7 +38,16 @@
       "program": "${workspaceFolder}/py/ProcessInes.py",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}"
-    }/*,
+    },
+    {
+      "name": "Make Enums",
+      "type": "python",      
+      "request": "launch",
+      "program": "${workspaceFolder}/py/MakeEnums.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    }
+    /*,
     {
       "name": "Generate Cycles",
       "type": "python",      

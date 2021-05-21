@@ -18,10 +18,10 @@ module video (
   O_host_data,
   O_host_nmi,
 
-  O_cart_addr,  
-  O_cart_wren,
-  I_cart_data,
-  O_cart_data);
+  O_vid_addr,  
+  O_vid_wren,
+  I_vid_data,
+  O_vid_data);
 
 /* I/O ports */
 
@@ -44,26 +44,38 @@ module video (
   output  bit[7:0]    O_host_data ;
   output  bit         O_host_nmi  ;
 
-  output  bit[13:0]   O_cart_addr ;  
-  output  bit         O_cart_wren ;
-  input   wire[7:0]   I_cart_data ;
-  output  bit[7:0]    O_cart_data ;
+  output  bit[13:0]   O_vid_addr ;  
+  output  bit         O_vid_wren ;
+  input   wire[7:0]   I_vid_data ;
+  output  bit[7:0]    O_vid_data ;
   
 
 
 /* Decode register address */
 
-  wire[7:0]       W_select_reg;
+  wire[7:0]       W_select_reg     ;
 
-  decoder #(.P_width(3)) inst_rsdec (I_host_addr[2:0], W_select_reg);
+  localparam      reg_ppu_control  = 0;
+  localparam      reg_ppu_mask     = 1;  
+  localparam      reg_ppu_status   = 2;
+  localparam      reg_oam_addr     = 3;  
+  localparam      reg_oam_data     = 4;  
+  localparam      reg_ppu_scroll   = 5;  
+  localparam      reg_ppu_addr     = 6;  
+  localparam      reg_ppu_data     = 7;  
+
+  decoder #(.P_width(3)) inst_select_reg (
+    I_host_addr[2:0], W_select_reg);
     
 /* Read / Write edge edtect */
 
   wire            W_host_rden;
   wire            W_host_wren;
 
-  edge_trig inst_wren_det (I_clock, I_reset, I_host_wren, W_host_wren);
-  edge_trig inst_rden_det (I_clock, I_reset, I_host_rden, W_host_rden);
+  edge_trig inst_wren_trigger (
+    I_clock, I_reset, I_host_wren, W_host_wren);
+  edge_trig inst_rden_trigger (
+    I_clock, I_reset, I_host_rden, W_host_rden);
 
   /* Video timing generator */
 
@@ -75,13 +87,20 @@ module video (
   wire            W_hcount_zero    = W_hcount == 16'd0 ;
   wire            W_prerender_line = W_vcount == 16'd261;
   wire            W_rendering_line = W_not_vblank | W_prerender_line;
-  wire            W_vblank_set     = (W_hcount_zero & W_vcount == 16'd241);
-  wire            W_vblank_clr     = (W_hcount_zero & W_vcount == 16'd241) | (W_host_rden & W_select_reg[2]);
+
   wire            W_vblank_value   ;   
 
   bit             R_nmi_enabled    = 1'b0;  
   
-  sc_latch inst_vblank_flag (I_clock, I_reset, W_vblank_set, W_vblank_clr, R_nmi_enabled, W_vblank_value, O_host_nmi);
+  sc_latch inst_vblank_flag (
+    .I_clock      (I_clock), 
+    .I_reset      (I_reset), 
+    .I_set        ((W_hcount_zero & W_vcount == 16'd241)), 
+    .I_clear      ((W_hcount_zero & W_vcount == 16'd261) 
+                  |(W_host_rden & W_select_reg[reg_ppu_status])), 
+    .I_gate       (R_nmi_enabled), 
+    .O_value      (W_vblank_value),
+    .O_not_value  (O_host_nmi));
 
   video_timing inst_timing (
     .I_clock      (I_clock),

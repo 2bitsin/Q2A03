@@ -1,6 +1,6 @@
 CFLAGS = -std=c++20 -O3 -flto
 #CFLAGS = -std=c++20 -g -O0 
-VFLAGS = #--trace-fst
+VFLAGS = --trace-fst
 VLTPAT = /usr/share/verilator/include
 
 TOP     			= widget
@@ -21,6 +21,8 @@ VFILES  			= ver/widget.sv 					   	\
 								ver/components/delay.sv    	\
 								ver/components/compare.sv  	\
 								ver/components/edge_trig.sv	\
+								ver/components/sc_latch.sv	\
+								ver/components/decoder.sv		\
 								ver/core.sv 						   	\
 								ver/core_irq.sv 				   	\
 								ver/core_alu.sv 				   	\

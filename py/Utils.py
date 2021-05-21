@@ -9,6 +9,10 @@ class Utils:
     return ss
 
   @staticmethod
+  def simplify_name(ss):
+    return re.sub(r'[^a-zA-Z]+', '', ss) 
+
+  @staticmethod
   def int8_to_hex(o):
     return '8\'h%02X' % (o)
 

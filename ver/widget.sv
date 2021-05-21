@@ -140,15 +140,15 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
         
     .I_host_addr  (W_core_addr[2:0]),
     .I_host_data  (W_core_wr_data),
-    .I_host_wren  (W_core_wren),
-    .I_host_rden  (W_core_rden),
+    .I_host_wren  (W_core_wren & W_ppu_select),
+    .I_host_rden  (W_core_rden & W_ppu_select),
     .O_host_data  (W_ppu_O_data),
     .O_host_nmi   (W_core_nmi),
     
-    .O_cart_addr  (W_video_addr),
-    .O_cart_wren  (W_video_wren),
-    .O_cart_data  (W_video_wr_data),
-    .I_cart_data  (W_video_mem_select ? W_video_mem_O_data : W_cart_chr_O_data));
+    .O_vid_addr   (W_video_addr),
+    .O_vid_wren   (W_video_wren),
+    .O_vid_data   (W_video_wr_data),
+    .I_vid_data   (W_video_mem_select ? W_video_mem_O_data : W_cart_chr_O_data));
                     
   memory #(.P_addr_bits (12)) inst_video_memory (
     .I_clock      (I_sys_clock),        
