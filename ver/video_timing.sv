@@ -41,8 +41,7 @@ module video_timing (I_clock, I_reset, O_clock, O_rise, O_not_blank, O_hsync, O_
     .I_clock         (I_clock), 
     .I_reset         (I_reset),
     .I_signal        (O_clock), 
-    .O_rise          (O_rise), 
-    .O_fall          ());
+    .O_rise          (O_rise));
 
   count_up #(.P_width(2)) inst_clk_tick (
     .I_clock         (I_clock),

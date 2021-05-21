@@ -1,6 +1,6 @@
 CFLAGS = -std=c++20 -O3 -flto
 #CFLAGS = -std=c++20 -g -O0 
-VFLAGS = --trace-fst
+VFLAGS = #--trace-fst
 VLTPAT = /usr/share/verilator/include
 
 TOP     			= widget
