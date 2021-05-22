@@ -120,7 +120,7 @@ module video (
   wire[15:0]      W_vcount         ;
   wire            W_not_vblank     ;
   wire            W_not_hblank     ;  
-  wire            W_vblank_value   ;   
+  wire            W_vblank_value   ;
 
   video_timing inst_timing (
     .I_clock      (I_clock),
@@ -150,11 +150,19 @@ module video (
 
   /* Vblank flag / NMI */
 
+  wire            W_clear_vblank_flag;
+  delay #(.P_length(1)) inst_clrvbf_delay (
+    .I_clock      (I_clock), 
+    .I_reset      (I_reset), 
+    .I_tick       (O_vid_rise), 
+    .I_signal     (W_reg_rden[R_ppu_stat]), 
+    .O_signal     (W_clear_vblank_flag));
+
   sc_latch inst_vblank_flag (
     .I_clock      (I_clock), 
     .I_reset      (I_reset), 
     .I_set        (W_video_control[video_vblank_set]), 
-    .I_clear      (W_video_control[video_vblank_clr] | W_reg_rden[R_ppu_ctrl]), 
+    .I_clear      (W_video_control[video_vblank_clr] | W_clear_vblank_flag), 
     .I_gate       (W_ppu_ctrl[7]), 
     .O_value      (W_vblank_value),
     .O_value_n    (),
