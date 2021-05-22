@@ -13,7 +13,6 @@ VFILES   =  ver/video.sv            \
             ver/core_executor.sv       
           
 VHEADERS =  ver/core_control.svh     
-VPACKS   =  ver/core_alu_signals.sv 
 TOP      =  core
 
 
@@ -34,8 +33,8 @@ out/lib/verilated_vcd_c.o: $(VLTPAT)/verilated_vcd_c.cpp
 out/lib/verilated_dpi.o: $(VLTPAT)/verilated_dpi.cpp
   g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
 
-out/ver/libwidget.a out/ver/Vcore.h: $(VFILES) $(VHEADERS) $(PACKS)
-  verilator --cc -Mdir out/ver -y ver -y ver/tests -y ver/games --top-module core $(VPACKS) $(VFILES) -CFLAGS "$(CFLAGS)" $(VFLAGS)
+out/ver/libwidget.a out/ver/Vcore.h: $(VFILES) $(VHEADERS)
+  verilator --cc -Mdir out/ver -y ver -y ver/tests -y ver/games --top-module core $(VFILES) -CFLAGS "$(CFLAGS)" $(VFLAGS)
   $(MAKE) -C out/ver -f V$(TOP).mk
   mv out/ver/V$(TOP)__ALL.a out/ver/lib$(TOP).a 
 

@@ -9,12 +9,7 @@ VCONFIG  			= ver/config.vlt
 
 VHEADERS 			=	ver/core_control.svh 		
 
-VPACKS	 			=	ver/core_alu_signals.sv 
-
 VFILES  			= ver/widget.sv 					   	\
-								ver/video.sv 						   	\
-								ver/video_timing.sv  		   	\
-								ver/video_color_tab.sv     	\
 								ver/components/memory.sv 	 	\
 								ver/components/register.sv 	\
 								ver/components/count_up.sv 	\
@@ -23,6 +18,12 @@ VFILES  			= ver/widget.sv 					   	\
 								ver/components/edge_trig.sv	\
 								ver/components/sc_latch.sv	\
 								ver/components/decoder.sv		\
+								ver/components/mux.sv				\
+								ver/video_control.sv 		   	\
+								ver/video.sv 						   	\
+								ver/video_timing.sv  		   	\
+								ver/video_regdec.sv 		   	\
+								ver/video_color_tab.sv     	\
 								ver/core.sv 						   	\
 								ver/core_irq.sv 				   	\
 								ver/core_alu.sv 				   	\
@@ -57,8 +58,8 @@ out/lib/verilated_fst_c.o: $(VLTPAT)/verilated_fst_c.cpp
 out/lib/verilated_dpi.o: $(VLTPAT)/verilated_dpi.cpp
 	g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
 
-out/ver/lib$(TOP).a out/ver/V$(TOP).h: $(VFILES) $(VHEADERS) $(PACKS) $(VCONFIG)
-	verilator --cc -Mdir out/ver $(MOD_DIRS) --top-module $(TOP) $(VCONFIG) $(VPACKS) $(VFILES) -CFLAGS "$(CFLAGS)" $(VFLAGS)
+out/ver/lib$(TOP).a out/ver/V$(TOP).h: $(VFILES) $(VCONFIG) $(VHEADERS)
+	verilator --cc -Mdir out/ver $(MOD_DIRS) --top-module $(TOP) $(VFILES) $(VCONFIG) -CFLAGS "$(CFLAGS)" $(VFLAGS)
 	$(MAKE) -C out/ver -f V$(TOP).mk
 	mv out/ver/V$(TOP)__ALL.a out/ver/lib$(TOP).a 
 

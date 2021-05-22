@@ -23,6 +23,8 @@ module video (
   I_vid_data,
   O_vid_data);
 
+  import video_control_signals::*;
+
 /* I/O ports */
 
   input   wire        I_clock ;
@@ -48,74 +50,77 @@ module video (
   output  bit         O_vid_wren ;
   input   wire[7:0]   I_vid_data ;
   output  bit[7:0]    O_vid_data ;
-  
-
-
-/* Decode register address */
-
-  wire            W_select_ppu_ctrl ;
-  wire            W_select_ppu_mask ;  
-  wire            W_select_ppu_stat ;
-  wire            W_select_oam_addr ;  
-  wire            W_select_oam_data ;  
-  wire            W_select_ppu_scrl ;  
-  wire            W_select_ppu_addr ;  
-  wire            W_select_ppu_data ;  
-
-  decoder #(.P_width(3)) inst_select_reg (
-    I_host_addr[2:0], {
-      W_select_ppu_data,      
-      W_select_ppu_addr,
-      W_select_ppu_scrl,
-      W_select_oam_data,
-      W_select_oam_addr,
-      W_select_ppu_stat,
-      W_select_ppu_mask,
-      W_select_ppu_ctrl 
-    });
     
 /* Read / Write edge edtect */
 
   wire            W_host_rden;
   wire            W_host_wren;
 
-  edge_trig inst_wren_trigger (I_clock, I_reset, I_host_wren, W_host_wren);
-  edge_trig inst_rden_trigger (I_clock, I_reset, I_host_rden, W_host_rden);
+  edge_trig #(.P_width(2)) inst_edge_trig (
+    .I_clock      (I_clock), 
+    .I_reset      (I_reset), 
+    .I_signal     ({I_host_rden, I_host_wren}), 
+    .O_rise       ({W_host_rden, W_host_wren}),
+    .O_fall       ());
+
+/* Decode register access */
+
+  parameter       R_ppu_ctrl = 0;
+  parameter       R_ppu_mask = 1;
+  parameter       R_ppu_stat = 2;  
+  parameter       R_oam_addr = 3;
+  parameter       R_oam_data = 4;
+  parameter       R_ppu_scrl = 5;
+  parameter       R_ppu_addr = 6;
+  parameter       R_ppu_data = 7;
+
+  wire[7:0]       W_reg_select;
+  wire[7:0]       W_reg_wren;
+  wire[7:0]       W_reg_rden;
+
+  video_regdec inst_video_regdec (
+    .I_addr       (I_host_addr[2:0]), 
+    .I_rden       (W_host_rden),
+    .I_wren       (W_host_wren),
+    .O_reg        (W_reg_select),
+    .O_reg_wren   (W_reg_wren),
+    .O_reg_rden   (W_reg_rden));
+
+
+/* Registers */
 
   wire[7:0]       W_host_data;
 
   wire[7:0]       W_ppu_ctrl;
   wire[7:0]       W_ppu_mask;
 
-  register #(.P_width (8)) inst_host_data (I_clock, I_reset, W_host_wren                    , I_host_data, W_host_data);
-  register #(.P_width (8)) inst_ppu_ctrl  (I_clock, I_reset, W_host_wren & W_select_ppu_ctrl, W_host_data, W_ppu_ctrl);
-  register #(.P_width (8)) inst_ppu_mask  (I_clock, I_reset, W_host_wren & W_select_ppu_mask, W_host_data, W_ppu_mask);
- 
+  register #(.P_width (8)) inst_host_data   (I_clock, I_reset, W_host_wren, I_host_data, W_host_data);
+  register #(.P_width (8)) inst_ppu_ctrl    (I_clock, I_reset, W_reg_wren[R_ppu_ctrl], W_host_data, W_ppu_ctrl);
+  register #(.P_width (8)) inst_ppu_mask    (I_clock, I_reset, W_reg_wren[R_ppu_mask], W_host_data, W_ppu_mask);
 
-  /* Video timing generator */
+/* Host bus logic */
+
+  mux #(.P_select_width (3), .P_data_width (8)) inst_host_data_mux (
+    .I_select (I_host_addr),
+    .I_data   ('{
+      W_host_data,                                      // PPUCTRL
+      W_host_data,                                      // PPUMASK
+      {W_vblank_value, 1'b0, 1'b0, W_host_data[4:0]},   // PPUSTATUS
+      W_host_data,                                      // OAMADDR
+      W_host_data,                                      // OAMDATA
+      W_host_data,                                      // PPUSCROLL
+      W_host_data,                                      // PPUADDR
+      W_host_data}),                                    // PPUDATA
+    .O_data   (O_host_data)
+  );
+ 
+/* Video timing generator */
 
   wire[15:0]      W_hcount         ;
   wire[15:0]      W_vcount         ;
   wire            W_not_vblank     ;
-  wire            W_not_hblank     ;
-
-  wire            W_hcount_zero    = W_hcount == 16'd0 ;
-  wire            W_prerender_line = W_vcount == 16'd261;
-  wire            W_rendering_line = W_not_vblank | W_prerender_line;
-
+  wire            W_not_hblank     ;  
   wire            W_vblank_value   ;   
-
-  bit             R_nmi_enabled    = 1'b0;  
-  
-  sc_latch inst_vblank_flag (
-    .I_clock      (I_clock), 
-    .I_reset      (I_reset), 
-    .I_set        ((W_hcount_zero & W_vcount == 16'd241)), 
-    .I_clear      ((W_hcount_zero & W_vcount == 16'd261) 
-                  |(W_host_rden & W_select_ppu_stat)), 
-    .I_gate       (R_nmi_enabled), 
-    .O_value      (W_vblank_value),
-    .O_not_value  (O_host_nmi));
 
   video_timing inst_timing (
     .I_clock      (I_clock),
@@ -131,6 +136,30 @@ module video (
     .O_not_vblank (W_not_vblank)
   );
 
+  /* Video control signals */
+
+  wire[15:0]      W_video_control;
+
+  video_control inst_video_control (
+    .I_vcount     (W_vcount), 
+    .I_hcount     (W_hcount), 
+    .I_not_hblank (W_not_hblank), 
+    .I_not_vblank (W_not_vblank),
+    .O_control    (W_video_control)
+  );
+
+  /* Vblank flag / NMI */
+
+  sc_latch inst_vblank_flag (
+    .I_clock      (I_clock), 
+    .I_reset      (I_reset), 
+    .I_set        (W_video_control[video_vblank_set]), 
+    .I_clear      (W_video_control[video_vblank_clr] | W_reg_rden[R_ppu_ctrl]), 
+    .I_gate       (W_ppu_ctrl[7]), 
+    .O_value      (W_vblank_value),
+    .O_value_n    (),
+    .O_value_g    (),
+    .O_value_gn   (O_host_nmi));
 
   /* Color generator */
 
