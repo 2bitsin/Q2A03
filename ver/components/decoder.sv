@@ -1,17 +1,12 @@
 module decoder (I_packed, O_unpacked);
-  parameter P_width = 3;
-  parameter P_unpacked_width = 2**P_width;
 
-  output  wire[P_unpacked_width - 1: 0] O_unpacked;
-  input   wire[P_width - 1: 0]          I_packed;
+  parameter P_width     = 3;
+  parameter P_up_width  = 2**P_width;
 
-  genvar i;
+  typedef bit[P_up_width - 1: 0] t;
 
-  generate
-    for (i = 0; i < P_unpacked_width; ++i) 
-		begin: l0
-      assign O_unpacked[i] = I_packed == i;
-		end
-  endgenerate
+  input   wire[P_width    - 1: 0] I_packed;
+  output  wire[P_up_width - 1: 0] O_unpacked;
 
+  assign O_unpacked = t' (1) << I_packed;
 endmodule

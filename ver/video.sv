@@ -51,18 +51,6 @@ module video (
   input   wire[7:0]   I_vid_data ;
   output  bit[7:0]    O_vid_data ;
     
-/* Read / Write edge edtect */
-
-  wire            W_host_rden;
-  wire            W_host_wren;
-
-  edge_trig #(.P_width(2)) inst_edge_trig (
-    .I_clock      (I_clock), 
-    .I_reset      (I_reset), 
-    .I_signal     ({I_host_rden, I_host_wren}), 
-    .O_rise       ({W_host_rden, W_host_wren}),
-    .O_fall       ());
-
 /* Decode register access */
 
   parameter       R_ppu_ctrl = 0;
@@ -74,17 +62,37 @@ module video (
   parameter       R_ppu_addr = 6;
   parameter       R_ppu_data = 7;
 
+  wire            W_host_rden_rise;
+  wire            W_host_wren_rise;
+  wire            W_host_rden_fall;
+  wire            W_host_wren_fall;
+
   wire[7:0]       W_reg_select;
   wire[7:0]       W_reg_wren;
   wire[7:0]       W_reg_rden;
+  wire[7:0]       W_reg_wrrise;
+  wire[7:0]       W_reg_rdrise;
+  wire[7:0]       W_reg_wrfall;
+  wire[7:0]       W_reg_rdfall;
 
   video_regdec inst_video_regdec (
+    .I_clock      (I_clock),
+    .I_reset      (I_reset),
     .I_addr       (I_host_addr[2:0]), 
-    .I_rden       (W_host_rden),
-    .I_wren       (W_host_wren),
+    .I_rden       (I_host_rden),
+    .I_wren       (I_host_wren),
+    .O_rden_rise  (W_host_rden_rise),
+    .O_wren_rise  (W_host_wren_rise),
+    .O_rden_fall  (W_host_rden_fall),
+    .O_wren_fall  (W_host_wren_fall),
     .O_reg        (W_reg_select),
     .O_reg_wren   (W_reg_wren),
-    .O_reg_rden   (W_reg_rden));
+    .O_reg_rden   (W_reg_rden),
+    .O_reg_wrrise (W_reg_wrrise),
+    .O_reg_rdrise (W_reg_rdrise),
+    .O_reg_wrfall (W_reg_wrfall),
+    .O_reg_rdfall (W_reg_rdfall)
+  );
 
 
 /* Registers */
@@ -94,9 +102,9 @@ module video (
   wire[7:0]       W_ppu_ctrl;
   wire[7:0]       W_ppu_mask;
 
-  register #(.P_width (8)) inst_host_data   (I_clock, I_reset, W_host_wren, I_host_data, W_host_data);
-  register #(.P_width (8)) inst_ppu_ctrl    (I_clock, I_reset, W_reg_wren[R_ppu_ctrl], W_host_data, W_ppu_ctrl);
-  register #(.P_width (8)) inst_ppu_mask    (I_clock, I_reset, W_reg_wren[R_ppu_mask], W_host_data, W_ppu_mask);
+  register #(.P_width (8)) inst_host_data   (I_clock, I_reset, W_host_wren_rise, I_host_data, W_host_data);
+  register #(.P_width (8)) inst_ppu_ctrl    (I_clock, I_reset, W_reg_wrrise[R_ppu_ctrl], W_host_data, W_ppu_ctrl);
+  register #(.P_width (8)) inst_ppu_mask    (I_clock, I_reset, W_reg_wrrise[R_ppu_mask], W_host_data, W_ppu_mask);
 
 /* Host bus logic */
 
@@ -149,20 +157,19 @@ module video (
   );
 
   /* Vblank flag / NMI */
-
-  wire            W_clear_vblank_flag;
-  delay #(.P_length(4)) inst_clrvbf_delay (
-    .I_clock      (I_clock), 
-    .I_reset      (I_reset), 
-    .I_tick       (O_vid_rise), 
-    .I_signal     (W_reg_rden[R_ppu_stat]), 
-    .O_signal     (W_clear_vblank_flag));
+  
+//  delay #(.P_length(4)) inst_clrvbf_delay (
+//    .I_clock      (I_clock), 
+//    .I_reset      (I_reset), 
+//    .I_tick       (O_vid_rise), 
+//    .I_signal     (), 
+//    .O_signal     (W_clear_vblank_flag));
 
   sc_latch inst_vblank_flag (
     .I_clock      (I_clock), 
     .I_reset      (I_reset), 
     .I_set        (W_video_control[video_vblank_set]), 
-    .I_clear      (W_video_control[video_vblank_clr] | W_clear_vblank_flag), 
+    .I_clear      (W_video_control[video_vblank_clr] | W_reg_rdfall[R_ppu_stat]), 
     .I_gate       (W_ppu_ctrl[7]), 
     .O_value      (W_vblank_value),
     .O_value_n    (),

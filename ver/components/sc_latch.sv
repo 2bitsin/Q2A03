@@ -14,24 +14,17 @@ module sc_latch (I_clock, I_reset, I_set, I_clear, I_gate, O_value, O_value_n, O
 
   bit[P_width - 1: 0] value;
 
-  assign O_value            = value;
-  assign O_value_n          = ~O_value;
-  assign O_value_g          = value & I_gate;
-  assign O_value_gn         = ~O_value_g;
+  assign  O_value     = value;
+  assign  O_value_n   = ~O_value;
+  assign  O_value_g   = value & I_gate;
+  assign  O_value_gn  = ~O_value_g;
 
   always @(posedge I_clock, negedge I_reset)
   begin
     if (~I_reset)
       value <= {P_width {1'b0}};
-    else begin
-      for (integer i = 0; i < P_width; ++i)
-      begin
-        if (I_clear[i])
-          value[i] <= 1'b0;
-        else if (I_set[i])
-          value[i] <= 1'b1;
-      end
-    end
+    else 
+      value <= (value | I_set) & ~I_clear;
   end
 
 endmodule
