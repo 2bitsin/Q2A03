@@ -151,7 +151,7 @@ module video (
   /* Vblank flag / NMI */
 
   wire            W_clear_vblank_flag;
-  delay #(.P_length(1)) inst_clrvbf_delay (
+  delay #(.P_length(4)) inst_clrvbf_delay (
     .I_clock      (I_clock), 
     .I_reset      (I_reset), 
     .I_tick       (O_vid_rise), 
