@@ -97,28 +97,43 @@ module video (
 
 /* Registers */
 
-  wire[7:0]       W_host_data;
+  wire[7:0]       curr_host_data;
 
-  wire[7:0]       W_ppu_ctrl;
-  wire[7:0]       W_ppu_mask;
+  wire[7:0]       curr_ppu_ctrl;
+  wire[7:0]       curr_ppu_mask;
+  wire[7:0]       curr_oam_addr;
 
-  register #(.P_width (8)) inst_host_data   (I_clock, I_reset, W_host_wren_rise, I_host_data, W_host_data);
-  register #(.P_width (8)) inst_ppu_ctrl    (I_clock, I_reset, W_reg_wrrise[R_ppu_ctrl], W_host_data, W_ppu_ctrl);
-  register #(.P_width (8)) inst_ppu_mask    (I_clock, I_reset, W_reg_wrrise[R_ppu_mask], W_host_data, W_ppu_mask);
+  bit[7:0]        next_oam_addr;
+
+  register #(.P_width (8)) inst_host_data   (I_clock, I_reset, W_host_wren_rise, I_host_data, curr_host_data);
+  register #(.P_width (8)) inst_ppu_ctrl    (I_clock, I_reset, W_reg_wrrise[R_ppu_ctrl], curr_host_data, curr_ppu_ctrl);
+  register #(.P_width (8)) inst_ppu_mask    (I_clock, I_reset, W_reg_wrrise[R_ppu_mask], curr_host_data, curr_ppu_mask);
+
+  register #(.P_width (8)) inst_oam_addr    (I_clock, I_reset, O_vid_rise, next_oam_addr, curr_oam_addr);
+
+  always_comb
+  begin
+    
+    next_oam_addr = curr_oam_addr;
+    if (W_reg_wrrise[R_oam_addr])
+      next_oam_addr = curr_host_data;
+    else if (W_reg_wren[R_oam_data] | W_reg_rden[R_oam_data])
+      next_oam_addr = curr_oam_addr + 8'd1;    
+  end
 
 /* Host bus logic */
 
   mux #(.P_select_width (3), .P_data_width (8)) inst_host_data_mux (
     .I_select (I_host_addr),
     .I_data   ('{
-      W_host_data,                                      // PPUCTRL
-      W_host_data,                                      // PPUMASK
-      {W_vblank_value, 1'b0, 1'b0, W_host_data[4:0]},   // PPUSTATUS
-      W_host_data,                                      // OAMADDR
-      W_host_data,                                      // OAMDATA
-      W_host_data,                                      // PPUSCROLL
-      W_host_data,                                      // PPUADDR
-      W_host_data}),                                    // PPUDATA
+      curr_host_data,                                   // PPUCTRL
+      curr_host_data,                                   // PPUMASK
+      {W_vblank_value, 2'b00, curr_host_data[4:0]},     // PPUSTATUS
+      curr_host_data,                                   // OAMADDR
+      curr_host_data,                                   // OAMDATA
+      curr_host_data,                                   // PPUSCROLL
+      curr_host_data,                                   // PPUADDR
+      curr_host_data}),                                 // PPUDATA    
     .O_data   (O_host_data)
   );
  
@@ -170,7 +185,7 @@ module video (
     .I_reset      (I_reset), 
     .I_set        (W_video_control[video_vblank_set]), 
     .I_clear      (W_video_control[video_vblank_clr] | W_reg_rdfall[R_ppu_stat]), 
-    .I_gate       (W_ppu_ctrl[7]), 
+    .I_gate       (curr_ppu_ctrl[7]), 
     .O_value      (W_vblank_value),
     .O_value_n    (),
     .O_value_g    (),
