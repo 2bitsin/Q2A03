@@ -6,6 +6,8 @@ module video_address (I_clock,
                       I_data, 
                       O_data,
                       I_control, 
+                      I_ppuctrl,
+                      I_ppumask,
                       O_vid_fine, 
                       O_vid_addr,
                       O_vid_wren,
@@ -24,13 +26,14 @@ module video_address (I_clock,
   input  wire[7:0]    I_rden      ; 
 
   input  wire[15:0]   I_control   ;
+  input  wire[ 7:0]   I_ppuctrl   ;
+  input  wire[ 7:0]   I_ppumask   ;
   
   output wire[2:0]    O_vid_fine  ;
   output wire[13:0]   O_vid_addr  ;
   output wire         O_vid_wren  ;
   input  wire[7:0]    I_vid_data  ;
   output wire[7:0]    O_vid_data  ;
-
 
   bit[14:0]           v_addr;
   bit[14:0]           t_addr;
@@ -50,12 +53,25 @@ module video_address (I_clock,
       v_fine  <=  3'd0;
       t_addr  <= 15'd0;
       w_latch <=  1'd0;
+      v_incr  <=  1'd0;
+      v_data  <=  8'd0;
     end else 
     begin
+      if (I_rden [R_ppu_data])
+        v_data <= I_vid_data;
+
       if (I_rden [R_ppu_stat])
         w_latch <= 1'b0;
       else if (I_wren [R_ppu_addr] | I_wren [R_ppu_scrl])
         w_latch <= ~w_latch;
+
+      if (I_wren [R_ppu_data] | I_rden [R_ppu_data])
+      begin
+        if (~v_incr)
+          v_addr <= v_addr + 15'd1;
+        else
+          v_addr <= v_addr + 15'd32;
+      end 
 
       if (I_wren [R_ppu_ctrl])
       begin

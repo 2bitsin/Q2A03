@@ -11,53 +11,52 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   output wire[7:0]  O_vid_green;
   output wire[7:0]  O_vid_blue;
       
-  /* Host bus signals */
-
   /* Master cpu signals */
-  wire        W_core_phy2     ;
-  wire        W_core_rdwr     ;
-  wire        W_core_wren     = W_core_phy2 & ~W_core_rdwr;
-  wire        W_core_rden     = W_core_phy2 & W_core_rdwr;
-  wire[15:0]  W_core_addr     ;
-  wire[7:0]   W_core_wr_data  ;
+  wire            W_core_phy2     ;
+  wire            W_core_rdwr     ;
+  wire            W_core_wren     = W_core_phy2 & ~W_core_rdwr;
+  wire            W_core_rden     = W_core_phy2 & W_core_rdwr;
+  wire[15:0]      W_core_addr     ;
+  wire[7:0]       W_core_wr_data  ;
 
-  /* Chip select lines */
-  bit         W_mem_select    ; 
-  bit         W_car_select    ; 
-  bit         W_ppu_select    ;  
 
   /* Data return paths */
-  wire[7:0]   W_mem_O_data    ;
-  wire[7:0]   W_car_O_data    ;
-  wire[7:0]   W_ppu_O_data    ;
+  wire[7:0]       W_mem_O_data    ;
+  wire[7:0]       W_car_O_data    ;
+  wire[7:0]       W_ppu_O_data    ;
 
-  bit[7:0]    W_core_rd_data  ;
+  bit[7:0]        W_core_rd_data  ;
 
   /* Misc signals */
-  wire        W_core_nmi      ;
-  wire        W_core_irq      ;
+  wire            W_core_nmi      ;
+  wire            W_core_irq      ;
 
-  /* Host bus address decoding */
-  always @* begin  
-    W_mem_select = 1'b0;
-    W_ppu_select = 1'b0;
-    W_car_select = 1'b0;
-    unique case (W_core_addr[15:12])
-      4'h0, 4'h1 : W_mem_select = 1'b1; // $0000 - $1FFF : RAM
-      4'h2, 4'h3 : W_ppu_select = 1'b1; // $2000 - $3FFF : PPU
-      default    : W_car_select = 1'b1; // $4000 - $FFFF : CARTRIDGE
-    endcase
-  end
+  /* Chip select lines */
+  wire            W_mem_select    = |W_core_addr_dec[0];
+  wire            W_ppu_select    = |W_core_addr_dec[1];
+  wire            W_car_select    = |W_core_addr_dec[7:2];
+  wire[7:0]       W_core_addr_dec ;
 
-  always @* begin
-    W_core_rd_data = 8'hFF;
-    if (W_mem_select)
-      W_core_rd_data = W_mem_O_data;
-    else if (W_ppu_select)
-      W_core_rd_data = W_ppu_O_data;
-    else if (W_car_select)
-      W_core_rd_data = W_car_O_data;
-  end
+  decoder #(.P_width (3)) inst_decode_bus(
+    .I_packed     (W_core_addr[15:13]),
+    .O_unpacked   (W_core_addr_dec)
+  );
+  
+  mux #(.P_select_width(3), .P_data_width(8)) inst_data_bus_mux (
+    .I_select     (W_core_addr[15:13]),
+    .I_data       ('{
+                  W_mem_O_data,  // $0xxx - $1xxx
+                  W_ppu_O_data,  // $2xxx - $3xxx
+                  W_car_O_data,  // $4xxx - $5xxx
+                  W_car_O_data,  // $6xxx - $7xxx
+                  W_car_O_data,  // $8xxx - $9xxx
+                  W_car_O_data,  // $Axxx - $Bxxx
+                  W_car_O_data,  // $Cxxx - $Dxxx
+                  W_car_O_data   // $Exxx - $Fxxx
+                  }),
+    .O_data       (W_core_rd_data)
+  );
+
 
   /* Host cpu and host memory*/    
   core inst_core (
@@ -82,47 +81,37 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .I_addr1      (11'b0),
     .I_wren1      (1'b0),
     .I_data1      (8'b0),
-    .O_data1      ()
-    );
+    .O_data1      ());
 
   /* Video bus signals */
-  wire        W_video_wren;
-  wire[13:0]  W_video_addr;
-  wire[7:0]   W_video_wr_data;
+  wire            W_video_wren;
+  wire[13:0]      W_video_addr;
+  wire[7:0]       W_video_wr_data;
 
   /* Video bus select signals*/
-  wire        W_cart_ciram_ce;
-  wire        W_cart_ciram_a10;
-  wire        W_cart_ciram_a11;
-
-  wire        W_video_mem_select = (W_video_addr[13] & W_cart_ciram_ce);
+  wire            W_cart_ciram_ce;
+  wire            W_cart_ciram_a10;
+  wire            W_cart_ciram_a11;
+  wire            W_video_mem_select = (W_video_addr[13] & W_cart_ciram_ce);
 
   /* Video data return paths */
-  wire[7:0]   W_video_mem_O_data;  
-  wire[7:0]   W_cart_chr_O_data;
+  wire[7:0]       W_video_mem_O_data;  
+  wire[7:0]       W_cart_chr_O_data;
 
 /* Delaying sync signals by 1 vid_clock, 
    to compensate for not going trough the DAC */
 
-  wire        W_vid_hsync ;    
-  wire        W_vid_vsync ;
-  wire        W_vid_clock_rise;
+  wire            W_vid_hsync ;    
+  wire            W_vid_vsync ;
+  wire            W_vid_clock_rise;
  
 
-  delay #(.P_length(4)) inst_delay_vsync (
+  delay #(.P_width(2), .P_length(4)) inst_delay_vsync (
     .I_clock      (I_sys_clock), 
     .I_reset      (I_sys_reset), 
     .I_tick       (W_vid_clock_rise),
-    .I_signal     (W_vid_vsync), 
-    .O_signal     (O_vid_vsync)
-  );
-
-  delay #(.P_length(4)) inst_delay_hsync (
-    .I_clock      (I_sys_clock), 
-    .I_reset      (I_sys_reset), 
-    .I_tick       (W_vid_clock_rise), 
-    .I_signal     (W_vid_hsync), 
-    .O_signal     (O_vid_hsync)
+    .I_signal     ({W_vid_vsync, W_vid_hsync}), 
+    .O_signal     ({O_vid_vsync, O_vid_hsync})
   );
      
   /* Video and video memory*/        
