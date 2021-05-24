@@ -20,15 +20,18 @@ VFILES  			= ver/widget.sv 					   	\
 								ver/components/decoder.sv		\
 								ver/components/mux.sv				\
 								ver/video_control.sv 		   	\
-								ver/video.sv 						   	\
-								ver/video_timing.sv  		   	\
 								ver/video_regdec.sv 		   	\
+								ver/video_address.sv     		\
+								ver/video_timing.sv  		   	\
+								ver/video_oam.sv						\
 								ver/video_color_tab.sv     	\
+								ver/video.sv 						   	\
 								ver/core.sv 						   	\
 								ver/core_irq.sv 				   	\
 								ver/core_alu.sv 				   	\
 								ver/core_decode.sv 			   	\
-								ver/core_isexec.sv 			
+								ver/core_isexec.sv 					\
+								ver/games/super_mario.sv
 
 LAUNCH_DEPS 	= cpp/$(TOP)_main.cpp 			 	\
 								out/lib/verilated.o 			 	\

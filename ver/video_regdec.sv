@@ -1,3 +1,14 @@
+package video_regdec_signals;
+  parameter  R_ppu_ctrl = 0;
+  parameter  R_ppu_mask = 1;
+  parameter  R_ppu_stat = 2;  
+  parameter  R_oam_addr = 3;
+  parameter  R_oam_data = 4;
+  parameter  R_ppu_scrl = 5;
+  parameter  R_ppu_addr = 6;
+  parameter  R_ppu_data = 7;
+endpackage
+
 module video_regdec ( I_clock,
                       I_reset,
   

@@ -1,9 +1,10 @@
-module video_timing (I_clock, I_reset, O_clock, O_rise, O_not_blank, O_hsync, O_vsync, O_hcount, O_vcount, O_not_hblank, O_not_vblank);
+module video_timing (I_clock, I_reset, O_clock, O_clk_rise, O_clk_fall, O_not_blank, O_hsync, O_vsync, O_hcount, O_vcount, O_not_hblank, O_not_vblank);
 
   input   wire        I_clock       ;
   input   wire        I_reset       ;
   output  wire        O_clock       ;
-  output  wire        O_rise        ;
+  output  wire        O_clk_rise    ;
+  output  wire        O_clk_fall    ;
   output  wire        O_not_blank   ;
   output  wire        O_hsync       ;
   output  wire        O_vsync       ;
@@ -41,8 +42,8 @@ module video_timing (I_clock, I_reset, O_clock, O_rise, O_not_blank, O_hsync, O_
     .I_clock         (I_clock), 
     .I_reset         (I_reset),
     .I_signal        (O_clock), 
-    .O_rise          (O_rise),
-    .O_fall          ());
+    .O_rise          (O_clk_rise),
+    .O_fall          (O_clk_fall));
 
   count_up #(.P_width(2)) inst_clk_tick (
     .I_clock         (I_clock),
@@ -58,7 +59,7 @@ module video_timing (I_clock, I_reset, O_clock, O_rise, O_not_blank, O_hsync, O_
     .I_clock         (I_clock),
     .I_reset         (I_reset),
     .I_clear         (1'b0),
-    .I_enable        (O_rise),
+    .I_enable        (O_clk_rise),
     .I_target        (G_ticks_h - 1),
     .O_value         (O_hcount),
     .O_overflow      (W_overflow_h),
@@ -68,7 +69,7 @@ module video_timing (I_clock, I_reset, O_clock, O_rise, O_not_blank, O_hsync, O_
     .I_clock         (I_clock),
     .I_reset         (I_reset),
     .I_clear         (1'b0),
-    .I_enable        (W_overflow_h & O_rise),
+    .I_enable        (W_overflow_h & O_clk_rise),
     .I_target        (G_ticks_v - 1),
     .O_value         (O_vcount),
     .O_overflow      (W_overflow_v),

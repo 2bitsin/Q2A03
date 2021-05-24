@@ -24,7 +24,7 @@ module video (
   O_vid_data);
 
   import video_control_signals::*;
-
+  import video_regdec_signals::*;
 /* I/O ports */
 
   input   wire        I_clock ;
@@ -52,16 +52,6 @@ module video (
   output  bit[7:0]    O_vid_data ;
     
 /* Decode register access */
-
-  parameter       R_ppu_ctrl = 0;
-  parameter       R_ppu_mask = 1;
-  parameter       R_ppu_stat = 2;  
-  parameter       R_oam_addr = 3;
-  parameter       R_oam_data = 4;
-  parameter       R_ppu_scrl = 5;
-  parameter       R_ppu_addr = 6;
-  parameter       R_ppu_data = 7;
-
   wire            W_host_rden_rise;
   wire            W_host_wren_rise;
   wire            W_host_rden_fall;
@@ -97,46 +87,78 @@ module video (
 
 /* Registers */
 
-  wire[7:0]       curr_host_data;
-
+  wire[7:0]       curr_hb_latch;
   wire[7:0]       curr_ppu_ctrl;
   wire[7:0]       curr_ppu_mask;
   wire[7:0]       curr_oam_addr;
 
-  bit[7:0]        next_oam_addr;
+  register #(.P_width (8)) inst_db_latch (I_clock, I_reset, I_host_wren | I_host_rden, I_host_wren ? I_host_data : O_host_data, curr_hb_latch);
+  register #(.P_width (8)) inst_ppu_ctrl (I_clock, I_reset, W_reg_wrrise[R_ppu_ctrl], I_host_data, curr_ppu_ctrl);
+  register #(.P_width (8)) inst_ppu_mask (I_clock, I_reset, W_reg_wrrise[R_ppu_mask], I_host_data, curr_ppu_mask);
 
-  register #(.P_width (8)) inst_host_data   (I_clock, I_reset, W_host_wren_rise, I_host_data, curr_host_data);
-  register #(.P_width (8)) inst_ppu_ctrl    (I_clock, I_reset, W_reg_wrrise[R_ppu_ctrl], curr_host_data, curr_ppu_ctrl);
-  register #(.P_width (8)) inst_ppu_mask    (I_clock, I_reset, W_reg_wrrise[R_ppu_mask], curr_host_data, curr_ppu_mask);
 
-  register #(.P_width (8)) inst_oam_addr    (I_clock, I_reset, O_vid_rise, next_oam_addr, curr_oam_addr);
+  /* Video bus control logic */  
 
-  always_comb
-  begin
-    
-    next_oam_addr = curr_oam_addr;
-    if (W_reg_wrrise[R_oam_addr])
-      next_oam_addr = curr_host_data;
-    else if (W_reg_wren[R_oam_data] | W_reg_rden[R_oam_data])
-      next_oam_addr = curr_oam_addr + 8'd1;    
-  end
+  wire[2:0] W_vid_fine;  
+  wire[7:0] W_ppu_data;
+
+  video_address inst_video_address (
+    .I_clock      (I_clock),
+    .I_reset      (I_reset),
+    .I_wren       (W_reg_wrrise),
+    .I_rden       (W_reg_rdrise),
+    .I_data       (I_host_data),
+    .O_data       (W_ppu_data),
+    .I_control    (W_video_control),
+
+    .O_vid_fine   (W_vid_fine),
+    .O_vid_addr   (O_vid_addr),
+    .O_vid_wren   (O_vid_wren),    
+    .I_vid_data   (I_vid_data),
+    .O_vid_data   (O_vid_data)
+  );
+
+/* OAM memory and registers */
+
+  wire[7:0]       curr_oam_data;
+
+  video_oam inst_video_oam (
+    .I_clock      (I_clock),
+    .I_reset      (I_reset),
+    .I_addr_wren  (W_reg_wrrise[R_oam_addr]), 
+    .I_addr_inc   (W_reg_wrfall[R_oam_data]), 
+    .I_addr_clr   (1'b0),
+    .I_data_wren  (W_reg_wrrise[R_oam_data]), 
+    .I_data       (I_host_data),
+    .O_addr       (), 
+    .O_data       (curr_oam_data));
 
 /* Host bus logic */
 
   mux #(.P_select_width (3), .P_data_width (8)) inst_host_data_mux (
-    .I_select (I_host_addr),
-    .I_data   ('{
-      curr_host_data,                                   // PPUCTRL
-      curr_host_data,                                   // PPUMASK
-      {W_vblank_value, 2'b00, curr_host_data[4:0]},     // PPUSTATUS
-      curr_host_data,                                   // OAMADDR
-      curr_host_data,                                   // OAMDATA
-      curr_host_data,                                   // PPUSCROLL
-      curr_host_data,                                   // PPUADDR
-      curr_host_data}),                                 // PPUDATA    
-    .O_data   (O_host_data)
+    .I_select     (I_host_addr),
+    .I_data       ('{
+                  curr_hb_latch,                                   // PPUCTRL
+                  curr_hb_latch,                                   // PPUMASK
+                  {W_vblank_value, 2'b00, curr_hb_latch[4:0]},     // PPUSTATUS
+                  curr_hb_latch,                                   // OAMADDR
+                  curr_oam_data,                                   // OAMDATA
+                  curr_hb_latch,                                   // PPUSCROLL
+                  curr_hb_latch,                                   // PPUADDR
+                  W_vid_mux_data}),                                  // PPUDATA    
+    .O_data       (O_host_data)
   );
  
+  wire[7:0]       W_vid_mux_data;
+
+  mux #(.P_select_width (1), .P_data_width (8)) inst_vid_data_mux (
+    .I_select     (W_select_color_tab),
+    .I_data       ('{
+                  W_ppu_data, 
+                  W_pal_data}),
+    .O_data       (W_vid_mux_data)
+  );
+
 /* Video timing generator */
 
   wire[15:0]      W_hcount         ;
@@ -144,12 +166,17 @@ module video (
   wire            W_not_vblank     ;
   wire            W_not_hblank     ;  
   wire            W_vblank_value   ;
+  wire            W_clk_fall       ;
+  wire            W_clk_rise       ;
+
+  assign          O_vid_rise       = W_clk_rise;
 
   video_timing inst_timing (
     .I_clock      (I_clock),
     .I_reset      (I_reset),
     .O_clock      (O_vid_clock),
-    .O_rise       (O_vid_rise),
+    .O_clk_rise   (W_clk_rise),
+    .O_clk_fall   (W_clk_fall),
     .O_not_blank  (O_vid_blank),
     .O_hsync      (O_vid_hsync),
     .O_vsync      (O_vid_vsync),
@@ -168,17 +195,13 @@ module video (
     .I_hcount     (W_hcount), 
     .I_not_hblank (W_not_hblank), 
     .I_not_vblank (W_not_vblank),
+    .I_vid_clock  (O_vid_clock),
+    .I_clk_rise   (W_clk_rise),
+    .I_clk_fall   (W_clk_fall),
     .O_control    (W_video_control)
   );
 
   /* Vblank flag / NMI */
-  
-//  delay #(.P_length(4)) inst_clrvbf_delay (
-//    .I_clock      (I_clock), 
-//    .I_reset      (I_reset), 
-//    .I_tick       (O_vid_rise), 
-//    .I_signal     (), 
-//    .O_signal     (W_clear_vblank_flag));
 
   sc_latch inst_vblank_flag (
     .I_clock      (I_clock), 
@@ -193,6 +216,9 @@ module video (
 
   /* Color generator */
 
+  wire            W_select_color_tab  = (O_vid_addr[13:8] == 6'h3F);
+  wire[7:0]       W_pal_data  ;
+
   video_color_tab inst_color_tab(
     .I_clock      (I_clock),
     .I_reset      (I_reset),
@@ -201,10 +227,10 @@ module video (
     .O_green      (O_vid_green),
     .O_blue       (O_vid_blue),
 
-    .I_addr       (5'd0),
-    .I_wren       (1'd0),
-    .I_data       (6'd0),
-    .O_data       (), 
+    .I_addr       (O_vid_addr[4:0]),
+    .I_wren       (O_vid_wren & W_select_color_tab),
+    .I_data       (I_host_data),
+    .O_data       (W_pal_data), 
     .I_index      ({W_vcount[7:6], W_hcount[7:5]})
 
   );

@@ -4,12 +4,15 @@ package video_control_signals;
   parameter video_is_rendering  = 2;
 endpackage
 
-module video_control(I_vcount, I_hcount, I_not_hblank, I_not_vblank, O_control);
+module video_control(I_vcount, I_hcount, I_not_hblank, I_not_vblank, I_vid_clock, I_clk_rise, I_clk_fall, O_control);
 
   import video_control_signals::*;
 
   input   wire[15:0]  I_hcount;
   input   wire[15:0]  I_vcount;
+  input   wire        I_vid_clock;
+  input   wire        I_clk_rise;
+  input   wire        I_clk_fall;
   input   wire        I_not_hblank;
   input   wire        I_not_vblank;
   output  wire[15:0]  O_control;

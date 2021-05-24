@@ -5,8 +5,8 @@ module  video_color_tab (I_clock, I_reset, I_addr, I_wren, I_data, O_data, I_ind
     
   input   wire[4:0]   I_addr  ; 
   input   wire        I_wren  ;   
-  input   wire[5:0]   I_data  ; 
-  output  bit[5:0]    O_data  ; 
+  input   wire[7:0]   I_data  ; 
+  output  wire[7:0]   O_data  ; 
 
   input   wire[4:0]   I_index ;  
 
@@ -43,11 +43,14 @@ module  video_color_tab (I_clock, I_reset, I_addr, I_wren, I_data, O_data, I_ind
   };
   
   bit[5:0] W_temp;
+
+  assign O_data = {2'b0, color_lookup[I_addr]};
+
   always @(posedge I_clock) 
   begin
     if (I_wren)
       color_lookup[I_addr] <= I_data[5:0];    
-    O_data <= color_lookup[I_addr];
+    
     W_temp <= color_lookup[I_index];
   end
   
