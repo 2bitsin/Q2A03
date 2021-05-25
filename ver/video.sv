@@ -110,7 +110,8 @@ module video (
     .I_data       (I_host_data),
     .O_data       (W_ppu_data),
     .I_control    (W_video_control),
-
+    .I_ppuctrl    (curr_ppu_ctrl),
+    .I_ppumask    (curr_ppu_mask),
     .O_vid_fine   (W_vid_fine),
     .O_vid_addr   (O_vid_addr),
     .O_vid_wren   (O_vid_wren),    
@@ -216,7 +217,7 @@ module video (
 
   /* Color generator */
 
-  wire            W_select_color_tab  = (O_vid_addr[13:8] == 6'h3F);
+  wire            W_select_color_tab  = &O_vid_addr[13:8];
   wire[7:0]       W_pal_data  ;
 
   video_color_tab inst_color_tab(
