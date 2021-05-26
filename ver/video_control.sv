@@ -17,6 +17,7 @@ package video_control_signals;
   parameter video_incr_vert_v        = 12;
   parameter video_hori_v_eq_t        = 13;
   parameter video_vert_v_eq_t        = 14;
+  parameter video_left_most_8        = 15 ;
 
 endpackage
 
@@ -74,5 +75,6 @@ module video_control(I_vcount, I_hcount, I_not_hblank, I_not_vblank, I_vid_clock
   assign O_control  [video_incr_vert_v  ] = W_is_rendering & I_clk_rise & W_col_256 ;
   assign O_control  [video_hori_v_eq_t  ] = W_is_rendering & I_clk_rise & W_col_257 ;
   assign O_control  [video_vert_v_eq_t  ] = W_is_prerender & I_clk_rise & W_col_280_to_304 ;
+  assign O_control  [video_left_most_8  ] = I_hcount >= 16'd1 && I_hcount <= 16'd8;
 
 endmodule

@@ -9,6 +9,7 @@ module video_address (I_clock,
                       I_ppuctrl,
                       I_ppumask,
                       O_vid_fine,
+                      O_at_shift,
                       O_vid_addr,
                       O_vid_wren,
                       I_vid_data,
@@ -30,12 +31,11 @@ module video_address (I_clock,
   input  wire[ 7:0]   I_ppumask   ;
 
   output wire[2:0]    O_vid_fine  ;
-  output bit[13:0]    O_vid_addr  ;
+  output wire[1:0]    O_at_shift  ;
+  output wire[13:0]   O_vid_addr  ;
   output wire         O_vid_wren  ;
   input  wire[7:0]    I_vid_data  ;
   output wire[7:0]    O_vid_data  ;
-
-  wire[14:0]          v_incr;
 
   bit[14:0]           v_addr;
   bit[14:0]           t_addr;
@@ -43,14 +43,46 @@ module video_address (I_clock,
   bit                 w_latch;
   bit[7:0]            v_data;
   bit[7:0]            t_tidx;
+  bit[2:0]            v_oaddr;
+  wire[14:0]          v_incr;
 
   assign              O_data      = v_data;
 
   assign              O_vid_fine  = v_fine[2:0];
   assign              O_vid_data  = I_data;
   assign              O_vid_wren  = I_wren[R_ppu_data];
+  assign              O_at_shift  = {v_addr[6], v_addr[1]};
 
   assign              v_incr      = I_ppuctrl[2] ? 15'd32 : 15'd1;
+
+  mux #(.P_select_width (3), .P_data_width (14)) inst_addr_mux (
+    .I_select (v_oaddr),
+    .I_data   ('{
+              {2'h2, v_addr[11:0]},
+              {2'h2, v_addr[11:10], 4'b1111, v_addr[9:7], v_addr[4:2]},
+              {1'h0, I_ppuctrl[4], t_tidx, 1'b0, v_addr[14:12]},
+              {1'h0, I_ppuctrl[4], t_tidx, 1'b0, v_addr[14:12]} + 14'd8,
+              v_addr[13:0],
+              v_addr[13:0],
+              v_addr[13:0],
+              v_addr[13:0]}),
+    .O_data   (O_vid_addr));
+
+  always_comb
+  begin
+    v_oaddr = 3'd4;
+    if (|I_ppumask[4:3])
+    begin
+      if (I_control[video_fetch_nt_byte_addr])
+        v_oaddr = 3'd0; 
+      else if (I_control[video_fetch_at_byte_addr])
+        v_oaddr = 3'd1;
+      else if (I_control[video_fetch_tile_lo_addr])
+        v_oaddr = 3'd2;
+      else if (I_control[video_fetch_tile_hi_addr])
+        v_oaddr = 3'd3;
+    end
+  end
 
   always_ff @(posedge I_clock, negedge I_reset)
   begin
@@ -104,18 +136,8 @@ module video_address (I_clock,
         end
       end
 
-
-      if (I_ppumask[3] || I_ppumask[4])
-      begin  
-             if (I_control[video_fetch_nt_byte_addr])
-          O_vid_addr <= {2'h2, v_addr[11:0]};
-        else if (I_control[video_fetch_at_byte_addr])
-          O_vid_addr <= {2'h2, v_addr[11:10], 4'b1111, v_addr[9:7], v_addr[4:2]};
-        else if (I_control[video_fetch_tile_lo_addr])
-          O_vid_addr <= {1'h0, I_ppuctrl[4], t_tidx, 1'b0, v_addr[14:12]};
-        else if (I_control[video_fetch_tile_hi_addr])
-          O_vid_addr <= {1'h0, I_ppuctrl[4], t_tidx, 1'b0, v_addr[14:12]} + 14'd8;
-      
+      if (|I_ppumask[4:3])
+      begin                
         if (I_control[video_fetch_nt_byte_data])
           t_tidx <= I_vid_data;
         

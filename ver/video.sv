@@ -100,6 +100,7 @@ module video (
   /* Video bus control logic */  
 
   wire[2:0] W_vid_fine;  
+  wire[1:0] W_at_shift;
   wire[7:0] W_ppu_data;
 
   video_address inst_video_address (
@@ -113,10 +114,28 @@ module video (
     .I_ppuctrl    (curr_ppu_ctrl),
     .I_ppumask    (curr_ppu_mask),
     .O_vid_fine   (W_vid_fine),
+    .O_at_shift   (W_at_shift),
     .O_vid_addr   (O_vid_addr),
     .O_vid_wren   (O_vid_wren),    
     .I_vid_data   (I_vid_data),
     .O_vid_data   (O_vid_data)
+  );
+
+/* Background render */
+
+  wire[3:0]       W_bg_color;
+
+  video_background inst_video_background(
+    .I_clock      (I_clock),
+    .I_reset      (I_reset),
+    .I_shr_tile   (W_clk_rise),
+    .I_vid_data   (I_vid_data),
+    .I_control    (W_video_control),
+    .I_ppuctrl    (curr_ppu_ctrl),
+    .I_ppumask    (curr_ppu_mask),
+    .I_at_shift   (W_at_shift),
+    .I_fine       (W_vid_fine),
+    .O_color      (W_bg_color)
   );
 
 /* OAM memory and registers */
@@ -217,6 +236,19 @@ module video (
 
   /* Color generator */
 
+  wire[4:0]       W_final_color;
+
+  video_composit inst_video_composit (
+    .I_clock      (I_clock),
+    .I_reset      (I_reset),
+    .I_dot_clk    (W_clk_rise),
+    .I_control    (W_video_control),
+    .I_ppuctrl    (curr_ppu_ctrl),
+    .I_ppumask    (curr_ppu_mask),
+    .I_bg_color   (W_bg_color),
+    .O_color      (W_final_color)
+  );
+
   wire            W_select_color_tab  = &O_vid_addr[13:8];
   wire[7:0]       W_pal_data  ;
 
@@ -232,7 +264,7 @@ module video (
     .I_wren       (O_vid_wren & W_select_color_tab),
     .I_data       (I_host_data),
     .O_data       (W_pal_data), 
-    .I_index      ({W_vcount[7:6], W_hcount[7:5]})
+    .I_index      (W_final_color)
 
   );
 
