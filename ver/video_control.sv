@@ -16,6 +16,7 @@ package video_control_signals;
   parameter video_incr_hori_v        = 11;
   parameter video_incr_vert_v        = 12;
   parameter video_hori_v_eq_t        = 13;
+  parameter video_vert_v_eq_t        = 14;
 
 endpackage
 
@@ -70,8 +71,8 @@ module video_control(I_vcount, I_hcount, I_not_hblank, I_not_vblank, I_vid_clock
   assign O_control  [video_vblank_clr   ] = W_is_idle_cycle & W_vblank_end ;
   assign O_control  [video_is_rendering ] = W_is_rendering ;
   assign O_control  [video_incr_hori_v  ] = W_is_rendering & W_fetch_phase[0] & ~(W_is_idle_cycle | W_is_sprite_fetch);
-  assign O_control  [video_incr_vert_v  ] = W_is_rendering & W_col_256 ;
-  assign O_control  [video_hori_v_eq_t  ] = W_is_rendering & W_col_257 ;
-  assign O_control  [video_vert_v_eq_t  ] = W_is_prerender & W_col_280_to_304 ;
+  assign O_control  [video_incr_vert_v  ] = W_is_rendering & I_clk_rise & W_col_256 ;
+  assign O_control  [video_hori_v_eq_t  ] = W_is_rendering & I_clk_rise & W_col_257 ;
+  assign O_control  [video_vert_v_eq_t  ] = W_is_prerender & I_clk_rise & W_col_280_to_304 ;
 
 endmodule

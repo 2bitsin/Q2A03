@@ -42,13 +42,14 @@ module video_address (I_clock,
   bit[2:0]            v_fine;
   bit                 w_latch;
   bit[7:0]            v_data;
-
   bit[7:0]            t_tidx;
-  bit[7:0]            t_attr;
+
+  assign              O_data      = v_data;
 
   assign              O_vid_fine  = v_fine[2:0];
   assign              O_vid_data  = I_data;
   assign              O_vid_wren  = I_wren[R_ppu_data];
+
   assign              v_incr      = I_ppuctrl[2] ? 15'd32 : 15'd1;
 
   always_ff @(posedge I_clock, negedge I_reset)
@@ -103,18 +104,52 @@ module video_address (I_clock,
         end
       end
 
-      if (O_control[video_fetch_nt_byte_addr])
-        O_vid_addr <= {4'h2, v_addr[11:0]};
 
-      if (O_control[video_fetch_nt_byte_data])
-        t_tidx <= I_vid_data;
-
-      if (O_control[video_fetch_at_byte_addr])
-        O_vid_addr <= {3'b010, v_addr[11:10], 4'b1111, v_addr[9:7], v_addr[4:2]};
-
-      if (O_control[video_fetch_at_byte_data])
-        t_attr <= I_vid_data;
-
+      if (I_ppumask[3] || I_ppumask[4])
+      begin  
+             if (I_control[video_fetch_nt_byte_addr])
+          O_vid_addr <= {2'h2, v_addr[11:0]};
+        else if (I_control[video_fetch_at_byte_addr])
+          O_vid_addr <= {2'h2, v_addr[11:10], 4'b1111, v_addr[9:7], v_addr[4:2]};
+        else if (I_control[video_fetch_tile_lo_addr])
+          O_vid_addr <= {1'h0, I_ppuctrl[4], t_tidx, 1'b0, v_addr[14:12]};
+        else if (I_control[video_fetch_tile_hi_addr])
+          O_vid_addr <= {1'h0, I_ppuctrl[4], t_tidx, 1'b0, v_addr[14:12]} + 14'd8;
+      
+        if (I_control[video_fetch_nt_byte_data])
+          t_tidx <= I_vid_data;
+        
+        if (I_control[video_incr_hori_v])
+        begin
+          v_addr[4:0] <= v_addr[4:0] + 5'd1;
+          if (&v_addr[4:0])
+            v_addr[10] <= ~v_addr[10];
+        end else 
+        if (I_control[video_incr_vert_v])
+        begin
+          v_addr[14:12] <= v_addr[14:12] + 3'd1;
+          if (&v_addr[14:12])
+          begin
+            v_addr[9:5] <= v_addr[9:5] + 5'd1;
+            if (v_addr[9:5] == 5'd29)
+            begin
+              v_addr[9:5] <= 5'd0;
+              v_addr[11] <= ~v_addr[11];              
+            end
+          end
+        end else
+        if (I_control[video_hori_v_eq_t])
+        begin
+          v_addr[   10] <= t_addr[   10];
+          v_addr[ 4: 0] <= t_addr[ 4: 0];
+        end else
+        if (I_control[video_vert_v_eq_t])
+        begin
+          v_addr[   11] <= t_addr[   11];
+          v_addr[ 9: 5] <= t_addr[ 9: 5];
+          v_addr[14:12] <= t_addr[14:12];
+        end
+      end
     end
   end
 

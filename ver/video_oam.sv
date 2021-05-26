@@ -20,20 +20,22 @@ module video_oam (  I_clock,
   input  wire[7:0]  I_data;
 
   output wire[7:0]  O_addr;
-  output wire[7:0]  O_data;
+  output bit[7:0]  	O_data;
 
   bit[7:0] oam_addr;
   bit[7:0] oam_data [0:255];
-
-  assign O_data = oam_data[oam_addr];
+  
   assign O_addr = oam_addr;
 
   always_ff @(posedge I_clock, negedge I_reset) 
   begin
     if (~I_reset) begin
       oam_addr <= 0;
+			O_data <= 0;
     end else 
     begin
+			O_data <= oam_data[oam_addr];
+		
       if (I_addr_clr)
         oam_addr <= 8'd0;
       else if (I_addr_wren)
@@ -41,7 +43,7 @@ module video_oam (  I_clock,
       else if (I_addr_inc)
         oam_addr <= oam_addr + 8'd1;
       else if (I_data_wren) 
-        oam_data [oam_addr] <= I_data;
+        oam_data [oam_addr] <= I_data;			
     end
   end
 
