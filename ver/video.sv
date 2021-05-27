@@ -23,8 +23,6 @@ module video (
   I_vid_data,
   O_vid_data);
 
-  import video_control_signals::*;
-  import video_regdec_signals::*;
 /* I/O ports */
 
   input   wire        I_clock ;
@@ -46,230 +44,115 @@ module video (
   output  bit[7:0]    O_host_data ;
   output  bit         O_host_nmi  ;
 
-  output  bit[13:0]   O_vid_addr ;  
-  output  bit         O_vid_wren ;
   input   wire[7:0]   I_vid_data ;
   output  bit[7:0]    O_vid_data ;
+  output  bit[13:0]   O_vid_addr ;  
+  output  bit         O_vid_wren ;
     
-/* Decode register access */
-  wire            W_host_rden_rise;
-  wire            W_host_wren_rise;
-  wire            W_host_rden_fall;
-  wire            W_host_wren_fall;
+/* Clock divider logic */
 
-  wire[7:0]       W_reg_select;
-  wire[7:0]       W_reg_wren;
-  wire[7:0]       W_reg_rden;
-  wire[7:0]       W_reg_wrrise;
-  wire[7:0]       W_reg_rdrise;
-  wire[7:0]       W_reg_wrfall;
-  wire[7:0]       W_reg_rdfall;
+  bit[1:0]  clkdiv      ;
+  bit       last_clk    ;  
+  assign    O_vid_clock = ~clkdiv[1];
+  assign    O_vid_rise  = ~last_clk & O_vid_clock;
 
-  video_regdec inst_video_regdec (
-    .I_clock      (I_clock),
-    .I_reset      (I_reset),
-    .I_addr       (I_host_addr[2:0]), 
-    .I_rden       (I_host_rden),
-    .I_wren       (I_host_wren),
-    .O_rden_rise  (W_host_rden_rise),
-    .O_wren_rise  (W_host_wren_rise),
-    .O_rden_fall  (W_host_rden_fall),
-    .O_wren_fall  (W_host_wren_fall),
-    .O_reg        (W_reg_select),
-    .O_reg_wren   (W_reg_wren),
-    .O_reg_rden   (W_reg_rden),
-    .O_reg_wrrise (W_reg_wrrise),
-    .O_reg_rdrise (W_reg_rdrise),
-    .O_reg_wrfall (W_reg_wrfall),
-    .O_reg_rdfall (W_reg_rdfall)
-  );
+  always_ff @(posedge I_clock, 
+              negedge I_reset)
+  begin      
+    if (~I_reset) begin
+      clkdiv    <= 2'd0;
+      last_clk  <= 1'b0;
+    end else begin
+      last_clk  <= O_vid_clock;
+      clkdiv    <= clkdiv + 2'd1;
+    end
+  end
 
+/* Vertical and Horizontal counter logic */
 
-/* Registers */
+  bit[15:0] curr_count_y;
+  bit[15:0] curr_count_x;
+  bit[15:0] next_count_y;
+  bit[15:0] next_count_x;
 
-  wire[7:0]       curr_hb_latch;
-  wire[7:0]       curr_ppu_ctrl;
-  wire[7:0]       curr_ppu_mask;
-  wire[7:0]       curr_oam_addr;
-
-  register #(.P_width (8)) inst_db_latch (I_clock, I_reset, I_host_wren | I_host_rden, I_host_wren ? I_host_data : O_host_data, curr_hb_latch);
-  register #(.P_width (8)) inst_ppu_ctrl (I_clock, I_reset, W_reg_wrrise[R_ppu_ctrl], I_host_data, curr_ppu_ctrl);
-  register #(.P_width (8)) inst_ppu_mask (I_clock, I_reset, W_reg_wrrise[R_ppu_mask], I_host_data, curr_ppu_mask);
-
-
-  /* Video bus control logic */  
-
-  wire[2:0] W_vid_fine;  
-  wire[1:0] W_at_shift;
-  wire[7:0] W_ppu_data;
-
-  video_address inst_video_address (
-    .I_clock      (I_clock),
-    .I_reset      (I_reset),
-    .I_wren       (W_reg_wrrise),
-    .I_rden       (W_reg_rdrise),
-    .I_data       (I_host_data),
-    .O_data       (W_ppu_data),
-    .I_control    (W_video_control),
-    .I_ppuctrl    (curr_ppu_ctrl),
-    .I_ppumask    (curr_ppu_mask),
-    .O_vid_fine   (W_vid_fine),
-    .O_at_shift   (W_at_shift),
-    .O_vid_addr   (O_vid_addr),
-    .O_vid_wren   (O_vid_wren),    
-    .I_vid_data   (I_vid_data),
-    .O_vid_data   (O_vid_data)
-  );
-
-/* Background render */
-
-  wire[3:0]       W_bg_color;
-
-  video_background inst_video_background(
-    .I_clock      (I_clock),
-    .I_reset      (I_reset),
-    .I_shr_tile   (W_clk_rise),
-    .I_vid_data   (I_vid_data),
-    .I_control    (W_video_control),
-    .I_ppuctrl    (curr_ppu_ctrl),
-    .I_ppumask    (curr_ppu_mask),
-    .I_at_shift   (W_at_shift),
-    .I_fine       (W_vid_fine),
-    .O_color      (W_bg_color)
-  );
-
-/* OAM memory and registers */
-
-  wire[7:0]       curr_oam_data;
-
-  video_oam inst_video_oam (
-    .I_clock      (I_clock),
-    .I_reset      (I_reset),
-    .I_addr_wren  (W_reg_wrrise[R_oam_addr]), 
-    .I_addr_inc   (W_reg_wrfall[R_oam_data]), 
-    .I_addr_clr   (1'b0),
-    .I_data_wren  (W_reg_wrrise[R_oam_data]), 
-    .I_data       (I_host_data),
-    .O_addr       (), 
-    .O_data       (curr_oam_data));
-
-/* Host bus logic */
-
-  mux #(.P_select_width (3), .P_data_width (8)) inst_host_data_mux (
-    .I_select     (I_host_addr),
-    .I_data       ('{
-                  curr_hb_latch,                                   // PPUCTRL
-                  curr_hb_latch,                                   // PPUMASK
-                  {W_vblank_value, 2'b00, curr_hb_latch[4:0]},     // PPUSTATUS
-                  curr_hb_latch,                                   // OAMADDR
-                  curr_oam_data,                                   // OAMDATA
-                  curr_hb_latch,                                   // PPUSCROLL
-                  curr_hb_latch,                                   // PPUADDR
-                  W_vid_mux_data}),                                  // PPUDATA    
-    .O_data       (O_host_data)
-  );
+  assign O_vid_hsync = curr_count_x < 16'd275 || curr_count_x > 16'd300;
+  assign O_vid_vsync = curr_count_y < 16'd242 || curr_count_y > 16'd244;
+  assign O_vid_blank = curr_count_x > 16'd000 && curr_count_x < 16'd257 && curr_count_y < 16'd240;
  
-  wire[7:0]       W_vid_mux_data;
+  always_ff @(posedge I_clock) 
+  if (O_vid_rise) begin
+    curr_count_y <= next_count_y;
+    curr_count_x <= next_count_x;
+  end
+  
+  always_comb begin
+    next_count_y = 16'd0;
+    next_count_x = 16'd0;
+    if (I_reset) begin
+      next_count_x = curr_count_x + 16'd1;
+      next_count_y = curr_count_y;
+      if (curr_count_x == 16'd340)
+      begin
+        next_count_y = next_count_y + 16'd1;
+        next_count_x = 16'd0;
+        if (curr_count_y == 16'd261)        
+          next_count_y = 16'd0;        
+      end
+    end    
+  end
 
-  mux #(.P_select_width (1), .P_data_width (8)) inst_vid_data_mux (
-    .I_select     (W_select_color_tab),
-    .I_data       ('{
-                  W_ppu_data, 
-                  W_pal_data}),
-    .O_data       (W_vid_mux_data)
-  );
+/* Palette color lookup logic */  
 
-/* Video timing generator */
+  bit[ 5:0] color_index;
+  bit[23:0] color_table [0:63];
 
-  wire[15:0]      W_hcount         ;
-  wire[15:0]      W_vcount         ;
-  wire            W_not_vblank     ;
-  wire            W_not_hblank     ;  
-  wire            W_vblank_value   ;
-  wire            W_clk_fall       ;
-  wire            W_clk_rise       ;
+  initial color_table = '{
+    24'h666666, 24'h002A88, 24'h1412A7, 24'h3B00A4, 24'h5C007E, 24'h6E0040, 24'h6C0600, 24'h561D00,
+    24'h333500, 24'h0B4800, 24'h005200, 24'h004F08, 24'h00404D, 24'h000000, 24'h000000, 24'h000000,
+    24'hADADAD, 24'h155FD9, 24'h4240FF, 24'h7527FE, 24'hA01ACC, 24'hB71E7B, 24'hB53120, 24'h994E00,
+    24'h6B6D00, 24'h388700, 24'h0C9300, 24'h008F32, 24'h007C8D, 24'h000000, 24'h000000, 24'h000000,    
+    24'hFFFEFF, 24'h64B0FF, 24'h9290FF, 24'hC676FF, 24'hF36AFF, 24'hFE6ECC, 24'hFE8170, 24'hEA9E22,
+    24'hBCBE00, 24'h88D800, 24'h5CE430, 24'h45E082, 24'h48CDDE, 24'h4F4F4F, 24'h000000, 24'h000000,
+    24'hFFFEFF, 24'hC0DFFF, 24'hD3D2FF, 24'hE8C8FF, 24'hFBC2FF, 24'hFEC4EA, 24'hFECCC5, 24'hF7D8A5,
+    24'hE4E594, 24'hCFEF96, 24'hBDF4AB, 24'hB3F3CC, 24'hB5EBF2, 24'hB8B8B8, 24'h000000, 24'h000000
+  };
 
-  assign          O_vid_rise       = W_clk_rise;
+  assign O_vid_red   = color_table[color_index][23:16];
+  assign O_vid_green = color_table[color_index][15: 8];
+  assign O_vid_blue  = color_table[color_index][ 7: 0];
 
-  video_timing inst_timing (
-    .I_clock      (I_clock),
-    .I_reset      (I_reset),
-    .O_clock      (O_vid_clock),
-    .O_clk_rise   (W_clk_rise),
-    .O_clk_fall   (W_clk_fall),
-    .O_not_blank  (O_vid_blank),
-    .O_hsync      (O_vid_hsync),
-    .O_vsync      (O_vid_vsync),
-    .O_hcount     (W_hcount),
-    .O_vcount     (W_vcount),
-    .O_not_hblank (W_not_hblank),
-    .O_not_vblank (W_not_vblank)
-  );
+/* Palette RAM */
 
-  /* Video control signals */
+  bit[4:0] pixel_color;
+  bit[5:0] palette_bits [0:31];
 
-  wire[15:0]      W_video_control;
+  initial palette_bits = '{
+    6'h01, 6'h03, 6'h04, 6'h06, 6'h07, 6'h08, 6'h09, 6'h0c,    
+    6'h11, 6'h13, 6'h14, 6'h16, 6'h17, 6'h18, 6'h19, 6'h1c,    
+    6'h21, 6'h23, 6'h24, 6'h26, 6'h27, 6'h28, 6'h29, 6'h2c,    
+    6'h31, 6'h33, 6'h34, 6'h36, 6'h37, 6'h38, 6'h39, 6'h3c
+  };
 
-  video_control inst_video_control (
-    .I_vcount     (W_vcount), 
-    .I_hcount     (W_hcount), 
-    .I_not_hblank (W_not_hblank), 
-    .I_not_vblank (W_not_vblank),
-    .I_vid_clock  (O_vid_clock),
-    .I_clk_rise   (W_clk_rise),
-    .I_clk_fall   (W_clk_fall),
-    .O_control    (W_video_control)
-  );
+  always_ff @(posedge I_clock) begin
+    color_index <= palette_bits[pixel_color];
+  end
 
-  /* Vblank flag / NMI */
-
-  sc_latch inst_vblank_flag (
-    .I_clock      (I_clock), 
-    .I_reset      (I_reset), 
-    .I_set        (W_video_control[video_vblank_set]), 
-    .I_clear      (W_video_control[video_vblank_clr] | W_reg_rdfall[R_ppu_stat]), 
-    .I_gate       (curr_ppu_ctrl[7]), 
-    .O_value      (W_vblank_value),
-    .O_value_n    (),
-    .O_value_g    (),
-    .O_value_gn   (O_host_nmi));
-
-  /* Color generator */
-
-  wire[4:0]       W_final_color;
-
-  video_composit inst_video_composit (
-    .I_clock      (I_clock),
-    .I_reset      (I_reset),
-    .I_dot_clk    (W_clk_rise),
-    .I_control    (W_video_control),
-    .I_ppuctrl    (curr_ppu_ctrl),
-    .I_ppumask    (curr_ppu_mask),
-    .I_bg_color   (W_bg_color),
-    .O_color      (W_final_color)
-  );
-
-  wire            W_select_color_tab  = &O_vid_addr[13:8];
-  wire[7:0]       W_pal_data  ;
-
-  video_color_tab inst_color_tab(
-    .I_clock      (I_clock),
-    .I_reset      (I_reset),
-
-    .O_red        (O_vid_red),
-    .O_green      (O_vid_green),
-    .O_blue       (O_vid_blue),
-
-    .I_addr       (O_vid_addr[4:0]),
-    .I_wren       (O_vid_wren & W_select_color_tab),
-    .I_data       (I_host_data),
-    .O_data       (W_pal_data), 
-    .I_index      (W_final_color)
-
-  );
-
+  always_comb 
+  begin		
+    pixel_color = {2'b00, curr_count_x[7:5]};
+         if (curr_count_y < 16'd030) pixel_color[4:3] = 2'd0;
+    else if (curr_count_y < 16'd060) pixel_color[4:3] = 2'd1;
+    else if (curr_count_y < 16'd090) pixel_color[4:3] = 2'd2;
+    else if (curr_count_y < 16'd120) pixel_color[4:3] = 2'd3;
+    else if (curr_count_y < 16'd150) pixel_color[4:3] = 2'd0;
+    else if (curr_count_y < 16'd180) pixel_color[4:3] = 2'd1;
+    else if (curr_count_y < 16'd210) pixel_color[4:3] = 2'd2;
+    else if (curr_count_y < 16'd240) pixel_color[4:3] = 2'd3;
+  end
 
 
 endmodule
+
+
 
 

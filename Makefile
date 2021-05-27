@@ -19,14 +19,6 @@ VFILES  			= ver/widget.sv 					   	\
 								ver/components/sc_latch.sv	\
 								ver/components/decoder.sv		\
 								ver/components/mux.sv				\
-								ver/video_control.sv 		   	\
-								ver/video_regdec.sv 		   	\
-								ver/video_address.sv     		\
-								ver/video_background.sv 		\
-								ver/video_composit.sv				\
-								ver/video_timing.sv  		   	\
-								ver/video_oam.sv						\
-								ver/video_color_tab.sv     	\
 								ver/video.sv 						   	\
 								ver/core.sv 						   	\
 								ver/core_irq.sv 				   	\
