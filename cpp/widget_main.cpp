@@ -74,7 +74,7 @@ int main(int argc, char** argv)
   uint8_t buff[240][256][3];
 
   widget.I_sys_reset = 1;
-  const auto Total_ticks = 2*42'884'160;
+  const auto Total_ticks = 2*42'884'160 / 20;
   for(auto i = 0; i < Total_ticks; ++i, ++$time) 
   {
     if (!(i % 4288416))
