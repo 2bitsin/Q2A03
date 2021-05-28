@@ -1,14 +1,14 @@
 
 module video (
-  I_clock, 
-  I_reset, 
-  O_vid_clock, 
+  I_clock,
+  I_reset,
+  O_vid_clock,
   O_vid_rise,
-  O_vid_blank, 
+  O_vid_blank,
   O_vid_hsync,
-  O_vid_vsync, 
-  O_vid_red, 
-  O_vid_green, 
+  O_vid_vsync,
+  O_vid_red,
+  O_vid_green,
   O_vid_blue,
 
   I_host_addr,
@@ -18,12 +18,13 @@ module video (
   O_host_data,
   O_host_nmi,
 
-  O_vid_addr,  
+  O_vid_addr,
   O_vid_wren,
   I_vid_data,
   O_vid_data);
 
-/* I/O ports */
+/* I/O ports 
+ *****************************************/
 
   input   wire        I_clock ;
   input   wire        I_reset ;
@@ -46,19 +47,20 @@ module video (
 
   input   wire[7:0]   I_vid_data ;
   output  bit[7:0]    O_vid_data ;
-  output  bit[13:0]   O_vid_addr ;  
+  output  bit[13:0]   O_vid_addr ;
   output  bit         O_vid_wren ;
-    
-/* Clock divider logic */
+
+/* Clock divider logic 
+ *****************************************/
 
   bit[1:0]  clkdiv      ;
-  bit       last_clk    ;  
+  bit       last_clk    ;
   assign    O_vid_clock = ~clkdiv[1];
   assign    O_vid_rise  = ~last_clk & O_vid_clock;
 
-  always_ff @(posedge I_clock, 
+  always_ff @(posedge I_clock,
               negedge I_reset)
-  begin      
+  begin
     if (~I_reset) begin
       clkdiv    <= 2'd0;
       last_clk  <= 1'b0;
@@ -68,7 +70,8 @@ module video (
     end
   end
 
-/* Vertical and Horizontal counter logic */
+/* Vertical and Horizontal counter logic 
+ *****************************************/
 
   bit[15:0] curr_count_y;
   bit[15:0] curr_count_x;
@@ -78,13 +81,13 @@ module video (
   assign O_vid_hsync = curr_count_x < 16'd275 || curr_count_x > 16'd300;
   assign O_vid_vsync = curr_count_y < 16'd242 || curr_count_y > 16'd244;
   assign O_vid_blank = curr_count_x > 16'd000 && curr_count_x < 16'd257 && curr_count_y < 16'd240;
- 
-  always_ff @(posedge I_clock) 
+
+  always_ff @(posedge I_clock)
   if (O_vid_rise) begin
     curr_count_y <= next_count_y;
     curr_count_x <= next_count_x;
   end
-  
+
   always_comb begin
     next_count_y = 16'd0;
     next_count_x = 16'd0;
@@ -95,13 +98,148 @@ module video (
       begin
         next_count_y = next_count_y + 16'd1;
         next_count_x = 16'd0;
-        if (curr_count_y == 16'd261)        
-          next_count_y = 16'd0;        
+        if (curr_count_y == 16'd261)
+          next_count_y = 16'd0;
       end
-    end    
+    end
   end
 
-/* Palette color lookup logic */  
+/* Register latch behaviour 
+ *****************************************/
+
+  bit[7:0] curr_latch_value;
+  bit[7:0] next_latch_value;
+
+  always_ff @(posedge I_clock)
+    curr_latch_value <= next_latch_value;
+
+  always_comb
+  begin
+    next_latch_value = 8'd0;
+    if (I_reset) begin
+      next_latch_value = I_host_data;
+      if (I_host_wren)
+        next_latch_value = O_host_data;
+    end
+  end
+
+/* Register decode logic 
+ *****************************************/
+
+  bit[7:0]  reg_select;
+  wire      reg_select_control      = reg_select [0];
+  wire      reg_select_mask         = reg_select [1];
+  wire      reg_select_status       = reg_select [2];
+  wire      reg_select_oam_address  = reg_select [3];
+  wire      reg_select_oam_data     = reg_select [4];
+  wire      reg_select_scroll       = reg_select [5];
+  wire      reg_select_ppu_address  = reg_select [6];
+  wire      reg_select_ppu_data     = reg_select [7];
+
+  always_comb   
+  begin
+    reg_select = 8'd0;
+    unique case (I_host_addr[2:0]) 
+    3'd0 : reg_select = 8'b00000001;
+    3'd1 : reg_select = 8'b00000010;
+    3'd2 : reg_select = 8'b00000100;
+    3'd3 : reg_select = 8'b00001000;
+    3'd4 : reg_select = 8'b00010000;
+    3'd5 : reg_select = 8'b00100000;
+    3'd6 : reg_select = 8'b01000000;
+    3'd7 : reg_select = 8'b10000000;
+    endcase
+  end
+
+/* Mask register 
+ **********************************/
+
+  bit       curr_mask_grayscale;
+  bit       curr_mask_show_left_background;
+  bit       curr_mask_show_left_sprites;
+  bit       curr_mask_show_background;
+  bit       curr_mask_show_sprites;
+  bit       curr_mask_emphasize_red;
+  bit       curr_mask_emphasize_green;
+  bit       curr_mask_emphasize_blue;
+
+  wire[7:0] curr_mask =
+            {
+              curr_mask_grayscale,
+              curr_mask_show_left_background,
+              curr_mask_show_left_sprites,
+              curr_mask_show_background,
+              curr_mask_show_sprites,
+              curr_mask_emphasize_red,
+              curr_mask_emphasize_green,
+              curr_mask_emphasize_blue
+            };
+
+  bit[7:0]  next_mask;
+
+  always_ff @(posedge I_clock)
+  begin
+    curr_mask_grayscale             <= next_mask[0];
+    curr_mask_show_left_background  <= next_mask[1];
+    curr_mask_show_left_sprites     <= next_mask[2];
+    curr_mask_show_background       <= next_mask[3];
+    curr_mask_show_sprites          <= next_mask[4];
+    curr_mask_emphasize_red         <= next_mask[5];
+    curr_mask_emphasize_green       <= next_mask[6];
+    curr_mask_emphasize_blue        <= next_mask[7];
+  end
+
+  always_comb
+  begin
+    next_mask = curr_mask;
+    if (I_host_wren & reg_select_mask)
+      next_mask = I_host_data;
+  end
+
+/* Control register 
+ **********************************/
+
+  bit[1:0]  curr_control_nametable;
+  bit       curr_control_increment;
+  bit       curr_control_sprite_8x8_addr;
+  bit       curr_control_background_addr;
+  bit       curr_control_sprite_size;
+  bit       curr_control_master_or_slave;
+  bit       curr_control_enable_nmi;
+
+  wire[7:0] curr_control =
+            {
+              curr_control_nametable,
+              curr_control_increment,
+              curr_control_sprite_8x8_addr,
+              curr_control_background_addr,
+              curr_control_sprite_size,
+              curr_control_master_or_slave,
+              curr_control_enable_nmi
+            };
+
+  bit[7:0]  next_control;
+
+  always_ff @(posedge I_clock)  
+  begin
+    curr_control_nametable          <= next_control[1:0];
+    curr_control_increment          <= next_control[2];
+    curr_control_sprite_8x8_addr    <= next_control[3];
+    curr_control_background_addr    <= next_control[4];
+    curr_control_sprite_size        <= next_control[5];
+    curr_control_master_or_slave    <= next_control[6];
+    curr_control_enable_nmi         <= next_control[7];
+  end
+
+  always_comb
+  begin
+    next_control = curr_control;
+    if (I_host_wren & reg_select_control)
+      next_control = I_host_data;
+  end
+
+/* Palette color lookup logic 
+ ***********************************************/
 
   bit[ 5:0] color_index;
   bit[23:0] color_table [0:63];
@@ -110,7 +248,7 @@ module video (
     24'h666666, 24'h002A88, 24'h1412A7, 24'h3B00A4, 24'h5C007E, 24'h6E0040, 24'h6C0600, 24'h561D00,
     24'h333500, 24'h0B4800, 24'h005200, 24'h004F08, 24'h00404D, 24'h000000, 24'h000000, 24'h000000,
     24'hADADAD, 24'h155FD9, 24'h4240FF, 24'h7527FE, 24'hA01ACC, 24'hB71E7B, 24'hB53120, 24'h994E00,
-    24'h6B6D00, 24'h388700, 24'h0C9300, 24'h008F32, 24'h007C8D, 24'h000000, 24'h000000, 24'h000000,    
+    24'h6B6D00, 24'h388700, 24'h0C9300, 24'h008F32, 24'h007C8D, 24'h000000, 24'h000000, 24'h000000,
     24'hFFFEFF, 24'h64B0FF, 24'h9290FF, 24'hC676FF, 24'hF36AFF, 24'hFE6ECC, 24'hFE8170, 24'hEA9E22,
     24'hBCBE00, 24'h88D800, 24'h5CE430, 24'h45E082, 24'h48CDDE, 24'h4F4F4F, 24'h000000, 24'h000000,
     24'hFFFEFF, 24'hC0DFFF, 24'hD3D2FF, 24'hE8C8FF, 24'hFBC2FF, 24'hFEC4EA, 24'hFECCC5, 24'hF7D8A5,
@@ -121,35 +259,140 @@ module video (
   assign O_vid_green = color_table[color_index][15: 8];
   assign O_vid_blue  = color_table[color_index][ 7: 0];
 
-/* Palette RAM */
+/* Palette RAM 
+ *****************************************/
 
-  bit[4:0] pixel_color;
+  bit[4:0] final_color;
   bit[5:0] palette_bits [0:31];
 
   initial palette_bits = '{
-    6'h01, 6'h03, 6'h04, 6'h06, 6'h07, 6'h08, 6'h09, 6'h0c,    
-    6'h11, 6'h13, 6'h14, 6'h16, 6'h17, 6'h18, 6'h19, 6'h1c,    
-    6'h21, 6'h23, 6'h24, 6'h26, 6'h27, 6'h28, 6'h29, 6'h2c,    
-    6'h31, 6'h33, 6'h34, 6'h36, 6'h37, 6'h38, 6'h39, 6'h3c
+    6'h01, 6'h03, 6'h04, 6'h06, 
+    6'h07, 6'h08, 6'h09, 6'h0c,
+    6'h11, 6'h13, 6'h14, 6'h16, 
+    6'h17, 6'h18, 6'h19, 6'h1c,
+    6'h21, 6'h23, 6'h24, 6'h26, 
+    6'h27, 6'h28, 6'h29, 6'h2c,
+    6'h31, 6'h33, 6'h34, 6'h36, 
+    6'h37, 6'h38, 6'h39, 6'h3c
   };
 
   always_ff @(posedge I_clock) begin
-    color_index <= palette_bits[pixel_color];
+    color_index <= palette_bits[final_color];
+  end
+
+
+/* Background and sprite test pattern 
+ *****************************************/
+
+  bit[3:0] background_color;
+
+  always_comb
+  begin
+    background_color = {2'b00, curr_count_x[7:6]};
+         if (curr_count_y < 16'd030) background_color[3:2] = 2'd0;
+    else if (curr_count_y < 16'd060) background_color[3:2] = 2'd1;
+    else if (curr_count_y < 16'd090) background_color[3:2] = 2'd2;
+    else if (curr_count_y < 16'd120) background_color[3:2] = 2'd3;
+    else if (curr_count_y < 16'd150) background_color[3:2] = 2'd0;
+    else if (curr_count_y < 16'd180) background_color[3:2] = 2'd1;
+    else if (curr_count_y < 16'd210) background_color[3:2] = 2'd2;
+    else if (curr_count_y < 16'd240) background_color[3:2] = 2'd3;
+  end
+
+  bit[7:0] curr_sprite_sx [0:7] ;
+  bit[7:0] curr_sprite_sy [0:7] ;
+  bit[7:0] curr_sprite_dx [0:7] ;
+  bit[7:0] curr_sprite_dy [0:7] ;
+  bit[3:0] curr_sprite_id [0:7] ;
+
+  bit[7:0] next_sprite_sx [0:7] ;
+  bit[7:0] next_sprite_sy [0:7] ;
+  bit[7:0] next_sprite_dx [0:7] ;
+  bit[7:0] next_sprite_dy [0:7] ;
+
+  bit      last_vsync;
+  bit[3:0] color_sprite   [0:7];
+
+  /* verilator lint_off WIDTH */
+  initial curr_sprite_sx = '{  8'd71, 8'd50, 8'd80, 8'd60, 8'd25, 8'd100, 8'd12, 8'd4  };
+  initial curr_sprite_sy = '{  8'd48, 8'd31, 8'd41, 8'd27, 8'd57, 8'd55,  8'd32, 8'd22 };
+  initial curr_sprite_dx = '{ +8'd1, -8'd1, +8'd1, -8'd1, +8'd1, +8'd1,  -8'd1, +8'd1  };
+  initial curr_sprite_dy = '{ +8'd1, -8'd1, -8'd1, -8'd1, -8'd1, +8'd1,  -8'd1, +8'd1  };
+  initial curr_sprite_id = '{  8'd3,  8'd4,  8'd9,  8'd14, 8'd15, 8'd7,   8'd6,  8'd2  };
+  /* verilator lint_on WIDTH */
+  always_ff @(posedge I_clock)
+  begin
+    last_vsync <= O_vid_vsync;
+    for (integer i = 0; i < 8; ++i)
+    begin
+      curr_sprite_sx[i] <= next_sprite_sx[i];
+      curr_sprite_sy[i] <= next_sprite_sy[i];
+      curr_sprite_dx[i] <= next_sprite_dx[i];
+      curr_sprite_dy[i] <= next_sprite_dy[i];
+    end
   end
 
   always_comb 
-  begin		
-    pixel_color = {2'b00, curr_count_x[7:5]};
-         if (curr_count_y < 16'd030) pixel_color[4:3] = 2'd0;
-    else if (curr_count_y < 16'd060) pixel_color[4:3] = 2'd1;
-    else if (curr_count_y < 16'd090) pixel_color[4:3] = 2'd2;
-    else if (curr_count_y < 16'd120) pixel_color[4:3] = 2'd3;
-    else if (curr_count_y < 16'd150) pixel_color[4:3] = 2'd0;
-    else if (curr_count_y < 16'd180) pixel_color[4:3] = 2'd1;
-    else if (curr_count_y < 16'd210) pixel_color[4:3] = 2'd2;
-    else if (curr_count_y < 16'd240) pixel_color[4:3] = 2'd3;
-  end
+  begin
+    for (integer i = 0; i < 8; ++i) 
+    begin
+      next_sprite_sx[i] = 0;
+      next_sprite_sy[i] = 0;
+      next_sprite_dx[i] = 0;
+      next_sprite_dy[i] = 0;
 
+      color_sprite[i] = 0;
+    end
+
+    if (I_reset)
+    begin
+      for (integer i = 0; i < 8; ++i)
+      begin
+        next_sprite_sx[i] = curr_sprite_sx[i];
+        next_sprite_sy[i] = curr_sprite_sy[i];
+        next_sprite_dx[i] = curr_sprite_dx[i];
+        next_sprite_dy[i] = curr_sprite_dy[i];        
+      end
+
+      if (last_vsync & ~O_vid_vsync)
+      begin
+        for (integer i = 0; i < 8; ++i)
+        begin
+          next_sprite_sx[i] = curr_sprite_sx[i] + curr_sprite_dx[i];
+          next_sprite_sy[i] = curr_sprite_sy[i] + curr_sprite_dy[i];
+
+          if (curr_sprite_sx[i] < 8'd1 || curr_sprite_sx[i] >= 8'd248)
+            next_sprite_dx[i] = -curr_sprite_dx[i];
+
+          if (curr_sprite_sy[i] < 8'd1 || curr_sprite_sy[i] >= 8'd232)
+            next_sprite_dy[i] = -curr_sprite_dy[i];
+
+          if (curr_count_x >= {8'd0, curr_sprite_sx[i]} && curr_count_x <  {8'd0, curr_sprite_sx[i]} + 16'd8 &&  
+              curr_count_y >= {8'd0, curr_sprite_sy[i]} && curr_count_y <  {8'd0, curr_sprite_sy[i]} + 16'd8)            
+            color_sprite[i] = curr_sprite_id[i];
+        end
+      end
+    end
+  end
+  
+
+
+/* Color Mux logic
+ *****************************************/
+
+  always_comb
+  begin
+    final_color = 5'd0;
+
+    if (background_color[1:0] != 2'd0)
+      final_color = {1'b0, background_color};
+
+    for (integer i = 0; i < 8; ++i)
+    begin
+      if (color_sprite[i][1:0] != 2'd0)
+        final_color = {1'b1, color_sprite [i]};
+    end
+  end  
 
 endmodule
 
