@@ -241,10 +241,71 @@ module video (
 /* Status register and NMI logic
  ***********************************************/
 
-  bit curr_vblank_bit;
-  bit next_vblank_bit;
+  bit curr_vertical_blank_bit  ;
+  bit curr_sprite_zero_hit_bit ;
+  bit curr_sprite_overflow_bit ;
 
-  assign O_host_nmi = ~(curr_vblank_bit & curr_control_enable_nmi);
+  bit next_vertical_blank_bit  ;
+  bit next_sprite_zero_hit_bit ;
+  bit next_sprite_overflow_bit ;
+
+  assign O_host_nmi = ~(curr_control_enable_nmi & curr_vertical_blank_bit);
+
+  always_ff @(posedge I_clock) 
+  begin
+        
+    if (O_vid_rise)
+    begin
+      curr_vertical_blank_bit  <= next_vertical_blank_bit  ;    
+      curr_sprite_zero_hit_bit <= next_sprite_zero_hit_bit ;
+      curr_sprite_overflow_bit <= next_sprite_overflow_bit ;
+    end
+
+    if (I_host_rden & reg_select_status)
+      curr_vertical_blank_bit <= 1'b0;
+  end
+
+  always_comb 
+  begin
+    next_vertical_blank_bit  = curr_vertical_blank_bit  ;
+    next_sprite_zero_hit_bit = curr_sprite_zero_hit_bit ;
+    next_sprite_overflow_bit = curr_sprite_overflow_bit ;
+
+    if (curr_count_x == 16'd0)
+    begin
+      if (curr_count_y == 16'd241)
+        next_vertical_blank_bit = 1'b1;
+
+      if (curr_count_y == 16'd261) 
+      begin
+        next_sprite_overflow_bit = 1'b0;
+        next_sprite_zero_hit_bit = 1'b0;
+        next_vertical_blank_bit  = 1'b0;
+      end
+    end
+  end
+
+/* Register read logic 
+ ***********************************************/
+
+  always_comb 
+  begin
+    O_host_data = curr_latch_value;
+    unique case (I_host_addr[2:0])  
+      // PPU STATUS
+      3'd2 : O_host_data[7:5] = { 
+              curr_vertical_blank_bit, 
+              curr_sprite_zero_hit_bit, 
+              curr_sprite_overflow_bit
+            };
+      // OAM DATA
+      3'd4 : ;
+
+      // PPU DATA
+      3'd7 : ;
+      default:;
+    endcase
+  end
 
 
 /* Palette color lookup logic 
@@ -387,7 +448,7 @@ module video (
 /* Color Mux logic
  *****************************************/
 
-  wire left_most_column   = curr_count_x < 8'd9;
+  wire left_most_column   = curr_count_x < 16'd9;
   wire visible_background = curr_mask_show_background & (curr_mask_show_left_background | ~left_most_column) ;
   wire visible_sprites    = curr_mask_show_sprites    & (curr_mask_show_left_sprites    | ~left_most_column) ;
  
