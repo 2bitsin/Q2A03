@@ -15,18 +15,16 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   output  wire        O_phy2;
 
   core_isexec inst_exec (
-    I_clock, 
-    I_reset, 
-    I_irq, 
-    I_nmi, 
-    O_addr, 
-    O_wr_data, 
-    I_rd_data, 
-    O_rdwr, 
-    I_ready, 
-    O_sync, 
-    O_phy2);
-
-  //core_dma inst_dma ();
+                      I_clock, 
+                      I_reset, 
+                      I_irq, 
+                      I_nmi, 
+                      O_addr, 
+                      O_wr_data, 
+                      I_rd_data, 
+                      O_rdwr, 
+                      I_ready, 
+                      O_sync, 
+                      O_phy2);
 
 endmodule
