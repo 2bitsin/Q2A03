@@ -307,7 +307,7 @@ module video (
 
   always_ff @(posedge I_clock) begin
     palette_data <= palette_bits[palette_addr];
-    if (reg_select_vid_data & I_host_wren_rise & is_palette_access)
+    if (reg_select_vid_data & I_host_wren_rise & vi_palette_access)
       palette_bits[palette_addr] <= I_host_data[5:0];
   end
 
@@ -383,7 +383,7 @@ module video (
       // PPU DATA
       3'd7 : begin
         O_host_data[5:0] = palette_data; 
-        if (~is_palette_access) 
+        if (~vi_palette_access) 
           O_host_data = curr_video_data;
       end
 
@@ -422,10 +422,10 @@ module video (
   bit         curr_video_addr_w ;
 
   wire[14:0]  vi_addr_increment = curr_control_increment ? 15'd32 : 15'd1;
-  wire        is_palette_access = curr_video_addr_v[13:8] == 6'b111111;
+  wire        vi_palette_access = curr_video_addr_v[13:8] == 6'b111111;
   
   assign      O_vid_data        = I_host_data;
-  assign      O_vid_wren        = reg_select_vid_data & I_host_wren & ~is_palette_access;
+  assign      O_vid_wren        = reg_select_vid_data & I_host_wren & ~vi_palette_access;
 
 
   always_ff @(posedge I_clock)
