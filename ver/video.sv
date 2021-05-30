@@ -23,7 +23,7 @@ module video (
   I_vid_data,
   O_vid_data);
 
-/* I/O ports 
+/* I/O ports
  *****************************************/
 
   input   wire        I_clock ;
@@ -50,7 +50,7 @@ module video (
   output  bit[13:0]   O_vid_addr ;
   output  bit         O_vid_wren ;
 
-/* Clock divider logic 
+/* Clock divider logic
  *****************************************/
 
   bit[1:0]  clkdiv      ;
@@ -72,8 +72,8 @@ module video (
 
 /* Host bus edge logic
  *****************************************/
-  
-  bit   last_host_rden;  
+
+  bit   last_host_rden;
   bit   last_host_wren;
 
   wire  I_host_rden_rise = ~last_host_rden & I_host_rden;
@@ -85,15 +85,15 @@ module video (
   always_ff @(posedge I_clock, negedge I_reset)
   begin
     if (~I_reset) begin
-      last_host_rden <= 1'b0;  
+      last_host_rden <= 1'b0;
       last_host_wren <= 1'b0;
     end else begin
       last_host_rden <= I_host_rden;
       last_host_wren <= I_host_wren;
     end
   end
-  
-/* Vertical and Horizontal counter logic 
+
+/* Vertical and Horizontal counter logic
  *****************************************/
 
   bit[15:0] curr_count_y;
@@ -127,7 +127,7 @@ module video (
     end
   end
 
-/* Register latch behaviour 
+/* Register latch behaviour
  *****************************************/
 
   bit[7:0] curr_latch_value;
@@ -146,7 +146,7 @@ module video (
     end
   end
 
-/* Register decode logic 
+/* Register decode logic
  *****************************************/
 
   bit[7:0]  reg_select;
@@ -159,10 +159,10 @@ module video (
   wire      reg_select_vid_addr = reg_select [6];
   wire      reg_select_vid_data = reg_select [7];
 
-  always_comb   
+  always_comb
   begin
     reg_select = 8'd0;
-    unique case (I_host_addr[2:0]) 
+    unique case (I_host_addr[2:0])
     3'd0 : reg_select = 8'b00000001;
     3'd1 : reg_select = 8'b00000010;
     3'd2 : reg_select = 8'b00000100;
@@ -174,7 +174,7 @@ module video (
     endcase
   end
 
-/* Mask register 
+/* Mask register
  **********************************/
 
   bit       curr_mask_grayscale;
@@ -219,7 +219,7 @@ module video (
       next_mask = I_host_data;
   end
 
-/* Control register 
+/* Control register
  **********************************/
 
   bit[1:0]  curr_control_nametable;
@@ -243,7 +243,7 @@ module video (
 
   bit[7:0]  next_control;
 
-  always_ff @(posedge I_clock)  
+  always_ff @(posedge I_clock)
   begin
     curr_control_nametable       <= next_control[1:0];
     curr_control_increment       <= next_control[2];
@@ -261,7 +261,7 @@ module video (
       next_control = I_host_data;
   end
 
-/* Palette color lookup logic 
+/* Palette color lookup logic
  ***********************************************/
 
   bit[ 5:0] color_index;
@@ -282,7 +282,7 @@ module video (
   assign O_vid_green = color_table[color_index][15: 8];
   assign O_vid_blue  = color_table[color_index][ 7: 0];
 
-/* Palette RAM 
+/* Palette RAM
  *****************************************/
 
   bit[4:0] color_final;
@@ -291,13 +291,13 @@ module video (
   bit[5:0] palette_bits [0:31];
 
   initial palette_bits = '{
-    6'h01, 6'h03, 6'h04, 6'h06, 
+    6'h01, 6'h03, 6'h04, 6'h06,
     6'h07, 6'h08, 6'h09, 6'h0c,
-    6'h11, 6'h13, 6'h14, 6'h16, 
+    6'h11, 6'h13, 6'h14, 6'h16,
     6'h17, 6'h18, 6'h19, 6'h1c,
-    6'h21, 6'h23, 6'h24, 6'h26, 
+    6'h21, 6'h23, 6'h24, 6'h26,
     6'h27, 6'h28, 6'h29, 6'h2c,
-    6'h31, 6'h33, 6'h34, 6'h36, 
+    6'h31, 6'h33, 6'h34, 6'h36,
     6'h37, 6'h38, 6'h39, 6'h3c
   };
 
@@ -314,7 +314,7 @@ module video (
   always_comb begin
     palette_addr = curr_video_addr_v[4:0];
     if (~|curr_video_addr_v[1:0])
-      palette_addr[4] = 1'b0;    
+      palette_addr[4] = 1'b0;
   end
 
 /* Status register and NMI logic
@@ -330,12 +330,12 @@ module video (
 
   assign O_host_nmi = ~(curr_control_enable_nmi & curr_vertical_blank_bit);
 
-  always_ff @(posedge I_clock) 
+  always_ff @(posedge I_clock)
   begin
-        
+
     if (O_vid_rise)
     begin
-      curr_vertical_blank_bit  <= next_vertical_blank_bit  ;    
+      curr_vertical_blank_bit  <= next_vertical_blank_bit  ;
       curr_sprite_zero_hit_bit <= next_sprite_zero_hit_bit ;
       curr_sprite_overflow_bit <= next_sprite_overflow_bit ;
     end
@@ -344,7 +344,7 @@ module video (
       curr_vertical_blank_bit <= 1'b0;
   end
 
-  always_comb 
+  always_comb
   begin
     next_vertical_blank_bit  = curr_vertical_blank_bit  ;
     next_sprite_zero_hit_bit = curr_sprite_zero_hit_bit ;
@@ -355,7 +355,7 @@ module video (
       if (curr_count_y == 16'd241)
         next_vertical_blank_bit = 1'b1;
 
-      if (curr_count_y == 16'd261) 
+      if (curr_count_y == 16'd261)
       begin
         next_sprite_overflow_bit = 1'b0;
         next_sprite_zero_hit_bit = 1'b0;
@@ -364,17 +364,17 @@ module video (
     end
   end
 
-/* Register read logic 
+/* Register read logic
  ***********************************************/
 
-  always_comb 
+  always_comb
   begin
     O_host_data = curr_latch_value;
-    unique case (I_host_addr[2:0])  
+    unique case (I_host_addr[2:0])
       // PPU STATUS
-      3'd2 : O_host_data[7:5] = { 
-              curr_vertical_blank_bit, 
-              curr_sprite_zero_hit_bit, 
+      3'd2 : O_host_data[7:5] = {
+              curr_vertical_blank_bit,
+              curr_sprite_zero_hit_bit,
               curr_sprite_overflow_bit
             };
       // OAM DATA
@@ -382,8 +382,8 @@ module video (
 
       // PPU DATA
       3'd7 : begin
-        O_host_data[5:0] = palette_data; 
-        if (~vi_palette_access) 
+        O_host_data[5:0] = palette_data;
+        if (~vi_palette_access)
           O_host_data = curr_video_data;
       end
 
@@ -394,12 +394,12 @@ module video (
 /* Video address and scroll register
  ***********************************************/
 
-  typedef struct packed 
+  typedef struct packed
   {
     bit[4:0] x_coarse;
     bit[4:0] y_coarse;
 
-    struct packed 
+    struct packed
     {
       bit x;
       bit y;
@@ -409,23 +409,48 @@ module video (
 
   } vi_addr_t;
 
-  vi_addr_t   curr_video_addr_v ;
-  vi_addr_t   curr_video_addr_t ;
-  bit[2:0]    curr_video_fine_x ;
-  bit[7:0]    curr_video_data   ;
-  
-  vi_addr_t   next_video_addr_v ;
-  vi_addr_t   next_video_addr_t ;
-  bit[2:0]    next_video_fine_x ;
-  bit[7:0]    next_video_data   ;
+  vi_addr_t       curr_video_addr_v   ;
+  vi_addr_t       curr_video_addr_t   ;
+  bit[2:0]        curr_video_fine_x   ;
+  bit[7:0]        curr_video_data     ;
+  bit[7:0]        curr_tile_index     ;
+  bit[1:0]        curr_tile_attrib    ;
+  bit[7:0]        curr_tile_bits_lo   ;
+  bit[7:0]        curr_tile_bits_hi   ;
+  bit[15:0][3:0]  curr_tile_shifter   ;
 
-  bit         curr_video_addr_w ;
+  vi_addr_t       next_video_addr_v   ;
+  vi_addr_t       next_video_addr_t   ;
+  bit[2:0]        next_video_fine_x   ;
+  bit[7:0]        next_video_data     ;
+  bit[7:0]        next_tile_index     ;
+  bit[1:0]        next_tile_attrib    ;
+  bit[7:0]        next_tile_bits_lo   ;
+  bit[7:0]        next_tile_bits_hi   ;
+  bit[15:0][3:0]  next_tile_shifter   ;
 
-  wire[14:0]  vi_addr_increment = curr_control_increment ? 15'd32 : 15'd1;
-  wire        vi_palette_access = curr_video_addr_v[13:8] == 6'b111111;
-  
-  assign      O_vid_data        = I_host_data;
-  assign      O_vid_wren        = reg_select_vid_data & I_host_wren & ~vi_palette_access;
+  bit             curr_video_addr_w   ;
+
+  bit[3:0]        vi_tile_line        ;
+  bit[7:0]        vi_tile_index       ;
+  bit             vi_tile_base        ;
+
+  wire[14:0]      vi_addr_increment   = curr_control_increment ? 15'd32 : 15'd1;
+  wire            vi_palette_access   = curr_video_addr_v[13:8] == 6'b111111;
+  wire            vi_render_enabled   = curr_mask_show_sprites
+                                      | curr_mask_show_background;
+  wire            vi_prederder_line   = curr_count_y == 16'd261;
+  wire            vi_rendering_line   = curr_count_y <= 16'd239;
+
+  wire            vi_active_line      = (vi_prederder_line | vi_rendering_line) ;
+  wire            vi_active_sprites_x = (curr_count_x > 16'd256) & (curr_count_x < 16'd321);
+  wire            vi_active_backgnd_x = (curr_count_x > 16'd000) & (curr_count_x < 16'd337) & ~vi_active_sprites_x;
+  wire            vi_active_sprites   = vi_active_line & vi_active_sprites_x;
+  wire            vi_active_backgnd   = vi_active_line & vi_active_backgnd_x;
+
+  assign          O_vid_data          = I_host_data;
+  assign          O_vid_wren          = reg_select_vid_data & I_host_wren & ~vi_palette_access;
+  assign          color_background    = curr_tile_shifter[curr_video_fine_x];
 
 
   always_ff @(posedge I_clock)
@@ -437,6 +462,10 @@ module video (
       curr_video_addr_t <= next_video_addr_t;
       curr_video_fine_x <= next_video_fine_x;
       curr_video_data   <= next_video_data;
+      curr_tile_index   <= next_tile_index;
+      curr_tile_bits_lo <= next_tile_bits_lo;
+      curr_tile_bits_hi <= next_tile_bits_hi;
+      curr_tile_shifter <= next_tile_shifter;
     end
 
   /* Clear write latch, on PPUSTATUS read */
@@ -448,7 +477,7 @@ module video (
       curr_video_addr_w <= ~curr_video_addr_w;
 
   /* Write PPUADDR */
-    if (reg_select_vid_addr & I_host_wren_rise)    
+    if (reg_select_vid_addr & I_host_wren_rise)
     begin
       if (curr_video_addr_w) begin
       /* When write latch is 1, write LSB of PPUADDR and set v = t */
@@ -473,140 +502,142 @@ module video (
         curr_video_addr_t.y_coarse <= I_host_data[7:3];
         curr_video_addr_t.y_fine   <= I_host_data[2:0];
       end else begin
-      /* When write latch is 0, write scroll x */  
+      /* When write latch is 0, write scroll x */
         curr_video_addr_t.x_coarse <= I_host_data[7:3];
-        curr_video_fine_x          <= I_host_data[2:0];        
+        curr_video_fine_x          <= I_host_data[2:0];
       end
     end
 
   /* Incrment video addr on write to or read from */
     if (reg_select_vid_data & (I_host_wren_rise | I_host_rden_rise))
       curr_video_addr_v <= curr_video_addr_v + vi_addr_increment;
+
+
   end
-
-  always_comb 
-  begin    
-    next_video_addr_t = 15'd0;
-    next_video_addr_v = 15'd0;
-    next_video_fine_x = 3'd0;
-    next_video_data = 8'd0;
-
-    O_vid_addr = curr_video_addr_v[13:0];
-
-    if (I_reset)
-    begin
-
-      next_video_addr_t = curr_video_addr_t;  
-      next_video_addr_v = curr_video_addr_v;
-      next_video_fine_x = curr_video_fine_x;      
-      next_video_data   = curr_video_data;      
-
-      if (reg_select_vid_data & I_host_rden) 
-        next_video_data = I_vid_data;      
-    end
-  end
-
-/* Background and sprite test pattern 
- **************************************************************************/
-
-  bit[3:0] color_background;
 
   always_comb
   begin
-    color_background = {curr_count_x[7:4] ^ curr_count_y[7:4]};
-  end
+  /* Reset render state */
+    next_video_addr_t = 15'd0;
+    next_video_addr_v = 15'd0;
+    next_video_fine_x = 3'd0;
+    next_video_data   = 8'd0;
+    next_tile_index   = 8'd0;
+    next_tile_attrib  = 2'd0;
+    next_tile_bits_lo = 8'd0;
+    next_tile_bits_hi = 8'd0;
+    next_tile_shifter = 64'd0;
 
-  bit[7:0] curr_sprite_sx [0:7] ;
-  bit[7:0] curr_sprite_sy [0:7] ;
-  bit[7:0] curr_sprite_dx [0:7] ;
-  bit[7:0] curr_sprite_dy [0:7] ;
-  bit[3:0] curr_sprite_id [0:7] ;
-
-  bit[7:0] next_sprite_sx [0:7] ;
-  bit[7:0] next_sprite_sy [0:7] ;
-  bit[7:0] next_sprite_dx [0:7] ;
-  bit[7:0] next_sprite_dy [0:7] ;
-
-  bit      last_vsync;
-  bit[3:0] color_sprite [0:7]   ;
-  bit[7:0] sprite_priority      ;
-
-  /* verilator lint_off WIDTH */
-  initial curr_sprite_sx = '{  8'd71, 8'd50, 8'd80, 8'd60, 8'd25, 8'd100, 8'd12, 8'd33 };
-  initial curr_sprite_sy = '{  8'd48, 8'd31, 8'd41, 8'd27, 8'd57, 8'd55,  8'd32, 8'd22 };
-  initial curr_sprite_dx = '{ +8'd1, -8'd1, +8'd1, -8'd1, +8'd1, +8'd1,  -8'd1, +8'd1  };
-  initial curr_sprite_dy = '{ +8'd1, -8'd1, -8'd1, -8'd1, -8'd1, +8'd1,  -8'd1, +8'd1  };
-  initial curr_sprite_id = '{  8'd1,  8'd3,  8'd5,  8'd7,  8'd9,  8'd11,  8'd13, 8'd15 };
-  /* verilator lint_on WIDTH */
-  always_ff @(posedge I_clock)
-  begin
-    last_vsync <= O_vid_vsync;
-    for (integer i = 0; i < 8; ++i)
-    begin
-      curr_sprite_sx[i] <= next_sprite_sx[i];
-      curr_sprite_sy[i] <= next_sprite_sy[i];
-      curr_sprite_dx[i] <= next_sprite_dx[i];
-      curr_sprite_dy[i] <= next_sprite_dy[i];
-    end
-  end
-
-  always_comb 
-  begin
-    for (integer i = 0; i < 8; ++i) 
-    begin
-      next_sprite_sx[i] = curr_sprite_sx[i];
-      next_sprite_sy[i] = curr_sprite_sy[i];
-      next_sprite_dx[i] = curr_sprite_dx[i];
-      next_sprite_dy[i] = curr_sprite_dy[i];        
-
-      color_sprite[i]   = 0;
-    end
+    /* Default the video address */
+    O_vid_addr        = curr_video_addr_v[13:0];
 
     if (I_reset)
     begin
+    /* Default register setup */
+      next_video_addr_t = curr_video_addr_t;
+      next_video_addr_v = curr_video_addr_v;
+      next_video_fine_x = curr_video_fine_x;
+      next_video_data   = curr_video_data;
 
-      for (integer i = 0; i < 8; ++i)
+    /* Current tile index and attribute*/
+      next_tile_index   = curr_tile_index;
+      next_tile_attrib  = curr_tile_attrib;
+      next_tile_bits_lo = curr_tile_bits_lo;
+      next_tile_bits_hi = curr_tile_bits_hi;
+      next_tile_shifter = curr_tile_shifter;
+
+    /* Read PPUDATA register into pipeline*/
+      if (reg_select_vid_data & I_host_rden)
+        next_video_data = I_vid_data;
+
+    /* Setup tile fetch for background */
+      vi_tile_index = curr_tile_index;
+      vi_tile_base  = curr_control_background_addr;
+      vi_tile_line  = {1'b0, curr_video_addr_v.y_fine};
+
+    /* Setup tile fetch for sprites */
+      if (vi_active_sprites)
       begin
+        vi_tile_index = 8'd0; // Fix later
+        vi_tile_line = 4'd0;  // Fix later
 
-        if ((curr_count_x >= {8'd0, curr_sprite_sx[i] + 8'd0}) & 
-            (curr_count_x <  {8'd0, curr_sprite_sx[i] + 8'd8}) &  
-            (curr_count_y >= {8'd0, curr_sprite_sy[i] + 8'd0}) & 
-            (curr_count_y <  {8'd0, curr_sprite_sy[i] + 8'd8}))
-        begin                     
-          color_sprite[i] = curr_sprite_id[i];
-        end      
-
-        if (curr_sprite_sx[i] < 8'd1)
-          next_sprite_dx[i] = +8'd1;
-        if (curr_sprite_sx[i] >= 8'd248)
-          next_sprite_dx[i] = -8'd1;
-
-        if (curr_sprite_sy[i] < 8'd1)
-          next_sprite_dy[i] = +8'd1;
-        if (curr_sprite_sy[i] >= 8'd232)
-          next_sprite_dy[i] = -8'd1;
+        if (~curr_control_sprite_size)
+          vi_tile_base = curr_control_sprite_8x8_addr;
+        else
+          vi_tile_base = 1'b0; // Fix later
       end
 
-      if (last_vsync & ~O_vid_vsync)
+      if (vi_render_enabled)
       begin
-        for (integer i = 0; i < 8; ++i)
+        if (vi_active_backgnd | vi_active_sprites)
         begin
-          next_sprite_sx[i] = curr_sprite_sx[i] + curr_sprite_dx[i];
-          next_sprite_sy[i] = curr_sprite_sy[i] + curr_sprite_dy[i];
+        /* Shift out a single background pixel */
+          next_tile_shifter[14:0] = curr_tile_shifter[15:1];
+
+        /* Generate data fetch addresses */
+          unique case (curr_count_x[2:0])
+          3'd1, 3'd2 : O_vid_addr = { 2'h2, curr_video_addr_v[11:0] };
+          3'd3, 3'd4 : O_vid_addr = { 2'h2, curr_video_addr_v.nametable, 4'hF, curr_video_addr_v.y_coarse[2:0], curr_video_addr_v.x_coarse[2:0] };
+          3'd5, 3'd6 : O_vid_addr = { 1'b0, vi_tile_base, vi_tile_index, vi_tile_line };
+          3'd7, 3'd0 : O_vid_addr = { 1'b0, vi_tile_base, vi_tile_index, vi_tile_line } + 14'd8;
+          default: ;
+          endcase
+
+        /* Grab the needed data bits */
+          unique case (curr_count_x[2:0])
+          3'd2  : next_tile_index   = 8'(I_vid_data);
+          3'd4  : next_tile_attrib  = 2'(I_vid_data >> {
+                    curr_video_addr_v.y_coarse[1],
+                    curr_video_addr_v.x_coarse[1]
+                  });
+          3'd6  : next_tile_bits_lo = 8'(I_vid_data); // Fetch tile low
+          3'd0  : next_tile_bits_hi = 8'(I_vid_data); // Fetch tile high
+          default: ;
+          endcase
+
+          if (curr_count_x[2:0] == 3'd0)
+          begin
+
+          /* Transfer tile and attribute bits into shift register */
+            for (integer i = 0; i < 8; ++i)
+            begin
+              next_tile_shifter[8 + i] = {
+                curr_tile_attrib,
+                next_tile_bits_hi [i],
+                next_tile_bits_lo [i]
+              };
+            end
+          end
+        end
+
+        if (vi_active_backgnd)
+        begin
+         /* Scrolling video address update */
+         if (curr_count_x[2:0] == 3'd0)
+         begin
+            if (curr_video_addr_v.x_coarse != 5'd31)
+              next_video_addr_v.x_coarse = curr_video_addr_v.x_coarse + 5'd1;
+            else
+              next_video_addr_v.x_coarse = 5'd0;
+         end          
         end
       end
     end
   end
-  
+
+
 
 
 /* Color Mux logic
  *****************************************/
+  bit[3:0]      color_background    ;
+  wire[3:0]     color_sprite [0:7]  ;
+  assign        color_sprite        = '{ 4'd0, 4'd0, 4'd0, 4'd0, 4'd0, 4'd0, 4'd0, 4'd0 }  ;
 
-  wire left_most_column   = curr_count_x < 16'd9;
-  wire visible_background = curr_mask_show_background & (curr_mask_show_left_background | ~left_most_column) ;
-  wire visible_sprites    = curr_mask_show_sprites    & (curr_mask_show_left_sprites    | ~left_most_column) ;
- 
+  wire          left_most_column    = curr_count_x < 16'd9;
+  wire          visible_background  = curr_mask_show_background & (curr_mask_show_left_background | ~left_most_column) ;
+  wire          visible_sprites     = curr_mask_show_sprites    & (curr_mask_show_left_sprites    | ~left_most_column) ;
+
   always_comb
   begin
     color_final = 5'd0;
@@ -625,6 +656,6 @@ module video (
           color_final = {1'b1, color_sprite [i]};
       end
     end
-  end  
+  end
 
 endmodule
