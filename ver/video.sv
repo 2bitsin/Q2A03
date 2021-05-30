@@ -177,39 +177,23 @@ module video (
 /* Mask register
  **********************************/
 
-  bit       curr_mask_grayscale;
-  bit       curr_mask_show_left_background;
-  bit       curr_mask_show_left_sprites;
-  bit       curr_mask_show_background;
-  bit       curr_mask_show_sprites;
-  bit       curr_mask_emphasize_red;
-  bit       curr_mask_emphasize_green;
-  bit       curr_mask_emphasize_blue;
+  typedef struct packed {
+    bit grayscale;
+    bit show_left_background;
+    bit show_left_sprites;
+    bit show_background;
+    bit show_sprites;
+    bit emphasize_red;
+    bit emphasize_green;
+    bit emphasize_blue;
+  } reg_mask_t;
 
-  wire[7:0] curr_mask =
-            {
-              curr_mask_grayscale,
-              curr_mask_show_left_background,
-              curr_mask_show_left_sprites,
-              curr_mask_show_background,
-              curr_mask_show_sprites,
-              curr_mask_emphasize_red,
-              curr_mask_emphasize_green,
-              curr_mask_emphasize_blue
-            };
-
-  bit[7:0]  next_mask;
+  reg_mask_t curr_mask;
+  reg_mask_t next_mask;
 
   always_ff @(posedge I_clock)
   begin
-    curr_mask_grayscale             <= next_mask[0];
-    curr_mask_show_left_background  <= next_mask[1];
-    curr_mask_show_left_sprites     <= next_mask[2];
-    curr_mask_show_background       <= next_mask[3];
-    curr_mask_show_sprites          <= next_mask[4];
-    curr_mask_emphasize_red         <= next_mask[5];
-    curr_mask_emphasize_green       <= next_mask[6];
-    curr_mask_emphasize_blue        <= next_mask[7];
+    curr_mask <= next_mask;
   end
 
   always_comb
@@ -222,36 +206,22 @@ module video (
 /* Control register
  **********************************/
 
-  bit[1:0]  curr_control_nametable;
-  bit       curr_control_increment;
-  bit       curr_control_sprite_8x8_addr;
-  bit       curr_control_background_addr;
-  bit       curr_control_sprite_size;
-  bit       curr_control_master_or_slave;
-  bit       curr_control_enable_nmi;
+  typedef struct packed {
+    bit[1:0]  nametable;
+    bit       increment;
+    bit       sprite_8x8_base;
+    bit       background_base;
+    bit       sprite_size;
+    bit       master_or_slave;
+    bit       enable_nmi;
+  } reg_control_t;
 
-  wire[7:0] curr_control =
-            {
-              curr_control_nametable,
-              curr_control_increment,
-              curr_control_sprite_8x8_addr,
-              curr_control_background_addr,
-              curr_control_sprite_size,
-              curr_control_master_or_slave,
-              curr_control_enable_nmi
-            };
-
-  bit[7:0]  next_control;
+  reg_control_t curr_control;
+  reg_control_t next_control;
 
   always_ff @(posedge I_clock)
   begin
-    curr_control_nametable       <= next_control[1:0];
-    curr_control_increment       <= next_control[2];
-    curr_control_sprite_8x8_addr <= next_control[3];
-    curr_control_background_addr <= next_control[4];
-    curr_control_sprite_size     <= next_control[5];
-    curr_control_master_or_slave <= next_control[6];
-    curr_control_enable_nmi      <= next_control[7];
+    curr_control <= next_control;
   end
 
   always_comb
@@ -328,7 +298,7 @@ module video (
   bit next_sprite_zero_hit_bit ;
   bit next_sprite_overflow_bit ;
 
-  assign O_host_nmi = ~(curr_control_enable_nmi & curr_vertical_blank_bit);
+  assign O_host_nmi = ~(curr_control.enable_nmi & curr_vertical_blank_bit);
 
   always_ff @(posedge I_clock)
   begin
@@ -340,7 +310,7 @@ module video (
       curr_sprite_overflow_bit <= next_sprite_overflow_bit ;
     end
 
-    if (I_host_rden & reg_select_status)
+    if (I_host_rden_fall & reg_select_status)
       curr_vertical_blank_bit <= 1'b0;
   end
 
@@ -435,10 +405,10 @@ module video (
   bit[7:0]        vi_tile_index       ;
   bit             vi_tile_base        ;
 
-  wire[14:0]      vi_addr_increment   = curr_control_increment ? 15'd32 : 15'd1;
+  wire[14:0]      vi_addr_increment   = curr_control.increment ? 15'd32 : 15'd1;
   wire            vi_palette_access   = curr_video_addr_v[13:8] == 6'b111111;
-  wire            vi_render_enabled   = curr_mask_show_sprites
-                                      | curr_mask_show_background;
+  wire            vi_render_enabled   = curr_mask.show_sprites
+                                      | curr_mask.show_background;
   wire            vi_prederder_line   = curr_count_y == 16'd261;
   wire            vi_rendering_line   = curr_count_y <= 16'd239;
 
@@ -552,7 +522,7 @@ module video (
 
     /* Setup tile fetch for background */
       vi_tile_index = curr_tile_index;
-      vi_tile_base  = curr_control_background_addr;
+      vi_tile_base  = curr_control.background_base;
       vi_tile_line  = {1'b0, curr_video_addr_v.y_fine};
 
     /* Setup tile fetch for sprites */
@@ -561,8 +531,8 @@ module video (
         vi_tile_index = 8'd0; // Fix later
         vi_tile_line = 4'd0;  // Fix later
 
-        if (~curr_control_sprite_size)
-          vi_tile_base = curr_control_sprite_8x8_addr;
+        if (~curr_control.sprite_size)
+          vi_tile_base = curr_control.sprite_8x8_base;
         else
           vi_tile_base = 1'b0; // Fix later
       end
@@ -610,16 +580,53 @@ module video (
           end
         end
 
+        /* Scrolling video address update */
         if (vi_active_backgnd)
         begin
-         /* Scrolling video address update */
-         if (curr_count_x[2:0] == 3'd0)
-         begin
-            if (curr_video_addr_v.x_coarse != 5'd31)
-              next_video_addr_v.x_coarse = curr_video_addr_v.x_coarse + 5'd1;
-            else
+
+          /* Increment horizontal */
+          if (curr_count_x[2:0] == 3'd0)
+          begin
+            next_video_addr_v.x_coarse = curr_video_addr_v.x_coarse + 5'd1;
+            if (curr_video_addr_v.x_coarse == 5'd31)              
+            begin
               next_video_addr_v.x_coarse = 5'd0;
-         end          
+              next_video_addr_v.nametable.x = ~curr_video_addr_v.nametable.x;
+            end            
+          end   
+
+          /* Increment vertical */
+          if (curr_count_x == 16'd256)
+          begin
+            next_video_addr_v.y_coarse = curr_video_addr_v.y_coarse ;
+            next_video_addr_v.y_fine = curr_video_addr_v.y_fine + 3'd1;
+            if (curr_video_addr_v.y_fine == 3'd7)
+            begin
+              next_video_addr_v.y_coarse = curr_video_addr_v.y_coarse + 5'd1;
+              next_video_addr_v.y_fine = 3'd0;
+              if (curr_video_addr_v.y_coarse == 5'd29)
+              begin
+                next_video_addr_v.y_coarse = 5'd0;
+                next_video_addr_v.nametable.y = ~curr_video_addr_v.nametable.y;
+              end
+            end
+          end
+
+          /* Assign horizontal scroll position */
+          if (curr_count_x == 16'd257)
+          begin
+            next_video_addr_v.nametable.x = curr_video_addr_t.nametable.x ;
+            next_video_addr_v.x_coarse    = curr_video_addr_t.x_coarse    ;
+          end
+
+          /* Assign vertical scroll position */
+          if ((curr_count_x >= 16'd280) & (curr_count_x <= 16'd304))
+          begin            
+            next_video_addr_v.nametable.y = curr_video_addr_t.nametable.y ;
+            next_video_addr_v.y_coarse    = curr_video_addr_t.y_coarse    ;
+            next_video_addr_v.y_fine      = curr_video_addr_t.y_fine      ;
+          end
+
         end
       end
     end
@@ -635,8 +642,8 @@ module video (
   assign        color_sprite        = '{ 4'd0, 4'd0, 4'd0, 4'd0, 4'd0, 4'd0, 4'd0, 4'd0 }  ;
 
   wire          left_most_column    = curr_count_x < 16'd9;
-  wire          visible_background  = curr_mask_show_background & (curr_mask_show_left_background | ~left_most_column) ;
-  wire          visible_sprites     = curr_mask_show_sprites    & (curr_mask_show_left_sprites    | ~left_most_column) ;
+  wire          visible_background  = curr_mask.show_background & (curr_mask.show_left_background | ~left_most_column) ;
+  wire          visible_sprites     = curr_mask.show_sprites    & (curr_mask.show_left_sprites    | ~left_most_column) ;
 
   always_comb
   begin
