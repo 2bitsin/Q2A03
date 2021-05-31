@@ -50,6 +50,16 @@ module video (
   output  bit[13:0]   O_vid_addr ;
   output  bit         O_vid_wren ;
 
+/* Debug logic
+ *****************************************/
+  bit[31:0] curr_debug_frames;
+  bit[31:0] next_debug_frames;
+
+  always_ff @(posedge I_clock)
+  begin
+    
+  end
+
 /* Clock divider logic
  *****************************************/
 
@@ -497,13 +507,13 @@ module video (
     next_tile_attrib  = 2'd0;
     next_tile_bits_lo = 8'd0;
     next_tile_bits_hi = 8'd0;
-    next_tile_shifter = 64'd0;
+    next_tile_shifter = 64'd0;  
     vi_tile_index     = 8'd0;
     vi_tile_base      = 1'd0;
     vi_tile_line      = 4'd0; 
 
     /* Default the video address */
-    O_vid_addr        = curr_video_addr_v[13:0];
+    O_vid_addr = curr_video_addr_v[13:0];
 
     if (I_reset)
     begin
@@ -533,7 +543,7 @@ module video (
       if (vi_active_sprites)
       begin
         vi_tile_index = 8'd0; // Fix later
-        vi_tile_line = 4'd0;  // Fix later
+        vi_tile_line  = 4'd0;  // Fix later
 
         if (~curr_control.sprite_size)
           vi_tile_base = curr_control.sprite_8x8_base;
@@ -546,7 +556,7 @@ module video (
         if (vi_active_backgnd | vi_active_sprites)
         begin
         /* Shift out a single background pixel */
-          next_tile_shifter[14:0] = curr_tile_shifter[15:1];
+          next_tile_shifter[15:0] = {4'b0000, curr_tile_shifter[15:1]};
 
         /* Generate data fetch addresses */
           unique case (curr_count_x[2:0])
@@ -562,7 +572,8 @@ module video (
           3'd2  : next_tile_index   = 8'(I_vid_data);
           3'd4  : next_tile_attrib  = 2'(I_vid_data >> {
                     curr_video_addr_v.y_coarse[1],
-                    curr_video_addr_v.x_coarse[1]
+                    curr_video_addr_v.x_coarse[1],
+                    1'b0
                   });
           3'd6  : next_tile_bits_lo = 8'(I_vid_data); // Fetch tile low
           3'd0  : next_tile_bits_hi = 8'(I_vid_data); // Fetch tile high
