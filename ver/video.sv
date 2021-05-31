@@ -50,16 +50,6 @@ module video (
   output  bit[13:0]   O_vid_addr ;
   output  bit         O_vid_wren ;
 
-/* Debug logic
- *****************************************/
-  bit[31:0] curr_debug_frames;
-  bit[31:0] next_debug_frames;
-
-  always_ff @(posedge I_clock)
-  begin
-    
-  end
-
 /* Clock divider logic
  *****************************************/
 
@@ -103,6 +93,17 @@ module video (
     end
   end
 
+/* Debug logic
+ *****************************************/
+
+  bit[31:0] curr_debug_frames;
+  bit[31:0] next_debug_frames;
+
+  always_ff @(posedge I_clock)
+  begin
+    curr_debug_frames <= next_debug_frames;
+  end
+
 /* Vertical and Horizontal counter logic
  *****************************************/
 
@@ -121,7 +122,11 @@ module video (
     curr_count_x <= next_count_x;
   end
 
-  always_comb begin
+  always_comb 
+  begin
+    // Debug logic
+    next_debug_frames = curr_debug_frames;
+    ////////////////
     next_count_y = 16'd0;
     next_count_x = 16'd0;
     if (I_reset) begin
@@ -132,7 +137,12 @@ module video (
         next_count_y = next_count_y + 16'd1;
         next_count_x = 16'd0;
         if (curr_count_y == 16'd261)
+        begin
           next_count_y = 16'd0;
+          // Debug logic
+          next_debug_frames = curr_debug_frames + 32'd1;
+          //////////////
+        end
       end
     end
   end
