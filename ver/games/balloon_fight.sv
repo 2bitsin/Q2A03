@@ -1564,6 +1564,8 @@ module balloon_fight (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_da
 		};
 	end
 	
+	wire chip_select_prg = (I_prg_addr >= 16'h8000);
+	
 	assign O_ciram_a10 = I_chr_addr[11];
 	assign O_ciram_a11 = 1'b0;
 	assign O_ciram_ce = 1'b1;
@@ -1571,9 +1573,13 @@ module balloon_fight (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_da
 	
 	always @(posedge I_clock)
 	begin
-		if (I_prg_wren)
+		if (I_prg_wren & chip_select_prg)
 			prg_bits[14' (I_prg_addr)] <= I_prg_data;
-		O_prg_data <= prg_bits[14' (I_prg_addr)];
+		
+		if (chip_select_prg)
+			O_prg_data <= prg_bits[14' (I_prg_addr)];
+		else
+			O_prg_data <= 8'hff;
 		
 		if (I_chr_wren)
 			chr_bits[13' (I_chr_addr)] <= I_chr_data;

@@ -178,14 +178,14 @@ module video (
  **********************************/
 
   typedef struct packed {
-    bit grayscale;
-    bit show_left_background;
-    bit show_left_sprites;
-    bit show_background;
-    bit show_sprites;
-    bit emphasize_red;
-    bit emphasize_green;
     bit emphasize_blue;
+    bit emphasize_green;
+    bit emphasize_red;
+    bit show_sprites;
+    bit show_background;
+    bit show_left_sprites;
+    bit show_left_background;
+    bit grayscale;
   } reg_mask_t;
 
   reg_mask_t curr_mask;
@@ -207,13 +207,13 @@ module video (
  **********************************/
 
   typedef struct packed {
-    bit[1:0]  nametable;
-    bit       increment;
-    bit       sprite_8x8_base;
-    bit       background_base;
-    bit       sprite_size;
-    bit       master_or_slave;
     bit       enable_nmi;
+    bit       master_or_slave;
+    bit       sprite_size;
+    bit       background_base;
+    bit       sprite_8x8_base;
+    bit       increment;
+    bit[1:0]  nametable;
   } reg_control_t;
 
   reg_control_t curr_control;
@@ -366,16 +366,16 @@ module video (
 
   typedef struct packed
   {
-    bit[4:0] x_coarse;
-    bit[4:0] y_coarse;
+    bit[2:0] y_fine;
 
     struct packed
     {
-      bit x;
       bit y;
+      bit x;
     } nametable;
 
-    bit[2:0] y_fine;
+    bit[4:0] y_coarse;
+    bit[4:0] x_coarse;
 
   } vi_addr_t;
 
@@ -420,7 +420,7 @@ module video (
 
   assign          O_vid_data          = I_host_data;
   assign          O_vid_wren          = reg_select_vid_data & I_host_wren & ~vi_palette_access;
-  assign          color_background    = curr_tile_shifter[curr_video_fine_x];
+  assign          color_background    = curr_tile_shifter[{1'b0, curr_video_fine_x}];
 
 
   always_ff @(posedge I_clock)
@@ -433,6 +433,7 @@ module video (
       curr_video_fine_x <= next_video_fine_x;
       curr_video_data   <= next_video_data;
       curr_tile_index   <= next_tile_index;
+      curr_tile_attrib  <= next_tile_attrib;
       curr_tile_bits_lo <= next_tile_bits_lo;
       curr_tile_bits_hi <= next_tile_bits_hi;
       curr_tile_shifter <= next_tile_shifter;
@@ -497,6 +498,9 @@ module video (
     next_tile_bits_lo = 8'd0;
     next_tile_bits_hi = 8'd0;
     next_tile_shifter = 64'd0;
+    vi_tile_index     = 8'd0;
+    vi_tile_base      = 1'd0;
+    vi_tile_line      = 4'd0; 
 
     /* Default the video address */
     O_vid_addr        = curr_video_addr_v[13:0];

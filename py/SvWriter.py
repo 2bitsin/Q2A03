@@ -34,9 +34,9 @@ class SvWriter:
     self.end_with('end')
 
   def begin_with(self, line = None):
-    self.write_line(line)
     if line is not None:
-      self.indent()
+      self.write_line(line)
+    self.indent()
 
   def end_with(self, line = None):
     self.unindent()
