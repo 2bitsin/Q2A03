@@ -21,6 +21,9 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   wire                W_sync;
   wire                W_phy2;
 
+
+  core_isexec inst_exec (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdwr, I_ready, O_sync, O_phy2);
+  /*
   core_isexec inst_exec (I_clock, I_reset, I_irq, I_nmi, W_addr, W_wr_data, I_rd_data, W_rdwr, I_ready, W_sync, W_phy2);
 
   always_comb 
@@ -31,5 +34,5 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
     O_sync    = W_sync;
     O_phy2    = W_phy2;
   end
-
+  */
 endmodule

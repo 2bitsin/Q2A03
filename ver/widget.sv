@@ -77,11 +77,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .I_addr0      (W_core_addr[10:0]),
     .I_wren0      (W_core_wren & W_mem_select),
     .I_data0      (W_core_wr_data),
-    .O_data0      (W_mem_O_data),    
-    .I_addr1      (11'b0),
-    .I_wren1      (1'b0),
-    .I_data1      (8'b0),
-    .O_data1      ());
+    .O_data0      (W_mem_O_data));
 
   /* Video bus signals */
   wire            W_video_wren;
@@ -144,16 +140,10 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .I_addr0      ({W_cart_ciram_a11, W_cart_ciram_a10, W_video_addr[9:0]}),
     .I_wren0      (W_video_wren & W_video_mem_select),
     .I_data0      (W_video_wr_data),
-    .O_data0      (W_video_mem_O_data),
-    
-    .I_addr1      (12'b0),
-    .I_wren1      (1'b0),
-    .I_data1      (8'b0),
-    .O_data1      ()    
-    );
+    .O_data0      (W_video_mem_O_data));
 
   /* Cartridge */
-  super_mario inst_cart(
+  popeye inst_cart(
     .I_clock      (I_sys_clock), 
     .I_reset      (I_sys_reset), 
     .I_phy2       (W_core_phy2), 

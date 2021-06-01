@@ -18,8 +18,7 @@ module memory #(
   parameter bit[P_addr_bits-1:0] P_init_beg3 = 0,
   parameter bit[P_addr_bits-1:0] P_init_end3 = 0)
  
- (I_clock, I_addr0, I_wren0, I_data0, O_data0,
-           I_addr1, I_wren1, I_data1, O_data1);
+ (I_clock, I_addr0, I_wren0, I_data0, O_data0);
 
   input   wire                    I_clock ;
 
@@ -27,11 +26,6 @@ module memory #(
   input   wire                    I_wren0 ;  
   input   wire[P_data_bits - 1:0] I_data0 ;
   output  bit[P_data_bits - 1:0]  O_data0 ;
-
-  input   wire[P_addr_bits - 1:0] I_addr1 ;
-  input   wire                    I_wren1 ;  
-  input   wire[P_data_bits - 1:0] I_data1 ;
-  output  bit[P_data_bits - 1:0]  O_data1 ;
 
   (* ramstyle = "no_rw_check, M10K" *)
   bit[P_data_bits - 1:0] bits [0:(2**P_addr_bits) - 1];
@@ -42,13 +36,6 @@ module memory #(
       bits[I_addr0] <= I_data0;
     O_data0 <= bits[I_addr0];
   end
-
-  always @(posedge I_clock) 
-  begin
-    if (I_wren1) 
-      bits[I_addr1] <= I_data1;
-    O_data1 <= bits[I_addr1];
-  end  
 
   initial begin
     if (P_init_bin0.len () > 0 && P_init_end0 - P_init_beg0 > 0) 

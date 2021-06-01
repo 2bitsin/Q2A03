@@ -17,8 +17,10 @@ module test_14_rti (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_data
 	output   logic        O_ciram_a11 ;
 	output   logic        O_irq       ;
 	
+	(* romstyle = "M10K" *)
 	bit[7:0] prg_bits [0:32767];
 	
+	(* romstyle = "M10K" *)
 	bit[7:0] chr_bits [0:8191];
 	
 	initial begin
@@ -2596,15 +2598,14 @@ module test_14_rti (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_data
 	assign O_irq = 1'b1;
 	
 	always @(posedge I_clock)
-	begin
-		if (I_prg_wren & chip_select_prg)
+	if (chip_select_prg) begin
+		if (I_prg_wren)
 			prg_bits[15' (I_prg_addr)] <= I_prg_data;
-		
-		if (chip_select_prg)
-			O_prg_data <= prg_bits[15' (I_prg_addr)];
-		else
-			O_prg_data <= 8'hff;
-		
+		O_prg_data <= prg_bits[15' (I_prg_addr)];
+	end
+	
+	always @(posedge I_clock)
+	begin
 		if (I_chr_wren)
 			chr_bits[13' (I_chr_addr)] <= I_chr_data;
 		O_chr_data <= chr_bits[13' (I_chr_addr)];

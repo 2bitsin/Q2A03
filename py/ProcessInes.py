@@ -47,9 +47,11 @@ class ProcessInes:
 
   def write_initial(self, writer, ines):
     if ines.prg_size > 0:
+      writer.write_line('(* romstyle = "M10K" *)')
       writer.write_line('bit[7:0] prg_bits [0:%u];' % (ines.prg_size - 1))    
       writer.write_line('')
     if ines.chr_size > 0:
+      writer.write_line('(* romstyle = "M10K" *)')
       writer.write_line('bit[7:0] chr_bits [0:%u];' % (ines.chr_size - 1))
       writer.write_line('')
     writer.begin_with('initial begin')    
@@ -77,26 +79,23 @@ class ProcessInes:
     writer.write_line('assign O_irq = 1\'b1;')
     writer.write_line('')
 
-    writer.write_line('always @(posedge I_clock)')
-    writer.begin()
     if ines.prg_size > 0:      
-      writer.begin_with('if (I_prg_wren & chip_select_prg)')
+      writer.write_line('always @(posedge I_clock)')
+      writer.begin_with('if (chip_select_prg) begin')
+      writer.begin_with('if (I_prg_wren)')
       writer.write_line('prg_bits[%u\' (I_prg_addr)] <= I_prg_data;' % (math.log2 (ines.prg_size)))
-      writer.end_with('')
-      
-      writer.begin_with('if (chip_select_prg)')
+      writer.end_with()      
       writer.write_line('O_prg_data <= prg_bits[%u\' (I_prg_addr)];' % (math.log2 (ines.prg_size)))      
-      writer.end_with('else')
-      writer.begin_with()
-      writer.write_line('O_prg_data <= 8\'hff;')
-      writer.end_with('')
-      
+      writer.end()
+    writer.write_line('')
     if ines.chr_size > 0:      
+      writer.write_line('always @(posedge I_clock)')
+      writer.begin()
       writer.begin_with('if (I_chr_wren)')
       writer.write_line('chr_bits[%u\' (I_chr_addr)] <= I_chr_data;' % (math.log2 (ines.chr_size)))
       writer.end_with()
       writer.write_line('O_chr_data <= chr_bits[%u\' (I_chr_addr)];' % (math.log2 (ines.chr_size)))            
-    writer.end()
+      writer.end()
 
     return
 

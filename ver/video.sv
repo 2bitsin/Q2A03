@@ -1,4 +1,3 @@
-
 module video (
   I_clock,
   I_reset,
@@ -101,7 +100,9 @@ module video (
 
   always_ff @(posedge I_clock)
   begin
-    curr_debug_frames <= next_debug_frames;
+    if (O_vid_rise) begin
+      curr_debug_frames <= next_debug_frames;
+    end
   end
 
 /* Vertical and Horizontal counter logic
@@ -122,7 +123,7 @@ module video (
     curr_count_x <= next_count_x;
   end
 
-  always_comb 
+  always_comb
   begin
     // Debug logic
     next_debug_frames = curr_debug_frames;
@@ -278,18 +279,9 @@ module video (
   bit[4:0] color_final;
   bit[4:0] palette_addr;
   bit[5:0] palette_data;
-  bit[5:0] palette_bits [0:31];
 
-  initial palette_bits = '{
-    6'h01, 6'h03, 6'h04, 6'h06,
-    6'h07, 6'h08, 6'h09, 6'h0c,
-    6'h11, 6'h13, 6'h14, 6'h16,
-    6'h17, 6'h18, 6'h19, 6'h1c,
-    6'h21, 6'h23, 6'h24, 6'h26,
-    6'h27, 6'h28, 6'h29, 6'h2c,
-    6'h31, 6'h33, 6'h34, 6'h36,
-    6'h37, 6'h38, 6'h39, 6'h3c
-  };
+  (* ramstyle = "no_rw_check, M10K" *)
+  bit[5:0] palette_bits [0:31];
 
   always_ff @(posedge I_clock) begin
     color_index <= palette_bits[color_final];
@@ -429,14 +421,16 @@ module video (
   wire            vi_palette_access   = curr_video_addr_v[13:8] == 6'b111111;
   wire            vi_render_enabled   = curr_mask.show_sprites
                                       | curr_mask.show_background;
-  wire            vi_prederder_line   = curr_count_y == 16'd261;
-  wire            vi_rendering_line   = curr_count_y <= 16'd239;
-
+  wire            vi_prederder_line   = curr_count_y > 16'd260;
+  wire            vi_rendering_line   = curr_count_y < 16'd240;
   wire            vi_active_line      = (vi_prederder_line | vi_rendering_line) ;
-  wire            vi_active_sprites_x = (curr_count_x > 16'd256) & (curr_count_x < 16'd321);
-  wire            vi_active_backgnd_x = (curr_count_x > 16'd000) & (curr_count_x < 16'd337) & ~vi_active_sprites_x;
+  wire            vi_active_sprites_x = ((curr_count_x > 16'd256) & (curr_count_x < 16'd321));
+  wire            vi_active_backgnd_x = ((curr_count_x > 16'd000) & (curr_count_x < 16'd257))
+                                      | ((curr_count_x > 16'd320) & (curr_count_x < 16'd337));
   wire            vi_active_sprites   = vi_active_line & vi_active_sprites_x;
   wire            vi_active_backgnd   = vi_active_line & vi_active_backgnd_x;
+
+  wire[3:0][1:0]  vi_vid_data_4x2     = I_vid_data;
 
   assign          O_vid_data          = I_host_data;
   assign          O_vid_wren          = reg_select_vid_data & I_host_wren & ~vi_palette_access;
@@ -517,10 +511,10 @@ module video (
     next_tile_attrib  = 2'd0;
     next_tile_bits_lo = 8'd0;
     next_tile_bits_hi = 8'd0;
-    next_tile_shifter = 64'd0;  
+    next_tile_shifter = 64'd0;
     vi_tile_index     = 8'd0;
     vi_tile_base      = 1'd0;
-    vi_tile_line      = 4'd0; 
+    vi_tile_line      = 4'd0;
 
     /* Default the video address */
     O_vid_addr = curr_video_addr_v[13:0];
@@ -571,7 +565,7 @@ module video (
         /* Generate data fetch addresses */
           unique case (curr_count_x[2:0])
           3'd1, 3'd2 : O_vid_addr = { 2'h2, curr_video_addr_v[11:0] };
-          3'd3, 3'd4 : O_vid_addr = { 2'h2, curr_video_addr_v.nametable, 4'hF, curr_video_addr_v.y_coarse[2:0], curr_video_addr_v.x_coarse[2:0] };
+          3'd3, 3'd4 : O_vid_addr = { 2'h2, curr_video_addr_v.nametable, 4'hF, curr_video_addr_v.y_coarse[4:2], curr_video_addr_v.x_coarse[4:2] };
           3'd5, 3'd6 : O_vid_addr = { 1'b0, vi_tile_base, vi_tile_index, vi_tile_line };
           3'd7, 3'd0 : O_vid_addr = { 1'b0, vi_tile_base, vi_tile_index, vi_tile_line } + 14'd8;
           default: ;
@@ -579,14 +573,13 @@ module video (
 
         /* Grab the needed data bits */
           unique case (curr_count_x[2:0])
-          3'd2  : next_tile_index   = 8'(I_vid_data);
-          3'd4  : next_tile_attrib  = 2'(I_vid_data >> {
+          3'd2  : next_tile_index   = I_vid_data;
+          3'd4  : next_tile_attrib  = vi_vid_data_4x2 [{
                     curr_video_addr_v.y_coarse[1],
-                    curr_video_addr_v.x_coarse[1],
-                    1'b0
-                  });
-          3'd6  : next_tile_bits_lo = 8'(I_vid_data); // Fetch tile low
-          3'd0  : next_tile_bits_hi = 8'(I_vid_data); // Fetch tile high
+                    curr_video_addr_v.x_coarse[1]
+                  }];
+          3'd6  : next_tile_bits_lo = I_vid_data; // Fetch tile low
+          3'd0  : next_tile_bits_hi = I_vid_data; // Fetch tile high
           default: ;
           endcase
 
@@ -596,7 +589,7 @@ module video (
           /* Transfer tile and attribute bits into shift register */
             for (integer i = 0; i < 8; ++i)
             begin
-              next_tile_shifter[8 + i] = {
+              next_tile_shifter[15 - i] = {
                 curr_tile_attrib,
                 next_tile_bits_hi [i],
                 next_tile_bits_lo [i]
@@ -605,54 +598,52 @@ module video (
           end
         end
 
-        /* Scrolling video address update */
-        if (vi_active_backgnd)
+        /* Scrolling video address update
+        **************************************************/
+
+        /* Increment horizontal */
+        if (vi_active_backgnd & (curr_count_x[2:0] == 3'd0))
         begin
-
-          /* Increment horizontal */
-          if (curr_count_x[2:0] == 3'd0)
+          next_video_addr_v.x_coarse = curr_video_addr_v.x_coarse + 5'd1;
+          if (curr_video_addr_v.x_coarse == 5'd31)
           begin
-            next_video_addr_v.x_coarse = curr_video_addr_v.x_coarse + 5'd1;
-            if (curr_video_addr_v.x_coarse == 5'd31)              
-            begin
-              next_video_addr_v.x_coarse = 5'd0;
-              next_video_addr_v.nametable.x = ~curr_video_addr_v.nametable.x;
-            end            
-          end   
+            next_video_addr_v.x_coarse = 5'd0;
+            next_video_addr_v.nametable.x = ~curr_video_addr_v.nametable.x;
+          end
+        end
 
-          /* Increment vertical */
-          if (curr_count_x == 16'd256)
+        /* Increment vertical */
+        if (curr_count_x == 16'd256)
+        begin
+          next_video_addr_v.y_coarse = curr_video_addr_v.y_coarse ;
+          next_video_addr_v.y_fine = curr_video_addr_v.y_fine + 3'd1;
+          if (curr_video_addr_v.y_fine == 3'd7)
           begin
-            next_video_addr_v.y_coarse = curr_video_addr_v.y_coarse ;
-            next_video_addr_v.y_fine = curr_video_addr_v.y_fine + 3'd1;
-            if (curr_video_addr_v.y_fine == 3'd7)
+            next_video_addr_v.y_coarse = curr_video_addr_v.y_coarse + 5'd1;
+            next_video_addr_v.y_fine = 3'd0;
+            if (curr_video_addr_v.y_coarse == 5'd29)
             begin
-              next_video_addr_v.y_coarse = curr_video_addr_v.y_coarse + 5'd1;
-              next_video_addr_v.y_fine = 3'd0;
-              if (curr_video_addr_v.y_coarse == 5'd29)
-              begin
-                next_video_addr_v.y_coarse = 5'd0;
-                next_video_addr_v.nametable.y = ~curr_video_addr_v.nametable.y;
-              end
+              next_video_addr_v.y_coarse = 5'd0;
+              next_video_addr_v.nametable.y = ~curr_video_addr_v.nametable.y;
             end
           end
-
-          /* Assign horizontal scroll position */
-          if (curr_count_x == 16'd257)
-          begin
-            next_video_addr_v.nametable.x = curr_video_addr_t.nametable.x ;
-            next_video_addr_v.x_coarse    = curr_video_addr_t.x_coarse    ;
-          end
-
-          /* Assign vertical scroll position */
-          if ((curr_count_x >= 16'd280) & (curr_count_x <= 16'd304))
-          begin            
-            next_video_addr_v.nametable.y = curr_video_addr_t.nametable.y ;
-            next_video_addr_v.y_coarse    = curr_video_addr_t.y_coarse    ;
-            next_video_addr_v.y_fine      = curr_video_addr_t.y_fine      ;
-          end
-
         end
+
+        /* Assign horizontal scroll position */
+        if (curr_count_x == 16'd257)
+        begin
+          next_video_addr_v.nametable.x = curr_video_addr_t.nametable.x ;
+          next_video_addr_v.x_coarse    = curr_video_addr_t.x_coarse    ;
+        end
+
+        /* Assign vertical scroll position */
+        if ((curr_count_x >= 16'd280) & (curr_count_x <= 16'd304) & vi_prederder_line)
+        begin
+          next_video_addr_v.nametable.y = curr_video_addr_t.nametable.y ;
+          next_video_addr_v.y_coarse    = curr_video_addr_t.y_coarse    ;
+          next_video_addr_v.y_fine      = curr_video_addr_t.y_fine      ;
+        end
+
       end
     end
   end
