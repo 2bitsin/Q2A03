@@ -494,7 +494,7 @@ module video (
     end
 
   /* Incrment video addr on write to or read from */
-    if (reg_select_vid_data & (I_host_wren_rise | I_host_rden_rise))
+    if (reg_select_vid_data & (I_host_wren_fall | I_host_rden_fall))
       curr_video_addr_v <= curr_video_addr_v + vi_addr_increment;
 
 

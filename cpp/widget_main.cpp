@@ -74,7 +74,10 @@ int main(int argc, char** argv)
   uint8_t buff[240][256][3];
 
   widget.I_sys_reset = 1;
-  const auto Total_ticks = 2*42'884'160 ;
+  const auto Ticks_per_second = 42'884'160ull; 
+  const auto Simulate_seconds = 10.0 / 60.0 ;
+  const auto Total_ticks = (unsigned long long)(Simulate_seconds * Ticks_per_second) ;
+
   for(auto i = 0; i < Total_ticks; ++i, ++$time) 
   {
     if (!(i % 4288416))
@@ -123,8 +126,22 @@ int main(int argc, char** argv)
     }   
   }
 
+  {
+    std::ofstream _dump ("trace/video_memory.bin", std::ios::binary);
+    _dump.write ((const char*)&widget.widget__DOT__inst_video_memory__DOT__bits [0], 
+      sizeof (widget.widget__DOT__inst_video_memory__DOT__bits));
+  }
+
+  {
+    std::ofstream _dump ("trace/core_memory.bin", std::ios::binary);
+    _dump.write ((const char*)&widget.widget__DOT__inst_core_memory__DOT__bits [0], 
+      sizeof (widget.widget__DOT__inst_core_memory__DOT__bits));
+  }
+
   auto cmd = "ffmpeg -r 60 -f image2 -s 1280x1200 -i trace/img/%05d.png -filter:v scale=1536:1440:flags=neighbor -vcodec libx264 -pix_fmt rgb24 trace/"s + time_as_string() + ".avi"s;
   auto res = system(cmd.data());
   
+  
+
   return 0;
 }
