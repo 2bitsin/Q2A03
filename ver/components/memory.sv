@@ -31,9 +31,14 @@ module memory #(
   (* ramstyle = "no_rw_check, M10K" *)
   bit[P_data_bits - 1:0]  bits [0:(2**P_addr_bits) - 1];
 
+  bit last_wren;
+  always @(posedge I_clock)
+    last_wren <= I_wren0;
+  wire W_wren_rise = ~last_wren & I_wren0;
+
   always @(posedge I_clock) 
   begin
-    if (I_wren0) 
+    if (W_wren_rise) 
       bits[I_addr0] <= I_data0;
     O_data0 <= bits[I_addr0];
   end
