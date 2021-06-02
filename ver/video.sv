@@ -497,7 +497,6 @@ module video (
     if (reg_select_vid_data & (I_host_wren_fall | I_host_rden_fall))
       curr_video_addr_v <= curr_video_addr_v + vi_addr_increment;
 
-
   end
 
   always_comb
@@ -648,7 +647,38 @@ module video (
     end
   end
 
+/* OAM logic 
+ *****************************************/
+  bit[7:0]      oam_bits [0:255] ;
 
+  bit[7:0]      curr_oam_addr ;
+  bit[7:0]      next_oam_addr ;
+  bit[7:0]      curr_oam_data ;
+  
+  always_ff @(posedge I_clock)
+  begin    
+    if (O_vid_rise) 
+    begin
+      curr_oam_addr <= next_oam_addr;
+    end
+
+    /* Write OAMADDR */
+    if (reg_select_oam_addr & I_host_wren_rise)
+      curr_oam_addr <= I_host_data;  
+
+    /* Write OAMDATA */
+    if (reg_select_oam_data & I_host_wren_rise)
+    begin
+      oam_bits [curr_oam_addr] <= I_host_data;
+      curr_oam_addr <= curr_oam_addr + 8'd1;
+    end
+
+  end
+
+  always_comb 
+  begin
+    next_oam_addr = curr_oam_addr;
+  end
 
 
 /* Color Mux logic
