@@ -27,8 +27,9 @@ module memory #(
   input   wire[P_data_bits - 1:0] I_data0 ;
   output  bit[P_data_bits - 1:0]  O_data0 ;
 
+
   (* ramstyle = "no_rw_check, M10K" *)
-  bit[P_data_bits - 1:0] bits [0:(2**P_addr_bits) - 1];
+  bit[P_data_bits - 1:0]  bits [0:(2**P_addr_bits) - 1];
 
   always @(posedge I_clock) 
   begin
