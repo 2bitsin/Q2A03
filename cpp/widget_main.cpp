@@ -17,6 +17,13 @@ double sc_time_stamp()
   return $time;
 }
 
+template <typename _What>
+void dump_bits (const std::string& target_path, _What&& bits)
+{
+  std::ofstream ofs (target_path, std::ios::binary);
+  ofs.write((const char*)std::addressof(bits), sizeof (bits));
+}
+
 template <auto Y_size, auto X_size, typename T_type>
 void image_write(unsigned index, const T_type (&data) [Y_size][X_size])
 {
@@ -75,7 +82,7 @@ int main(int argc, char** argv)
 
   widget.I_sys_reset = 1;
   const auto Ticks_per_second = 42'884'160ull; 
-  const auto Simulate_seconds = 10.0 / 60.0 ;
+  const auto Simulate_seconds = 60.0 / 60.0 ;
   const auto Total_ticks = (unsigned long long)(Simulate_seconds * Ticks_per_second) ;
 
   for(auto i = 0; i < Total_ticks; ++i, ++$time) 
@@ -126,17 +133,11 @@ int main(int argc, char** argv)
     }   
   }
 
-  {
-    std::ofstream _dump ("trace/video_memory.bin", std::ios::binary);
-    _dump.write ((const char*)&widget.widget__DOT__inst_video_memory__DOT__bits [0], 
-      sizeof (widget.widget__DOT__inst_video_memory__DOT__bits));
-  }
+  
+  dump_bits("trace/video_memory.bin", widget.widget__DOT__inst_video_memory__DOT__bits);
+  dump_bits("trace/core_memory.bin", widget.widget__DOT__inst_core_memory__DOT__bits);
+  dump_bits("trace/object_memory.bin", widget.widget__DOT__inst_video__DOT__oam_bits);
 
-  {
-    std::ofstream _dump ("trace/core_memory.bin", std::ios::binary);
-    _dump.write ((const char*)&widget.widget__DOT__inst_core_memory__DOT__bits [0], 
-      sizeof (widget.widget__DOT__inst_core_memory__DOT__bits));
-  }
 
   auto cmd = "ffmpeg -r 60 -f image2 -s 1280x1200 -i trace/img/%05d.png -filter:v scale=1536:1440:flags=neighbor -vcodec libx264 -pix_fmt rgb24 trace/"s + time_as_string() + ".avi"s;
   auto res = system(cmd.data());

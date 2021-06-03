@@ -195,9 +195,7 @@ module core_isexec (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data
       tick       <= 0;
       last_phy2  <= 0;
 
-    end  
-    else
-    begin
+    end else begin
 
       /* Timing generation */
       tick <= tick + 4'b1;
