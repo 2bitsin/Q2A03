@@ -81,46 +81,37 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       next_dma_data   = curr_dma_data;
       
       unique case (curr_dma_state)
-      dma_idle, dma_wait: W_ready = 1'b1;
-      dma_pull, dma_push: W_ready = 1'b0;
-      endcase
-
-      unique case (curr_dma_state)
-      dma_idle: begin
-        if (W_addr == 16'h4014 && ~W_rdwr)
-        begin
-          next_dma_state = dma_pull;
-          next_dma_page = W_wr_data;
-          next_dma_offs = 8'b0;
-          next_dma_data = 8'b0;
+        dma_idle, dma_wait: begin
+          W_ready = 1'b1;
+          if (W_addr == 16'h4014 && ~W_rdwr)
+          begin
+            next_dma_state = dma_pull;
+            next_dma_page = W_wr_data;
+            next_dma_offs = 8'b0;
+            next_dma_data = 8'b0;
+          end
         end
-      end
 
-      dma_wait: begin
-        if (W_rdwr)
-          next_dma_state = dma_pull;
-      end
-
-      dma_pull: begin
-        next_dma_state = dma_push;
-        next_dma_data = I_rd_data;
-        O_addr = {curr_dma_page, curr_dma_offs};
-        O_wr_data = curr_dma_data;
-        O_rdwr = 1'b1;
-      end
-
-      dma_push: begin
-        next_dma_state = dma_pull;
-        next_dma_offs = curr_dma_offs + 8'b1;
-        if (curr_dma_offs == 8'hff) 
-        begin
-          next_dma_state = dma_idle;
-          next_dma_offs = 8'h00;
+        dma_pull: begin
+          next_dma_state = dma_push;
+          next_dma_data = I_rd_data;
+          O_addr = {curr_dma_page, curr_dma_offs};
+          O_wr_data = curr_dma_data;
+          O_rdwr = 1'b1;
         end
-        O_wr_data = curr_dma_data;
-        O_addr = 16'h2004;
-        O_rdwr = 1'b0;
-      end      
+
+        dma_push: begin
+          next_dma_state = dma_pull;
+          next_dma_offs = curr_dma_offs + 8'b1;
+          if (curr_dma_offs == 8'hff) 
+          begin
+            next_dma_state = dma_idle;
+            next_dma_offs = 8'h00;
+          end
+          O_wr_data = curr_dma_data;
+          O_addr = 16'h2004;
+          O_rdwr = 1'b0;
+        end      
       endcase
     end
   end

@@ -136,7 +136,7 @@ int main(int argc, char** argv)
   
   dump_bits("trace/video_memory.bin", widget.widget__DOT__inst_video_memory__DOT__bits);
   dump_bits("trace/core_memory.bin", widget.widget__DOT__inst_core_memory__DOT__bits);
-  dump_bits("trace/object_memory.bin", widget.widget__DOT__inst_video__DOT__oam_bits);
+  dump_bits("trace/object_memory.bin", widget.widget__DOT__inst_video__DOT__pri_oam_bits);
 
 
   auto cmd = "ffmpeg -r 60 -f image2 -s 1280x1200 -i trace/img/%05d.png -filter:v scale=1536:1440:flags=neighbor -vcodec libx264 -pix_fmt rgb24 trace/"s + time_as_string() + ".avi"s;

@@ -142,7 +142,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_data0      (W_video_mem_O_data));
 
   /* Cartridge */
-  donkey_kong inst_cart(
+  super_mario inst_cart(
     .I_clock      (I_sys_clock), 
     .I_reset      (I_sys_reset), 
     .I_phy2       (W_core_phy2), 

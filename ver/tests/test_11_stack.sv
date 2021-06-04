@@ -2599,15 +2599,11 @@ module test_11_stack (I_clock, I_reset, I_phy2, I_prg_addr, I_prg_wren, I_prg_da
 	
 	always @(posedge I_clock)
 	if (chip_select_prg) begin
-		if (I_prg_wren)
-			prg_bits[15' (I_prg_addr)] <= I_prg_data;
 		O_prg_data <= prg_bits[15' (I_prg_addr)];
 	end
 	
 	always @(posedge I_clock)
 	begin
-		if (I_chr_wren)
-			chr_bits[13' (I_chr_addr)] <= I_chr_data;
 		O_chr_data <= chr_bits[13' (I_chr_addr)];
 	end
 endmodule

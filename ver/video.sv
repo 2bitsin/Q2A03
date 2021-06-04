@@ -355,12 +355,13 @@ module video (
     unique case (I_host_addr[2:0])
       // PPU STATUS
       3'd2 : O_host_data[7:5] = {
-              curr_vertical_blank_bit,
-              curr_sprite_zero_hit_bit,
-              curr_sprite_overflow_bit
-            };
+        curr_vertical_blank_bit,
+        curr_sprite_zero_hit_bit,
+        curr_sprite_overflow_bit
+      };
+
       // OAM DATA
-      3'd4 : ;
+      3'd4 : O_host_data = pri_oam_data;
 
       // PPU DATA
       3'd7 : begin
@@ -421,9 +422,9 @@ module video (
   wire            vi_palette_access   = curr_video_addr_v[13:8] == 6'b111111;
   wire            vi_render_enabled   = curr_mask.show_sprites
                                       | curr_mask.show_background;
-  wire            vi_prederder_line   = curr_count_y > 16'd260;
+  wire            vi_prerender_line   = curr_count_y > 16'd260;
   wire            vi_rendering_line   = curr_count_y < 16'd240;
-  wire            vi_active_line      = (vi_prederder_line | vi_rendering_line) ;
+  wire            vi_active_line      = (vi_prerender_line | vi_rendering_line) ;
   wire            vi_active_sprites_x = ((curr_count_x > 16'd256) & (curr_count_x < 16'd321));
   wire            vi_active_backgnd_x = ((curr_count_x > 16'd000) & (curr_count_x < 16'd257))
                                       | ((curr_count_x > 16'd320) & (curr_count_x < 16'd337));
@@ -445,12 +446,17 @@ module video (
       curr_video_addr_v <= next_video_addr_v;
       curr_video_addr_t <= next_video_addr_t;
       curr_video_fine_x <= next_video_fine_x;
-      curr_video_data   <= next_video_data;
       curr_tile_index   <= next_tile_index;
       curr_tile_attrib  <= next_tile_attrib;
       curr_tile_bits_lo <= next_tile_bits_lo;
       curr_tile_bits_hi <= next_tile_bits_hi;
       curr_tile_shifter <= next_tile_shifter;
+    end
+
+    if (reg_select_vid_data & I_host_rden_rise)
+    begin
+      curr_video_data <= next_video_data;
+      next_video_data <= I_vid_data;
     end
 
   /* Clear write latch, on PPUSTATUS read */
@@ -505,7 +511,6 @@ module video (
     next_video_addr_t = 15'd0;
     next_video_addr_v = 15'd0;
     next_video_fine_x = 3'd0;
-    next_video_data   = 8'd0;
     next_tile_index   = 8'd0;
     next_tile_attrib  = 2'd0;
     next_tile_bits_lo = 8'd0;
@@ -524,7 +529,6 @@ module video (
       next_video_addr_t = curr_video_addr_t;
       next_video_addr_v = curr_video_addr_v;
       next_video_fine_x = curr_video_fine_x;
-      next_video_data   = curr_video_data;
 
     /* Current tile index and attribute*/
       next_tile_index   = curr_tile_index;
@@ -533,9 +537,6 @@ module video (
       next_tile_bits_hi = curr_tile_bits_hi;
       next_tile_shifter = curr_tile_shifter;
 
-    /* Read PPUDATA register into pipeline*/
-      if (reg_select_vid_data & I_host_rden)
-        next_video_data = I_vid_data;
 
     /* Setup tile fetch for background */
       vi_tile_index = curr_tile_index;
@@ -636,7 +637,7 @@ module video (
         end
 
         /* Assign vertical scroll position */
-        if ((curr_count_x >= 16'd280) & (curr_count_x <= 16'd304) & vi_prederder_line)
+        if ((curr_count_x >= 16'd280) & (curr_count_x <= 16'd304) & vi_prerender_line)
         begin
           next_video_addr_v.nametable.y = curr_video_addr_t.nametable.y ;
           next_video_addr_v.y_coarse    = curr_video_addr_t.y_coarse    ;
@@ -647,39 +648,144 @@ module video (
     end
   end
 
-/* OAM logic 
+/* OAM and sprite logic
  *****************************************/
-  bit[7:0]      oam_bits [0:255] ;
-
-  bit[7:0]      curr_oam_addr ;
-  bit[7:0]      next_oam_addr ;
-  bit[7:0]      curr_oam_data ;
   
+  typedef struct packed {
+    bit[5:0] obj_index;
+    bit[1:0] atr_index;
+  } oam_addr_type;
+
+
+  bit[7:0]      pri_oam_bits [0:255]  ;
+  bit[7:0]      pri_oam_data          ;
+
+  oam_addr_type curr_pri_oam_addr     ;
+  oam_addr_type next_pri_oam_addr     ;
+
+  bit[7:0]      sec_oam_bits [0:31]   ;
+  bit[4:0]      sec_oam_addr          ;
+  bit           sec_oam_wren          ;
+  bit[7:0]      sec_oam_wr_data       ;
+  bit[7:0]      sec_oam_rd_data       ;
+
+  bit[3:0]      curr_object_index     ;
+  bit[3:0]      next_object_index     ;
+
+  bit[7:0]      curr_object_latch     ;
+  bit[7:0]      next_object_latch     ;
+  
+  wire[4:0]     vi_sprite_height      = curr_control.sprite_size ? 5'd16 : 5'd8;
+  wire[15:0]    vi_sprite_lower_int   = $signed(curr_count_y) - $signed(vi_sprite_height);
+  wire[15:0]    vi_sprite_lower       = ~vi_sprite_lower_abs[15] ? vi_sprite_lower_abs : 16'd0 ;
+
+
   always_ff @(posedge I_clock)
-  begin    
-    if (O_vid_rise) 
+  begin
+    if (O_vid_rise != 1'b0)
     begin
-      curr_oam_addr <= next_oam_addr;
+      curr_pri_oam_addr <= next_pri_oam_addr;      
+      curr_object_index <= next_object_index;
+      curr_object_latch <= next_object_latch;
     end
 
-    /* Write OAMADDR */
-    if (reg_select_oam_addr & I_host_wren_rise)
-      curr_oam_addr <= I_host_data;  
+    // Prime primary OAM data buffer
+    pri_oam_data <= pri_oam_bits[curr_pri_oam_addr];
 
-    /* Write OAMDATA */
+    // Primary OAM address write
+    if (reg_select_oam_addr & I_host_wren_rise)
+      curr_pri_oam_addr <= I_host_data;
+
+    // Primary OAM data write
     if (reg_select_oam_data & I_host_wren_rise)
     begin
-      oam_bits [curr_oam_addr] <= I_host_data;
-      curr_oam_addr <= curr_oam_addr + 8'd1;
+      if (~vi_active_line | ~vi_render_enabled)
+      begin
+        pri_oam_bits[curr_pri_oam_addr] <= I_host_data;
+        curr_pri_oam_addr <= curr_pri_oam_addr + 8'd1;
+      end else begin
+        curr_pri_oam_addr.obj_index <= 
+          curr_pri_oam_addr.obj_index  + 6'd1;
+      end
     end
 
+    // Secondary OAM read/write
+    if (O_vid_rise & sec_oam_wren)    
+      sec_oam_bits[sec_oam_addr] <= sec_oam_wr_data;
+    sec_oam_rd_data <= sec_oam_bits[sec_oam_addr];
+    
   end
 
-  always_comb 
-  begin
-    next_oam_addr = curr_oam_addr;
-  end
+  always_comb
+  begin  
+    bit[15:0] row;
 
+    /* Reset registers */
+    next_pri_oam_addr = 8'b0;
+    next_object_index = 4'b0;
+    next_object_latch = 8'b0;
+
+    sec_oam_wr_data = 8'b0;
+    sec_oam_addr = 5'b0;
+    sec_oam_wren = 1'b0;
+
+    if (I_reset)
+    begin
+      /* Hold register value */
+      next_pri_oam_addr = curr_pri_oam_addr;
+      next_object_index = curr_object_index;
+      next_object_latch = curr_object_latch;
+
+      /* Reset OAM addr when sprite tiles are loaded */
+      if (vi_active_sprites)
+        next_pri_oam_addr = 8'b0;
+
+      /* While sprite evaluation is happening */
+      if (curr_count_x > 16'd0 & curr_count_x < 16'd257)
+      begin
+        /* Write on every even cycle */
+        sec_oam_wren = ~curr_count_x[0];
+
+        /* Clear secondary OAM in the firs 65 cycles */
+        if (curr_count_x < 16'd65)
+        begin
+          next_pri_oam_addr = 8'b0;
+          next_object_index = 4'b0;
+          sec_oam_wr_data = 8'b0;
+          sec_oam_addr = 5' ((curr_count_x[5:0] - 6'd1) >> 1'b1);          
+        /* Find visible sprites for this scanline */
+        end else begin          
+          sec_oam_addr = { curr_object_index[2:0], 
+            curr_pri_oam_addr.atr_index };
+          /* On odd cycles */
+          if (curr_count_x[0])
+          begin
+            /* Read byte from primary OAM */
+            next_object_latch = pri_oam_data ;
+          end else begin
+            /* On even cycles, write byte to secondary OAM */
+            sec_oam_wr_data = curr_object_latch;
+            /* Perform specific action on each of the attributes */            
+            unique case (curr_pri_oam_addr.atr_index) 
+              2'd0: begin
+                row = $signed(curr_count_y) - $signed({8'b0, curr_object_latch}) ;
+              end
+
+              2'd1, 2'd2: begin
+                
+              end
+
+              2'd3: begin
+                
+              end
+              
+            endcase
+          end
+        end
+      end
+
+    end
+  end
 
 /* Color Mux logic
  *****************************************/
