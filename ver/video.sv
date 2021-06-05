@@ -310,6 +310,9 @@ module video (
   bit next_sprite_zero_hit_bit ;
   bit next_sprite_overflow_bit ;
 
+  bit set_sprite_zero_hit ;
+  bit set_sprite_overflow ;
+
   assign O_host_nmi = ~(curr_control.enable_nmi & curr_vertical_blank_bit);
 
   always_ff @(posedge I_clock)
@@ -329,8 +332,8 @@ module video (
   always_comb
   begin
     next_vertical_blank_bit  = curr_vertical_blank_bit  ;
-    next_sprite_zero_hit_bit = curr_sprite_zero_hit_bit ;
-    next_sprite_overflow_bit = curr_sprite_overflow_bit ;
+    next_sprite_zero_hit_bit = curr_sprite_zero_hit_bit | set_sprite_zero_hit ;
+    next_sprite_overflow_bit = curr_sprite_overflow_bit | set_sprite_overflow ;
 
     if (curr_count_x == 16'd0)
     begin
@@ -650,7 +653,7 @@ module video (
 
 /* OAM and sprite logic
  *****************************************/
-  
+
   typedef struct packed {
     bit[5:0] obj_index;
     bit[1:0] atr_index;
@@ -669,24 +672,38 @@ module video (
   bit[7:0]      sec_oam_wr_data       ;
   bit[7:0]      sec_oam_rd_data       ;
 
-  bit[3:0]      curr_object_index     ;
-  bit[3:0]      next_object_index     ;
+  bit[3:0]      curr_sprite_index     ;
+  bit[7:0]      curr_sprite_latch     ;
+  bit[1:0]      curr_spr0_visible     ;
+  bit           curr_sprites_wrap     ;
 
-  bit[7:0]      curr_object_latch     ;
-  bit[7:0]      next_object_latch     ;
-  
-  wire[4:0]     vi_sprite_height      = curr_control.sprite_size ? 5'd16 : 5'd8;
-  wire[15:0]    vi_sprite_lower_int   = $signed(curr_count_y) - $signed(vi_sprite_height);
-  wire[15:0]    vi_sprite_lower       = ~vi_sprite_lower_abs[15] ? vi_sprite_lower_abs : 16'd0 ;
+  bit[3:0]      next_sprite_index     ;
+  bit[7:0]      next_sprite_latch     ;
+  bit[1:0]      next_spr0_visible     ;
+  bit           next_sprites_wrap     ;
 
+  wire[15:0]    vi_sprite_height      = curr_control.sprite_size
+                                      ? 16'd16
+                                      : 16'd8                               ;
+
+  wire[15:0]    vi_sprite_min_y       = { 8'b0, curr_sprite_latch }         ;
+  wire[15:0]    vi_sprite_min_x       = { 8'b0, curr_sprite_latch }         ;
+  wire[15:0]    vi_sprite_max_y       = vi_sprite_min_y + vi_sprite_height  ;
+  wire[15:0]    vi_sprite_max_x       = vi_sprite_min_x + 16'd8             ;
+  wire          vi_sprite_test_y      = curr_count_y >= vi_sprite_min_y
+                                      & curr_count_y <  vi_sprite_max_y     ;
+  wire          vi_sprite_test_x      = curr_count_x >= vi_sprite_min_x
+                                      & curr_count_x <  vi_sprite_max_x     ;
 
   always_ff @(posedge I_clock)
   begin
     if (O_vid_rise != 1'b0)
     begin
-      curr_pri_oam_addr <= next_pri_oam_addr;      
-      curr_object_index <= next_object_index;
-      curr_object_latch <= next_object_latch;
+      curr_pri_oam_addr <= next_pri_oam_addr ;
+      curr_sprite_index <= next_sprite_index ;
+      curr_sprite_latch <= next_sprite_latch ;
+      curr_spr0_visible <= next_spr0_visible ;
+      curr_sprites_wrap <= next_sprites_wrap ;
     end
 
     // Prime primary OAM data buffer
@@ -704,27 +721,32 @@ module video (
         pri_oam_bits[curr_pri_oam_addr] <= I_host_data;
         curr_pri_oam_addr <= curr_pri_oam_addr + 8'd1;
       end else begin
-        curr_pri_oam_addr.obj_index <= 
+        curr_pri_oam_addr.obj_index <=
           curr_pri_oam_addr.obj_index  + 6'd1;
       end
     end
 
     // Secondary OAM read/write
-    if (O_vid_rise & sec_oam_wren)    
+    if (O_vid_rise & sec_oam_wren)
       sec_oam_bits[sec_oam_addr] <= sec_oam_wr_data;
     sec_oam_rd_data <= sec_oam_bits[sec_oam_addr];
-    
+
   end
 
   always_comb
-  begin  
-    bit[15:0] row;
+  begin
+  /* Sprite event signals */
+    set_sprite_zero_hit = 1'b0;
+    set_sprite_overflow = 1'b0;
 
-    /* Reset registers */
+  /* Reset registers */
     next_pri_oam_addr = 8'b0;
-    next_object_index = 4'b0;
-    next_object_latch = 8'b0;
+    next_sprite_index = 4'b0;
+    next_sprite_latch = 8'b0;
+    next_spr0_visible = 2'b0;
+    next_sprites_wrap = 1'b0;
 
+  /* Secondary oam signals */
     sec_oam_wr_data = 8'b0;
     sec_oam_addr = 5'b0;
     sec_oam_wren = 1'b0;
@@ -733,8 +755,10 @@ module video (
     begin
       /* Hold register value */
       next_pri_oam_addr = curr_pri_oam_addr;
-      next_object_index = curr_object_index;
-      next_object_latch = curr_object_latch;
+      next_sprite_index = curr_sprite_index;
+      next_sprite_latch = curr_sprite_latch;
+      next_spr0_visible = curr_spr0_visible;
+      next_sprites_wrap = curr_sprites_wrap;
 
       /* Reset OAM addr when sprite tiles are loaded */
       if (vi_active_sprites)
@@ -746,44 +770,97 @@ module video (
         /* Write on every even cycle */
         sec_oam_wren = ~curr_count_x[0];
 
-        /* Clear secondary OAM in the firs 65 cycles */
+        /* In the first 65 cycles */
         if (curr_count_x < 16'd65)
         begin
+          /* Reset evaluator state */
           next_pri_oam_addr = 8'b0;
-          next_object_index = 4'b0;
-          sec_oam_wr_data = 8'b0;
-          sec_oam_addr = 5' ((curr_count_x[5:0] - 6'd1) >> 1'b1);          
-        /* Find visible sprites for this scanline */
-        end else begin          
-          sec_oam_addr = { curr_object_index[2:0], 
-            curr_pri_oam_addr.atr_index };
+          next_sprite_index = 4'b0;
+          next_sprites_wrap = 1'b0;
+
+          /* Initial secondary OAM to all $FF */
+          sec_oam_wr_data = 8'hff;
+          sec_oam_addr = 5' ((curr_count_x[5:0] - 6'd1) >> 1'b1);
+
+        /* In the next 192 cycles, find visible sprites for next scanline */
+        end else begin
+          /* Hold address of next secondary OAM slot to be written to */
+          sec_oam_addr = { curr_sprite_index[2:0]
+                         , curr_pri_oam_addr.atr_index };
+
+          /* Write on each even cycle, but only if overflow hasn't occured
+             and sprite evaluation is not wrapped around all 64 sprites */
+          sec_oam_wren = ( ~curr_count_x[0] 
+                         & ~curr_sprite_index [3]
+                         & ~curr_sprites_wrap );
           /* On odd cycles */
           if (curr_count_x[0])
           begin
             /* Read byte from primary OAM */
-            next_object_latch = pri_oam_data ;
+            next_sprite_latch = pri_oam_data ;
           end else begin
             /* On even cycles, write byte to secondary OAM */
-            sec_oam_wr_data = curr_object_latch;
-            /* Perform specific action on each of the attributes */            
-            unique case (curr_pri_oam_addr.atr_index) 
+            sec_oam_wr_data = curr_sprite_latch;
+
+            /* Perform specific action on each of the attributes */
+            unique case (curr_pri_oam_addr.atr_index)
               2'd0: begin
-                row = $signed(curr_count_y) - $signed({8'b0, curr_object_latch}) ;
+             /* At this point , curr_sprite_latch should contain the sprite Y coordinate,
+              * hence vi_sprite_test_y will be set to the status of weather this scanline
+              * hits the current sprite
+              */
+                if (vi_sprite_test_y)
+                begin
+               /* Sprite 0 is evaluated on cycle 66 of each visible line,
+                  so we set the precursor flag to sprite zero hit */
+                  if (curr_count_x == 16'd66)
+                    next_spr0_visible[1] = 1'b1;
+
+               /* When we are in overflow state, set the overflow flag  */
+                  set_sprite_overflow =
+                    curr_sprite_index[3];
+
+               /* Increment attribute index */
+                  next_pri_oam_addr.atr_index =
+                    curr_pri_oam_addr.atr_index + 2'b1;
+                end else begin
+                  /* Did we evaluate all sprites yet ? */
+                  if (curr_pri_oam_addr.obj_index < 6'd63)
+                  begin
+                    /* Increment prinmary OAM index */
+                    next_pri_oam_addr.obj_index =
+                      curr_pri_oam_addr.obj_index + 6'b1;
+                  end else begin
+                    /* Wrap around and disable writes until next scanline */
+                    next_pri_oam_addr.obj_index = 6'b0;
+                    next_sprites_wrap = 1'b0;
+                  end
+                end
               end
 
               2'd1, 2'd2: begin
-                
+                /* Increment attribute index to be copied */
+                next_pri_oam_addr.atr_index =
+                  curr_pri_oam_addr.atr_index + 2'b1;
               end
 
               2'd3: begin
-                
+                /* Reset attribute index to 0, 
+                   and start evaluating next sprite */
+                next_pri_oam_addr.obj_index =
+                  curr_pri_oam_addr.obj_index + 6'b1;
+                next_pri_oam_addr.atr_index = 2'b0;
               end
-              
+
             endcase
           end
         end
+      end 
+      else if (curr_count_x == 16'd257)
+      begin
+        /* Carry over sprite 0 hit flag from previous scanline to this scanline */
+        next_spr0_visible = next_spr0_visible >> 1;
       end
-
     end
   end
 
