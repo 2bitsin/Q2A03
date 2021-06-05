@@ -764,102 +764,110 @@ module video (
       if (vi_active_sprites)
         next_pri_oam_addr = 8'b0;
 
-      /* While sprite evaluation is happening */
-      if (curr_count_x > 16'd0 & curr_count_x < 16'd257)
+      if (vi_active_line & vi_render_enabled)
       begin
-        /* Write on every even cycle */
-        sec_oam_wren = ~curr_count_x[0];
-
-        /* In the first 65 cycles */
-        if (curr_count_x < 16'd65)
+        /* While sprite evaluation is happening */
+        if (curr_count_x > 16'd0 & curr_count_x < 16'd257)
         begin
-          /* Reset evaluator state */
-          next_pri_oam_addr = 8'b0;
-          next_sprite_index = 4'b0;
-          next_sprites_wrap = 1'b0;
+          /* Write on every even cycle */
+          sec_oam_wren = ~curr_count_x[0];
 
-          /* Initial secondary OAM to all $FF */
-          sec_oam_wr_data = 8'hff;
-          sec_oam_addr = 5' ((curr_count_x[5:0] - 6'd1) >> 1'b1);
-
-        /* In the next 192 cycles, find visible sprites for next scanline */
-        end else begin
-          /* Hold address of next secondary OAM slot to be written to */
-          sec_oam_addr = { curr_sprite_index[2:0]
-                         , curr_pri_oam_addr.atr_index };
-
-          /* Write on each even cycle, but only if overflow hasn't occured
-             and sprite evaluation is not wrapped around all 64 sprites */
-          sec_oam_wren = ( ~curr_count_x[0] 
-                         & ~curr_sprite_index [3]
-                         & ~curr_sprites_wrap );
-          /* On odd cycles */
-          if (curr_count_x[0])
+          /* In the first 65 cycles */
+          if (curr_count_x < 16'd65)
           begin
-            /* Read byte from primary OAM */
-            next_sprite_latch = pri_oam_data ;
-          end else begin
-            /* On even cycles, write byte to secondary OAM */
-            sec_oam_wr_data = curr_sprite_latch;
+            /* Reset evaluator state */
+            next_pri_oam_addr = 8'b0;
+            next_sprite_index = 4'b0;
+            next_sprites_wrap = 1'b0;
 
-            /* Perform specific action on each of the attributes */
-            unique case (curr_pri_oam_addr.atr_index)
-              2'd0: begin
-             /* At this point , curr_sprite_latch should contain the sprite Y coordinate,
-              * hence vi_sprite_test_y will be set to the status of weather this scanline
-              * hits the current sprite
-              */
-                if (vi_sprite_test_y)
-                begin
-               /* Sprite 0 is evaluated on cycle 66 of each visible line,
-                  so we set the precursor flag to sprite zero hit */
-                  if (curr_count_x == 16'd66)
-                    next_spr0_visible[1] = 1'b1;
+            /* Initial secondary OAM to all $FF */
+            sec_oam_wr_data = 8'hff;
+            sec_oam_addr = 5' ((curr_count_x[5:0] - 6'd1) >> 1'b1);
+            
+          /* In the next 192 cycles, find visible sprites for next scanline */
+          end else
+          begin
+            /* Hold address of next secondary OAM slot to be written to */
+            sec_oam_addr = { curr_sprite_index[2:0]
+                           , curr_pri_oam_addr.atr_index };
 
-               /* When we are in overflow state, set the overflow flag  */
-                  set_sprite_overflow =
-                    curr_sprite_index[3];
+            /* Write on each even cycle, but only if overflow hasn't occured
+               and sprite evaluation is not wrapped around all 64 sprites */
+            sec_oam_wren = ( ~curr_count_x[0]
+                           & ~curr_sprite_index [3]
+                           & ~curr_sprites_wrap );
+            /* On odd cycles */
+            if (curr_count_x[0])
+            begin
+              /* Read byte from primary OAM */
+              next_sprite_latch = pri_oam_data ;
+            end else
+            begin
+              /* On even cycles, write byte to secondary OAM */
+              sec_oam_wr_data = curr_sprite_latch;
 
-               /* Increment attribute index */
-                  next_pri_oam_addr.atr_index =
-                    curr_pri_oam_addr.atr_index + 2'b1;
-                end else begin
-                  /* Did we evaluate all sprites yet ? */
-                  if (curr_pri_oam_addr.obj_index < 6'd63)
+              /* Perform specific action on each of the attributes */
+              unique case (curr_pri_oam_addr.atr_index)
+                2'd0: begin
+                  /* At this point , curr_sprite_latch should contain the sprite Y coordinate,
+                   * hence vi_sprite_test_y will be set to the status of weather this scanline
+                   * hits the current sprite
+                   */
+                  if (vi_sprite_test_y)
                   begin
-                    /* Increment prinmary OAM index */
-                    next_pri_oam_addr.obj_index =
-                      curr_pri_oam_addr.obj_index + 6'b1;
-                  end else begin
-                    /* Wrap around and disable writes until next scanline */
-                    next_pri_oam_addr.obj_index = 6'b0;
-                    next_sprites_wrap = 1'b0;
+                    /* Sprite 0 is evaluated on cycle 66 of each visible line,
+                       so we set the precursor flag to sprite zero hit */
+                    if (curr_count_x == 16'd66)
+                      next_spr0_visible[1] = 1'b1;
+
+                    /* When we are in overflow state, set the overflow flag  */
+                    set_sprite_overflow =
+                      curr_sprite_index[3];
+
+                    /* Increment attribute index */
+                    next_pri_oam_addr.atr_index =
+                      curr_pri_oam_addr.atr_index + 2'b1;
+                  end else
+                  begin
+                    /* Did we evaluate all sprites yet ? */
+                    if (curr_pri_oam_addr.obj_index < 6'd63)
+                    begin
+                      /* Increment prinmary OAM index */
+                      next_pri_oam_addr.obj_index =
+                        curr_pri_oam_addr.obj_index + 6'b1;
+                    end else
+                    begin
+                      /* Wrap around and disable writes until next scanline */
+                      next_pri_oam_addr.obj_index = 6'b0;
+                      next_sprites_wrap = 1'b0;
+                    end
                   end
                 end
-              end
 
-              2'd1, 2'd2: begin
-                /* Increment attribute index to be copied */
-                next_pri_oam_addr.atr_index =
-                  curr_pri_oam_addr.atr_index + 2'b1;
-              end
+                2'd1, 2'd2: begin
+                  /* Increment attribute index to be copied */
+                  next_pri_oam_addr.atr_index =
+                    curr_pri_oam_addr.atr_index + 2'b1;
+                end
 
-              2'd3: begin
-                /* Reset attribute index to 0, 
-                   and start evaluating next sprite */
-                next_pri_oam_addr.obj_index =
-                  curr_pri_oam_addr.obj_index + 6'b1;
-                next_pri_oam_addr.atr_index = 2'b0;
-              end
+                2'd3: begin
+                  /* Reset attribute index to 0,
+                     and start evaluating next sprite */
+                  next_pri_oam_addr.obj_index =
+                    curr_pri_oam_addr.obj_index + 6'b1;
+                  next_pri_oam_addr.atr_index = 2'b0;
+                end
 
-            endcase
+              endcase
+            end
           end
         end
-      end 
-      else if (curr_count_x == 16'd257)
-      begin
-        /* Carry over sprite 0 hit flag from previous scanline to this scanline */
-        next_spr0_visible = next_spr0_visible >> 1;
+        else if (curr_count_x >= 16'd257 & curr_count_x < 16'd321)
+        begin
+          /* On cycle 257, carry over sprite 0 hit flag from previous scanline to this scanline */
+          if (curr_count_x == 16'd257)
+            next_spr0_visible = next_spr0_visible >> 1;
+        end
       end
     end
   end
