@@ -403,7 +403,7 @@ module video (
   bit[1:0]        curr_tile_attrib    ;
   bit[7:0]        curr_tile_bits_lo   ;
   bit[7:0]        curr_tile_bits_hi   ;
-  bit[15:0][3:0]  curr_tile_shifter   ;
+  bit[15:0][3:0]  curr_tile_shifter   ;  
 
   vi_addr_t       next_video_addr_v   ;
   vi_addr_t       next_video_addr_t   ;
@@ -414,6 +414,15 @@ module video (
   bit[7:0]        next_tile_bits_lo   ;
   bit[7:0]        next_tile_bits_hi   ;
   bit[15:0][3:0]  next_tile_shifter   ;
+
+
+  bit[7:0][3:0]   curr_sprite_pattern [0:7] ;  
+  bit[7:0]        curr_sprite_coord_x [0:7] ;
+  bit             curr_sprite_priority [0:7 ];
+
+  bit[7:0][3:0]   next_sprite_pattern [0:7] ;  
+  bit[7:0]        next_sprite_coord_x [0:7] ;
+  bit             next_sprite_priority [0:7] ;
 
   bit             curr_video_addr_w   ;
 
@@ -446,14 +455,18 @@ module video (
     if (O_vid_rise)
     begin
       /* Do normal clocked logic */
-      curr_video_addr_v <= next_video_addr_v;
-      curr_video_addr_t <= next_video_addr_t;
-      curr_video_fine_x <= next_video_fine_x;
-      curr_tile_index   <= next_tile_index;
-      curr_tile_attrib  <= next_tile_attrib;
-      curr_tile_bits_lo <= next_tile_bits_lo;
-      curr_tile_bits_hi <= next_tile_bits_hi;
-      curr_tile_shifter <= next_tile_shifter;
+      curr_video_addr_v     <= next_video_addr_v    ;
+      curr_video_addr_t     <= next_video_addr_t    ;
+      curr_video_fine_x     <= next_video_fine_x    ;
+      curr_tile_index       <= next_tile_index      ;
+      curr_tile_attrib      <= next_tile_attrib     ;
+      curr_tile_bits_lo     <= next_tile_bits_lo    ;
+      curr_tile_bits_hi     <= next_tile_bits_hi    ;
+      curr_tile_shifter     <= next_tile_shifter    ;
+
+      curr_sprite_pattern   <= next_sprite_pattern  ; 
+      curr_sprite_coord_x   <= next_sprite_coord_x  ;
+      curr_sprite_priority  <= next_sprite_priority ;
     end
 
     if (reg_select_vid_data & I_host_rden_rise)
@@ -510,7 +523,7 @@ module video (
 
   always_comb
   begin
-  /* Reset render state */
+    /* Reset render state */
     next_video_addr_t = 15'd0;
     next_video_addr_v = 15'd0;
     next_video_fine_x = 3'd0;
@@ -519,43 +532,66 @@ module video (
     next_tile_bits_lo = 8'd0;
     next_tile_bits_hi = 8'd0;
     next_tile_shifter = 64'd0;
+
+    /* Reset fetch state */
     vi_tile_index     = 8'd0;
     vi_tile_base      = 1'd0;
     vi_tile_line      = 4'd0;
+
+    /* Reset sprite state for next line */
+    for (integer i = 0; i < 8; ++i)
+    begin
+        next_sprite_pattern  [i] = 32'd0; 
+        next_sprite_coord_x  [i] =  8'd0;
+        next_sprite_priority [i] =  1'd0;
+    end
+
 
     /* Default the video address */
     O_vid_addr = curr_video_addr_v[13:0];
 
     if (I_reset)
     begin
-    /* Default register setup */
+    /* Hold video address registers*/
       next_video_addr_t = curr_video_addr_t;
       next_video_addr_v = curr_video_addr_v;
       next_video_fine_x = curr_video_fine_x;
 
-    /* Current tile index and attribute*/
+    /* Hold tile registers */
       next_tile_index   = curr_tile_index;
       next_tile_attrib  = curr_tile_attrib;
       next_tile_bits_lo = curr_tile_bits_lo;
       next_tile_bits_hi = curr_tile_bits_hi;
       next_tile_shifter = curr_tile_shifter;
 
-
     /* Setup tile fetch for background */
       vi_tile_index = curr_tile_index;
       vi_tile_base  = curr_control.background_base;
       vi_tile_line  = {1'b0, curr_video_addr_v.y_fine};
 
+    /* Hold sprite registers */
+      for (integer i = 0; i < 8; ++i)
+      begin
+          next_sprite_pattern  [i] = curr_sprite_pattern  [i] ;
+          next_sprite_coord_x  [i] = curr_sprite_coord_x  [i] ;
+          next_sprite_priority [i] = curr_sprite_priority [i] ;
+      end
+
+
     /* Setup tile fetch for sprites */
       if (vi_active_sprites)
-      begin
-        vi_tile_index = 8'd0; // Fix later
-        vi_tile_line  = 4'd0;  // Fix later
-
-        if (~curr_control.sprite_size)
-          vi_tile_base = curr_control.sprite_8x8_base;
-        else
-          vi_tile_base = 1'b0; // Fix later
+      begin        
+        if (curr_control.sprite_size)
+        begin
+          vi_tile_base  = sprite_props.tile[0] ;
+          vi_tile_index = {sprite_props.tile[7:1], sprite_offset_y[3]} ;
+          vi_tile_line  = {1'b0, sprite_offset_y[2:0]} ;
+        end else
+        begin
+          vi_tile_base  = curr_control.sprite_8x8_base;          
+          vi_tile_index = sprite_props.tile;  
+          vi_tile_line  = sprite_offset_y ;
+        end
       end
 
       if (vi_render_enabled)
@@ -574,7 +610,7 @@ module video (
           default: ;
           endcase
 
-        /* Grab the needed data bits */
+          /* Grab the needed data bits */
           unique case (curr_count_x[2:0])
           3'd2  : next_tile_index   = I_vid_data;
           3'd4  : next_tile_attrib  = vi_vid_data_4x2 [{
@@ -586,17 +622,39 @@ module video (
           default: ;
           endcase
 
+          /* take attribute from active sprite */
+          if (vi_active_sprites)
+            next_tile_attrib = sprite_props.palette;
+
           if (curr_count_x[2:0] == 3'd0)
           begin
-
-          /* Transfer tile and attribute bits into shift register */
-            for (integer i = 0; i < 8; ++i)
+            if (~vi_active_sprites)
             begin
-              next_tile_shifter[15 - i] = {
-                curr_tile_attrib,
-                next_tile_bits_hi [i],
-                next_tile_bits_lo [i]
-              };
+          /* Transfer tile and attribute bits into shift register */
+              for (integer i = 0; i < 8; ++i)
+              begin
+                next_tile_shifter[15 - i] = {
+                  curr_tile_attrib,
+                  next_tile_bits_hi [i],
+                  curr_tile_bits_lo [i]
+                };
+              end
+            end else 
+            begin
+              /* Transfer sprite attributes into sprite registers */
+              next_sprite_priority  [sprite_fetch_idx] = sprite_props.prio;
+              next_sprite_coord_x   [sprite_fetch_idx] = sprite_props.coord_x;
+
+              /* Transfer sprite patterns into sprite registers */
+              for (integer i = 0; i < 8; ++i)
+              begin
+                next_sprite_pattern [sprite_fetch_idx][sprite_props.flip_x ? (7 - i) : i] =  
+                {
+                  curr_tile_attrib,
+                  next_tile_bits_hi [i],
+                  curr_tile_bits_lo [i]
+                };
+              end              
             end
           end
         end
@@ -646,7 +704,6 @@ module video (
           next_video_addr_v.y_coarse    = curr_video_addr_t.y_coarse    ;
           next_video_addr_v.y_fine      = curr_video_addr_t.y_fine      ;
         end
-
       end
     end
   end
@@ -659,6 +716,24 @@ module video (
     bit[1:0] atr_index;
   } oam_addr_type;
 
+  typedef struct packed {
+    // X coordinate
+    bit [7:0] coord_x;
+
+    // Attribues
+    bit       flip_y;
+    bit       flip_x;
+    bit       prio;
+    bit[2:0]  reserved;
+    bit[1:0]  palette;
+
+    // Tile index
+    bit[7:0]  tile;    
+
+    // Y coordinate
+    bit[7:0]  coord_y;
+  } object_type;
+
 
   bit[7:0]      pri_oam_bits [0:255]  ;
   bit[7:0]      pri_oam_data          ;
@@ -666,34 +741,40 @@ module video (
   oam_addr_type curr_pri_oam_addr     ;
   oam_addr_type next_pri_oam_addr     ;
 
-  bit[7:0]      sec_oam_bits [0:31]   ;
+  bit[3:0][7:0] sec_oam_bits [0:7]    ;
   bit[4:0]      sec_oam_addr          ;
   bit           sec_oam_wren          ;
-  bit[7:0]      sec_oam_wr_data       ;
-  bit[7:0]      sec_oam_rd_data       ;
-
+  bit[7:0]      sec_oam_data          ;
+  
   bit[3:0]      curr_sprite_index     ;
   bit[7:0]      curr_sprite_latch     ;
   bit[1:0]      curr_spr0_visible     ;
   bit           curr_sprites_wrap     ;
-
+  
   bit[3:0]      next_sprite_index     ;
   bit[7:0]      next_sprite_latch     ;
   bit[1:0]      next_spr0_visible     ;
   bit           next_sprites_wrap     ;
 
-  wire[15:0]    vi_sprite_height      = curr_control.sprite_size
+  wire[15:0]    sprite_height         = curr_control.sprite_size
                                       ? 16'd16
-                                      : 16'd8                               ;
+                                      : 16'd8                             ;
 
-  wire[15:0]    vi_sprite_min_y       = { 8'b0, curr_sprite_latch }         ;
-  wire[15:0]    vi_sprite_min_x       = { 8'b0, curr_sprite_latch }         ;
-  wire[15:0]    vi_sprite_max_y       = vi_sprite_min_y + vi_sprite_height  ;
-  wire[15:0]    vi_sprite_max_x       = vi_sprite_min_x + 16'd8             ;
-  wire          vi_sprite_test_y      = curr_count_y >= vi_sprite_min_y
-                                      & curr_count_y <  vi_sprite_max_y     ;
-  wire          vi_sprite_test_x      = curr_count_x >= vi_sprite_min_x
-                                      & curr_count_x <  vi_sprite_max_x     ;
+  wire[15:0]    sprite_min_y          = { 8'b0, curr_sprite_latch }       ;
+  wire[15:0]    sprite_min_x          = { 8'b0, curr_sprite_latch }       ;
+  wire[15:0]    sprite_max_y          = sprite_min_y + sprite_height      ;
+  wire[15:0]    sprite_max_x          = sprite_min_x + 16'd8              ;
+  wire          sprite_test_y         = curr_count_y >= sprite_min_y
+                                      & curr_count_y <  sprite_max_y      ;
+  wire          sprite_test_x         = curr_count_x >= sprite_min_x
+                                      & curr_count_x <  sprite_max_x      ;
+  wire[2:0]     sprite_fetch_idx      = 3'((curr_count_x - 16'd257) >> 3) ;
+  object_type   sprite_props          = sec_oam_bits[sprite_fetch_idx]    ;
+  wire[3:0]     sprite_offset_dir_y   = 4'(curr_count_y - {8'b0, sprite_props.coord_y}) ;
+  wire[3:0]     sprite_offset_inv_y   = 4'(sprite_height[4:0] - 5'(sprite_offset_dir_y) - 5'd1) ;
+  wire[3:0]     sprite_offset_y       = sprite_props.flip_y 
+                                      ? sprite_offset_inv_y
+                                      : sprite_offset_dir_y                ;
 
   always_ff @(posedge I_clock)
   begin
@@ -726,11 +807,13 @@ module video (
       end
     end
 
-    // Secondary OAM read/write
+    /* Secondary OAM read/write */
     if (O_vid_rise & sec_oam_wren)
-      sec_oam_bits[sec_oam_addr] <= sec_oam_wr_data;
-    sec_oam_rd_data <= sec_oam_bits[sec_oam_addr];
+      sec_oam_bits[sec_oam_addr[4:2]]
+                  [sec_oam_addr[1:0]] 
+        <= sec_oam_data;
 
+      
   end
 
   always_comb
@@ -747,7 +830,7 @@ module video (
     next_sprites_wrap = 1'b0;
 
   /* Secondary oam signals */
-    sec_oam_wr_data = 8'b0;
+    sec_oam_data = 8'b0;
     sec_oam_addr = 5'b0;
     sec_oam_wren = 1'b0;
 
@@ -781,9 +864,9 @@ module video (
             next_sprites_wrap = 1'b0;
 
             /* Initial secondary OAM to all $FF */
-            sec_oam_wr_data = 8'hff;
+            sec_oam_data = 8'hff;
             sec_oam_addr = 5' ((curr_count_x[5:0] - 6'd1) >> 1'b1);
-            
+
           /* In the next 192 cycles, find visible sprites for next scanline */
           end else
           begin
@@ -804,16 +887,16 @@ module video (
             end else
             begin
               /* On even cycles, write byte to secondary OAM */
-              sec_oam_wr_data = curr_sprite_latch;
+              sec_oam_data = curr_sprite_latch;
 
               /* Perform specific action on each of the attributes */
               unique case (curr_pri_oam_addr.atr_index)
                 2'd0: begin
                   /* At this point , curr_sprite_latch should contain the sprite Y coordinate,
-                   * hence vi_sprite_test_y will be set to the status of weather this scanline
+                   * hence sprite_test_y will be set to the status of weather this scanline
                    * hits the current sprite
                    */
-                  if (vi_sprite_test_y)
+                  if (sprite_test_y)
                   begin
                     /* Sprite 0 is evaluated on cycle 66 of each visible line,
                        so we set the precursor flag to sprite zero hit */
@@ -862,11 +945,12 @@ module video (
             end
           end
         end
-        else if (curr_count_x >= 16'd257 & curr_count_x < 16'd321)
+        else if (vi_active_sprites)
         begin
           /* On cycle 257, carry over sprite 0 hit flag from previous scanline to this scanline */
           if (curr_count_x == 16'd257)
-            next_spr0_visible = next_spr0_visible >> 1;
+            next_spr0_visible = curr_spr0_visible >> 1;          
+          /* */
         end
       end
     end
