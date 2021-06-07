@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 
   widget.I_sys_reset = 1;
   const auto Ticks_per_second = 42'884'160ull; 
-  const auto Simulate_seconds = 180.0 / 60.0 ;
+  const auto Simulate_seconds = 2*60.0 / 60.0 ;
   const auto Total_ticks = (unsigned long long)(Simulate_seconds * Ticks_per_second) ;
 
   for(auto i = 0; i < Total_ticks; ++i, ++$time) 

@@ -112,11 +112,11 @@ class ProcessInes:
     self.write_logic(writer, ines)
     self.write_epilogue(writer)
 
-for filename in os.listdir('assets/instr_test_v5/rom_singles/'):
+for filename in os.listdir('assets/ppu_tests/'):
   main = ProcessInes()
   name, _ = os.path.splitext(filename)
   name = re.sub(r"[^\w]+", '_', name)  
-  main.build_cart('assets/instr_test_v5/rom_singles/%s' % (filename), 'ver/tests/test_%s.sv' % (name))
+  main.build_cart('assets/ppu_tests/%s' % (filename), 'ver/tests/test_%s.sv' % (name))
 
 for filename in os.listdir('assets/games/'):
   main = ProcessInes()

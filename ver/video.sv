@@ -667,7 +667,7 @@ module video (
               for (integer i = 0; i < 8; ++i)
               begin
                 bit[2:0] t; 
-                t = 3' (sprite_props.flip_x ? (7 - i) : i);
+                t = 3' (~sprite_props.flip_x ? (7 - i) : i);
                 next_sprite_pattern [sprite_fetch_idx][t] =  
                 {
                   curr_tile_attrib,
@@ -971,9 +971,14 @@ module video (
   bit       Q_sprite_opaque     ;
   bit[3:0]  Q_background_color  ; 
   bit       Q_background_opaque ;
+  
+  bit signed [15:0] x_offset [0:7];
+  bit[3:0] temp_color [0:7];
+  
 
   always_comb
   begin
+    set_sprite_zero_hit = 1'b0;      
     
     Q_sprite_priority   = 1'b0;
     Q_sprite_index      = 3'b0;
@@ -981,27 +986,29 @@ module video (
     Q_sprite_opaque     = 1'b0;
     Q_background_color  = 4'b0;    
     Q_background_opaque = 1'b0;
+    for (integer i = 0; i < 8; ++i)
+    begin
+      x_offset[i] = 16'd0;
+      temp_color[i] = 4'd0;
+    end
 
     color_final = 5'd0;
 
     if (visible_background)
-      Q_background_color = curr_tile_pattern[{1'b0, curr_video_fine_x}];
+      Q_background_color = curr_tile_pattern[{3'b0, curr_video_fine_x}];
     
     if (visible_sprites)
     begin
       for (integer i = 7; i >= 0; --i)
-      begin: q
-        bit signed [15:0] x_offset = 16'd0;
-        bit[3:0] color = 4'd0;
-  
-        x_offset = curr_count_x - 16'(curr_sprite_coord_x[i]);
-        if (x_offset >= 0 & x_offset < 8)
+      begin  
+        x_offset[i] = curr_count_x - 16'(curr_sprite_coord_x[i]);
+        if (x_offset[i] >= 0 & x_offset[i] < 8)
         begin 
-          color = curr_sprite_pattern[i][x_offset];
-          if (color [1:0] != 2'b0)
+          temp_color[i] = curr_sprite_pattern[i][x_offset [i]];
+          if (temp_color[i] [1:0] != 2'b0)
           begin
             Q_sprite_priority = curr_sprite_priority[i];
-            Q_sprite_color = color;
+            Q_sprite_color = temp_color[i];
             Q_sprite_index = 3'(i);
           end
         end

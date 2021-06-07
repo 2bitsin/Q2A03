@@ -63,11 +63,6 @@ module core_irq(I_clock, I_sync, I_reset, I_nmi, I_irq, I_irq_mask, O_force_brk,
 
   end else begin
 
-    /* NMI edge detecton */
-    last_nmi <= I_nmi;
-    if (last_nmi & ~I_nmi)
-      raise_nmi <= 1;      
-
     /* Interrupt drive logic */
     if (I_sync)
     begin        
@@ -89,6 +84,11 @@ module core_irq(I_clock, I_sync, I_reset, I_nmi, I_irq, I_irq_mask, O_force_brk,
       if (nmi_p) nmi_p <= 0; else
       if (irq_p) irq_p <= 0;         
     end 
+
+    /* NMI edge detecton */
+    last_nmi <= I_nmi;
+    if (last_nmi & ~I_nmi)
+      raise_nmi <= 1;      
   end
 
 endmodule
