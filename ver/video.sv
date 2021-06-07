@@ -961,16 +961,17 @@ module video (
  *****************************************/
   
 
-  wire left_most_column    = curr_count_x < 16'd9;
-  wire visible_background  = curr_mask.show_background & (curr_mask.show_left_background | ~left_most_column) ;
-  wire visible_sprites     = curr_mask.show_sprites    & (curr_mask.show_left_sprites    | ~left_most_column) ;
+  wire        left_most_column    = curr_count_x < 16'd9;
+  wire        visible_background  = curr_mask.show_background & (curr_mask.show_left_background | ~left_most_column) ;
+  wire        visible_sprites     = curr_mask.show_sprites    & (curr_mask.show_left_sprites    | ~left_most_column) ;
+  wire[15:0]  screen_coord_x      = curr_count_x - 16'd1;
 
-  bit       Q_sprite_priority   ;
-  bit[2:0]  Q_sprite_index      ;
-  bit[3:0]  Q_sprite_color      ;
-  bit       Q_sprite_opaque     ;
-  bit[3:0]  Q_background_color  ; 
-  bit       Q_background_opaque ;
+  bit         Q_sprite_priority   ;
+  bit[2:0]    Q_sprite_index      ;
+  bit[3:0]    Q_sprite_color      ;
+  bit         Q_sprite_opaque     ;
+  bit[3:0]    Q_background_color  ; 
+  bit         Q_background_opaque ;
   
   bit signed [15:0] x_offset [0:7];
   bit[3:0] temp_color [0:7];
@@ -1001,7 +1002,7 @@ module video (
     begin
       for (integer i = 7; i >= 0; --i)
       begin  
-        x_offset[i] = curr_count_x - 16'(curr_sprite_coord_x[i]);
+        x_offset[i] = screen_coord_x - 16'(curr_sprite_coord_x[i]);
         if (x_offset[i] >= 0 & x_offset[i] < 8)
         begin 
           temp_color[i] = curr_sprite_pattern[i][x_offset [i]];
