@@ -380,6 +380,24 @@ module video (
 /* Video address and scroll register
  ***********************************************/
 
+  typedef struct packed {
+    // X coordinate
+    bit [7:0] coord_x;
+
+    // Attribues
+    bit       flip_y;
+    bit       flip_x;
+    bit       coord_z;
+    bit[2:0]  reserved;
+    bit[1:0]  palette;
+
+    // Tile index
+    bit[7:0]  tile;    
+
+    // Y coordinate
+    bit[7:0]  coord_y;
+  } object_type;
+
   typedef struct packed
   {
     bit[2:0] y_fine;
@@ -403,7 +421,7 @@ module video (
   bit[1:0]        curr_tile_attrib    ;
   bit[7:0]        curr_tile_bits_lo   ;
   bit[7:0]        curr_tile_bits_hi   ;
-  bit[15:0][3:0]  curr_tile_shifter   ;  
+  bit[15:0][3:0]  curr_tile_pattern   ;  
 
   vi_addr_t       next_video_addr_v   ;
   vi_addr_t       next_video_addr_t   ;
@@ -413,16 +431,18 @@ module video (
   bit[1:0]        next_tile_attrib    ;
   bit[7:0]        next_tile_bits_lo   ;
   bit[7:0]        next_tile_bits_hi   ;
-  bit[15:0][3:0]  next_tile_shifter   ;
+  bit[15:0][3:0]  next_tile_pattern   ;
 
 
   bit[7:0][3:0]   curr_sprite_pattern [0:7] ;  
   bit[7:0]        curr_sprite_coord_x [0:7] ;
-  bit             curr_sprite_priority [0:7 ];
+  bit             curr_sprite_priority [0:7];
 
   bit[7:0][3:0]   next_sprite_pattern [0:7] ;  
   bit[7:0]        next_sprite_coord_x [0:7] ;
   bit             next_sprite_priority [0:7] ;
+
+  object_type     sprite_props        ; 
 
   bit             curr_video_addr_w   ;
 
@@ -446,8 +466,7 @@ module video (
   wire[3:0][1:0]  vi_vid_data_4x2     = I_vid_data;
 
   assign          O_vid_data          = I_host_data;
-  assign          O_vid_wren          = reg_select_vid_data & I_host_wren & ~vi_palette_access;
-  assign          color_background    = curr_tile_shifter[{1'b0, curr_video_fine_x}];
+  assign          O_vid_wren          = reg_select_vid_data & I_host_wren & ~vi_palette_access;    
 
 
   always_ff @(posedge I_clock)
@@ -462,7 +481,7 @@ module video (
       curr_tile_attrib      <= next_tile_attrib     ;
       curr_tile_bits_lo     <= next_tile_bits_lo    ;
       curr_tile_bits_hi     <= next_tile_bits_hi    ;
-      curr_tile_shifter     <= next_tile_shifter    ;
+      curr_tile_pattern     <= next_tile_pattern    ;
 
       curr_sprite_pattern   <= next_sprite_pattern  ; 
       curr_sprite_coord_x   <= next_sprite_coord_x  ;
@@ -531,7 +550,7 @@ module video (
     next_tile_attrib  = 2'd0;
     next_tile_bits_lo = 8'd0;
     next_tile_bits_hi = 8'd0;
-    next_tile_shifter = 64'd0;
+    next_tile_pattern = 64'd0;
 
     /* Reset fetch state */
     vi_tile_index     = 8'd0;
@@ -562,7 +581,7 @@ module video (
       next_tile_attrib  = curr_tile_attrib;
       next_tile_bits_lo = curr_tile_bits_lo;
       next_tile_bits_hi = curr_tile_bits_hi;
-      next_tile_shifter = curr_tile_shifter;
+      next_tile_pattern = curr_tile_pattern;
 
     /* Setup tile fetch for background */
       vi_tile_index = curr_tile_index;
@@ -599,7 +618,7 @@ module video (
         if (vi_active_backgnd | vi_active_sprites)
         begin
         /* Shift out a single background pixel */
-          next_tile_shifter[15:0] = {4'b0000, curr_tile_shifter[15:1]};
+          next_tile_pattern[15:0] = {4'b0000, curr_tile_pattern[15:1]};
 
         /* Generate data fetch addresses */
           unique case (curr_count_x[2:0])
@@ -633,7 +652,7 @@ module video (
           /* Transfer tile and attribute bits into shift register */
               for (integer i = 0; i < 8; ++i)
               begin
-                next_tile_shifter[15 - i] = {
+                next_tile_pattern[15 - i] = {
                   curr_tile_attrib,
                   next_tile_bits_hi [i],
                   curr_tile_bits_lo [i]
@@ -642,19 +661,20 @@ module video (
             end else 
             begin
               /* Transfer sprite attributes into sprite registers */
-              next_sprite_priority  [sprite_fetch_idx] = sprite_props.prio;
+              next_sprite_priority  [sprite_fetch_idx] = sprite_props.coord_z;
               next_sprite_coord_x   [sprite_fetch_idx] = sprite_props.coord_x;
-
               /* Transfer sprite patterns into sprite registers */
               for (integer i = 0; i < 8; ++i)
               begin
-                next_sprite_pattern [sprite_fetch_idx][sprite_props.flip_x ? (7 - i) : i] =  
+                bit[2:0] t; 
+                t = 3' (sprite_props.flip_x ? (7 - i) : i);
+                next_sprite_pattern [sprite_fetch_idx][t] =  
                 {
                   curr_tile_attrib,
                   next_tile_bits_hi [i],
                   curr_tile_bits_lo [i]
-                };
-              end              
+                };                
+              end
             end
           end
         end
@@ -716,25 +736,6 @@ module video (
     bit[1:0] atr_index;
   } oam_addr_type;
 
-  typedef struct packed {
-    // X coordinate
-    bit [7:0] coord_x;
-
-    // Attribues
-    bit       flip_y;
-    bit       flip_x;
-    bit       prio;
-    bit[2:0]  reserved;
-    bit[1:0]  palette;
-
-    // Tile index
-    bit[7:0]  tile;    
-
-    // Y coordinate
-    bit[7:0]  coord_y;
-  } object_type;
-
-
   bit[7:0]      pri_oam_bits [0:255]  ;
   bit[7:0]      pri_oam_data          ;
 
@@ -768,8 +769,9 @@ module video (
                                       & curr_count_y <  sprite_max_y      ;
   wire          sprite_test_x         = curr_count_x >= sprite_min_x
                                       & curr_count_x <  sprite_max_x      ;
-  wire[2:0]     sprite_fetch_idx      = 3'((curr_count_x - 16'd257) >> 3) ;
-  object_type   sprite_props          = sec_oam_bits[sprite_fetch_idx]    ;
+  wire[2:0]     sprite_fetch_idx      = 3'((curr_count_x - 16'd257) >> 3) ;  
+  assign        sprite_props          = sec_oam_bits[sprite_fetch_idx]    ;
+
   wire[3:0]     sprite_offset_dir_y   = 4'(curr_count_y - {8'b0, sprite_props.coord_y}) ;
   wire[3:0]     sprite_offset_inv_y   = 4'(sprite_height[4:0] - 5'(sprite_offset_dir_y) - 5'd1) ;
   wire[3:0]     sprite_offset_y       = sprite_props.flip_y 
@@ -809,9 +811,7 @@ module video (
 
     /* Secondary OAM read/write */
     if (O_vid_rise & sec_oam_wren)
-      sec_oam_bits[sec_oam_addr[4:2]]
-                  [sec_oam_addr[1:0]] 
-        <= sec_oam_data;
+      sec_oam_bits[sec_oam_addr[4:2]][sec_oam_addr[1:0]] <= sec_oam_data;
 
       
   end
@@ -819,7 +819,6 @@ module video (
   always_comb
   begin
   /* Sprite event signals */
-    set_sprite_zero_hit = 1'b0;
     set_sprite_overflow = 1'b0;
 
   /* Reset registers */
@@ -939,6 +938,8 @@ module video (
                   next_pri_oam_addr.obj_index =
                     curr_pri_oam_addr.obj_index + 6'b1;
                   next_pri_oam_addr.atr_index = 2'b0;
+                  if (~curr_sprite_index[3])
+                    next_sprite_index = curr_sprite_index + 3'd1;
                 end
 
               endcase
@@ -958,32 +959,70 @@ module video (
 
 /* Color Mux logic
  *****************************************/
-  bit[3:0]      color_background    ;
-  wire[3:0]     color_sprite [0:7]  ;
-  assign        color_sprite        = '{ 4'd0, 4'd0, 4'd0, 4'd0, 4'd0, 4'd0, 4'd0, 4'd0 }  ;
+  
 
-  wire          left_most_column    = curr_count_x < 16'd9;
-  wire          visible_background  = curr_mask.show_background & (curr_mask.show_left_background | ~left_most_column) ;
-  wire          visible_sprites     = curr_mask.show_sprites    & (curr_mask.show_left_sprites    | ~left_most_column) ;
+  wire left_most_column    = curr_count_x < 16'd9;
+  wire visible_background  = curr_mask.show_background & (curr_mask.show_left_background | ~left_most_column) ;
+  wire visible_sprites     = curr_mask.show_sprites    & (curr_mask.show_left_sprites    | ~left_most_column) ;
+
+  bit       Q_sprite_priority   ;
+  bit[2:0]  Q_sprite_index      ;
+  bit[3:0]  Q_sprite_color      ;
+  bit       Q_sprite_opaque     ;
+  bit[3:0]  Q_background_color  ; 
+  bit       Q_background_opaque ;
 
   always_comb
   begin
+    
+    Q_sprite_priority   = 1'b0;
+    Q_sprite_index      = 3'b0;
+    Q_sprite_color      = 4'b0;
+    Q_sprite_opaque     = 1'b0;
+    Q_background_color  = 4'b0;    
+    Q_background_opaque = 1'b0;
+
     color_final = 5'd0;
 
     if (visible_background)
-    begin
-      if (color_background[1:0] != 2'd0)
-        color_final = {1'b0, color_background};
-    end
-
+      Q_background_color = curr_tile_pattern[{1'b0, curr_video_fine_x}];
+    
     if (visible_sprites)
     begin
-      for (integer i = 0; i < 8; ++i)
-      begin
-        if (color_sprite[i][1:0] != 2'd0)
-          color_final = {1'b1, color_sprite [i]};
+      for (integer i = 7; i >= 0; --i)
+      begin: q
+        bit signed [15:0] x_offset = 16'd0;
+        bit[3:0] color = 4'd0;
+  
+        x_offset = curr_count_x - 16'(curr_sprite_coord_x[i]);
+        if (x_offset >= 0 & x_offset < 8)
+        begin 
+          color = curr_sprite_pattern[i][x_offset];
+          if (color [1:0] != 2'b0)
+          begin
+            Q_sprite_priority = curr_sprite_priority[i];
+            Q_sprite_color = color;
+            Q_sprite_index = 3'(i);
+          end
+        end
       end
     end
+
+    Q_background_opaque = |Q_background_color[1:0];
+    Q_sprite_opaque = |Q_sprite_color[1:0];
+
+    unique case ({Q_background_opaque, Q_sprite_opaque})
+      2'b00 : color_final = 5'b0 ;
+      2'b01 : color_final = { 1'b1, Q_sprite_color } ;
+      2'b10 : color_final = { 1'b0, Q_background_color } ;
+      default : begin
+        color_final = { 1'b0, Q_background_color } ;
+        if (~Q_sprite_priority) 
+          color_final = { 1'b1, Q_sprite_color } ;
+        if (Q_sprite_index == 3'd0 & curr_spr0_visible[0] & curr_count_x < 16'd255)
+          set_sprite_zero_hit = 1'b1;      
+      end
+    endcase
   end
 
 endmodule
