@@ -42,88 +42,20 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   wire            W_car_select    = |W_core_addr_dec[7:2];
   wire[7:0]       W_core_addr_dec ;
 
-  /* Controller logic
-   *******************************************/
 
-  bit[7:0]        joypad_clock  ;
-  bit             last_joy_clk  ;  
+  wire[1:0]       W_GPIO_o_rden   ;
+  wire[7:0]       W_GPIO_o_data   ;
+  wire[1:0]       W_GPIO_i_data   ;
 
-  bit[1:0][7:0]   curr_joy_bits ;
-  bit[1:0][7:0]   next_joy_bits ;
-
-  bit[1:0][7:0]   joy_latch ;
-  bit[1:0]        last_GPIO_rden ;
-
-  wire[1:0]       W_GPIO_o_rden ;
-  wire[7:0]       W_GPIO_o_data ;
-  wire[1:0]       W_GPIO_i_data ;
-
-  assign          O_joy0_mode   = { joypad_clock[$high(joypad_clock)]  } ;
-  assign          O_joy1_mode   = { joypad_clock[$high(joypad_clock)]  } ;
-  assign          W_GPIO_i_data = { joy_latch[1][0], 
-                                    joy_latch[0][0]   } ;
-
-  always_ff @(posedge I_sys_clock)
-  begin
-    joypad_clock      <= joypad_clock + 1 ;
-    last_joy_clk      <= joypad_clock[$high(joypad_clock)] ;
-    curr_joy_bits     <= next_joy_bits ;    
-    last_GPIO_rden[0] <= W_GPIO_o_rden[0] ; 
-    last_GPIO_rden[1] <= W_GPIO_o_rden[1] ; 
-
-    if (W_GPIO_o_data[0]) 
-      joy_latch[0] <= curr_joy_bits[0];
-    if (W_GPIO_o_data[1]) 
-      joy_latch[1] <= curr_joy_bits[1];
-
-    if (last_GPIO_rden[0] & ~W_GPIO_o_rden[0])
-      joy_latch[0] <= joy_latch[0] >> 1;
-    if (last_GPIO_rden[1] & ~W_GPIO_o_rden[1])
-      joy_latch[1] <= joy_latch[1] >> 1;
-  end
-
-  always_comb
-  begin
-    next_joy_bits = 16'b0;
-    if (I_sys_reset)
-    begin
-     /*
-      * Up    (0, if sel = *)
-      * Down  (1, if sel = *)
-      * Left  (2, if sel = 1)
-      * Right (3, if sel = 1)
-      * A     (4, if sel = 0)
-      * B     (4, if sel = 1)
-      * C     (5, if sel = 1)
-      * Start (5, if sel = 0)
-      *****************************/
-
-      next_joy_bits = curr_joy_bits;
-
-      next_joy_bits[0][5:4] = I_joy0_bits[1:0];
-      next_joy_bits[1][5:4] = I_joy1_bits[1:0];
-
-      if (joypad_clock[$high(joypad_clock)])
-      begin
-        next_joy_bits[0][7:6] = I_joy0_bits[3:2];
-        next_joy_bits[1][7:6] = I_joy1_bits[3:2];
-
-        next_joy_bits[0][0] = I_joy0_bits[4];
-        next_joy_bits[0][2] = I_joy0_bits[5];
-        next_joy_bits[1][0] = I_joy1_bits[4];
-        next_joy_bits[1][2] = I_joy1_bits[5];
-      end else begin
-        next_joy_bits[0][1] = I_joy0_bits[4];
-        next_joy_bits[0][3] = I_joy0_bits[5];
-        next_joy_bits[1][1] = I_joy1_bits[4];
-        next_joy_bits[1][3] = I_joy1_bits[5];
-      end
-    end
-  end
-
-  /* Other logic
-   *******************************************/
-
+  controller inst_controller (
+    .I_clock      (I_sys_clock),
+    .I_reset      (I_sys_reset),
+    .I_joy_bits   ({I_joy1_bits, I_joy0_bits}),
+    .O_joy_mode   ({O_joy1_mode, O_joy0_mode}),
+    .I_GPIO_load  (W_GPIO_o_data[1:0]),
+    .I_GPIO_rden  (W_GPIO_o_rden[1:0]),
+    .O_GPIO_data  (W_GPIO_i_data[1:0])
+  );
 
   decoder #(.P_width (3)) inst_decode_bus(
     .I_packed     (W_core_addr[15:13]),

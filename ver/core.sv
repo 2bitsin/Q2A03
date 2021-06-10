@@ -17,8 +17,6 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   output  bit[7:0]    O_GPIO_data;
   output  bit[1:0]    O_GPIO_rden;
   input   wire[1:0]   I_GPIO_data;
-
-
   
   typedef enum logic[1:0]
   {
