@@ -5,7 +5,7 @@
       "label": "Build",
       "type": "shell",
       "command": "make",
-      "args": [],
+      "args": ["-j16"],
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -36,7 +36,7 @@
     {
       "label": "Re-Build",
       "type": "shell",      
-      "command":"make clean; make",      
+      "command":"make clean; make -j16",      
       "options": {
         "cwd": "${workspaceFolder}"
       },

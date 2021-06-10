@@ -1,16 +1,21 @@
-module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, O_vid_vsync, O_vid_red, O_vid_green, O_vid_blue);
+module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, O_vid_vsync, O_vid_red, O_vid_green, O_vid_blue, I_joy0_bits, O_joy0_mode, I_joy1_bits, O_joy1_mode);
 
-  input  wire       I_sys_clock;
-  input  wire       I_sys_reset;
+  input  wire       I_sys_clock ;
+  input  wire       I_sys_reset ;
 
-  output wire       O_vid_clock;
-  output wire       O_vid_blank;
-  output bit        O_vid_hsync;
-  output bit        O_vid_vsync;
-  output wire[7:0]  O_vid_red;
-  output wire[7:0]  O_vid_green;
-  output wire[7:0]  O_vid_blue;
-      
+  output wire       O_vid_clock ;
+  output wire       O_vid_blank ;
+  output bit        O_vid_hsync ;
+  output bit        O_vid_vsync ;
+  output wire[7:0]  O_vid_red   ;
+  output wire[7:0]  O_vid_green ;
+  output wire[7:0]  O_vid_blue  ;
+
+  input  wire[5:0]  I_joy0_bits ;
+  output wire       O_joy0_mode ;
+  input  wire[5:0]  I_joy1_bits ;
+  output wire       O_joy1_mode ;
+
   /* Master cpu signals */
   wire            W_core_phy2     ;
   wire            W_core_rdwr     ;
@@ -37,11 +42,97 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   wire            W_car_select    = |W_core_addr_dec[7:2];
   wire[7:0]       W_core_addr_dec ;
 
+  /* Controller logic
+   *******************************************/
+
+  bit[10:0]       joypad_clock  ;
+  bit             last_joy_clk  ;  
+
+  bit[1:0][7:0]   curr_joy_bits ;
+  bit[1:0][7:0]   next_joy_bits ;
+
+  bit[1:0][7:0]   joy_latch ;
+  bit[1:0]        last_GPIO_rden ;
+
+  wire[1:0]       W_GPIO_o_rden ;
+  wire[7:0]       W_GPIO_o_data ;
+  wire[1:0]       W_GPIO_i_data ;
+
+  assign          O_joy0_mode   = { joypad_clock[10]  } ;
+  assign          O_joy1_mode   = { joypad_clock[10]  } ;
+  assign          W_GPIO_i_data = { joy_latch[1][0], 
+                                    joy_latch[0][0]   } ;
+
+  always_ff @(posedge I_sys_clock)
+  begin
+    joypad_clock      <= joypad_clock + 1 ;
+    last_joy_clk      <= joypad_clock[10] ;
+    curr_joy_bits     <= next_joy_bits ;    
+    last_GPIO_rden[0] <= W_GPIO_o_rden[0] ; 
+    last_GPIO_rden[1] <= W_GPIO_o_rden[1] ; 
+
+    if (W_GPIO_o_data[0]) 
+      joy_latch[0] <= curr_joy_bits[0];
+    if (W_GPIO_o_data[1]) 
+      joy_latch[1] <= curr_joy_bits[1];
+
+    if (last_GPIO_rden[0] & ~W_GPIO_o_rden[0])
+      joy_latch[0] <= joy_latch[0] >> 1;
+    if (last_GPIO_rden[1] & ~W_GPIO_o_rden[1])
+      joy_latch[1] <= joy_latch[1] >> 1;
+  end
+
+  always_comb
+  begin
+    next_joy_bits = 16'b0;
+    if (I_sys_reset)
+    begin
+     /*
+      * 0 - Up    (0, if sel = *)
+      * 1 - Down  (1, if sel = *)
+      * 2 - Left  (2, if sel = 1)
+      * 3 - Right (3, if sel = 1)
+      * 4 - A     (4, if sel = 0)
+      * 5 - B     (4, if sel = 1)
+      * 6 - C     (5, if sel = 1)
+      * 7 - Start (5, if sel = 0)
+      *
+      * 4 5 6 7 0 1 2 3
+      * 
+      *****************************/
+
+      next_joy_bits = curr_joy_bits;
+
+      next_joy_bits[0][5:4] = I_joy0_bits[1:0];
+      next_joy_bits[1][5:4] = I_joy1_bits[1:0];
+
+      if (joypad_clock[10])
+      begin
+        next_joy_bits[0][7:6] = I_joy0_bits[3:2];
+        next_joy_bits[1][7:6] = I_joy1_bits[3:2];
+
+        next_joy_bits[0][1] = I_joy0_bits[4];
+        next_joy_bits[0][2] = I_joy0_bits[5];
+        next_joy_bits[1][1] = I_joy1_bits[4];
+        next_joy_bits[1][2] = I_joy1_bits[5];
+      end else begin
+        next_joy_bits[0][0] = I_joy0_bits[4];
+        next_joy_bits[0][3] = I_joy0_bits[5];
+        next_joy_bits[1][0] = I_joy1_bits[4];
+        next_joy_bits[1][3] = I_joy1_bits[5];
+      end
+    end
+  end
+
+  /* Other logic
+   *******************************************/
+
+
   decoder #(.P_width (3)) inst_decode_bus(
     .I_packed     (W_core_addr[15:13]),
     .O_unpacked   (W_core_addr_dec)
   );
-  
+
   mux #(.P_select_width(3), .P_data_width(8)) inst_data_bus_mux (
     .I_select     (W_core_addr[15:13]),
     .I_data       ('{
@@ -57,8 +148,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_data       (W_core_rd_data)
   );
 
-
-  /* Host cpu and host memory*/    
+  /* Host cpu and host memory*/
   core inst_core (
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
@@ -69,10 +159,13 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_phy2       (W_core_phy2),
     .O_wr_data    (W_core_wr_data),
     .I_rd_data    (W_core_rd_data),
-    .O_sync       ());
+    .O_sync       (),
+    .O_GPIO_rden  (W_GPIO_o_rden),
+    .O_GPIO_data  (W_GPIO_o_data),
+    .I_GPIO_data  (W_GPIO_i_data));
 
   memory #(.P_addr_bits (11)) inst_core_memory (
-    .I_clock      (I_sys_clock),        
+    .I_clock      (I_sys_clock),
     .I_addr0      (W_core_addr[10:0]),
     .I_wren0      (W_core_wren & W_mem_select),
     .I_data0      (W_core_wr_data),
@@ -90,26 +183,26 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   wire            W_video_mem_select = (W_video_addr[13] & W_cart_ciram_ce);
 
   /* Video data return paths */
-  wire[7:0]       W_video_mem_O_data;  
+  wire[7:0]       W_video_mem_O_data;
   wire[7:0]       W_cart_chr_O_data;
 
-/* Delaying sync signals by 1 vid_clock, 
+/* Delaying sync signals by 1 vid_clock,
    to compensate for not going trough the DAC */
 
-  wire            W_vid_hsync ;    
+  wire            W_vid_hsync ;
   wire            W_vid_vsync ;
   wire            W_vid_clock_rise;
- 
+
 
   delay #(.P_width(2), .P_length(4)) inst_delay_vsync (
-    .I_clock      (I_sys_clock), 
-    .I_reset      (I_sys_reset), 
+    .I_clock      (I_sys_clock),
+    .I_reset      (I_sys_reset),
     .I_tick       (W_vid_clock_rise),
-    .I_signal     ({W_vid_vsync, W_vid_hsync}), 
+    .I_signal     ({W_vid_vsync, W_vid_hsync}),
     .O_signal     ({O_vid_vsync, O_vid_hsync})
   );
-     
-  /* Video and video memory*/        
+
+  /* Video and video memory*/
   video inst_video (
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
@@ -121,21 +214,21 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_vid_red    (O_vid_red),
     .O_vid_green  (O_vid_green),
     .O_vid_blue   (O_vid_blue),
-        
+
     .I_host_addr  (W_core_addr[2:0]),
     .I_host_data  (W_core_wr_data),
     .I_host_wren  (W_core_wren & W_ppu_select),
     .I_host_rden  (W_core_rden & W_ppu_select),
     .O_host_data  (W_ppu_O_data),
     .O_host_nmi   (W_core_nmi),
-    
+
     .O_vid_addr   (W_video_addr),
     .O_vid_wren   (W_video_wren),
     .O_vid_data   (W_video_wr_data),
     .I_vid_data   (W_video_mem_select ? W_video_mem_O_data : W_cart_chr_O_data));
-                    
+
   memory #(.P_addr_bits (12)) inst_video_memory (
-    .I_clock      (I_sys_clock),        
+    .I_clock      (I_sys_clock),
     .I_addr0      ({W_cart_ciram_a11, W_cart_ciram_a10, W_video_addr[9:0]}),
     .I_wren0      (W_video_wren & W_video_mem_select),
     .I_data0      (W_video_wr_data),
@@ -143,31 +236,31 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
 
   /* Cartridge */
   super_mario inst_cart(
-    .I_clock      (I_sys_clock), 
-    .I_reset      (I_sys_reset), 
-    .I_phy2       (W_core_phy2), 
+    .I_clock      (I_sys_clock),
+    .I_reset      (I_sys_reset),
+    .I_phy2       (W_core_phy2),
 
-    .I_prg_addr   (W_core_addr), 
-    .I_prg_wren   (W_core_wren & W_car_select), 
-    .I_prg_data   (W_core_wr_data), 
+    .I_prg_addr   (W_core_addr),
+    .I_prg_wren   (W_core_wren & W_car_select),
+    .I_prg_data   (W_core_wr_data),
     .O_prg_data   (W_car_O_data),
     .O_irq        (W_core_irq),
 
-    .I_chr_addr   (W_video_addr), 
+    .I_chr_addr   (W_video_addr),
     .I_chr_wren   (W_video_wren & ~W_video_mem_select),
-    .I_chr_data   (W_video_wr_data), 
-    .O_chr_data   (W_cart_chr_O_data), 
+    .I_chr_data   (W_video_wr_data),
+    .O_chr_data   (W_cart_chr_O_data),
 
-    .O_ciram_ce   (W_cart_ciram_ce), 
-    .O_ciram_a10  (W_cart_ciram_a10), 
+    .O_ciram_ce   (W_cart_ciram_ce),
+    .O_ciram_a10  (W_cart_ciram_a10),
     .O_ciram_a11  (W_cart_ciram_a11)
   );
 
   initial begin
   `ifdef VERILATOR
     $dumpfile("trace/widget.fst");
-    $dumpvars(999, inst_core);    
+    $dumpvars(999, inst_core);
   `endif
-  end    
+  end
 
 endmodule

@@ -82,15 +82,23 @@ int main(int argc, char** argv)
 
   widget.I_sys_reset = 1;
   const auto Ticks_per_second = 42'884'160ull; 
-  const auto Simulate_seconds = 2*60.0 / 60.0 ;
+  const auto Simulate_seconds = 60.0 / 60.0 ;
   const auto Total_ticks = (unsigned long long)(Simulate_seconds * Ticks_per_second) ;
 
   for(auto i = 0; i < Total_ticks; ++i, ++$time) 
   {
     if (!(i % 4288416))
       std::printf("%u ticks passed...\n", i);
+
+    if (!widget.O_joy0_mode)
+      widget.I_joy0_bits = 0x20 * ((frame_index >> 0) & 1);
+    else
+      widget.I_joy0_bits = 0x00;
+    widget.I_joy1_bits = 0xff;
+
     widget.I_sys_clock ^= 1;
     widget.eval();
+
 
     if (!synced)
     {
@@ -134,9 +142,9 @@ int main(int argc, char** argv)
   }
 
   
-  dump_bits("trace/video_memory.bin", widget.widget__DOT__inst_video_memory__DOT__bits);
-  dump_bits("trace/core_memory.bin", widget.widget__DOT__inst_core_memory__DOT__bits);
-  dump_bits("trace/object_memory.bin", widget.widget__DOT__inst_video__DOT__pri_oam_bits);
+  dump_bits("trace/video.mem", widget.widget__DOT__inst_video_memory__DOT__bits);
+  dump_bits("trace/core.mem", widget.widget__DOT__inst_core_memory__DOT__bits);
+  dump_bits("trace/object.mem", widget.widget__DOT__inst_video__DOT__pri_oam_bits);
 
 
   auto cmd = "ffmpeg -r 60 -f image2 -s 1280x1200 -i trace/img/%05d.png -filter:v scale=1536:1440:flags=neighbor -vcodec libx264 -pix_fmt rgb24 trace/"s + time_as_string() + ".avi"s;
