@@ -45,7 +45,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   /* Controller logic
    *******************************************/
 
-  bit[10:0]       joypad_clock  ;
+  bit[7:0]        joypad_clock  ;
   bit             last_joy_clk  ;  
 
   bit[1:0][7:0]   curr_joy_bits ;
@@ -58,15 +58,15 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   wire[7:0]       W_GPIO_o_data ;
   wire[1:0]       W_GPIO_i_data ;
 
-  assign          O_joy0_mode   = { joypad_clock[10]  } ;
-  assign          O_joy1_mode   = { joypad_clock[10]  } ;
+  assign          O_joy0_mode   = { joypad_clock[$high(joypad_clock)]  } ;
+  assign          O_joy1_mode   = { joypad_clock[$high(joypad_clock)]  } ;
   assign          W_GPIO_i_data = { joy_latch[1][0], 
                                     joy_latch[0][0]   } ;
 
   always_ff @(posedge I_sys_clock)
   begin
     joypad_clock      <= joypad_clock + 1 ;
-    last_joy_clk      <= joypad_clock[10] ;
+    last_joy_clk      <= joypad_clock[$high(joypad_clock)] ;
     curr_joy_bits     <= next_joy_bits ;    
     last_GPIO_rden[0] <= W_GPIO_o_rden[0] ; 
     last_GPIO_rden[1] <= W_GPIO_o_rden[1] ; 
@@ -88,17 +88,14 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     if (I_sys_reset)
     begin
      /*
-      * 0 - Up    (0, if sel = *)
-      * 1 - Down  (1, if sel = *)
-      * 2 - Left  (2, if sel = 1)
-      * 3 - Right (3, if sel = 1)
-      * 4 - A     (4, if sel = 0)
-      * 5 - B     (4, if sel = 1)
-      * 6 - C     (5, if sel = 1)
-      * 7 - Start (5, if sel = 0)
-      *
-      * 4 5 6 7 0 1 2 3
-      * 
+      * Up    (0, if sel = *)
+      * Down  (1, if sel = *)
+      * Left  (2, if sel = 1)
+      * Right (3, if sel = 1)
+      * A     (4, if sel = 0)
+      * B     (4, if sel = 1)
+      * C     (5, if sel = 1)
+      * Start (5, if sel = 0)
       *****************************/
 
       next_joy_bits = curr_joy_bits;
@@ -106,19 +103,19 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
       next_joy_bits[0][5:4] = I_joy0_bits[1:0];
       next_joy_bits[1][5:4] = I_joy1_bits[1:0];
 
-      if (joypad_clock[10])
+      if (joypad_clock[$high(joypad_clock)])
       begin
         next_joy_bits[0][7:6] = I_joy0_bits[3:2];
         next_joy_bits[1][7:6] = I_joy1_bits[3:2];
 
-        next_joy_bits[0][1] = I_joy0_bits[4];
+        next_joy_bits[0][0] = I_joy0_bits[4];
         next_joy_bits[0][2] = I_joy0_bits[5];
-        next_joy_bits[1][1] = I_joy1_bits[4];
+        next_joy_bits[1][0] = I_joy1_bits[4];
         next_joy_bits[1][2] = I_joy1_bits[5];
       end else begin
-        next_joy_bits[0][0] = I_joy0_bits[4];
+        next_joy_bits[0][1] = I_joy0_bits[4];
         next_joy_bits[0][3] = I_joy0_bits[5];
-        next_joy_bits[1][0] = I_joy1_bits[4];
+        next_joy_bits[1][1] = I_joy1_bits[4];
         next_joy_bits[1][3] = I_joy1_bits[5];
       end
     end
