@@ -1,4 +1,4 @@
-module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, O_vid_vsync, O_vid_red, O_vid_green, O_vid_blue, I_joy0_bits, O_joy0_mode, I_joy1_bits, O_joy1_mode);
+module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, O_vid_vsync, O_vid_red, O_vid_green, O_vid_blue, I_joy0_bits, O_joy0_mode, I_joy1_bits, O_joy1_mode, O_audio_mclk, O_audio_wclk, O_audio_sclk, O_audio_data);
 
   input  wire       I_sys_clock ;
   input  wire       I_sys_reset ;
@@ -15,6 +15,11 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
   output wire       O_joy0_mode ;
   input  wire[5:0]  I_joy1_bits ;
   output wire       O_joy1_mode ;
+
+  output wire       O_audio_mclk ;
+  output wire       O_audio_wclk ;
+  output wire       O_audio_sclk ;
+  output wire       O_audio_data ;
 
   /* Master cpu signals */
   wire            W_core_phy2     ;
@@ -164,7 +169,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_data0      (W_video_mem_O_data));
 
   /* Cartridge */
-  super_mario inst_cart(
+  duck_hunt inst_cart(
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
     .I_phy2       (W_core_phy2),
@@ -183,6 +188,17 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_ciram_ce   (W_cart_ciram_ce),
     .O_ciram_a10  (W_cart_ciram_a10),
     .O_ciram_a11  (W_cart_ciram_a11)
+  );
+
+  /* Audio I2S */
+  audio_i2s inst_audio_i2s (
+    .I_clock      (I_sys_clock), 
+    .I_reset      (I_sys_reset),
+    .I_data       (16'd0),
+    .O_mclk       (O_audio_mclk),
+    .O_wclk       (O_audio_wclk),
+    .O_sclk       (O_audio_sclk),
+    .O_data       (O_audio_data)
   );
 
   initial begin

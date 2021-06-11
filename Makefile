@@ -19,6 +19,7 @@ VFILES  			= ver/widget.sv 					   	\
 								ver/components/sc_latch.sv	\
 								ver/components/decoder.sv		\
 								ver/components/mux.sv				\
+								ver/audio_i2s.sv						\
 								ver/controller.sv						\
 								ver/video.sv 						   	\
 								ver/core.sv 						   	\
