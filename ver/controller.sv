@@ -9,7 +9,7 @@ module controller (I_clock, I_reset, I_joy_bits, O_joy_mode, I_GPIO_load, I_GPIO
   input   wire[1:0]       I_GPIO_rden;
   output  wire[1:0]       O_GPIO_data;
 
-  bit[7:0]        clock_divide    ;
+  bit[10:0]       clock_divide    ;
 
   bit[1:0][7:0]   curr_GPIO_state ;
   bit[1:0][7:0]   next_GPIO_state ;

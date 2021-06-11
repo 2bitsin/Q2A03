@@ -29,7 +29,7 @@ VFILES  			= ver/widget.sv 					   	\
 								ver/core_isexec.sv 					\
 								ver/games/super_mario.sv
 
-LAUNCH_DEPS 	= cpp/$(TOP)_main.cpp 			 	\
+LAUNCH_DEPS 	= out/cpp/$(TOP)_main.o 			\
 								out/lib/verilated.o 			 	\
 								out/lib/verilated_fst_c.o  	\
 								out/lib/verilated_dpi.o 	 	\
@@ -40,22 +40,28 @@ MOD_DIRS      = -y ver 									   	\
 								-y ver/games               	\
 								-y ver/components 
 
+INCLUDE				= -I$(VLTPAT) 								\
+								-I$(VLTPAT)/vltstd 					\
+								-Iout/ver 				 						
 all: out/launch
 
 clean: 
 	rm -rf out/ver/* out/cpp/* out/launch trace/img/* trace/*.avi
 
 out/lib/verilated.o: $(VLTPAT)/verilated.cpp
-	g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
+	g++ -c $(CFLAGS) $(INCLUDE) -o $@ $^
 
 out/lib/verilated_vcd_c.o: $(VLTPAT)/verilated_vcd_c.cpp
-	g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
+	g++ -c $(CFLAGS) $(INCLUDE) -o $@ $^
 
 out/lib/verilated_fst_c.o: $(VLTPAT)/verilated_fst_c.cpp
-	g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
+	g++ -c $(CFLAGS) $(INCLUDE) -o $@ $^
 
 out/lib/verilated_dpi.o: $(VLTPAT)/verilated_dpi.cpp
-	g++ -c $(CFLAGS) -I$(VLTPAT) -I$(VLTPAT)/vltstd -o $@ $^
+	g++ -c $(CFLAGS) $(INCLUDE) -o $@ $^
+
+out/cpp/$(TOP)_main.o: cpp/$(TOP)_main.cpp out/ver/V$(TOP).h
+	g++ -c $(CFLAGS) $(INCLUDE) -o $@ $<
 
 out/ver/lib$(TOP).a out/ver/V$(TOP).h: $(VFILES) $(VCONFIG) $(VHEADERS)
 	verilator --cc -Mdir out/ver $(MOD_DIRS) --top-module $(TOP) $(VFILES) $(VCONFIG) -CFLAGS "$(CFLAGS)" $(VFLAGS)
@@ -64,9 +70,6 @@ out/ver/lib$(TOP).a out/ver/V$(TOP).h: $(VFILES) $(VCONFIG) $(VHEADERS)
 
 out/launch: $(LAUNCH_DEPS) out/ver/V$(TOP).h 
 	g++ $(CFLAGS) 			 \
-	  -Iout/ver 				 \
-	  -I$(VLTPAT) 			 \
-	  -I$(VLTPAT)/vltstd \
 	  -o $@ 						 \
 	  -Wl,--start-group  \
 	  $(LAUNCH_DEPS)		 \

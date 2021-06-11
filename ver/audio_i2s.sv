@@ -7,18 +7,19 @@ module audio_i2s (I_clock, I_reset, I_data, O_mclk, O_wclk, O_sclk, O_data);
   output  wire        O_mclk;
   output  wire        O_wclk;
   output  wire        O_sclk;
-  output  wire        O_data;
+  output  bit         O_data;
 
-  bit[7:0]  divide_mclk;
-  bit       last_mclk;
-  bit[7:0]  lut_index;
-  bit[15:0] curr_sample;
-  bit[15:0] lut [0:127];
+  bit[7:0]    divide_mclk;
+  bit         last_mclk;
+  bit[7:0]    lut_index;
+  bit[15:0]   curr_sample;
+  bit[15:0]   lut [0:127];
+  wire[15:0]  next_sample = lut[lut_index[7:1]];
 
   assign O_mclk = I_clock;
   assign O_wclk = divide_mclk [$high(divide_mclk)];
-  assign O_sclk = 0;
-  assign O_data = 0;
+  assign O_sclk = divide_mclk [$high(divide_mclk) - 5];
+  
 
   initial lut = '{
     16'h7FFF, 16'h7FD7, 16'h7F61, 16'h7E9C, 16'h7D89, 16'h7C28, 16'h7A7C, 16'h7883, 
@@ -51,11 +52,19 @@ module audio_i2s (I_clock, I_reset, I_data, O_mclk, O_wclk, O_sclk, O_data);
     begin
       divide_mclk <= divide_mclk + 1;
       last_mclk   <= O_mclk;
+
+      if (&divide_mclk[$high(divide_mclk) - 5:0])
+      begin
+        O_data <= curr_sample [$high(curr_sample)];
+        curr_sample <= (curr_sample << 1);
+      end
+
       if (&divide_mclk[$high(divide_mclk) - 1:0])
       begin
-        curr_sample <= lut[lut_index[7:1]];
-        lut_index <= lut_index + 1;
+        curr_sample <= next_sample ;
+        lut_index <= lut_index + 1;        
       end
+      
     end
   end
 
