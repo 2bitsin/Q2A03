@@ -1,5 +1,9 @@
 module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, O_vid_vsync, O_vid_red, O_vid_green, O_vid_blue, I_joy0_bits, O_joy0_mode, I_joy1_bits, O_joy1_mode, O_audio_mclk, O_audio_wclk, O_audio_sclk, O_audio_data);
 
+`ifndef GAME
+  `define GAME super_mario
+`endif
+
   input  wire       I_sys_clock ;
   input  wire       I_sys_reset ;
 
@@ -170,7 +174,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_data0      (W_video_mem_O_data));
 
   /* Cartridge */
-  battle_city inst_cart(
+  `GAME inst_cart(
     .I_clock      (I_sys_clock),
     .I_reset      (I_sys_reset),
     .I_phy2       (W_core_phy2),

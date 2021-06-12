@@ -1,6 +1,6 @@
 CFLAGS = -std=c++20 -O3 -flto
 #CFLAGS = -std=c++20 -g -O0 
-VFLAGS = --trace-fst
+VFLAGS = --trace-fst 
 VLTPAT = /usr/share/verilator/include
 
 TOP     			= widget
@@ -67,7 +67,7 @@ out/cpp/$(TOP)_main.o: cpp/$(TOP)_main.cpp out/ver/V$(TOP).h
 	g++ -c $(CFLAGS) $(INCLUDE) -o $@ $<
 
 out/ver/lib$(TOP).a out/ver/V$(TOP).h: $(VFILES) $(VCONFIG) $(VHEADERS)
-	verilator --cc -Mdir out/ver $(MOD_DIRS) --top-module $(TOP) $(VFILES) $(VCONFIG) -CFLAGS "$(CFLAGS)" $(VFLAGS)
+	verilator --cc -Mdir out/ver $(MOD_DIRS) --top-module $(TOP) $(VFILES) $(VCONFIG) -CFLAGS "$(CFLAGS)" -DGAME=$(GAME) $(VFLAGS)
 	$(MAKE) -C out/ver -f V$(TOP).mk
 	mv out/ver/V$(TOP)__ALL.a out/ver/lib$(TOP).a 
 
