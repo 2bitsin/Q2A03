@@ -80,7 +80,7 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
                   W_car_O_data   // $Exxx - $Fxxx
                   }),
     .O_data       (W_core_rd_data)
-  );
+  );  
 
   /* Host cpu and host memory*/
   core inst_core (
@@ -96,7 +96,8 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_sync       (),
     .O_GPIO_rden  (W_GPIO_o_rden),
     .O_GPIO_data  (W_GPIO_o_data),
-    .I_GPIO_data  (W_GPIO_i_data));
+    .I_GPIO_data  (W_GPIO_i_data),
+    .O_audio_data (W_audio_data));
 
   memory #(.P_addr_bits (11)) inst_core_memory (
     .I_clock      (I_sys_clock),
@@ -190,11 +191,15 @@ module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, 
     .O_ciram_a11  (W_cart_ciram_a11)
   );
 
-  /* Audio I2S */
+  /* Audio I2S 
+   *********************************/
+
+  wire[15:0]      W_audio_data;
+
   audio_i2s inst_audio_i2s (
     .I_clock      (I_sys_clock), 
     .I_reset      (I_sys_reset),
-    .I_data       (16'd0),
+    .I_data       (W_audio_data),
     .O_mclk       (O_audio_mclk),
     .O_wclk       (O_audio_wclk),
     .O_sclk       (O_audio_sclk),

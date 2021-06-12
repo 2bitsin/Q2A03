@@ -9,6 +9,8 @@ VCONFIG  			= ver/config.vlt
 
 VHEADERS 			=	ver/core_control.svh 		
 
+GAME					= super_mario
+
 VFILES  			= ver/widget.sv 					   	\
 								ver/components/memory.sv 	 	\
 								ver/components/register.sv 	\
@@ -23,11 +25,12 @@ VFILES  			= ver/widget.sv 					   	\
 								ver/controller.sv						\
 								ver/video.sv 						   	\
 								ver/core.sv 						   	\
+								ver/core_audio.sv 			   	\
 								ver/core_irq.sv 				   	\
 								ver/core_alu.sv 				   	\
 								ver/core_decode.sv 			   	\
 								ver/core_isexec.sv 					\
-								ver/games/super_mario.sv
+								ver/games/$(GAME).sv				
 
 LAUNCH_DEPS 	= out/cpp/$(TOP)_main.o 			\
 								out/lib/verilated.o 			 	\

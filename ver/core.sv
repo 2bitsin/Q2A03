@@ -1,4 +1,4 @@
-module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdwr, O_sync, O_phy2, O_GPIO_rden, O_GPIO_data, I_GPIO_data);
+module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdwr, O_sync, O_phy2, O_GPIO_rden, O_GPIO_data, I_GPIO_data, O_audio_data);
 
 /* Input/Output section */
 
@@ -17,6 +17,8 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   output  bit[7:0]    O_GPIO_data;
   output  bit[1:0]    O_GPIO_rden;
   input   wire[1:0]   I_GPIO_data;
+
+  output  wire[15:0]  O_audio_data;
   
   typedef enum logic[1:0]
   {
@@ -27,19 +29,18 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
   } dma_state_type;
 
   wire[7:0]           W_wr_data;
+  wire[7:0]           W_apu_rd_data;
+  wire                W_apu_data_rdy;
   bit[7:0]            W_rd_data;
   wire                W_rdwr;
   wire[15:0]          W_addr;
   wire                W_sync;
   wire                W_phy2;
   bit                 W_ready;
-  
-  core_isexec inst_exec (I_clock, I_reset, I_irq, I_nmi, W_addr, W_wr_data, W_rd_data, W_rdwr, W_ready, W_sync, W_phy2);
-
   bit                 last_phy2;
-
   wire                W_phy2_rise = ~last_phy2 & W_phy2;
   wire                W_phy2_fall = last_phy2 & ~W_phy2;
+  wire                W_dmc_irq;
 
   bit[7:0]            curr_dma_page;
   bit[7:0]            next_dma_page;
@@ -50,6 +51,11 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
 
   dma_state_type      curr_dma_state;
   dma_state_type      next_dma_state;
+
+
+  
+  core_isexec inst_exec   (I_clock, I_reset, I_irq & W_dmc_irq, I_nmi, W_addr, W_wr_data, W_rd_data, W_rdwr, W_ready, W_sync, W_phy2);
+  core_audio  inst_audio  (I_clock, I_reset, W_phy2, W_addr, W_rdwr, W_wr_data, W_apu_rd_data, W_apu_data_rdy, W_dmc_irq, O_audio_data);
 
   always_ff @(posedge I_clock)
   begin
@@ -92,10 +98,11 @@ module core (I_clock, I_reset, I_irq, I_nmi, O_addr, O_wr_data, I_rd_data, O_rdw
       O_GPIO_rden[0] = W_phy2 & W_addr == 16'h4016 & W_rdwr;
       O_GPIO_rden[1] = W_phy2 & W_addr == 16'h4017 & W_rdwr;
 
-      if (W_addr == 16'h4016 & W_rdwr) 
+      if (W_apu_data_rdy)
+        W_rd_data = W_apu_rd_data;
+      else if (W_addr == 16'h4016 & W_rdwr) 
         W_rd_data = 8'(I_GPIO_data[0]);
-
-      if (W_addr == 16'h4017 & W_rdwr) 
+      else if (W_addr == 16'h4017 & W_rdwr) 
         W_rd_data = 8'(I_GPIO_data[1]);
 
       next_dma_state  = curr_dma_state;
