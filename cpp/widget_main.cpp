@@ -57,6 +57,8 @@ int main(int argc, char** argv)
   auto i = system("rm -rf trace/img/*.png");
   using namespace std::string_literals;
 
+  std::ofstream raw_audio ("trace/wav/audio.raw", std::ios::binary);
+
   Verilated::commandArgs(argc, argv);
   Verilated::traceEverOn(true);
 
@@ -74,6 +76,9 @@ int main(int argc, char** argv)
   edge_det O_vid_hsync { widget.O_vid_hsync } ;
   edge_det O_vid_vsync { widget.O_vid_vsync } ;
 
+  edge_det O_audio_wclk { widget.O_audio_wclk } ;
+  edge_det O_audio_sclk { widget.O_audio_sclk } ;
+
   unsigned buff_x = 0;
   unsigned buff_y = 0;
   unsigned frame_index = 0;
@@ -84,6 +89,8 @@ int main(int argc, char** argv)
   const auto Ticks_per_second = 42'884'160ull; 
   const auto Simulate_seconds = 0.2 * 60.0 / 60.0 ;
   const auto Total_ticks = (unsigned long long)(Simulate_seconds * Ticks_per_second) ;
+
+  uint16_t current_sample = 0;
 
   for(auto i = 0; i < Total_ticks; ++i, ++$time) 
   {
@@ -108,6 +115,19 @@ int main(int argc, char** argv)
         ++synced;
       continue;
     }
+
+    if (O_audio_sclk.rising())
+    {
+      current_sample >>= 1;
+      current_sample |= (widget.O_audio_data * 0x8000u);
+    }
+
+    if (O_audio_wclk.rising())
+    {      
+      raw_audio.write((const char*)&current_sample, sizeof(current_sample));
+      current_sample = 0;
+    }
+
 
     if (O_vid_clock.rising())
     {
