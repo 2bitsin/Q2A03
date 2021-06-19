@@ -694,7 +694,7 @@ module video (
         end
 
         /* Increment vertical */
-        if (curr_count_x == 16'd256)
+        if (vi_active_line && curr_count_x == 16'd256)
         begin
           next_video_addr_v.y_coarse = curr_video_addr_v.y_coarse ;
           next_video_addr_v.y_fine = curr_video_addr_v.y_fine + 3'd1;
@@ -711,7 +711,7 @@ module video (
         end
 
         /* Assign horizontal scroll position */
-        if (curr_count_x == 16'd257)
+        if (vi_active_line && curr_count_x == 16'd257)
         begin
           next_video_addr_v.nametable.x = curr_video_addr_t.nametable.x ;
           next_video_addr_v.x_coarse    = curr_video_addr_t.x_coarse    ;

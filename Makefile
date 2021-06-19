@@ -1,7 +1,3 @@
-CFLAGS = -std=c++20 -O3 -flto
-#CFLAGS = -std=c++20 -g -O0 
-VFLAGS = --trace-fst 
-VLTPAT = /usr/share/verilator/include
 
 TOP     			= widget
 					
@@ -9,7 +5,9 @@ VCONFIG  			= ver/config.vlt
 
 VHEADERS 			=	ver/core_control.svh 		
 
-GAME					= super_mario
+GAME					= battle_city
+
+RUN_SECONDS		= 5
 
 VFILES  			= ver/widget.sv 					   	\
 								ver/components/memory.sv 	 	\
@@ -46,6 +44,12 @@ MOD_DIRS      = -y ver 									   	\
 INCLUDE				= -I$(VLTPAT) 								\
 								-I$(VLTPAT)/vltstd 					\
 								-Iout/ver 				 						
+
+CFLAGS = -std=c++20 -O3 -flto -DSECONDS_TO_RUN=$(RUN_SECONDS)
+#CFLAGS = -std=c++20 -g -O0 -DSECONDS_TO_RUN=$(RUN_SECONDS) 
+VFLAGS = --trace-fst 
+VLTPAT = /usr/share/verilator/include
+
 all: out/launch
 
 clean: 

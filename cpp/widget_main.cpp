@@ -9,6 +9,9 @@
 
 #include "utilities.hpp"
 
+#ifndef SECONDS_TO_RUN
+ #define SECONDS_TO_RUN 5
+#endif
 
 static double $time = 0;
 
@@ -52,6 +55,14 @@ auto time_as_string(const char* fmt = "%Y-%m-%d_%H-%M-%S") -> std::string
   return oss.str();
 }
 
+uint8_t joy_mux(bool select_high, uint8_t signals)
+{
+  if (select_high) 
+    return (signals & 0b1111) | (((signals >> 4) & 0b11) << 4);
+  else
+    return (signals & 0b0011) | (((signals >> 6) & 0b11) << 4);
+}
+
 int main(int argc, char** argv)
 {
   auto i = system("rm -rf trace/img/*.png");
@@ -87,21 +98,21 @@ int main(int argc, char** argv)
 
   widget.I_sys_reset = 1;
   const auto Ticks_per_second = 42'884'160ull; 
-  const auto Simulate_seconds = 0.2 * 60.0 / 60.0 ;
+  const auto Simulate_seconds = SECONDS_TO_RUN * 60.0 / 60.0 ;
   const auto Total_ticks = (unsigned long long)(Simulate_seconds * Ticks_per_second) ;
 
   uint16_t current_sample = 0;
+
+  uint8_t j0 = 0;
+  uint8_t j1 = 0;
 
   for(auto i = 0; i < Total_ticks; ++i, ++$time) 
   {
     if (!(i % 4288416))
       std::printf("%u ticks passed...\n", i);
 
-    if (!widget.O_joy0_mode)
-      widget.I_joy0_bits = 0x20 * ((frame_index >> 0) & 1);
-    else
-      widget.I_joy0_bits = 0x00;
-    widget.I_joy1_bits = 0xff;
+    widget.I_joy0_bits = joy_mux(widget.O_joy0_mode, (0x80 >> ((frame_index >> 2) & 7)) * ((frame_index >> 1) & 1));
+    widget.I_joy1_bits = joy_mux(widget.O_joy1_mode, (0x80 >> ((frame_index >> 2) & 7)) * ((frame_index >> 1) & 1));
 
     widget.I_sys_clock ^= 1;
     widget.eval();
