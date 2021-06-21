@@ -101,7 +101,8 @@ int main(int argc, char** argv)
   const auto Simulate_seconds = SECONDS_TO_RUN * 60.0 / 60.0 ;
   const auto Total_ticks = (unsigned long long)(Simulate_seconds * Ticks_per_second) ;
 
-  uint16_t current_sample = 0;
+  uint32_t current_sample = 0;
+  int wclk_delay = 0;
 
   uint8_t j0 = 0;
   uint8_t j1 = 0;
@@ -129,16 +130,17 @@ int main(int argc, char** argv)
 
     if (O_audio_sclk.rising())
     {
-      current_sample >>= 1;
-      current_sample |= (widget.O_audio_data * 0x8000u);
+      current_sample <<= 1;
+      current_sample |= uint16_t (!!widget.O_audio_data);
+      if (wclk_delay) {
+        raw_audio.write((const char*)&current_sample, sizeof(current_sample));
+        current_sample = 0;
+        wclk_delay = 0;
+      }
     }
 
     if (O_audio_wclk.rising())
-    {      
-      raw_audio.write((const char*)&current_sample, sizeof(current_sample));
-      current_sample = 0;
-    }
-
+      wclk_delay = 1;
 
     if (O_vid_clock.rising())
     {
@@ -178,7 +180,7 @@ int main(int argc, char** argv)
   dump_bits("trace/object.mem", widget.widget__DOT__inst_video__DOT__pri_oam_bits);
 
 
-  auto cmd = "ffmpeg -r 60 -f image2 -s 1280x1200 -i trace/img/%05d.png -filter:v scale=1536:1440:flags=neighbor -vcodec libx264 -pix_fmt rgb24 trace/"s + time_as_string() + ".avi"s;
+  auto cmd = "ffmpeg -r 60 -f image2 -s 1280x1200 -i trace/img/%05d.png -f s16le -ar 83896 -ac 2 -i trace/wav/audio.raw -filter:v scale=1536:1440:flags=neighbor -vcodec libx264 -pix_fmt rgb24 trace/"s + time_as_string() + ".avi"s;
   auto res = system(cmd.data());
   
   

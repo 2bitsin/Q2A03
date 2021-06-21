@@ -1,7 +1,7 @@
 module widget (I_sys_clock, I_sys_reset, O_vid_clock, O_vid_blank, O_vid_hsync, O_vid_vsync, O_vid_red, O_vid_green, O_vid_blue, I_joy0_bits, O_joy0_mode, I_joy1_bits, O_joy1_mode, O_audio_mclk, O_audio_wclk, O_audio_sclk, O_audio_data);
 
 `ifndef GAME
-  `define GAME battle_city
+  `define GAME unchained
 `endif
 
   input  wire       I_sys_clock ;

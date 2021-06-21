@@ -16,6 +16,7 @@ module audio_i2s (I_clock, I_reset, I_data, O_mclk, O_wclk, O_sclk, O_data);
   assign O_wclk = divide_mclk [$high(divide_mclk)];
   assign O_sclk = divide_mclk [$high(divide_mclk) - 5];
 
+
   always_ff @(posedge I_clock, negedge I_reset)
   begin
     if (~I_reset)
